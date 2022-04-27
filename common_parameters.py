@@ -7,6 +7,9 @@ ANRITSU_REGIST = 3			# Under location registration
 ANRITSU_CONNECTED = 6  # Under communication or connected
 ANRITSU_LOOP_MODE_1 = 7  # Loopback mode 1
 
+MESUREMENT_GOOD = 0  # if the measurement status is good
+MESUREMENT_BAD = 5  # if the measurement status is bad, it might be low reference signal
+
 
 # bandwidth index
 def bandwidths_selected(band):

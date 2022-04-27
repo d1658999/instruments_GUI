@@ -6,6 +6,7 @@ from decimal import Decimal
 from loss_table import loss_table
 import common_parameters as cm_pmt
 import want_test_band as wt
+from fly_mode import Flymode, get_comport_wanted
 
 
 # rm = pyvisa.ResourceManager()
@@ -18,6 +19,7 @@ import want_test_band as wt
 class Anritsu8820:
     def __init__(self, resource_name):
         self.resource_name = resource_name
+        self.timer = 6
         try:
             self.build_object()
         except:
@@ -28,7 +30,16 @@ class Anritsu8820:
         rm = pyvisa.ResourceManager()
         self.inst = rm.open_resource(self.resource_name)
         self.inst.timeout = 5000
+        self.comport = get_comport_wanted()
+        self.flymode = Flymode(self.comport)
         print(self.inst.query('*IDN?'))
+
+    def flymode_circle(self):
+        self.flymode.com_open()
+        self.flymode.fly_on()
+        time.sleep(3)
+        self.flymode.fly_off()
+        self.flymode.com_close()
 
     def query_standard(self):
         return self.inst.query("STDSEL?").strip()
@@ -127,7 +138,7 @@ class Anritsu8820:
         if s == 'LTE':
             self.set_init_before_calling_lte(dl_ch, bw)
         elif s == 'WCDMA':
-            self.set_registration_calling_wcdma(dl_ch)
+            self.set_init_before_calling_wcdma(dl_ch)
         elif s == 'GSM':
             pass
 
@@ -513,12 +524,26 @@ class Anritsu8820:
         self.inst.query('*OPC?')
 
         for mod in want_mods:
-            # the four line is for waiting connected before change modulation
             conn_state = int(self.inst.query("CALLSTAT?").strip())
-            while conn_state != cm_pmt.ANRITSU_CONNECTED:
-                time.sleep(1)
-                print('wait 1 second to connect')
-                conn_state = int(self.inst.query("CALLSTAT?").strip())
+            while conn_state != cm_pmt.ANRITSU_CONNECTED:   # this is for waiting connected before change modulation if there is connection problems
+                print('Call drops...')
+                if self.timer == 0:
+                    # equipment end call and start call
+                    print('waiting for 10 secnods to end call and then start call')
+                    self.inst.write('CALLSO')
+                    self.inst.query('*OPC?')
+                    self.inst.write('CALLSA')
+                    self.flymode_circle()
+                    time.sleep(10)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+                    self.timer = 6
+                else:
+                    time.sleep(10)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+                    self.timer -= 1
+                    print('wait 10 second to connect')
+                    print(f'{6 - self.timer} times to wait 10 second')
+
 
             validation_list = []
             if mod == 'TESTPRM TX_MAXPWR_64_P':
@@ -534,7 +559,24 @@ class Anritsu8820:
                 self.inst.write(mod)
 
             self.set_to_measure()
-            # self.inst.query('MSTAT?')
+
+            meas_status = int(self.inst.query('MSTAT?').strip())
+            while meas_status == cm_pmt.MESUREMENT_BAD:  #this is for the reference signal is not found
+                print('measuring status is bad(Reference signal not found)')
+                print('Equipment is forced to set End Call')
+                self.inst.write('CALLSO')
+                time.sleep(5)
+                print('fly on and off again')
+                self.flymode_circle()
+                time.sleep(10)
+                self.inst.write('CALLSA')
+                print('waiting for 10 second to re-connect')
+                print(('measure it again'))
+                self.set_to_measure()
+                meas_status = int(self.inst.query('MSTAT?').strip())
+
+
+
             # self.inst.query('*OPC?')
 
             if mod == 'TESTPRM TX_MAXPWR_Q_1':  # mod[18:] -> Q_1
