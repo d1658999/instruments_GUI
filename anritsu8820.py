@@ -270,7 +270,7 @@ class Anritsu8820:
                 print('IDLE')
                 time.sleep(1)
                 self.flymode_circle()
-                time.sleep(8)
+                time.sleep(10)
                 conn_state = int(self.inst.query("CALLSTAT?").strip())
             conn_state = int(self.inst.query("CALLSTAT?").strip())
             print('START CALL')
@@ -432,7 +432,7 @@ class Anritsu8820:
 
         elif s == 'WCDMA':
             self.inst.write('RFOUT MAIN')
-            self.inst.write('BANDIND AUTO')
+            self.inst.write('BANDIND OFF')
             # self.inst.write('ATTFLAG OFF')
             # self.inst.write('MEASREP OFF')
             self.inst.write('DRXCYCLNG 64')
@@ -585,13 +585,16 @@ class Anritsu8820:
                     # equipment end call and start call
                     print('waiting for 10 seconds to etimes to wait 10 second'
                           'End call and then start call')
+                    self.flymode_circle()
+                    time.sleep(5)
                     self.inst.write('CALLSO')
                     self.inst.query('*OPC?')
+                    time.sleep(1)
                     self.inst.write('CALLSA')
-                    self.flymode_circle()
                     time.sleep(10)
-                    conn_state = int(self.inst.query("CALLSTAT?").strip())
                     self.count = 6
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+
                 else:
                     time.sleep(10)
                     self.count -= 1
@@ -727,11 +730,12 @@ class Anritsu8820:
         if s == 'LTE':
             evm = Decimal(self.inst.query('EVM? AVG'))
             self.inst.query('*OPC?')
-            print(f'evm: {evm}')
+            print(f'EVM: {evm}')
             return evm
         elif s == 'WCDMA':
             evm = Decimal(self.inst.query('AVG_EVM?'))
             self.inst.query('*OPC?')
+            print(f'EVM: {evm}')
             return evm
         elif s == 'GSM':
             pass
@@ -748,8 +752,8 @@ def get_resource():
 
 def run(resource_name):
     anritsu = Anritsu8820(resource_name)
-    for tech in [wt.lte_bands, wt.wcdma_bands]:
-        if tech == wt.lte_bands and wt.lte_bands != []:
+    for tech in wt.tech:
+        if tech == 'LTE' and wt.lte_bands != []:
             standard = anritsu.switch_to_lte()
             print(standard)
             for bw in wt.lte_bandwidths:
@@ -766,7 +770,7 @@ def run(resource_name):
                             anritsu.get_validation(standard)
                     else:
                         print(f'B{band} do not have BW {bw}MHZ')
-        elif tech == wt.wcdma_bands and wt.wcdma_bands != []:
+        elif tech == 'WCDMA' and wt.wcdma_bands !=[]:
             standard = anritsu.switch_to_wcdma()
             for band in wt.wcdma_bands:
                 for dl_ch in cm_pmt.dl_ch_selected(standard, band):
