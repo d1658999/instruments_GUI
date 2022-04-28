@@ -19,7 +19,7 @@ from fly_mode import Flymode, get_comport_wanted
 class Anritsu8820:
     def __init__(self, resource_name):
         self.resource_name = resource_name
-        self.timer = 6
+        self.count = 5
         try:
             self.build_object()
         except:
@@ -50,6 +50,8 @@ class Anritsu8820:
             switch ok => return 0
             switch fail => return 1
         """
+        self.inst.write('CALLSO')
+        time.sleep(1)
         s = self.query_standard()  # WCDMA|GSM|LTE
         print("Current Function: " + s)
         if s == 'WCDMA':
@@ -71,6 +73,8 @@ class Anritsu8820:
             switch ok => return 0
             switch fail => return 1
         """
+        self.inst.write('CALLSO')
+        time.sleep(1)
         s = self.query_standard()  # WCDMA|GSM|LTE
         print("Current Format: " + s)
         if s == 'GSM':
@@ -92,6 +96,8 @@ class Anritsu8820:
             switch ok => return 0
             switch fail => return 1
         """
+        self.inst.write('CALLSO')
+        time.sleep(2)
         s = self.query_standard()  # WCDMA|GSM|LTE
         print("Current Format: " + s)
         if s == 'LTE':
@@ -114,7 +120,10 @@ class Anritsu8820:
         print("Preset Anritsu 8820C")
         s = self.query_standard()  # WCDMA|GSM|LTE|CDMA2K
         if s == 'WCDMA':
+            self.inst.write('CALLSO')
+            time.sleep(2)
             self.preset_3gpp()
+            self.set_lvl_status('OFF')
         else:
             self.inst.write("*RST")  # this command changes measurement count to "single"
         self.inst.write("*CLS")
@@ -134,6 +143,7 @@ class Anritsu8820:
         self.inst.write('ULRMC_64QAM DISABLED')
 
     def set_init_before_calling(self, standard, dl_ch, bw=5):
+        print('init equipment before calling')
         s = standard
         if s == 'LTE':
             self.set_init_before_calling_lte(dl_ch, bw)
@@ -146,15 +156,16 @@ class Anritsu8820:
         """
             preset before start to calling for WCDMA
         """
-        self.preset()
         self.set_band_cal()
+        self.preset()
+        self.set_integrity('WCDMA', 'ON')
         self.set_screen_on()
         self.set_display_remain()
-        self.set_test_mode('OFF')
-        self.set_integrity('WCDMA', 'ON')
-        self.set_imsi()
-        self.set_all_measurement_items_off()
         self.set_init_miscs('WCDMA')
+        self.set_test_mode('OFF')
+        self.set_imsi()
+        self.set_authentication('WCDMA')
+        self.set_all_measurement_items_off()
         self.set_path_loss('WCDMA')
         self.set_init_level('WCDMA')
         self.set_handover('WCDMA', dl_ch)
@@ -181,6 +192,7 @@ class Anritsu8820:
         self.set_mcc_mnc()
         self.set_ant_config()
         self.set_imsi()
+        self.set_authentication()
         self.set_all_measurement_items_off()
         self.set_init_miscs('LTE')
         self.set_path_loss('LTE')
@@ -226,12 +238,13 @@ class Anritsu8820:
             self.inst.query('*OPC?')
         elif s == 'WCDMA':
             self.set_input_level()
-            self.set_output_level(-75)
+            self.set_output_level(-50)
             self.inst.query('*OPC?')
         elif s == 'GSM':
             pass
 
     def set_registration_calling(self, standard):
+        print('Start to calling')
         s = standard
         print("Current Format: " + s)
         if s == 'LTE':
@@ -251,19 +264,16 @@ class Anritsu8820:
         self.set_lvl_status('ON')
         self.set_test_mode()
         conn_state = int(self.inst.query("CALLSTAT?").strip())
-        while conn_state != cm_pmt.ANRITSU_CONNECTED:
+        while conn_state != cm_pmt.ANRITSU_CONNECTED:  # this is for waiting connection
             self.inst.write('CALLRFR')
-            while conn_state != cm_pmt.ANRITSU_CONNECTED:
-                # if int(conn_state) == cm_pmt.ANRITSU_IDLE:
+            while conn_state == cm_pmt.ANRITSU_IDLE:
                 print('IDLE')
                 time.sleep(1)
+                self.flymode_circle()
+                time.sleep(8)
                 conn_state = int(self.inst.query("CALLSTAT?").strip())
-                # elif int(conn_state) == cm_pmt.ANRITSU_REGIST:
-                #     conn_state = self.inst.query("CALLSTAT?")
-                #     self.inst.query('*OPC?')
-                #     print('Registration')
-                #     time.sleep(1)
             conn_state = int(self.inst.query("CALLSTAT?").strip())
+            print('START CALL')
             self.inst.write('CALLSA')
             self.inst.query('*OPC?')
             print('Connected')
@@ -274,21 +284,50 @@ class Anritsu8820:
             ANRITSU_IDLE = 1	        #Idle state
             ANRITSU_IDLE_REGIST = 2		#Idle( Regist ) Idle state (location registered)
             ANRITSU_LOOP_MODE_1 = 7	    # Under communication or connected
+            ANRITSU_LOOP_MODE_1_CLOSED = 9  # it seems like waiting to loop mode between Loopback mode 1 and IDLE
         """
+        self.set_lvl_status('ON')
+        self.set_test_mode()
+        self.flymode_circle()
         conn_state = int(self.inst.query("CALLSTAT?").strip())
-        while conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
-            while conn_state != cm_pmt.ANRITSU_IDLE_REGIST:
-                if conn_state == cm_pmt.ANRITSU_IDLE:
-                    print('IDLE')
+
+        self.count = 10
+        while conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:  # this is for waiting connection
+            if conn_state == cm_pmt.ANRITSU_IDLE:
+                print('IDLE')
+                time.sleep(5)
+                print('START CALL')
+                self.inst.write('CALLSA')
+                time.sleep(8)
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+            elif conn_state == cm_pmt.ANRITSU_IDLE_REGIST:
+                print('Status: IDLE_REGIST')
+                self.inst.write('CALLSA')
+                time.sleep(1)
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+            elif conn_state == cm_pmt.ANRITSU_REGIST:
+                print('Status: REGIST')
+                time.sleep(1)
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+            elif conn_state == cm_pmt.ANRITSU_LOOP_MODE_1_CLOSE:
+                if self.count < 0:
+                    print('END CALL and FLY ON and OFF')
+                    self.inst.write('CALLSO')
+                    time.sleep(3)
+                    self.flymode_circle()
+                    self.count = 10
                     time.sleep(5)
-                elif conn_state == cm_pmt.ANRITSU_IDLE_REGIST:
-                    print('IDLE(register)')
-                    self.inst.query('*OPC?')
-                    time.sleep(2)
-            conn_state = int(self.inst.query("CALLSTAT?").strip())
-            self.inst.write('CALLSA')
-            self.inst.query('*OPC?')
-            time.sleep(3)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+                else:
+                    print('Status: LOOP MODE(CLOSE)')
+                    time.sleep(1)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+                    self.count -= 1
+
+        print('Loop mode 1 and connected')
 
     def set_disconnected(self):
         self.inst.write('CALLSO')
@@ -310,8 +349,8 @@ class Anritsu8820:
             #     self.set_fdd_tdd_mode('TDD')
             # else:
             #     print('comparison between ul_ch and dl_ch seems like error!')
-        elif s == ('WCDMA' or 'GSM'):
-            self.set_downlink_channel(dl_ch)
+        elif s == 'WCDMA' or s == 'GSM':
+            self.set_downlink_channel(s, dl_ch)
             self.inst.query('*OPC?')
         else:
             print('Standard switch @handover function seems like error!')
@@ -361,15 +400,21 @@ class Anritsu8820:
         if s == 'LTE':
             self.inst.write(f'INTEGRITY {status}')  # SNOW3G | NULL | OFF
         elif s == 'WCDMA':
-            self.inst.wrtie(f'INTEGRITY {status}')  # ON | OFF
+            self.inst.write(f'INTEGRITY {status}')  # ON | OFF
         elif s == 'GSM':
             pass
 
-    def set_authentication(self):
-        self.inst.write('AUTHENT ON')
-        self.inst.write('AUTHENT_ALGO XOR')
-        self.inst.write('AUTHENT_KEYALL 00112233,44556677,8899AABB,CCDDEEFF')
-        self.inst.write('OPC_ALL 00000000,00000000,00000000,00000000')
+    def set_authentication(self, standard='LTE'):
+        s = standard
+        if s == 'LTE':
+            self.inst.write('AUTHENT ON')
+            self.inst.write('AUTHENT_ALGO XOR')
+            self.inst.write('AUTHENT_KEYALL 00112233,44556677,8899AABB,CCDDEEFF')
+            self.inst.write('OPC_ALL 00000000,00000000,00000000,00000000')
+        elif s == 'WCDMA':
+            self.inst.write('AUTHENT_ALGO XOR')
+            self.inst.write('AUTHENT_KEYALL 00112233,44556677,8899AABB,CCDDEEFF')
+            self.inst.write('OPC_ALL 00000000,00000000,00000000,00000000')
 
     def set_init_miscs(self, standard):
         s = standard
@@ -386,9 +431,17 @@ class Anritsu8820:
             self.inst.write('SIB2_NS NS_01')
 
         elif s == 'WCDMA':
-            self.inst.write('ATTFLAG OFF')
-            self.inst.write('MEASREP OFF')
+            self.inst.write('RFOUT MAIN')
+            self.inst.write('BANDIND AUTO')
+            # self.inst.write('ATTFLAG OFF')
+            # self.inst.write('MEASREP OFF')
             self.inst.write('DRXCYCLNG 64')
+            self.inst.write('BER_SAMPLE 10000')
+            self.inst.write('CONF_MEAS ON')
+            self.inst.write('RX_TIMEOUT 5')
+            self.inst.write('DOMAINIDRMC CS')
+            self.inst.write('REGMODE AUTO')
+
         elif s == 'GSM':
             pass
 
@@ -405,13 +458,13 @@ class Anritsu8820:
         self.inst.write(f'TPCPAT {tpc}')  # WCDMA default= ILPC | ALL1 | ALL0 | ALT | UCMD
         # self.inst.write(f'TPCPAT {tpc}')  # LTE default= AUTO | ALL3 |ALL1 | ALL0 | ALLM1| ALT | UCMD
 
-    def set_uplink_channel(self, standard,ul_ch):
+    def set_uplink_channel(self, standard, ul_ch):
         """
             Use this function only in FDD test mode.
             For Anritsu8820C, it could be used in link mode
         """
         s = standard
-        if s == ('LTE' or 'WCDMA'):
+        if s == 'LTE' or s == 'WCDMA':
             return self.inst.write(f'ULCHAN {str(ul_ch)}')
 
         elif s == 'GSM':
@@ -423,7 +476,7 @@ class Anritsu8820:
         	For Anritsu8820C, it could be used in link mode
         """
         s = standard
-        if s == ('LTE' or 'WCDMA'):
+        if s == 'LTE' or s == 'WCDMA':
             return self.inst.write(f'DLCHAN {str(dl_ch)}')
         elif s == 'GSM':
             pass
@@ -440,7 +493,7 @@ class Anritsu8820:
         elif s == 'WCDMA':
             self.inst.write('ADJ_MEAS ON')  # Set [ACLR Measurement] to [On]
             self.inst.write(f'ADJ_AVG {count}')  # Set [ACLR Count] to [count] times
-        elif s =='GSM':
+        elif s == 'GSM':
             pass
 
     def set_init_sem(self, count=1):
@@ -468,7 +521,7 @@ class Anritsu8820:
         elif s == 'GSM':
             pass
 
-    def set_init_power_template(self, standard,count=1):
+    def set_init_power_template(self, standard, count=1):
         s = standard
         if s == 'LTE':
             self.inst.write('PWRTEMP ON')  # Set [OBW Measurement] to [On]
@@ -525,25 +578,26 @@ class Anritsu8820:
 
         for mod in want_mods:
             conn_state = int(self.inst.query("CALLSTAT?").strip())
-            while conn_state != cm_pmt.ANRITSU_CONNECTED:   # this is for waiting connected before change modulation if there is connection problems
+            self.count = 5
+            while conn_state != cm_pmt.ANRITSU_CONNECTED:  # this is for waiting connection before change modulation if there is connection problems
                 print('Call drops...')
-                if self.timer == 0:
+                if self.count == 0:
                     # equipment end call and start call
-                    print('waiting for 10 secnods to end call and then start call')
+                    print('waiting for 10 seconds to etimes to wait 10 second'
+                          'End call and then start call')
                     self.inst.write('CALLSO')
                     self.inst.query('*OPC?')
                     self.inst.write('CALLSA')
                     self.flymode_circle()
                     time.sleep(10)
                     conn_state = int(self.inst.query("CALLSTAT?").strip())
-                    self.timer = 6
+                    self.count = 6
                 else:
                     time.sleep(10)
+                    self.count -= 1
+                    print('wait 10 seconds to connect')
+                    print(f'{6 - self.count} times to wait 10 second')
                     conn_state = int(self.inst.query("CALLSTAT?").strip())
-                    self.timer -= 1
-                    print('wait 10 second to connect')
-                    print(f'{6 - self.timer} times to wait 10 second')
-
 
             validation_list = []
             if mod == 'TESTPRM TX_MAXPWR_64_P':
@@ -561,7 +615,7 @@ class Anritsu8820:
             self.set_to_measure()
 
             meas_status = int(self.inst.query('MSTAT?').strip())
-            while meas_status == cm_pmt.MESUREMENT_BAD:  #this is for the reference signal is not found
+            while meas_status == cm_pmt.MESUREMENT_BAD:  # this is for the reference signal is not found
                 print('measuring status is bad(Reference signal not found)')
                 print('Equipment is forced to set End Call')
                 self.inst.write('CALLSO')
@@ -574,8 +628,6 @@ class Anritsu8820:
                 print(('measure it again'))
                 self.set_to_measure()
                 meas_status = int(self.inst.query('MSTAT?').strip())
-
-
 
             # self.inst.query('*OPC?')
 
@@ -605,7 +657,7 @@ class Anritsu8820:
         self.set_init_aclr('WCDMA')
         self.set_init_mod('WCDMA')
         self.set_input_level(26)
-        self.set_output_level(-106)
+        self.set_output_level(-93)
         self.set_tpc('ALL1')
         self.inst.query('*OPC?')
 
@@ -666,7 +718,7 @@ class Anritsu8820:
         elif s == 'GSM':
             pass
 
-    def get_uplink_evm(self,standard):
+    def get_uplink_evm(self, standard):
         """
             Get Error Vector Magnitude (EVM) - PUSCH @ max power
         """
@@ -696,35 +748,39 @@ def get_resource():
 
 def run(resource_name):
     anritsu = Anritsu8820(resource_name)
-    if wt.lte_bands != []:
-        standard = anritsu.switch_to_lte()
-        print(standard)
-        for bw in wt.lte_bandwidths:
-            for band in wt.lte_bands:
-                if bw in cm_pmt.bandwidths_selected(band):
-                    anritsu.set_test_parameter_normal()
-                    for dl_ch in cm_pmt.dl_ch_selected(standard, band, bw):
-                        print(f'Start to measure B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
-                        conn_state = int(anritsu.inst.query("CALLSTAT?").strip())
-                        if conn_state != cm_pmt.ANRITSU_CONNECTED:
-                            anritsu.set_init_before_calling(standard, dl_ch, bw)
-                            anritsu.set_registration_calling(standard)
-                        anritsu.set_handover(standard, dl_ch, bw)
-                        anritsu.get_validation(standard)
-                else:
-                    print(f'B{band} do not have BW {bw}MHZ')
-    elif wt.wcdma_bands != []:
-        standard = anritsu.switch_to_wcdma()
-        for band in wt.wcdma_bands:
-            for dl_ch in cm_pmt.dl_ch_selected(standard, band):
-                print(f'Start to measure B{band}, downlink_chan: {dl_ch}')
-                anritsu.set_init_before_calling(standard, dl_ch)
-                anritsu.set_registration_calling(standard)
-                anritsu.get_validation(standard)
-    elif wt.gsm_bands != []:
-        pass
-    else:
-        print(f'there are any bands selected')
+    for tech in [wt.lte_bands, wt.wcdma_bands]:
+        if tech == wt.lte_bands and wt.lte_bands != []:
+            standard = anritsu.switch_to_lte()
+            print(standard)
+            for bw in wt.lte_bandwidths:
+                for band in wt.lte_bands:
+                    if bw in cm_pmt.bandwidths_selected(band):
+                        anritsu.set_test_parameter_normal()
+                        for dl_ch in cm_pmt.dl_ch_selected(standard, band, bw):
+                            print(f'Start to measure B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
+                            conn_state = int(anritsu.inst.query("CALLSTAT?").strip())
+                            if conn_state != cm_pmt.ANRITSU_CONNECTED:
+                                anritsu.set_init_before_calling(standard, dl_ch, bw)
+                                anritsu.set_registration_calling(standard)
+                            anritsu.set_handover(standard, dl_ch, bw)
+                            anritsu.get_validation(standard)
+                    else:
+                        print(f'B{band} do not have BW {bw}MHZ')
+        elif tech == wt.wcdma_bands and wt.wcdma_bands != []:
+            standard = anritsu.switch_to_wcdma()
+            for band in wt.wcdma_bands:
+                for dl_ch in cm_pmt.dl_ch_selected(standard, band):
+                    print(f'Start to measure B{band}, downlink_chan: {dl_ch}')
+                    conn_state = int(anritsu.inst.query("CALLSTAT?").strip())
+                    if conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
+                        anritsu.set_init_before_calling(standard, dl_ch)
+                        anritsu.set_registration_calling(standard)
+                    anritsu.set_handover(standard, dl_ch)
+                    anritsu.get_validation(standard)
+        elif tech == wt.gsm_bands:
+            pass
+        else:
+            print(f'there are not any bands selected')
 
 
 def main():

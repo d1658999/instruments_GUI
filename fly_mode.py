@@ -29,11 +29,11 @@ def get_comport_wanted():
     comports = serial.tools.list_ports.comports()
     comport_waned = None
     for comport in comports:
-        print(comport.description)
-        print(type(comport.description))
+        # print(comport.description)
+        # print(type(comport.description))
         if 'Modem' in comport.description:
             comport_waned = comport.name
-            print(comport_waned)
+            print(f'Modem comport is: {comport_waned}')
     return comport_waned
 
 def main():

@@ -6,6 +6,8 @@ ANRITSU_IDLE_REGIST = 2  # Idle( Regist ) Idle state (location registered)
 ANRITSU_REGIST = 3			# Under location registration
 ANRITSU_CONNECTED = 6  # Under communication or connected
 ANRITSU_LOOP_MODE_1 = 7  # Loopback mode 1
+ANRITSU_LOOP_MODE_1_OPEN = 8  # Loop mode(open)
+ANRITSU_LOOP_MODE_1_CLOSE = 9  # loop mode(close)
 
 MESUREMENT_GOOD = 0  # if the measurement status is good
 MESUREMENT_BAD = 5  # if the measurement status is bad, it might be low reference signal
@@ -90,7 +92,7 @@ def dl_ch_selected(standard, band, bw=5):
     band_dl_ch_wcdma = {
         'B1': [10562, 10700, 10838],
         'B2': [9662, 9800, 9938],
-        'B4': [1537, 1675, 1738],
+        'B4': [1537, 1638, 1738],
         'B5': [4357, 4400, 4458],
         'B8': [2937, 3013, 3088],
         'B6': [4387, 4400, 4413],
