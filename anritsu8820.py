@@ -16,19 +16,25 @@ from fly_mode import Flymode, get_comport_wanted
 #         inst = rm.open_resource(rs)
 # print(inst.query("*IDN?"))
 
-class Anritsu8820:
-    def __init__(self, resource_name):
-        self.resource_name = resource_name
+class Anritsu8820(pyvisa.ResourceManager):
+    def __init__(self):
         self.count = 5
         try:
             self.build_object()
         except:
             print('Error to connect to instrument')
 
+    def get_gpib(self):
+        resources = []
+        for resource in super().list_resources():
+            if 'GPIB' in resource:
+                resources.append(resource)
+        return resources
+
     def build_object(self):
         print('start to connect')
-        rm = pyvisa.ResourceManager()
-        self.inst = rm.open_resource(self.resource_name)
+        gpib = self.get_gpib()
+        self.inst = super().open_resource(gpib[0])  # to build inst object
         self.inst.timeout = 5000
         self.comport = get_comport_wanted()
         self.flymode = Flymode(self.comport)
@@ -616,8 +622,6 @@ class Anritsu8820:
                 self.inst.write('ULRMC_64QAM DISABLED')
                 self.inst.write(mod)
 
-            self.set_to_measure()
-
             meas_status = int(self.inst.query('MSTAT?').strip())
             while meas_status == cm_pmt.MESUREMENT_BAD:  # this is for the reference signal is not found
                 print('measuring status is bad(Reference signal not found)')
@@ -632,6 +636,8 @@ class Anritsu8820:
                 print(('measure it again'))
                 self.set_to_measure()
                 meas_status = int(self.inst.query('MSTAT?').strip())
+
+            self.set_to_measure()
 
             # self.inst.query('*OPC?')
 
@@ -741,18 +747,8 @@ class Anritsu8820:
         elif s == 'GSM':
             pass
 
-
-def get_resource():
-    resource_name = None
-    rm = pyvisa.ResourceManager()
-    for rs in rm.list_resources():
-        if 'GPIB0' in rs:
-            resource_name = rs
-    return resource_name
-
-
-def run(resource_name):
-    anritsu = Anritsu8820(resource_name)
+def run():
+    anritsu = Anritsu8820()
     for tech in wt.tech:
         if tech == 'LTE' and wt.lte_bands != []:
             standard = anritsu.switch_to_lte()
@@ -791,8 +787,7 @@ def run(resource_name):
 def main():
     start = datetime.datetime.now()
 
-    resource_name = get_resource()
-    run(resource_name)
+    run()
 
     stop = datetime.datetime.now()
 

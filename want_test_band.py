@@ -1,5 +1,5 @@
 lte_bands = [1,2,3,4,25,66,7]
-wcdma_bands = [1,2,4]
+wcdma_bands = []
 gsm_bands = []
 
 
