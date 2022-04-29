@@ -270,6 +270,7 @@ class Anritsu8820:
                 print('IDLE')
                 time.sleep(1)
                 self.flymode_circle()
+                print('Waiting for 10 seconds')
                 time.sleep(10)
                 conn_state = int(self.inst.query("CALLSTAT?").strip())
             conn_state = int(self.inst.query("CALLSTAT?").strip())
