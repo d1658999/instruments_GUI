@@ -1,4 +1,4 @@
-lte_bands = [1]
+lte_bands = [1,2,3,4,7,25,66]
 wcdma_bands = []
 gsm_bands = []
 

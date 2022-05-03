@@ -22,6 +22,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.mod = None
         self.bw = None
         self.band = None
+        self.dl_ch = None
         try:
             self.build_object()
         except:
@@ -61,17 +62,18 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.inst.write('CALLSO')
         time.sleep(1)
-        s = self.query_standard()  # WCDMA|GSM|LTE
-        logger.debug("Current Function: " + s)
-        if s == 'WCDMA':
+        self.std = self.query_standard()  # WCDMA|GSM|LTE
+        logger.debug("Current Function: " + self.std)
+        if self.std == 'WCDMA':
             logger.info("Already WCDMA mode")
-            return s
+            return self.std
         else:
             self.inst.write('STDSEL WCDMA')  # switch to WCDMA
             time.sleep(1)
-            if (self.query_standard() == 'WCDMA'):
+            self.std = self.query_standard()
+            if (self.std == 'WCDMA'):
                 logger.info("Switch to WCDMA mode OK")
-                return self.query_standard()
+                return self.std
             else:
                 logger.info("Switch to WCDMA mode fail")
                 return 1
@@ -84,17 +86,18 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.inst.write('CALLSO')
         time.sleep(1)
-        s = self.query_standard()  # WCDMA|GSM|LTE
-        logger.debug("Current Format: " + s)
-        if s == 'GSM':
+        self.std = self.query_standard()  # WCDMA|GSM|LTE
+        logger.debug("Current Format: " + self.std)
+        if self.std == 'GSM':
             logger.info("Already GSM mode")
-            return s
+            return self.std
         else:
             self.inst.write('STDSEL GSM')  # switch to GSM
             time.sleep(1)
-            if (self.query_standard() == "GSM"):
+            self.std = self.query_standard()
+            if ( self.std == "GSM"):
                 logger.info("Switch to GSM mode OK")
-                return self.query_standard()
+                return self.std
             else:
                 logger.info("Switch to GSM mode fail")
                 return 1
@@ -107,17 +110,18 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.inst.write('CALLSO')
         time.sleep(2)
-        s = self.query_standard()  # WCDMA|GSM|LTE
-        logger.info("Current Format: " + s)
-        if s == 'LTE':
+        self.std = self.query_standard()  # WCDMA|GSM|LTE
+        logger.info("Current Format: " + self.std)
+        if self.std == 'LTE':
             logger.info("Already LTE mode")
-            return s
+            return self.std
         else:
             self.inst.write('STDSEL LTE')  # switch to LTE
             time.sleep(1)
-            if (self.query_standard() == 'LTE'):
+            self.std = self.query_standard()
+            if (self.std == 'LTE'):
                 logger.info("Switch to LTE mode OK")
-                return self.query_standard()
+                return self.std
             else:
                 logger.info("Switch to LTE mode fail")
                 return 1
@@ -629,7 +633,9 @@ class Anritsu8820(pyvisa.ResourceManager):
                 self.inst.write('ULRMC_64QAM DISABLED')
                 self.inst.write(mod)
 
+            self.set_to_measure()
             meas_status = int(self.inst.query('MSTAT?').strip())
+
             while meas_status == cm_pmt.MESUREMENT_BAD:  # this is for the reference signal is not found
                 logger.info('measuring status is bad(Reference signal not found)')
                 logger.info('Equipment is forced to set End Call')
@@ -644,7 +650,6 @@ class Anritsu8820(pyvisa.ResourceManager):
                 self.set_to_measure()
                 meas_status = int(self.inst.query('MSTAT?').strip())
 
-            self.set_to_measure()
 
             # self.inst.query('*OPC?')
 
@@ -698,19 +703,19 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
             Get UL power
         """
-        self.std = standard  # WCDMA|GSM|LTE
-        logger.debug("Current Format: " + self.std)
-        if self.std == 'LTE':
+        s = standard  # WCDMA|GSM|LTE
+        logger.debug("Current Format: " + s)
+        if s == 'LTE':
             power = self.inst.query('POWER? AVG').strip()
             self.inst.query('*OPC?')
             logger.info(f'POWER: {power}')
             return power
-        elif self.std == 'WCDMA':
+        elif s == 'WCDMA':
             power = self.inst.query('AVG_POWER?').strip()
             self.inst.query('*OPC?')
             logger.info(f'POWER: {power}')
             return power
-        elif self.std == 'GSM':
+        elif s == 'GSM':
             pass
 
     def get_uplink_aclr(self, standard):
@@ -776,6 +781,9 @@ class Anritsu8820(pyvisa.ResourceManager):
                         if bw in cm_pmt.bandwidths_selected(band):
                             self.set_test_parameter_normal()
                             for dl_ch in cm_pmt.dl_ch_selected(standard, band, bw):
+                                self.band = band
+                                self.bw = bw
+                                self.dl_ch = dl_ch
                                 conn_state = int(self.inst.query("CALLSTAT?").strip())
                                 if conn_state != cm_pmt.ANRITSU_CONNECTED:
                                     self.set_init_before_calling(standard, dl_ch, bw)
@@ -789,6 +797,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 standard = self.switch_to_wcdma()
                 for band in wt.wcdma_bands:
                     for dl_ch in cm_pmt.dl_ch_selected(standard, band):
+                        self.band = band
+                        self.dl_ch = dl_ch
                         conn_state = int(self.inst.query("CALLSTAT?").strip())
                         if conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
                             self.set_init_before_calling(standard, dl_ch)
