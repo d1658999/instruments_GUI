@@ -1,6 +1,12 @@
 import serial
 import time
 import serial.tools.list_ports
+import logging
+from logging.config import fileConfig
+
+fileConfig('logging.ini')
+logger = logging.getLogger()
+
 
 class Flymode:
     def __init__(self, comport):
@@ -19,11 +25,11 @@ class Flymode:
 
     def fly_on(self):
         self.ser.write(self.off.encode())
-        print('flymode is on, 0')
+        logger.info('flymode is on, 0')
 
     def fly_off(self):
         self.ser.write(self.on.encode())
-        print('flymode is off, 1')
+        logger.info('flymode is off, 1')
 
 def get_comport_wanted():
     comports = serial.tools.list_ports.comports()
@@ -33,7 +39,7 @@ def get_comport_wanted():
         # print(type(comport.description))
         if 'Modem' in comport.description:
             comport_waned = comport.name
-            print(f'Modem comport is: {comport_waned}')
+            logger.info(f'Modem comport is: {comport_waned}')
     return comport_waned
 
 def main():

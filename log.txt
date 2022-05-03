@@ -1,0 +1,6 @@
+[20220503 20:20:07 INFO    ] start to connect
+[20220503 20:20:08 INFO    ] Modem comport is: COM19
+[20220503 20:20:08 DEBUG   ] ANRITSU,MT8820C,6200930913,23.08S #001,1
+[20220503 20:20:08 INFO    ] there are not any bands selected
+[20220503 20:20:09 DEBUG   ] Current Function: LTE
+[20220503 20:20:10 INFO    ] Switch to WCDMA mode fail
