@@ -770,6 +770,37 @@ class Anritsu8820(pyvisa.ResourceManager):
             return evm
         elif s == 'GSM':
             pass
+    # def save_csv(self, mod_power_aclr_evm_s):
+    #
+    #     pwr_q_1 = {}
+    #     pwr_q_p = []
+    #     pwr_q_f = []
+    #     pwr_16_p = []
+    #     pwr_16_f = []
+    #     pwr_64_p = []
+    #     pwr_64_f = []
+    #
+    #     aclr_q_1 = []
+    #     aclr_q_p = []
+    #     aclr_q_f = []
+    #     aclr_16_p = []
+    #     aclr_16_f = []
+    #     aclr_64_p = []
+    #     aclr_64_f = []
+    #
+    #     evm_q_1 = []
+    #     evm_q_p = []
+    #     evm_q_f = []
+    #     evm_16_p = []
+    #     evm_16_f = []
+    #     evm_64_p = []
+    #     evm_64_f = []
+    #
+    #     # format: {mod:[POWER, [ACLR], EVM]}
+    #     for mod, list in mod_power_aclr_evm_s.items():
+    #         if mod == 'Q_1':
+    #             pwr_1[self.band]
+
 
     def run(self):
         for tech in wt.tech:
@@ -780,7 +811,16 @@ class Anritsu8820(pyvisa.ResourceManager):
                     for band in wt.lte_bands:
                         if bw in cm_pmt.bandwidths_selected(band):
                             self.set_test_parameter_normal()
-                            for dl_ch in cm_pmt.dl_ch_selected(standard, band, bw):
+                            ch_list = []
+                            for wt_ch in wt.channel:
+                                if wt_ch == 'L':
+                                    ch_list.append(cm_pmt.dl_ch_selected(standard, band, bw)[0])
+                                elif wt_ch == 'M':
+                                    ch_list.append(cm_pmt.dl_ch_selected(standard, band, bw)[1])
+                                elif wt_ch == 'H':
+                                    ch_list.append(cm_pmt.dl_ch_selected(standard, band, bw)[2])
+                            logger.debug(f'Test Channel List: {band}, {bw}MHZ, downlink channel list:{ch_list}')
+                            for dl_ch in ch_list:
                                 self.band = band
                                 self.bw = bw
                                 self.dl_ch = dl_ch
@@ -796,7 +836,16 @@ class Anritsu8820(pyvisa.ResourceManager):
             elif tech == 'WCDMA' and wt.wcdma_bands != []:
                 standard = self.switch_to_wcdma()
                 for band in wt.wcdma_bands:
-                    for dl_ch in cm_pmt.dl_ch_selected(standard, band):
+                    ch_list = []
+                    for wt_ch in wt.channel:
+                        if wt_ch == 'L':
+                            ch_list.append(cm_pmt.dl_ch_selected(standard, band)[0])
+                        elif wt_ch == 'M':
+                            ch_list.append(cm_pmt.dl_ch_selected(standard, band)[1])
+                        elif wt_ch == 'H':
+                            ch_list.append(cm_pmt.dl_ch_selected(standard, band)[2])
+                    logger.debug(f'Test Channel List: {band}, {bw}MHZ, downlink channel list:{ch_list}')
+                    for dl_ch in ch_list:
                         self.band = band
                         self.dl_ch = dl_ch
                         conn_state = int(self.inst.query("CALLSTAT?").strip())
