@@ -1,8 +1,14 @@
+import csv
+import pathlib
+
 import pyvisa
 import time
 import datetime
 import logging
 from logging.config import fileConfig
+import openpyxl
+from decimal import Decimal
+from openpyxl.chart import LineChart, Reference
 
 from loss_table import loss_table
 import common_parameters as cm_pmt
@@ -12,8 +18,10 @@ from fly_mode import Flymode, get_comport_wanted
 fileConfig('logging.ini')
 logger = logging.getLogger()
 
+
 class Anritsu8820(pyvisa.ResourceManager):
     def __init__(self):
+        self.excel_path = None
         self.count = 5
         self.pwr = None
         self.aclr = None
@@ -95,7 +103,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('STDSEL GSM')  # switch to GSM
             time.sleep(1)
             self.std = self.query_standard()
-            if ( self.std == "GSM"):
+            if (self.std == "GSM"):
                 logger.info("Switch to GSM mode OK")
                 return self.std
             else:
@@ -221,7 +229,6 @@ class Anritsu8820(pyvisa.ResourceManager):
         loss_title = 'LOSSTBLVAL'
         freq = sorted(loss_table.keys())
         for keys in freq:
-
             loss = f'{loss_title} {str(keys)}MHZ, {str(loss_table[keys])}, {str(loss_table[keys])}, {str(loss_table[keys])}'
             logger.info(loss)
             self.inst.write(loss)
@@ -602,7 +609,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 if self.count == 0:
                     # equipment end call and start call
                     logger.info('waiting for 10 seconds to etimes to wait 10 second'
-                          'End call and then start call')
+                                'End call and then start call')
                     self.flymode_circle()
                     time.sleep(5)
                     self.inst.write('CALLSO')
@@ -649,7 +656,6 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.info(('measure it again'))
                 self.set_to_measure()
                 meas_status = int(self.inst.query('MSTAT?').strip())
-
 
             # self.inst.query('*OPC?')
 
@@ -706,12 +712,12 @@ class Anritsu8820(pyvisa.ResourceManager):
         s = standard  # WCDMA|GSM|LTE
         logger.debug("Current Format: " + s)
         if s == 'LTE':
-            power = self.inst.query('POWER? AVG').strip()
+            power = Decimal(self.inst.query('POWER? AVG').strip())
             self.inst.query('*OPC?')
             logger.info(f'POWER: {power}')
             return power
         elif s == 'WCDMA':
-            power = self.inst.query('AVG_POWER?').strip()
+            power = Decimal(self.inst.query('AVG_POWER?').strip())
             self.inst.query('*OPC?')
             logger.info(f'POWER: {power}')
             return power
@@ -732,20 +738,20 @@ class Anritsu8820(pyvisa.ResourceManager):
         logger.debug("Current Format: " + s)
         aclr = []
         if s == 'LTE':
-            aclr.append(self.inst.query('MODPWR? E_LOW1,AVG').strip())
-            aclr.append(self.inst.query('MODPWR? E_UP1,AVG').strip())
-            aclr.append(self.inst.query('MODPWR? LOW1,AVG').strip())
-            aclr.append(self.inst.query('MODPWR? UP1,AVG').strip())
-            aclr.append(self.inst.query('MODPWR? LOW2,AVG').strip())
-            aclr.append(self.inst.query('MODPWR? UP2,AVG').strip())
+            aclr.append(Decimal(self.inst.query('MODPWR? E_LOW1,AVG').strip()))
+            aclr.append(Decimal(self.inst.query('MODPWR? E_UP1,AVG').strip()))
+            aclr.append(Decimal(self.inst.query('MODPWR? LOW1,AVG').strip()))
+            aclr.append(Decimal(self.inst.query('MODPWR? UP1,AVG').strip()))
+            aclr.append(Decimal(self.inst.query('MODPWR? LOW2,AVG').strip()))
+            aclr.append(Decimal(self.inst.query('MODPWR? UP2,AVG').strip()))
             self.inst.query('*OPC?')
             logger.info(f'ACLR: {aclr}')
             return aclr
         elif s == 'WCDMA':
-            aclr.append(self.inst.query('AVG_MODPWR? LOW5').strip())
-            aclr.append(self.inst.query('AVG_MODPWR? UP5').strip())
-            aclr.append(self.inst.query('AVG_MODPWR? LOW10').strip())
-            aclr.append(self.inst.query('AVG_MODPWR? UP10').strip())
+            aclr.append(Decimal(self.inst.query('AVG_MODPWR? LOW5').strip()))
+            aclr.append(Decimal(self.inst.query('AVG_MODPWR? UP5').strip()))
+            aclr.append(Decimal(self.inst.query('AVG_MODPWR? LOW10').strip()))
+            aclr.append(Decimal(self.inst.query('AVG_MODPWR? UP10').strip()))
             self.inst.query('*OPC?')
             logger.info(f'ACLR: {aclr}')
             return aclr
@@ -759,48 +765,288 @@ class Anritsu8820(pyvisa.ResourceManager):
         s = standard  # WCDMA|GSM|LTE
         logger.debug("Current Format: " + s)
         if s == 'LTE':
-            evm = self.inst.query('EVM? AVG').strip()
+            evm = Decimal(self.inst.query('EVM? AVG').strip())
             self.inst.query('*OPC?')
             logger.info(f'EVM: {evm}')
             return evm
         elif s == 'WCDMA':
-            evm = self.inst.query('AVG_EVM?').strip()
+            evm = Decimal(self.inst.query('AVG_EVM?').strip())
             self.inst.query('*OPC?')
             logger.info(f'EVM: {evm}')
             return evm
         elif s == 'GSM':
             pass
-    # def save_csv(self, mod_power_aclr_evm_s):
-    #
-    #     pwr_q_1 = {}
-    #     pwr_q_p = []
-    #     pwr_q_f = []
-    #     pwr_16_p = []
-    #     pwr_16_f = []
-    #     pwr_64_p = []
-    #     pwr_64_f = []
-    #
-    #     aclr_q_1 = []
-    #     aclr_q_p = []
-    #     aclr_q_f = []
-    #     aclr_16_p = []
-    #     aclr_16_f = []
-    #     aclr_64_p = []
-    #     aclr_64_f = []
-    #
-    #     evm_q_1 = []
-    #     evm_q_p = []
-    #     evm_q_f = []
-    #     evm_16_p = []
-    #     evm_16_f = []
-    #     evm_64_p = []
-    #     evm_64_f = []
-    #
-    #     # format: {mod:[POWER, [ACLR], EVM]}
-    #     for mod, list in mod_power_aclr_evm_s.items():
-    #         if mod == 'Q_1':
-    #             pwr_1[self.band]
 
+    def aclr_ch_judge(self, standard, band, dl_ch, bw=None):
+        if standard == 'LTE':
+            if dl_ch < cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                self.aclr_ch = 'ch01'
+            elif dl_ch == cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                self.aclr_ch = 'ch02'
+            elif dl_ch > cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                self.aclr_ch = 'ch03'
+        elif standard == 'WCDMA':
+            pass
+        elif standard == 'GSM':
+            pass
+
+    @staticmethod
+    def creat_excel(standard, bw=None):
+        if standard == 'LTE':
+            wb = openpyxl.Workbook()
+            wb.remove(wb['Sheet'])
+            wb.create_sheet('PWR_Q_1')
+            wb.create_sheet('PWR_Q_P')
+            wb.create_sheet('PWR_Q_F')
+            wb.create_sheet('PWR_16_P')
+            wb.create_sheet('PWR_16_F')
+            wb.create_sheet('PWR_64_P')
+            wb.create_sheet('PWR_64_F')
+            wb.create_sheet('ACLR_Q_P')
+            wb.create_sheet('ACLR_Q_F')
+            wb.create_sheet('ACLR_16_P')
+            wb.create_sheet('ACLR_16_F')
+            wb.create_sheet('ACLR_64_P')
+            wb.create_sheet('ACLR_64_F')
+            wb.create_sheet('EVM_Q_P')
+            wb.create_sheet('EVM_Q_F')
+            wb.create_sheet('EVM_16_P')
+            wb.create_sheet('EVM_16_F')
+            wb.create_sheet('EVM_64_P')
+            wb.create_sheet('EVM_64_F')
+
+            for sheet in wb.sheetnames:
+                if 'ACLR' in sheet:
+                    sh = wb[sheet]
+                    sh['A1'] = 'Band'
+                    sh['B1'] = 'Channel'
+                    sh['C1'] = 'EUTRA_-1'
+                    sh['D1'] = 'EUTRA_+1'
+                    sh['E1'] = 'UTRA_-1'
+                    sh['F1'] = 'UTRA_+1'
+                    sh['G1'] = 'UTRA_-2'
+                    sh['H1'] = 'UTRA_+2'
+
+                else:
+                    sh = wb[sheet]
+                    sh['A1'] = 'Band'
+                    sh['B1'] = 'ch0'
+                    sh['C1'] = 'ch1'
+                    sh['D1'] = 'ch2'
+
+            wb.save(f'results_{bw}MHZ_LTE.xlsx')
+            wb.close()
+
+        elif standard == 'WCDMA':
+            wb = openpyxl.Workbook()
+            wb.remove(wb['Sheet'])
+            wb.create_sheet('pwr')
+            wb.create_sheet('aclr')
+            wb.create_sheet('evm')
+
+            for sheet in wb.sheetnames:
+                if 'aclr' in sheet:
+                    sh = wb[sheet]
+                    sh['A1'] = 'Band'
+                    sh['B1'] = 'Channel'
+                    sh['C1'] = 'UTRA_-1'
+                    sh['D1'] = 'UTRA_+1'
+                    sh['E1'] = 'UTRA_-2'
+                    sh['F1'] = 'UTRA_+2'
+                else:
+                    sh = wb[sheet]
+                    sh['A1'] = 'Band'
+                    sh['B1'] = 'ch01'
+                    sh['C1'] = 'ch02'
+                    sh['D1'] = 'ch03'
+
+            wb.save(f'results_WCDMA.xlsx')
+            wb.close()
+
+    def fill_power_aclr_evm(self, standard, row, ws, band, dl_ch, test_items, items_selected,
+                            bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
+        if standard == 'LTE':
+            ws.cell(row, 1).value = band
+            if items_selected == 0 or items_selected == 2:  # when select power or evm
+                if dl_ch < cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                    ws.cell(row, 2).value = test_items[items_selected]
+                    if items_selected == 0:
+                        logger.debug('the power of L ch')
+                    elif items_selected == 2:
+                        logger.debug('the evm of L ch')
+                elif dl_ch == cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                    ws.cell(row, 3).value = test_items[items_selected]
+                    if items_selected == 0:
+                        logger.debug('the power of M ch')
+                    elif items_selected == 2:
+                        logger.debug('the evm of M ch')
+                elif dl_ch > cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                    ws.cell(row, 4).value = test_items[items_selected]
+                    if items_selected == 0:
+                        logger.debug('the power of H ch')
+                    elif items_selected == 2:
+                        logger.debug('the evm of H ch')
+
+            elif items_selected == 1:  # when select aclr
+                if dl_ch < cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                    ws.cell(row, 2).value = 'ch01'
+                    for col, aclr_item in enumerate(test_items[items_selected]):
+                        ws.cell(row, 3 + col).value = aclr_item
+                    logger.debug('the ALCR of L ch')
+                elif dl_ch == cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                    ws.cell(row, 2).value = 'ch02'
+                    for col, aclr_item in enumerate(test_items[items_selected]):
+                        ws.cell(row, 3 + col).value = aclr_item
+                    logger.debug('the ACLR of M ch')
+                elif dl_ch > cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                    ws.cell(row, 2).value = 'ch03'
+                    for col, aclr_item in enumerate(test_items[items_selected]):
+                        ws.cell(row, 3 + col).value = aclr_item
+                    logger.debug('the ACLR of H ch')
+        elif standard == 'WCDMA':
+            pass
+
+    def fill_progress(self, standard, ws, band, dl_ch, test_items, test_items_selected,
+                      bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
+        self.aclr_ch_judge(self.std, band, dl_ch, bw)
+        logger.debug(f'capture band: {band}, {bw}MHZ, {self.aclr_ch}')
+        if standard == 'LTE':
+            if ws.max_row == 1:  # only title
+                self.fill_power_aclr_evm(standard, 2, ws, band, dl_ch, test_items, test_items_selected, bw)
+                logger.debug('Only title')
+            else:
+                for row in range(2, ws.max_row + 1):  # not only title
+                    if ws.cell(row, 1).value == band and (
+                            test_items_selected == 0 or test_items_selected == 2):  # if band is in the row
+                        # POWER and EVM
+                        self.fill_power_aclr_evm(standard, row, ws, band, dl_ch, test_items, test_items_selected, bw)
+                        logger.debug('Band is found')
+                        break
+                    elif ws.cell(row, 1).value == band and row == ws.max_row and test_items_selected == 1 and ws.cell(
+                            row, 2).value != self.aclr_ch:
+                        self.fill_power_aclr_evm(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected,
+                                                 bw)
+                        logger.debug('ch is not the same for ACLR')
+                        break
+                    elif ws.cell(row, 1).value == band and test_items_selected == 1 and ws.cell(row,
+                                                                                                2).value == self.aclr_ch:
+                        self.fill_power_aclr_evm(standard, row, ws, band, dl_ch, test_items, test_items_selected, bw)
+                        logger.debug('ch is the same for ACLR')
+                        break
+                    elif ws.cell(row, 1).value != band and row == ws.max_row:  # if band is not in the row and final row
+                        self.fill_power_aclr_evm(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected,
+                                                 bw)
+                        logger.debug('Band is not found and the row is final and then to add new line')
+                        break
+                    else:
+                        logger.debug('continue to search')
+                        continue
+        elif standard == 'WCDMA':
+            pass
+
+    def fill_values(self, data, band, dl_ch, bw=None):
+        if self.std == 'LTE':
+            if pathlib.Path(f'results_{bw}MHZ_LTE.xlsx').exists() is False:
+                self.creat_excel(self.std, bw)
+                logger.debug('Create Excel')
+
+            wb = openpyxl.load_workbook(f'results_{bw}MHZ_LTE.xlsx')
+            logger.debug('Open Excel')
+            for mod, test_items in data.items():
+
+                ws = wb[f'PWR_{mod}']  # POWER
+                logger.debug('start to fill Power')
+                self.fill_progress(self.std, ws, band, dl_ch, test_items, 0, bw)
+
+                if mod != 'Q_1':
+                    ws = wb[f'ACLR_{mod}']  # ACLR
+                    logger.debug('start to fill ACLR')
+                    self.fill_progress(self.std, ws, band, dl_ch, test_items, 1, bw)
+
+                    ws = wb[f'EVM_{mod}']  # EVM
+                    logger.debug('start to fill EVM')
+                    self.fill_progress(self.std, ws, band, dl_ch, test_items, 2, bw)
+
+            wb.save(f'results_{bw}MHZ_LTE.xlsx')
+            wb.close()
+
+            excel_path = f'results_{bw}MHZ_LTE.xlsx'
+
+            return excel_path
+
+
+
+        elif self.std == 'WCDMA':
+            if pathlib.Path(f'results_WCDMA.xlsx').exists() is False:
+                self.creat_excel(self.std)
+            else:
+                for d in data:
+                    pass
+
+    def excel_plot_line(self, standard, excel_path):
+        logger.debug('Start to plot line chart in Excel')
+        if standard == 'LTE':
+
+            wb = openpyxl.load_workbook(excel_path)
+            for ws_name in wb.sheetnames:
+                ws = wb[ws_name]
+
+                if 'PWR' in ws_name or 'EVM' in ws_name:
+                    chart = LineChart()
+                    chart.title = f'{ws_name[:3]}'
+                    if 'PWR' in ws_name:
+                        chart.y_axis.title = f'{ws_name[:3]}(dBm)'
+                    elif 'EVM' in ws_name:
+                        chart.y_axis.title = f'{ws_name[:3]}%'
+
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+
+                    chart.height = 20
+                    chart.width = 40
+
+                    y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
+                    chart.series[2].marker.symbol = 'circle'  # for H_ch
+
+                    ws.add_chart(chart, "F1")
+
+                    wb.save(excel_path)
+                    wb.close()
+
+                elif 'ACLR' in ws_name:
+                    chart = LineChart()
+                    chart.title = 'ACLR'
+                    chart.y_axis.title = 'ACLR(dB)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+
+                    chart.height = 20
+                    chart.width = 40
+
+                    y_data = Reference(ws, min_col=3, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                    chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                    chart.series[3].graphicalProperties.line.width = 50000  # for EUTRA_+1
+
+                    ws.add_chart(chart, "J1")
+
+                    wb.save(excel_path)
+                    wb.close()
+
+        elif standard == 'WCDMA':
+            pass
+        elif standard == 'GSM':
+            pass
 
     def run(self):
         for tech in wt.tech:
@@ -830,9 +1076,11 @@ class Anritsu8820(pyvisa.ResourceManager):
                                     self.set_registration_calling(standard)
                                 logger.info(f'Start to measure B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
                                 self.set_handover(standard, dl_ch, bw)
-                                self.get_validation(standard)
+                                data = self.get_validation(standard)
+                                self.excel_path = self.fill_values(data, band, dl_ch, bw)
                         else:
                             logger.info(f'B{band} do not have BW {bw}MHZ')
+                    self.excel_plot_line(standard, self.excel_path)
             elif tech == 'WCDMA' and wt.wcdma_bands != []:
                 standard = self.switch_to_wcdma()
                 for band in wt.wcdma_bands:
@@ -854,15 +1102,15 @@ class Anritsu8820(pyvisa.ResourceManager):
                             self.set_registration_calling(standard)
                         logger.info(f'Start to measure B{band}, downlink_chan: {dl_ch}')
                         self.set_handover(standard, dl_ch)
-                        self.get_validation(standard)
+                        data = self.get_validation(standard)
+                        self.fill_values(data, band, dl_ch)
             elif tech == wt.gsm_bands:
                 pass
             else:
-                logger.info(f'there are not any bands selected')
+                logger.info(f'Finished')
 
 
 def main():
-
     start = datetime.datetime.now()
 
     anritsu = Anritsu8820()

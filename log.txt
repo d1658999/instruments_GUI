@@ -1,222 +1,164 @@
-[20220504 09:33:08 INFO    ] start to connect
-[20220504 09:33:09 INFO    ] Modem comport is: COM19
-[20220504 09:33:09 DEBUG   ] ANRITSU,MT8820C,6200930913,23.08S #001,1
-[20220504 09:33:11 INFO    ] Current Format: LTE
-[20220504 09:33:11 INFO    ] Already LTE mode
-[20220504 09:33:11 INFO    ] LTE
-[20220504 09:33:11 INFO    ] B1 do not have BW 1.4MHZ
-[20220504 09:33:11 DEBUG   ] Test Channel List: 2, 1.4MHZ, [1193]
-[20220504 09:33:11 INFO    ] init equipment before calling
-[20220504 09:33:11 INFO    ] Preset Anritsu 8820C
-[20220504 09:33:12 INFO    ] Set LOSS
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9
-[20220504 09:33:12 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9
-[20220504 09:33:12 DEBUG   ] Current Format: LTE
-[20220504 09:33:14 DEBUG   ] Current Format: LTE
-[20220504 09:33:15 INFO    ] Start to calling
-[20220504 09:33:15 DEBUG   ] Current Format: LTE
-[20220504 09:33:15 INFO    ] Start registration and calling
-[20220504 09:33:15 INFO    ] IDLE
-[20220504 09:33:16 INFO    ] flymode is on, 0
-[20220504 09:33:19 INFO    ] flymode is off, 1
-[20220504 09:33:19 INFO    ] Waiting for 10 seconds
-[20220504 09:33:29 INFO    ] START CALL
-[20220504 09:33:30 INFO    ] Connected
-[20220504 09:33:31 INFO    ] Start to measure B2, bandwidth: 1.4 MHz, downlink_chan: 1193
-[20220504 09:33:31 DEBUG   ] Current Format: LTE
-[20220504 09:33:31 DEBUG   ] Current Format: LTE
-[20220504 09:33:32 INFO    ] TESTPRM TX_MAXPWR_Q_1
-[20220504 09:33:32 DEBUG   ] Current Format: LTE
-[20220504 09:33:32 INFO    ] POWER: 24.84
-[20220504 09:33:32 INFO    ] TESTPRM TX_MAXPWR_Q_P
-[20220504 09:33:32 DEBUG   ] Current Format: LTE
-[20220504 09:33:32 INFO    ] POWER: 24.79
-[20220504 09:33:32 DEBUG   ] Current Format: LTE
-[20220504 09:33:33 INFO    ] ACLR: ['-43.40', '-45.51', '-47.64', '-49.07', '0.00', '0.00']
-[20220504 09:33:33 DEBUG   ] Current Format: LTE
-[20220504 09:33:33 INFO    ] EVM: 1.56
-[20220504 09:33:33 INFO    ] TESTPRM TX_MAXPWR_Q_F
-[20220504 09:33:33 DEBUG   ] Current Format: LTE
-[20220504 09:33:33 INFO    ] POWER: 23.81
-[20220504 09:33:33 DEBUG   ] Current Format: LTE
-[20220504 09:33:33 INFO    ] ACLR: ['-42.51', '-43.70', '-45.97', '-46.61', '0.00', '0.00']
-[20220504 09:33:33 DEBUG   ] Current Format: LTE
-[20220504 09:33:33 INFO    ] EVM: 1.47
-[20220504 09:33:34 INFO    ] TESTPRM TX_MAXPWR_16_P
-[20220504 09:33:34 DEBUG   ] Current Format: LTE
-[20220504 09:33:34 INFO    ] POWER: 23.72
-[20220504 09:33:34 DEBUG   ] Current Format: LTE
-[20220504 09:33:34 INFO    ] ACLR: ['-42.95', '-45.46', '-47.49', '-48.96', '0.00', '0.00']
-[20220504 09:33:34 DEBUG   ] Current Format: LTE
-[20220504 09:33:34 INFO    ] EVM: 2.22
-[20220504 09:33:35 INFO    ] TESTPRM TX_MAXPWR_16_F
-[20220504 09:33:35 DEBUG   ] Current Format: LTE
-[20220504 09:33:35 INFO    ] POWER: 21.85
-[20220504 09:33:35 DEBUG   ] Current Format: LTE
-[20220504 09:33:35 INFO    ] ACLR: ['-40.55', '-40.51', '-44.38', '-44.17', '0.00', '0.00']
-[20220504 09:33:35 DEBUG   ] Current Format: LTE
-[20220504 09:33:35 INFO    ] EVM: 2.09
-[20220504 09:33:37 INFO    ] TESTPRM TX_MAXPWR_64_P
-[20220504 09:33:37 DEBUG   ] Current Format: LTE
-[20220504 09:33:37 INFO    ] POWER: 22.92
-[20220504 09:33:37 DEBUG   ] Current Format: LTE
-[20220504 09:33:37 INFO    ] ACLR: ['-40.51', '-44.15', '-45.72', '-47.87', '0.00', '0.00']
-[20220504 09:33:37 DEBUG   ] Current Format: LTE
-[20220504 09:33:37 INFO    ] EVM: 9.19
-[20220504 09:33:38 INFO    ] TESTPRM TX_MAXPWR_64_F
-[20220504 09:33:38 DEBUG   ] Current Format: LTE
-[20220504 09:33:38 INFO    ] POWER: 21.73
-[20220504 09:33:38 DEBUG   ] Current Format: LTE
-[20220504 09:33:38 INFO    ] ACLR: ['-40.53', '-41.49', '-44.72', '-45.22', '0.00', '0.00']
-[20220504 09:33:38 DEBUG   ] Current Format: LTE
-[20220504 09:33:38 INFO    ] EVM: 2.67
-[20220504 09:33:38 DEBUG   ] {'Q_1': ['24.84'], 'Q_P': ['24.79', ['-43.40', '-45.51', '-47.64', '-49.07', '0.00', '0.00'], '1.56'], 'Q_F': ['23.81', ['-42.51', '-43.70', '-45.97', '-46.61', '0.00', '0.00'], '1.47'], '16_P': ['23.72', ['-42.95', '-45.46', '-47.49', '-48.96', '0.00', '0.00'], '2.22'], '16_F': ['21.85', ['-40.55', '-40.51', '-44.38', '-44.17', '0.00', '0.00'], '2.09'], '64_P': ['22.92', ['-40.51', '-44.15', '-45.72', '-47.87', '0.00', '0.00'], '9.19'], '64_F': ['21.73', ['-40.53', '-41.49', '-44.72', '-45.22', '0.00', '0.00'], '2.67']}
-[20220504 09:33:38 DEBUG   ] Test Channel List: 3, 1.4MHZ, [1943]
-[20220504 09:33:39 INFO    ] Start to measure B3, bandwidth: 1.4 MHz, downlink_chan: 1943
-[20220504 09:33:39 DEBUG   ] Current Format: LTE
-[20220504 09:33:40 DEBUG   ] Current Format: LTE
-[20220504 09:33:40 INFO    ] TESTPRM TX_MAXPWR_Q_1
-[20220504 09:33:40 DEBUG   ] Current Format: LTE
-[20220504 09:33:40 INFO    ] POWER: 24.81
-[20220504 09:33:41 INFO    ] TESTPRM TX_MAXPWR_Q_P
-[20220504 09:33:41 DEBUG   ] Current Format: LTE
-[20220504 09:33:41 INFO    ] POWER: 24.77
-[20220504 09:33:41 DEBUG   ] Current Format: LTE
-[20220504 09:33:41 INFO    ] ACLR: ['-47.06', '-48.44', '-49.24', '-50.88', '0.00', '0.00']
-[20220504 09:33:41 DEBUG   ] Current Format: LTE
-[20220504 09:33:41 INFO    ] EVM: 1.23
-[20220504 09:33:42 INFO    ] TESTPRM TX_MAXPWR_Q_F
-[20220504 09:33:42 DEBUG   ] Current Format: LTE
-[20220504 09:33:42 INFO    ] POWER: 23.78
-[20220504 09:33:42 DEBUG   ] Current Format: LTE
-[20220504 09:33:42 INFO    ] ACLR: ['-45.40', '-45.89', '-47.37', '-47.90', '0.00', '0.00']
-[20220504 09:33:42 DEBUG   ] Current Format: LTE
-[20220504 09:33:42 INFO    ] EVM: 1.19
-[20220504 09:33:43 INFO    ] TESTPRM TX_MAXPWR_16_P
-[20220504 09:33:43 DEBUG   ] Current Format: LTE
-[20220504 09:33:43 INFO    ] POWER: 23.60
-[20220504 09:33:43 DEBUG   ] Current Format: LTE
-[20220504 09:33:43 INFO    ] ACLR: ['-44.88', '-46.83', '-47.82', '-49.46', '0.00', '0.00']
-[20220504 09:33:43 DEBUG   ] Current Format: LTE
-[20220504 09:33:43 INFO    ] EVM: 1.26
-[20220504 09:33:43 INFO    ] TESTPRM TX_MAXPWR_16_F
-[20220504 09:33:43 DEBUG   ] Current Format: LTE
-[20220504 09:33:43 INFO    ] POWER: 22.56
-[20220504 09:33:43 DEBUG   ] Current Format: LTE
-[20220504 09:33:43 INFO    ] ACLR: ['-45.42', '-45.92', '-47.21', '-47.58', '0.00', '0.00']
-[20220504 09:33:43 DEBUG   ] Current Format: LTE
-[20220504 09:33:43 INFO    ] EVM: 1.28
-[20220504 09:33:45 INFO    ] TESTPRM TX_MAXPWR_64_P
-[20220504 09:33:45 DEBUG   ] Current Format: LTE
-[20220504 09:33:45 INFO    ] POWER: 22.79
-[20220504 09:33:45 DEBUG   ] Current Format: LTE
-[20220504 09:33:45 INFO    ] ACLR: ['-41.97', '-43.23', '-45.62', '-47.47', '0.00', '0.00']
-[20220504 09:33:45 DEBUG   ] Current Format: LTE
-[20220504 09:33:45 INFO    ] EVM: 1.89
-[20220504 09:33:46 INFO    ] TESTPRM TX_MAXPWR_64_F
-[20220504 09:33:46 DEBUG   ] Current Format: LTE
-[20220504 09:33:46 INFO    ] POWER: 21.72
-[20220504 09:33:46 DEBUG   ] Current Format: LTE
-[20220504 09:33:46 INFO    ] ACLR: ['-44.20', '-44.60', '-46.47', '-46.90', '0.00', '0.00']
-[20220504 09:33:46 DEBUG   ] Current Format: LTE
-[20220504 09:33:46 INFO    ] EVM: 2.88
-[20220504 09:33:46 DEBUG   ] {'Q_1': ['24.81'], 'Q_P': ['24.77', ['-47.06', '-48.44', '-49.24', '-50.88', '0.00', '0.00'], '1.23'], 'Q_F': ['23.78', ['-45.40', '-45.89', '-47.37', '-47.90', '0.00', '0.00'], '1.19'], '16_P': ['23.60', ['-44.88', '-46.83', '-47.82', '-49.46', '0.00', '0.00'], '1.26'], '16_F': ['22.56', ['-45.42', '-45.92', '-47.21', '-47.58', '0.00', '0.00'], '1.28'], '64_P': ['22.79', ['-41.97', '-43.23', '-45.62', '-47.47', '0.00', '0.00'], '1.89'], '64_F': ['21.72', ['-44.20', '-44.60', '-46.47', '-46.90', '0.00', '0.00'], '2.88']}
-[20220504 09:33:46 DEBUG   ] Test Channel List: 4, 1.4MHZ, [2393]
-[20220504 09:33:47 INFO    ] Start to measure B4, bandwidth: 1.4 MHz, downlink_chan: 2393
-[20220504 09:33:47 DEBUG   ] Current Format: LTE
-[20220504 09:33:48 DEBUG   ] Current Format: LTE
-[20220504 09:33:48 INFO    ] TESTPRM TX_MAXPWR_Q_1
-[20220504 09:33:48 DEBUG   ] Current Format: LTE
-[20220504 09:33:48 INFO    ] POWER: 24.53
-[20220504 09:33:49 INFO    ] TESTPRM TX_MAXPWR_Q_P
-[20220504 09:33:49 DEBUG   ] Current Format: LTE
-[20220504 09:33:49 INFO    ] POWER: 24.49
-[20220504 09:33:49 DEBUG   ] Current Format: LTE
-[20220504 09:33:49 INFO    ] ACLR: ['-43.43', '-46.29', '-47.32', '-49.02', '0.00', '0.00']
-[20220504 09:33:49 DEBUG   ] Current Format: LTE
-[20220504 09:33:49 INFO    ] EVM: 1.23
-[20220504 09:33:50 INFO    ] TESTPRM TX_MAXPWR_Q_F
-[20220504 09:33:50 DEBUG   ] Current Format: LTE
-[20220504 09:33:50 INFO    ] POWER: 23.43
-[20220504 09:33:50 DEBUG   ] Current Format: LTE
-[20220504 09:33:50 INFO    ] ACLR: ['-43.39', '-45.25', '-46.63', '-47.28', '0.00', '0.00']
-[20220504 09:33:50 DEBUG   ] Current Format: LTE
-[20220504 09:33:50 INFO    ] EVM: 1.25
-[20220504 09:33:51 INFO    ] TESTPRM TX_MAXPWR_16_P
-[20220504 09:33:51 DEBUG   ] Current Format: LTE
-[20220504 09:33:51 INFO    ] POWER: 23.36
-[20220504 09:33:51 DEBUG   ] Current Format: LTE
-[20220504 09:33:51 INFO    ] ACLR: ['-43.23', '-46.85', '-47.45', '-48.86', '0.00', '0.00']
-[20220504 09:33:51 DEBUG   ] Current Format: LTE
-[20220504 09:33:51 INFO    ] EVM: 1.93
-[20220504 09:33:52 INFO    ] TESTPRM TX_MAXPWR_16_F
-[20220504 09:33:52 DEBUG   ] Current Format: LTE
-[20220504 09:33:52 INFO    ] POWER: 22.37
-[20220504 09:33:52 DEBUG   ] Current Format: LTE
-[20220504 09:33:52 INFO    ] ACLR: ['-42.67', '-43.99', '-46.22', '-46.74', '0.00', '0.00']
-[20220504 09:33:52 DEBUG   ] Current Format: LTE
-[20220504 09:33:52 INFO    ] EVM: 2.00
-[20220504 09:33:53 INFO    ] TESTPRM TX_MAXPWR_64_P
-[20220504 09:33:53 DEBUG   ] Current Format: LTE
-[20220504 09:33:53 INFO    ] POWER: 22.48
-[20220504 09:33:53 DEBUG   ] Current Format: LTE
-[20220504 09:33:53 INFO    ] ACLR: ['-43.82', '-46.82', '-48.28', '-49.81', '0.00', '0.00']
-[20220504 09:33:53 DEBUG   ] Current Format: LTE
-[20220504 09:33:53 INFO    ] EVM: 9.25
-[20220504 09:33:54 INFO    ] TESTPRM TX_MAXPWR_64_F
-[20220504 09:33:54 DEBUG   ] Current Format: LTE
-[20220504 09:33:54 INFO    ] POWER: 21.32
-[20220504 09:33:54 DEBUG   ] Current Format: LTE
-[20220504 09:33:54 INFO    ] ACLR: ['-41.42', '-42.24', '-45.36', '-45.40', '0.00', '0.00']
-[20220504 09:33:54 DEBUG   ] Current Format: LTE
-[20220504 09:33:54 INFO    ] EVM: 2.16
-[20220504 09:33:54 DEBUG   ] {'Q_1': ['24.53'], 'Q_P': ['24.49', ['-43.43', '-46.29', '-47.32', '-49.02', '0.00', '0.00'], '1.23'], 'Q_F': ['23.43', ['-43.39', '-45.25', '-46.63', '-47.28', '0.00', '0.00'], '1.25'], '16_P': ['23.36', ['-43.23', '-46.85', '-47.45', '-48.86', '0.00', '0.00'], '1.93'], '16_F': ['22.37', ['-42.67', '-43.99', '-46.22', '-46.74', '0.00', '0.00'], '2.00'], '64_P': ['22.48', ['-43.82', '-46.82', '-48.28', '-49.81', '0.00', '0.00'], '9.25'], '64_F': ['21.32', ['-41.42', '-42.24', '-45.36', '-45.40', '0.00', '0.00'], '2.16']}
-[20220504 09:33:54 INFO    ] B7 do not have BW 1.4MHZ
-[20220504 09:33:54 DEBUG   ] Test Channel List: 25, 1.4MHZ, [8683]
-[20220504 09:33:56 INFO    ] Start to measure B25, bandwidth: 1.4 MHz, downlink_chan: 8683
-[20220504 09:33:56 DEBUG   ] Current Format: LTE
-[20220504 09:33:56 DEBUG   ] Current Format: LTE
-[20220504 09:33:57 INFO    ] TESTPRM TX_MAXPWR_Q_1
-[20220504 09:33:57 DEBUG   ] Current Format: LTE
-[20220504 09:33:57 INFO    ] POWER: 24.78
-[20220504 09:33:58 INFO    ] TESTPRM TX_MAXPWR_Q_P
-[20220504 09:33:58 DEBUG   ] Current Format: LTE
-[20220504 09:33:58 INFO    ] POWER: 24.66
-[20220504 09:33:58 DEBUG   ] Current Format: LTE
-[20220504 09:33:58 INFO    ] ACLR: ['-41.36', '-45.52', '-43.91', '-48.12', '0.00', '0.00']
-[20220504 09:33:58 DEBUG   ] Current Format: LTE
-[20220504 09:33:58 INFO    ] EVM: 2.24
-[20220504 09:33:58 INFO    ] TESTPRM TX_MAXPWR_Q_F
-[20220504 09:33:58 DEBUG   ] Current Format: LTE
-[20220504 09:33:58 INFO    ] POWER: 23.67
-[20220504 09:33:58 DEBUG   ] Current Format: LTE
-[20220504 09:33:59 INFO    ] ACLR: ['-41.29', '-44.04', '-43.56', '-46.17', '0.00', '0.00']
-[20220504 09:33:59 DEBUG   ] Current Format: LTE
-[20220504 09:33:59 INFO    ] EVM: 1.48
-[20220504 09:33:59 INFO    ] TESTPRM TX_MAXPWR_16_P
-[20220504 09:33:59 DEBUG   ] Current Format: LTE
-[20220504 09:33:59 INFO    ] POWER: 23.82
-[20220504 09:33:59 DEBUG   ] Current Format: LTE
-[20220504 09:33:59 INFO    ] ACLR: ['-40.67', '-44.60', '-44.21', '-47.95', '0.00', '0.00']
-[20220504 09:33:59 DEBUG   ] Current Format: LTE
-[20220504 09:33:59 INFO    ] EVM: 1.54
-[20220504 09:34:00 INFO    ] TESTPRM TX_MAXPWR_16_F
-[20220504 09:34:00 DEBUG   ] Current Format: LTE
-[20220504 09:34:00 INFO    ] POWER: 22.69
-[20220504 09:34:00 DEBUG   ] Current Format: LTE
-[20220504 09:34:00 INFO    ] ACLR: ['-40.08', '-42.86', '-42.87', '-45.00', '0.00', '0.00']
-[20220504 09:34:00 DEBUG   ] Current Format: LTE
-[20220504 09:34:00 INFO    ] EVM: 1.86
-[20220504 09:34:02 INFO    ] TESTPRM TX_MAXPWR_64_P
-[20220504 09:34:02 DEBUG   ] Current Format: LTE
-[20220504 09:34:02 INFO    ] POWER: 23.01
-[20220504 09:34:02 DEBUG   ] Current Format: LTE
-[20220504 09:34:02 INFO    ] ACLR: ['-39.75', '-42.31', '-42.54', '-45.51', '0.00', '0.00']
-[20220504 09:34:02 DEBUG   ] Current Format: LTE
-[20220504 09:34:02 INFO    ] EVM: 1.91
+[20220506 17:28:56 INFO    ] start to connect
+[20220506 17:28:58 INFO    ] Modem comport is: COM19
+[20220506 17:28:58 DEBUG   ] ANRITSU,MT8820C,6200930913,23.08S #001,1
+[20220506 17:29:00 INFO    ] Current Format: LTE
+[20220506 17:29:00 INFO    ] Already LTE mode
+[20220506 17:29:00 INFO    ] LTE
+[20220506 17:29:00 DEBUG   ] Test Channel List: 1, 5MHZ, downlink channel list:[300]
+[20220506 17:29:00 INFO    ] init equipment before calling
+[20220506 17:29:00 INFO    ] Preset Anritsu 8820C
+[20220506 17:29:01 INFO    ] Set LOSS
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9
+[20220506 17:29:01 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9
+[20220506 17:29:01 DEBUG   ] Current Format: LTE
+[20220506 17:29:03 DEBUG   ] Current Format: LTE
+[20220506 17:29:03 INFO    ] Start to calling
+[20220506 17:29:03 DEBUG   ] Current Format: LTE
+[20220506 17:29:03 INFO    ] Start registration and calling
+[20220506 17:29:03 INFO    ] IDLE
+[20220506 17:29:04 INFO    ] flymode is on, 0
+[20220506 17:29:07 INFO    ] flymode is off, 1
+[20220506 17:29:07 INFO    ] Waiting for 10 seconds
+[20220506 17:29:17 INFO    ] START CALL
+[20220506 17:29:18 INFO    ] Connected
+[20220506 17:29:19 INFO    ] Start to measure B1, bandwidth: 5 MHz, downlink_chan: 300
+[20220506 17:29:19 DEBUG   ] Current Format: LTE
+[20220506 17:29:19 DEBUG   ] Current Format: LTE
+[20220506 17:29:20 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220506 17:29:20 DEBUG   ] Current Format: LTE
+[20220506 17:29:20 INFO    ] POWER: 24.65
+[20220506 17:29:20 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220506 17:29:20 DEBUG   ] Current Format: LTE
+[20220506 17:29:20 INFO    ] POWER: 24.75
+[20220506 17:29:20 DEBUG   ] Current Format: LTE
+[20220506 17:29:20 INFO    ] ACLR: [Decimal('-47.94'), Decimal('-54.67'), Decimal('-49.64'), Decimal('-55.47'), Decimal('-58.74'), Decimal('-56.06')]
+[20220506 17:29:20 DEBUG   ] Current Format: LTE
+[20220506 17:29:20 INFO    ] EVM: 1.98
+[20220506 17:29:21 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220506 17:29:21 DEBUG   ] Current Format: LTE
+[20220506 17:29:21 INFO    ] POWER: 23.67
+[20220506 17:29:21 DEBUG   ] Current Format: LTE
+[20220506 17:29:21 INFO    ] ACLR: [Decimal('-47.83'), Decimal('-46.06'), Decimal('-50.07'), Decimal('-48.52'), Decimal('-56.04'), Decimal('-52.66')]
+[20220506 17:29:21 DEBUG   ] Current Format: LTE
+[20220506 17:29:21 INFO    ] EVM: 0.88
+[20220506 17:29:22 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220506 17:29:22 DEBUG   ] Current Format: LTE
+[20220506 17:29:22 INFO    ] POWER: 23.77
+[20220506 17:29:22 DEBUG   ] Current Format: LTE
+[20220506 17:29:22 INFO    ] ACLR: [Decimal('-43.00'), Decimal('-53.65'), Decimal('-44.94'), Decimal('-54.47'), Decimal('-57.59'), Decimal('-55.37')]
+[20220506 17:29:22 DEBUG   ] Current Format: LTE
+[20220506 17:29:22 INFO    ] EVM: 2.00
+[20220506 17:29:23 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220506 17:29:23 DEBUG   ] Current Format: LTE
+[20220506 17:29:23 INFO    ] POWER: 22.90
+[20220506 17:29:23 DEBUG   ] Current Format: LTE
+[20220506 17:29:23 INFO    ] ACLR: [Decimal('-44.73'), Decimal('-45.05'), Decimal('-46.48'), Decimal('-46.81'), Decimal('-54.16'), Decimal('-51.91')]
+[20220506 17:29:23 DEBUG   ] Current Format: LTE
+[20220506 17:29:23 INFO    ] EVM: 1.05
+[20220506 17:29:25 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220506 17:29:25 DEBUG   ] Current Format: LTE
+[20220506 17:29:25 INFO    ] POWER: 22.80
+[20220506 17:29:25 DEBUG   ] Current Format: LTE
+[20220506 17:29:25 INFO    ] ACLR: [Decimal('-44.34'), Decimal('-53.57'), Decimal('-46.23'), Decimal('-54.36'), Decimal('-57.63'), Decimal('-55.12')]
+[20220506 17:29:25 DEBUG   ] Current Format: LTE
+[20220506 17:29:25 INFO    ] EVM: 1.83
+[20220506 17:29:26 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220506 17:29:26 DEBUG   ] Current Format: LTE
+[20220506 17:29:26 INFO    ] POWER: 21.91
+[20220506 17:29:26 DEBUG   ] Current Format: LTE
+[20220506 17:29:26 INFO    ] ACLR: [Decimal('-42.71'), Decimal('-42.81'), Decimal('-44.18'), Decimal('-44.22'), Decimal('-54.12'), Decimal('-51.76')]
+[20220506 17:29:26 DEBUG   ] Current Format: LTE
+[20220506 17:29:26 INFO    ] EVM: 1.43
+[20220506 17:29:26 DEBUG   ] {'Q_1': [Decimal('24.65')], 'Q_P': [Decimal('24.75'), [Decimal('-47.94'), Decimal('-54.67'), Decimal('-49.64'), Decimal('-55.47'), Decimal('-58.74'), Decimal('-56.06')], Decimal('1.98')], 'Q_F': [Decimal('23.67'), [Decimal('-47.83'), Decimal('-46.06'), Decimal('-50.07'), Decimal('-48.52'), Decimal('-56.04'), Decimal('-52.66')], Decimal('0.88')], '16_P': [Decimal('23.77'), [Decimal('-43.00'), Decimal('-53.65'), Decimal('-44.94'), Decimal('-54.47'), Decimal('-57.59'), Decimal('-55.37')], Decimal('2.00')], '16_F': [Decimal('22.90'), [Decimal('-44.73'), Decimal('-45.05'), Decimal('-46.48'), Decimal('-46.81'), Decimal('-54.16'), Decimal('-51.91')], Decimal('1.05')], '64_P': [Decimal('22.80'), [Decimal('-44.34'), Decimal('-53.57'), Decimal('-46.23'), Decimal('-54.36'), Decimal('-57.63'), Decimal('-55.12')], Decimal('1.83')], '64_F': [Decimal('21.91'), [Decimal('-42.71'), Decimal('-42.81'), Decimal('-44.18'), Decimal('-44.22'), Decimal('-54.12'), Decimal('-51.76')], Decimal('1.43')]}
+[20220506 17:29:26 DEBUG   ] Open Excel
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill ACLR
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] continue to search
+[20220506 17:29:26 DEBUG   ] the ACLR of M ch
+[20220506 17:29:26 DEBUG   ] ch is the same for ACLR
+[20220506 17:29:26 DEBUG   ] start to fill EVM
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the evm of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill ACLR
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] continue to search
+[20220506 17:29:26 DEBUG   ] the ACLR of M ch
+[20220506 17:29:26 DEBUG   ] ch is the same for ACLR
+[20220506 17:29:26 DEBUG   ] start to fill EVM
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the evm of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill ACLR
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] continue to search
+[20220506 17:29:26 DEBUG   ] the ACLR of M ch
+[20220506 17:29:26 DEBUG   ] ch is the same for ACLR
+[20220506 17:29:26 DEBUG   ] start to fill EVM
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the evm of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill ACLR
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] continue to search
+[20220506 17:29:26 DEBUG   ] the ACLR of M ch
+[20220506 17:29:26 DEBUG   ] ch is the same for ACLR
+[20220506 17:29:26 DEBUG   ] start to fill EVM
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the evm of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill ACLR
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] continue to search
+[20220506 17:29:26 DEBUG   ] the ACLR of M ch
+[20220506 17:29:26 DEBUG   ] ch is the same for ACLR
+[20220506 17:29:26 DEBUG   ] start to fill EVM
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the evm of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill Power
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the power of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:26 DEBUG   ] start to fill ACLR
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] continue to search
+[20220506 17:29:26 DEBUG   ] the ACLR of M ch
+[20220506 17:29:26 DEBUG   ] ch is the same for ACLR
+[20220506 17:29:26 DEBUG   ] start to fill EVM
+[20220506 17:29:26 DEBUG   ] capture band: 1, 5MHZ, ch02
+[20220506 17:29:26 DEBUG   ] the evm of M ch
+[20220506 17:29:26 DEBUG   ] Band is found
+[20220506 17:29:27 DEBUG   ] Start to plot line chart in Excel
+[20220506 17:29:47 INFO    ] Finished
+[20220506 17:29:47 INFO    ] Timer: 0:00:54.200488
