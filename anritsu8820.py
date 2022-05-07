@@ -1003,15 +1003,18 @@ class Anritsu8820(pyvisa.ResourceManager):
                     chart.x_axis.tickLblPos = 'low'
 
                     chart.height = 20
-                    chart.width = 40
+                    chart.width = 32
 
                     y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
                     x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
                     chart.add_data(y_data, titles_from_data=True)
                     chart.set_categories(x_data)
 
+                    chart.series[0].graphicalProperties.line.dashStyle = 'dash'  #for L_ch
                     chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
                     chart.series[2].marker.symbol = 'circle'  # for H_ch
+                    chart.series[2].marker.size = 10
+
 
                     ws.add_chart(chart, "F1")
 
@@ -1034,9 +1037,13 @@ class Anritsu8820(pyvisa.ResourceManager):
                     chart.set_categories(x_data)
 
                     chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                    chart.series[0].marker.size = 10
                     chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[1].marker.size = 10
                     chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                    chart.series[3].graphicalProperties.line.width = 50000  # for EUTRA_+1
+                    chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                    chart.series[4].graphicalProperties.line.dashStyle = 'dash' # for UTRA_-2
+                    chart.series[5].graphicalProperties.line.dashStyle = 'dash' # for UTRA_+2
 
                     ws.add_chart(chart, "J1")
 
