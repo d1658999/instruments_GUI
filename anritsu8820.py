@@ -8,7 +8,7 @@ import logging
 from logging.config import fileConfig
 import openpyxl
 from decimal import Decimal
-from openpyxl.chart import LineChart, Reference
+from openpyxl.chart import LineChart, Reference, ScatterChart
 
 from loss_table import loss_table
 import common_parameters as cm_pmt
@@ -786,7 +786,12 @@ class Anritsu8820(pyvisa.ResourceManager):
             elif dl_ch > cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
                 self.aclr_ch = 'ch03'
         elif standard == 'WCDMA':
-            pass
+            if dl_ch < cm_pmt.dl_ch_selected(self.std, band)[1]:
+                self.aclr_ch = 'ch01'
+            elif dl_ch == cm_pmt.dl_ch_selected(self.std, band)[1]:
+                self.aclr_ch = 'ch02'
+            elif dl_ch > cm_pmt.dl_ch_selected(self.std, band)[1]:
+                self.aclr_ch = 'ch03'
         elif standard == 'GSM':
             pass
 
@@ -840,12 +845,12 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif standard == 'WCDMA':
             wb = openpyxl.Workbook()
             wb.remove(wb['Sheet'])
-            wb.create_sheet('pwr')
-            wb.create_sheet('aclr')
-            wb.create_sheet('evm')
+            wb.create_sheet('PWR')
+            wb.create_sheet('ACLR')
+            wb.create_sheet('EVM')
 
             for sheet in wb.sheetnames:
-                if 'aclr' in sheet:
+                if 'ACLR' in sheet:
                     sh = wb[sheet]
                     sh['A1'] = 'Band'
                     sh['B1'] = 'Channel'
@@ -904,13 +909,50 @@ class Anritsu8820(pyvisa.ResourceManager):
                         ws.cell(row, 3 + col).value = aclr_item
                     logger.debug('the ACLR of H ch')
         elif standard == 'WCDMA':
-            pass
+            ws.cell(row, 1).value = band
+            if items_selected == 0 or items_selected == 2:  # when select power or evm
+                if dl_ch < cm_pmt.dl_ch_selected(self.std, band)[1]:
+                    ws.cell(row, 2).value = test_items[items_selected]
+                    if items_selected == 0:
+                        logger.debug('the power of L ch')
+                    elif items_selected == 2:
+                        logger.debug('the evm of L ch')
+                elif dl_ch == cm_pmt.dl_ch_selected(self.std, band)[1]:
+                    ws.cell(row, 3).value = test_items[items_selected]
+                    if items_selected == 0:
+                        logger.debug('the power of M ch')
+                    elif items_selected == 2:
+                        logger.debug('the evm of M ch')
+                elif dl_ch > cm_pmt.dl_ch_selected(self.std, band)[1]:
+                    ws.cell(row, 4).value = test_items[items_selected]
+                    if items_selected == 0:
+                        logger.debug('the power of H ch')
+                    elif items_selected == 2:
+                        logger.debug('the evm of H ch')
+
+            elif items_selected == 1:  # when select aclr
+                if dl_ch < cm_pmt.dl_ch_selected(self.std, band)[1]:
+                    ws.cell(row, 2).value = 'ch01'
+                    for col, aclr_item in enumerate(test_items[items_selected]):
+                        ws.cell(row, 3 + col).value = aclr_item
+                    logger.debug('the ALCR of L ch')
+                elif dl_ch == cm_pmt.dl_ch_selected(self.std, band)[1]:
+                    ws.cell(row, 2).value = 'ch02'
+                    for col, aclr_item in enumerate(test_items[items_selected]):
+                        ws.cell(row, 3 + col).value = aclr_item
+                    logger.debug('the ACLR of M ch')
+                elif dl_ch > cm_pmt.dl_ch_selected(self.std, band)[1]:
+                    ws.cell(row, 2).value = 'ch03'
+                    for col, aclr_item in enumerate(test_items[items_selected]):
+                        ws.cell(row, 3 + col).value = aclr_item
+                    logger.debug('the ACLR of H ch')
 
     def fill_progress(self, standard, ws, band, dl_ch, test_items, test_items_selected,
                       bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
-        self.aclr_ch_judge(self.std, band, dl_ch, bw)
-        logger.debug(f'capture band: {band}, {bw}MHZ, {self.aclr_ch}')
+        self.aclr_ch_judge(self.std, band, dl_ch, bw)  # this is for ACLR fill in ACLR_TAB
+
         if standard == 'LTE':
+            logger.debug(f'capture band: {band}, {bw}MHZ, {self.aclr_ch}')
             if ws.max_row == 1:  # only title
                 self.fill_power_aclr_evm(standard, 2, ws, band, dl_ch, test_items, test_items_selected, bw)
                 logger.debug('Only title')
@@ -942,10 +984,42 @@ class Anritsu8820(pyvisa.ResourceManager):
                         logger.debug('continue to search')
                         continue
         elif standard == 'WCDMA':
-            pass
+            logger.debug(f'capture band: {band}, {self.aclr_ch}')
+
+            if ws.max_row == 1:  # only title
+                self.fill_power_aclr_evm(standard, 2, ws, band, dl_ch, test_items, test_items_selected)
+                logger.debug('Only title')
+            else:
+                for row in range(2, ws.max_row + 1):  # not only title
+                    if ws.cell(row, 1).value == band and (
+                            test_items_selected == 0 or test_items_selected == 2):  # if band is in the row
+                        # POWER and EVM
+                        self.fill_power_aclr_evm(standard, row, ws, band, dl_ch, test_items, test_items_selected)
+                        logger.debug('Band is found')
+                        break
+                    elif ws.cell(row, 1).value == band and row == ws.max_row and test_items_selected == 1 and ws.cell(
+                            row, 2).value != self.aclr_ch:
+                        self.fill_power_aclr_evm(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected)
+                        logger.debug('ch is not the same for ACLR')
+                        break
+                    elif ws.cell(row, 1).value == band and test_items_selected == 1 and ws.cell(row,
+                                                                                                2).value == self.aclr_ch:
+                        self.fill_power_aclr_evm(standard, row, ws, band, dl_ch, test_items, test_items_selected)
+                        logger.debug('ch is the same for ACLR')
+                        break
+                    elif ws.cell(row, 1).value != band and row == ws.max_row:  # if band is not in the row and final row
+                        self.fill_power_aclr_evm(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected)
+                        logger.debug('Band is not found and the row is final and then to add new line')
+                        break
+                    else:
+                        logger.debug('continue to search')
+                        continue
 
     def fill_values(self, data, band, dl_ch, bw=None):
         if self.std == 'LTE':
+            """
+                LTE format:{Q1:[power], Q_P:[power, ACLR, EVM], ...} and ACLR format is [L, M, H] 
+            """
             if pathlib.Path(f'results_{bw}MHZ_LTE.xlsx').exists() is False:
                 self.creat_excel(self.std, bw)
                 logger.debug('Create Excel')
@@ -977,11 +1051,34 @@ class Anritsu8820(pyvisa.ResourceManager):
 
 
         elif self.std == 'WCDMA':
+            """
+                WCDMA format:[power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
+            """
             if pathlib.Path(f'results_WCDMA.xlsx').exists() is False:
                 self.creat_excel(self.std)
-            else:
-                for d in data:
-                    pass
+                logger.debug('Create Excel')
+
+            wb = openpyxl.load_workbook(f'results_WCDMA.xlsx')
+            logger.debug('Open Excel')
+
+            ws = wb[f'PWR']  # POWER
+            logger.debug('start to fill Power')
+            self.fill_progress(self.std, ws, band, dl_ch, data, 0)
+
+            ws = wb[f'ACLR']  # ACLR
+            logger.debug('start to fill ACLR')
+            self.fill_progress(self.std, ws, band, dl_ch, data, 1)
+
+            ws = wb[f'EVM']  # EVM
+            logger.debug('start to fill EVM')
+            self.fill_progress(self.std, ws, band, dl_ch, data, 2)
+
+            wb.save(f'results_WCDMA.xlsx')
+            wb.close()
+
+            excel_path = f'results_WCDMA.xlsx'
+
+            return excel_path
 
     def excel_plot_line(self, standard, excel_path):
         logger.debug('Start to plot line chart in Excel')
@@ -990,6 +1087,9 @@ class Anritsu8820(pyvisa.ResourceManager):
             wb = openpyxl.load_workbook(excel_path)
             for ws_name in wb.sheetnames:
                 ws = wb[ws_name]
+
+                if ws._charts != []:  # if there is charts, delete it
+                    del ws._charts[0]
 
                 if 'PWR' in ws_name or 'EVM' in ws_name:
                     chart = LineChart()
@@ -1010,11 +1110,10 @@ class Anritsu8820(pyvisa.ResourceManager):
                     chart.add_data(y_data, titles_from_data=True)
                     chart.set_categories(x_data)
 
-                    chart.series[0].graphicalProperties.line.dashStyle = 'dash'  #for L_ch
+                    chart.series[0].graphicalProperties.line.dashStyle = 'dash'  # for L_ch
                     chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
                     chart.series[2].marker.symbol = 'circle'  # for H_ch
                     chart.series[2].marker.size = 10
-
 
                     ws.add_chart(chart, "F1")
 
@@ -1027,6 +1126,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     chart.y_axis.title = 'ACLR(dB)'
                     chart.x_axis.title = 'Band'
                     chart.x_axis.tickLblPos = 'low'
+                    chart.y_axis.scaling.min = -60
+                    chart.y_axis.scaling.max = -20
 
                     chart.height = 20
                     chart.width = 40
@@ -1042,8 +1143,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     chart.series[1].marker.size = 10
                     chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
                     chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                    chart.series[4].graphicalProperties.line.dashStyle = 'dash' # for UTRA_-2
-                    chart.series[5].graphicalProperties.line.dashStyle = 'dash' # for UTRA_+2
+                    chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                    chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
                     ws.add_chart(chart, "J1")
 
@@ -1051,7 +1152,68 @@ class Anritsu8820(pyvisa.ResourceManager):
                     wb.close()
 
         elif standard == 'WCDMA':
-            pass
+            wb = openpyxl.load_workbook(excel_path)
+            for ws_name in wb.sheetnames:
+                ws = wb[ws_name]
+
+                if ws._charts != []:  # if there is charts, delete it
+                    del ws._charts[0]
+
+                if 'PWR' in ws_name or 'EVM' in ws_name:
+                    chart = LineChart()
+                    chart.title = f'{ws_name[:3]}'
+                    if 'PWR' in ws_name:
+                        chart.y_axis.title = f'{ws_name[:3]}(dBm)'
+                    elif 'EVM' in ws_name:
+                        chart.y_axis.title = f'{ws_name[:3]}%'
+
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+
+                    chart.height = 20
+                    chart.width = 32
+
+                    y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].graphicalProperties.line.dashStyle = 'dash'  # for L_ch
+                    chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
+                    chart.series[2].marker.symbol = 'circle'  # for H_ch
+                    chart.series[2].marker.size = 10
+
+                    ws.add_chart(chart, "F1")
+
+                    wb.save(excel_path)
+                    wb.close()
+
+                elif 'ACLR' in ws_name:
+                    chart = LineChart()
+                    chart.title = 'ACLR'
+                    chart.y_axis.title = 'ACLR(dB)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+                    chart.y_axis.scaling.min = -60
+                    chart.y_axis.scaling.max = -20
+
+                    chart.height = 20
+                    chart.width = 40
+
+                    y_data = Reference(ws, min_col=3, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].graphicalProperties.line.width = 50000  # for UTRA_-1
+                    chart.series[1].graphicalProperties.line.width = 50000  # for UTRA_+1
+                    chart.series[2].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                    chart.series[3].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+
+                    ws.add_chart(chart, "J1")
+
+                    wb.save(excel_path)
+                    wb.close()
         elif standard == 'GSM':
             pass
 
@@ -1099,7 +1261,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                             ch_list.append(cm_pmt.dl_ch_selected(standard, band)[1])
                         elif wt_ch == 'H':
                             ch_list.append(cm_pmt.dl_ch_selected(standard, band)[2])
-                    logger.debug(f'Test Channel List: {band}, {bw}MHZ, downlink channel list:{ch_list}')
+                    logger.debug(f'Test Channel List: {band}, downlink channel list:{ch_list}')
                     for dl_ch in ch_list:
                         self.band = band
                         self.dl_ch = dl_ch
@@ -1110,7 +1272,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                         logger.info(f'Start to measure B{band}, downlink_chan: {dl_ch}')
                         self.set_handover(standard, dl_ch)
                         data = self.get_validation(standard)
-                        self.fill_values(data, band, dl_ch)
+                        self.excel_path = self.fill_values(data, band, dl_ch)
+                self.excel_plot_line(standard, self.excel_path)
             elif tech == wt.gsm_bands:
                 pass
             else:
