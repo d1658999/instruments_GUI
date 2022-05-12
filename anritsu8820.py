@@ -1,4 +1,3 @@
-import csv
 import pathlib
 
 import pyvisa
@@ -41,6 +40,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         for resource in super().list_resources():
             if 'GPIB' in resource:
                 resources.append(resource)
+                logger.debug(resource)
         return resources
 
     def build_object(self):
@@ -138,7 +138,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
             preset Anritsu 8820C
         """
-        logger.info("Preset Anritsu 8820C")
+        logger.info("Preset Anritsu 8820/8821")
         s = self.query_standard()  # WCDMA|GSM|LTE|CDMA2K
         if s == 'WCDMA':
             self.inst.write('CALLSO')
@@ -291,8 +291,10 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('CALLRFR')
             while conn_state == cm_pmt.ANRITSU_IDLE:
                 logger.info('IDLE')
-                time.sleep(1)
+                time.sleep(5)
                 self.flymode_circle()
+                time.sleep(1)
+                self.inst.write('CALLSA')
                 logger.info('Waiting for 10 seconds')
                 time.sleep(10)
                 conn_state = int(self.inst.query("CALLSTAT?").strip())
@@ -608,8 +610,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.info('Call drops...')
                 if self.count == 0:
                     # equipment end call and start call
-                    logger.info('waiting for 10 seconds to etimes to wait 10 second'
-                                'End call and then start call')
+                    logger.info('End call and then start call')
                     self.flymode_circle()
                     time.sleep(5)
                     self.inst.write('CALLSO')
@@ -1083,73 +1084,76 @@ class Anritsu8820(pyvisa.ResourceManager):
     def excel_plot_line(self, standard, excel_path):
         logger.debug('Start to plot line chart in Excel')
         if standard == 'LTE':
+            try:
+                wb = openpyxl.load_workbook(excel_path)
+                for ws_name in wb.sheetnames:
+                    ws = wb[ws_name]
 
-            wb = openpyxl.load_workbook(excel_path)
-            for ws_name in wb.sheetnames:
-                ws = wb[ws_name]
+                    if ws._charts != []:  # if there is charts, delete it
+                        del ws._charts[0]
 
-                if ws._charts != []:  # if there is charts, delete it
-                    del ws._charts[0]
+                    if 'PWR' in ws_name or 'EVM' in ws_name:
+                        chart = LineChart()
+                        chart.title = f'{ws_name[:3]}'
+                        if 'PWR' in ws_name:
+                            chart.y_axis.title = f'{ws_name[:3]}(dBm)'
+                        elif 'EVM' in ws_name:
+                            chart.y_axis.title = f'{ws_name[:3]}%'
 
-                if 'PWR' in ws_name or 'EVM' in ws_name:
-                    chart = LineChart()
-                    chart.title = f'{ws_name[:3]}'
-                    if 'PWR' in ws_name:
-                        chart.y_axis.title = f'{ws_name[:3]}(dBm)'
-                    elif 'EVM' in ws_name:
-                        chart.y_axis.title = f'{ws_name[:3]}%'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
 
-                    chart.x_axis.title = 'Band'
-                    chart.x_axis.tickLblPos = 'low'
+                        chart.height = 20
+                        chart.width = 32
 
-                    chart.height = 20
-                    chart.width = 32
+                        y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
 
-                    y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
-                    x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
-                    chart.add_data(y_data, titles_from_data=True)
-                    chart.set_categories(x_data)
+                        chart.series[0].graphicalProperties.line.dashStyle = 'dash'  # for L_ch
+                        chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
+                        chart.series[2].marker.symbol = 'circle'  # for H_ch
+                        chart.series[2].marker.size = 10
 
-                    chart.series[0].graphicalProperties.line.dashStyle = 'dash'  # for L_ch
-                    chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
-                    chart.series[2].marker.symbol = 'circle'  # for H_ch
-                    chart.series[2].marker.size = 10
+                        ws.add_chart(chart, "F1")
 
-                    ws.add_chart(chart, "F1")
+                        wb.save(excel_path)
+                        wb.close()
 
-                    wb.save(excel_path)
-                    wb.close()
+                    elif 'ACLR' in ws_name:
+                        chart = LineChart()
+                        chart.title = 'ACLR'
+                        chart.y_axis.title = 'ACLR(dB)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+                        chart.y_axis.scaling.min = -60
+                        chart.y_axis.scaling.max = -20
 
-                elif 'ACLR' in ws_name:
-                    chart = LineChart()
-                    chart.title = 'ACLR'
-                    chart.y_axis.title = 'ACLR(dB)'
-                    chart.x_axis.title = 'Band'
-                    chart.x_axis.tickLblPos = 'low'
-                    chart.y_axis.scaling.min = -60
-                    chart.y_axis.scaling.max = -20
+                        chart.height = 20
+                        chart.width = 40
 
-                    chart.height = 20
-                    chart.width = 40
+                        y_data = Reference(ws, min_col=3, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
 
-                    y_data = Reference(ws, min_col=3, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
-                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                    chart.add_data(y_data, titles_from_data=True)
-                    chart.set_categories(x_data)
+                        chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                        chart.series[0].marker.size = 10
+                        chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[1].marker.size = 10
+                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                        chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                        chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
-                    chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
-                    chart.series[0].marker.size = 10
-                    chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
-                    chart.series[1].marker.size = 10
-                    chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                    chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                    chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
-                    chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+                        ws.add_chart(chart, "J1")
 
-                    ws.add_chart(chart, "J1")
-
-                    wb.save(excel_path)
-                    wb.close()
+                        wb.save(excel_path)
+                        wb.close()
+            except TypeError as err:
+                logger.debug(err)
+                logger.info(f"This Band doesn't have this BW")
 
         elif standard == 'WCDMA':
             wb = openpyxl.load_workbook(excel_path)
@@ -1236,9 +1240,9 @@ class Anritsu8820(pyvisa.ResourceManager):
                                     ch_list.append(cm_pmt.dl_ch_selected(standard, band, bw)[2])
                             logger.debug(f'Test Channel List: {band}, {bw}MHZ, downlink channel list:{ch_list}')
                             for dl_ch in ch_list:
-                                self.band = band
-                                self.bw = bw
-                                self.dl_ch = dl_ch
+                                # self.band = band
+                                # self.bw = bw
+                                # self.dl_ch = dl_ch
                                 conn_state = int(self.inst.query("CALLSTAT?").strip())
                                 if conn_state != cm_pmt.ANRITSU_CONNECTED:
                                     self.set_init_before_calling(standard, dl_ch, bw)

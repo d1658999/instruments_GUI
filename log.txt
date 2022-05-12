@@ -1,292 +1,35 @@
-[20220509 22:28:18 INFO    ] start to connect
-[20220509 22:28:19 INFO    ] Modem comport is: COM19
-[20220509 22:28:19 DEBUG   ] ANRITSU,MT8820C,6201381739,23.08S #001,1
-[20220509 22:28:20 DEBUG   ] Current Function: WCDMA
-[20220509 22:28:20 INFO    ] Already WCDMA mode
-[20220509 22:28:20 DEBUG   ] Test Channel List: 1, downlink channel list:[10562, 10700, 10838]
-[20220509 22:28:20 INFO    ] init equipment before calling
-[20220509 22:28:20 INFO    ] Preset Anritsu 8820C
-[20220509 22:28:22 INFO    ] Set LOSS
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9
-[20220509 22:28:22 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9
-[20220509 22:28:22 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:26 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:26 INFO    ] Start to calling
-[20220509 22:28:26 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:26 INFO    ] Start registration and calling
-[20220509 22:28:26 INFO    ] flymode is on, 0
-[20220509 22:28:29 INFO    ] flymode is off, 1
-[20220509 22:28:29 INFO    ] IDLE
-[20220509 22:28:34 INFO    ] START CALL
-[20220509 22:28:42 INFO    ] Loop mode 1 and connected
-[20220509 22:28:42 INFO    ] Start to measure B1, downlink_chan: 10562
-[20220509 22:28:42 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:42 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:42 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:42 INFO    ] POWER: 22.19
-[20220509 22:28:42 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:42 INFO    ] ACLR: [Decimal('-44.01'), Decimal('-46.68'), Decimal('-57.03'), Decimal('-56.28')]
-[20220509 22:28:42 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:42 INFO    ] EVM: 1.77
-[20220509 22:28:42 DEBUG   ] [Decimal('22.19'), [Decimal('-44.01'), Decimal('-46.68'), Decimal('-57.03'), Decimal('-56.28')], Decimal('1.77')]
-[20220509 22:28:42 DEBUG   ] Open Excel
-[20220509 22:28:42 DEBUG   ] start to fill Power
-[20220509 22:28:42 DEBUG   ] capture band: 1, ch01
-[20220509 22:28:42 DEBUG   ] the power of L ch
-[20220509 22:28:42 DEBUG   ] Band is found
-[20220509 22:28:42 DEBUG   ] start to fill ACLR
-[20220509 22:28:42 DEBUG   ] capture band: 1, ch01
-[20220509 22:28:42 DEBUG   ] the ALCR of L ch
-[20220509 22:28:42 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:42 DEBUG   ] start to fill EVM
-[20220509 22:28:42 DEBUG   ] capture band: 1, ch01
-[20220509 22:28:42 DEBUG   ] the evm of L ch
-[20220509 22:28:42 DEBUG   ] Band is found
-[20220509 22:28:42 INFO    ] Start to measure B1, downlink_chan: 10700
-[20220509 22:28:42 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:44 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:44 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:44 INFO    ] POWER: 21.96
-[20220509 22:28:44 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:44 INFO    ] ACLR: [Decimal('-43.47'), Decimal('-45.10'), Decimal('-58.41'), Decimal('-55.11')]
-[20220509 22:28:44 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:44 INFO    ] EVM: 1.78
-[20220509 22:28:44 DEBUG   ] [Decimal('21.96'), [Decimal('-43.47'), Decimal('-45.10'), Decimal('-58.41'), Decimal('-55.11')], Decimal('1.78')]
-[20220509 22:28:44 DEBUG   ] Open Excel
-[20220509 22:28:44 DEBUG   ] start to fill Power
-[20220509 22:28:44 DEBUG   ] capture band: 1, ch02
-[20220509 22:28:44 DEBUG   ] the power of M ch
-[20220509 22:28:44 DEBUG   ] Band is found
-[20220509 22:28:44 DEBUG   ] start to fill ACLR
-[20220509 22:28:44 DEBUG   ] capture band: 1, ch02
-[20220509 22:28:44 DEBUG   ] continue to search
-[20220509 22:28:44 DEBUG   ] the ACLR of M ch
-[20220509 22:28:44 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:44 DEBUG   ] start to fill EVM
-[20220509 22:28:44 DEBUG   ] capture band: 1, ch02
-[20220509 22:28:44 DEBUG   ] the evm of M ch
-[20220509 22:28:44 DEBUG   ] Band is found
-[20220509 22:28:44 INFO    ] Start to measure B1, downlink_chan: 10838
-[20220509 22:28:44 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:45 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:45 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:45 INFO    ] POWER: 22.26
-[20220509 22:28:45 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:45 INFO    ] ACLR: [Decimal('-47.53'), Decimal('-47.75'), Decimal('-60.02'), Decimal('-53.66')]
-[20220509 22:28:45 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:45 INFO    ] EVM: 1.88
-[20220509 22:28:45 DEBUG   ] [Decimal('22.26'), [Decimal('-47.53'), Decimal('-47.75'), Decimal('-60.02'), Decimal('-53.66')], Decimal('1.88')]
-[20220509 22:28:45 DEBUG   ] Open Excel
-[20220509 22:28:45 DEBUG   ] start to fill Power
-[20220509 22:28:45 DEBUG   ] capture band: 1, ch03
-[20220509 22:28:45 DEBUG   ] the power of H ch
-[20220509 22:28:45 DEBUG   ] Band is found
-[20220509 22:28:45 DEBUG   ] start to fill ACLR
-[20220509 22:28:45 DEBUG   ] capture band: 1, ch03
-[20220509 22:28:45 DEBUG   ] continue to search
-[20220509 22:28:45 DEBUG   ] continue to search
-[20220509 22:28:45 DEBUG   ] the ACLR of H ch
-[20220509 22:28:45 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:45 DEBUG   ] start to fill EVM
-[20220509 22:28:45 DEBUG   ] capture band: 1, ch03
-[20220509 22:28:45 DEBUG   ] the evm of H ch
-[20220509 22:28:45 DEBUG   ] Band is found
-[20220509 22:28:45 DEBUG   ] Test Channel List: 2, downlink channel list:[9662, 9800, 9938]
-[20220509 22:28:45 INFO    ] Start to measure B2, downlink_chan: 9662
-[20220509 22:28:45 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:46 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:46 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:47 INFO    ] POWER: 21.97
-[20220509 22:28:47 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:47 INFO    ] ACLR: [Decimal('-45.57'), Decimal('-45.69'), Decimal('-57.94'), Decimal('-55.00')]
-[20220509 22:28:47 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:47 INFO    ] EVM: 1.57
-[20220509 22:28:47 DEBUG   ] [Decimal('21.97'), [Decimal('-45.57'), Decimal('-45.69'), Decimal('-57.94'), Decimal('-55.00')], Decimal('1.57')]
-[20220509 22:28:47 DEBUG   ] Open Excel
-[20220509 22:28:47 DEBUG   ] start to fill Power
-[20220509 22:28:47 DEBUG   ] capture band: 2, ch01
-[20220509 22:28:47 DEBUG   ] continue to search
-[20220509 22:28:47 DEBUG   ] the power of L ch
-[20220509 22:28:47 DEBUG   ] Band is found
-[20220509 22:28:47 DEBUG   ] start to fill ACLR
-[20220509 22:28:47 DEBUG   ] capture band: 2, ch01
-[20220509 22:28:47 DEBUG   ] continue to search
-[20220509 22:28:47 DEBUG   ] continue to search
-[20220509 22:28:47 DEBUG   ] continue to search
-[20220509 22:28:47 DEBUG   ] the ALCR of L ch
-[20220509 22:28:47 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:47 DEBUG   ] start to fill EVM
-[20220509 22:28:47 DEBUG   ] capture band: 2, ch01
-[20220509 22:28:47 DEBUG   ] continue to search
-[20220509 22:28:47 DEBUG   ] the evm of L ch
-[20220509 22:28:47 DEBUG   ] Band is found
-[20220509 22:28:47 INFO    ] Start to measure B2, downlink_chan: 9800
-[20220509 22:28:47 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:48 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:48 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:48 INFO    ] POWER: 22.02
-[20220509 22:28:48 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:48 INFO    ] ACLR: [Decimal('-44.01'), Decimal('-44.70'), Decimal('-57.43'), Decimal('-55.02')]
-[20220509 22:28:48 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:48 INFO    ] EVM: 2.19
-[20220509 22:28:48 DEBUG   ] [Decimal('22.02'), [Decimal('-44.01'), Decimal('-44.70'), Decimal('-57.43'), Decimal('-55.02')], Decimal('2.19')]
-[20220509 22:28:48 DEBUG   ] Open Excel
-[20220509 22:28:48 DEBUG   ] start to fill Power
-[20220509 22:28:48 DEBUG   ] capture band: 2, ch02
-[20220509 22:28:48 DEBUG   ] continue to search
-[20220509 22:28:48 DEBUG   ] the power of M ch
-[20220509 22:28:48 DEBUG   ] Band is found
-[20220509 22:28:48 DEBUG   ] start to fill ACLR
-[20220509 22:28:48 DEBUG   ] capture band: 2, ch02
-[20220509 22:28:48 DEBUG   ] continue to search
-[20220509 22:28:48 DEBUG   ] continue to search
-[20220509 22:28:48 DEBUG   ] continue to search
-[20220509 22:28:48 DEBUG   ] continue to search
-[20220509 22:28:48 DEBUG   ] the ACLR of M ch
-[20220509 22:28:48 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:48 DEBUG   ] start to fill EVM
-[20220509 22:28:48 DEBUG   ] capture band: 2, ch02
-[20220509 22:28:48 DEBUG   ] continue to search
-[20220509 22:28:48 DEBUG   ] the evm of M ch
-[20220509 22:28:48 DEBUG   ] Band is found
-[20220509 22:28:48 INFO    ] Start to measure B2, downlink_chan: 9938
-[20220509 22:28:48 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:49 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:49 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:49 INFO    ] POWER: 24.02
-[20220509 22:28:49 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:49 INFO    ] ACLR: [Decimal('-41.72'), Decimal('-45.91'), Decimal('-53.42'), Decimal('-54.24')]
-[20220509 22:28:49 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:49 INFO    ] EVM: 2.23
-[20220509 22:28:49 DEBUG   ] [Decimal('24.02'), [Decimal('-41.72'), Decimal('-45.91'), Decimal('-53.42'), Decimal('-54.24')], Decimal('2.23')]
-[20220509 22:28:49 DEBUG   ] Open Excel
-[20220509 22:28:49 DEBUG   ] start to fill Power
-[20220509 22:28:49 DEBUG   ] capture band: 2, ch03
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] the power of H ch
-[20220509 22:28:49 DEBUG   ] Band is found
-[20220509 22:28:49 DEBUG   ] start to fill ACLR
-[20220509 22:28:49 DEBUG   ] capture band: 2, ch03
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] the ACLR of H ch
-[20220509 22:28:49 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:49 DEBUG   ] start to fill EVM
-[20220509 22:28:49 DEBUG   ] capture band: 2, ch03
-[20220509 22:28:49 DEBUG   ] continue to search
-[20220509 22:28:49 DEBUG   ] the evm of H ch
-[20220509 22:28:49 DEBUG   ] Band is found
-[20220509 22:28:49 DEBUG   ] Test Channel List: 4, downlink channel list:[1537, 1638, 1738]
-[20220509 22:28:49 INFO    ] Start to measure B4, downlink_chan: 1537
-[20220509 22:28:49 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:50 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:50 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:51 INFO    ] POWER: 22.14
-[20220509 22:28:51 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:51 INFO    ] ACLR: [Decimal('-41.56'), Decimal('-39.92'), Decimal('-57.50'), Decimal('-56.75')]
-[20220509 22:28:51 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:51 INFO    ] EVM: 1.74
-[20220509 22:28:51 DEBUG   ] [Decimal('22.14'), [Decimal('-41.56'), Decimal('-39.92'), Decimal('-57.50'), Decimal('-56.75')], Decimal('1.74')]
-[20220509 22:28:51 DEBUG   ] Open Excel
-[20220509 22:28:51 DEBUG   ] start to fill Power
-[20220509 22:28:51 DEBUG   ] capture band: 4, ch01
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] the power of L ch
-[20220509 22:28:51 DEBUG   ] Band is found
-[20220509 22:28:51 DEBUG   ] start to fill ACLR
-[20220509 22:28:51 DEBUG   ] capture band: 4, ch01
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] the ALCR of L ch
-[20220509 22:28:51 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:51 DEBUG   ] start to fill EVM
-[20220509 22:28:51 DEBUG   ] capture band: 4, ch01
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] continue to search
-[20220509 22:28:51 DEBUG   ] the evm of L ch
-[20220509 22:28:51 DEBUG   ] Band is found
-[20220509 22:28:51 INFO    ] Start to measure B4, downlink_chan: 1638
-[20220509 22:28:51 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:52 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:52 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:52 INFO    ] POWER: 22.05
-[20220509 22:28:52 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:52 INFO    ] ACLR: [Decimal('-47.29'), Decimal('-46.04'), Decimal('-56.12'), Decimal('-55.83')]
-[20220509 22:28:52 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:52 INFO    ] EVM: 1.68
-[20220509 22:28:52 DEBUG   ] [Decimal('22.05'), [Decimal('-47.29'), Decimal('-46.04'), Decimal('-56.12'), Decimal('-55.83')], Decimal('1.68')]
-[20220509 22:28:52 DEBUG   ] Open Excel
-[20220509 22:28:52 DEBUG   ] start to fill Power
-[20220509 22:28:52 DEBUG   ] capture band: 4, ch02
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] the power of M ch
-[20220509 22:28:52 DEBUG   ] Band is found
-[20220509 22:28:52 DEBUG   ] start to fill ACLR
-[20220509 22:28:52 DEBUG   ] capture band: 4, ch02
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] the ACLR of M ch
-[20220509 22:28:52 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:52 DEBUG   ] start to fill EVM
-[20220509 22:28:52 DEBUG   ] capture band: 4, ch02
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] continue to search
-[20220509 22:28:52 DEBUG   ] the evm of M ch
-[20220509 22:28:52 DEBUG   ] Band is found
-[20220509 22:28:52 INFO    ] Start to measure B4, downlink_chan: 1738
-[20220509 22:28:52 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:53 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:53 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:53 INFO    ] POWER: 22.24
-[20220509 22:28:53 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:53 INFO    ] ACLR: [Decimal('-46.07'), Decimal('-47.15'), Decimal('-58.58'), Decimal('-53.89')]
-[20220509 22:28:53 DEBUG   ] Current Format: WCDMA
-[20220509 22:28:53 INFO    ] EVM: 1.64
-[20220509 22:28:53 DEBUG   ] [Decimal('22.24'), [Decimal('-46.07'), Decimal('-47.15'), Decimal('-58.58'), Decimal('-53.89')], Decimal('1.64')]
-[20220509 22:28:53 DEBUG   ] Open Excel
-[20220509 22:28:53 DEBUG   ] start to fill Power
-[20220509 22:28:53 DEBUG   ] capture band: 4, ch03
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] the power of H ch
-[20220509 22:28:53 DEBUG   ] Band is found
-[20220509 22:28:53 DEBUG   ] start to fill ACLR
-[20220509 22:28:53 DEBUG   ] capture band: 4, ch03
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] the ACLR of H ch
-[20220509 22:28:53 DEBUG   ] ch is the same for ACLR
-[20220509 22:28:53 DEBUG   ] start to fill EVM
-[20220509 22:28:53 DEBUG   ] capture band: 4, ch03
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] continue to search
-[20220509 22:28:53 DEBUG   ] the evm of H ch
-[20220509 22:28:53 DEBUG   ] Band is found
-[20220509 22:28:53 DEBUG   ] Start to plot line chart in Excel
-[20220509 22:28:54 INFO    ] Timer: 0:00:36.342179
+[20220512 15:11:56 INFO    ] start to connect
+[20220512 15:11:57 DEBUG   ] GPIB0::1::INSTR
+[20220512 15:11:57 INFO    ] Modem comport is: COM19
+[20220512 15:11:58 DEBUG   ] ANRITSU,MT8821C,6200910051,40.10S #052,1
+[20220512 15:12:00 INFO    ] Current Format: LTE
+[20220512 15:12:00 INFO    ] Already LTE mode
+[20220512 15:12:00 INFO    ] LTE
+[20220512 15:12:00 INFO    ] B1 do not have BW 1.4MHZ
+[20220512 15:12:00 DEBUG   ] Test Channel List: 2, 1.4MHZ, downlink channel list:[607, 900, 1193]
+[20220512 15:12:00 INFO    ] init equipment before calling
+[20220512 15:12:00 INFO    ] Preset Anritsu 8820/8821
+[20220512 15:12:08 DEBUG   ] -
+
+[20220512 15:12:08 INFO    ] Set LOSS
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 500MHZ, 0.5, 0.5,,, 0.5,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 1000MHZ, 0.5, 0.5,,, 0.5,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 1100MHZ, 0.6, 0.6,,, 0.6,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 1500MHZ, 0.6, 0.6,,, 0.6,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 1600MHZ, 0.8, 0.8,,, 0.8,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 2000MHZ, 0.8, 0.8,,, 0.8,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 2100MHZ, 0.9, 0.9,,, 0.9,,,
+[20220512 15:12:08 INFO    ] LOSSTBLVAL2 2500MHZ, 0.9, 0.9,,, 0.9,,,
+[20220512 15:12:08 DEBUG   ] Current Format: LTE
+[20220512 15:12:08 DEBUG   ] Current Format: LTE
+[20220512 15:12:09 INFO    ] Start to calling
+[20220512 15:12:09 DEBUG   ] Current Format: LTE
+[20220512 15:12:09 INFO    ] Start registration and calling
+[20220512 15:12:09 INFO    ] IDLE
+[20220512 15:12:14 INFO    ] flymode is on, 0
+[20220512 15:12:17 INFO    ] flymode is off, 1
+[20220512 15:12:18 INFO    ] Waiting for 10 seconds
+[20220512 15:12:28 INFO    ] IDLE
+[20220512 15:12:33 INFO    ] flymode is on, 0
+[20220512 15:12:36 INFO    ] flymode is off, 1
+[20220512 15:12:37 INFO    ] Waiting for 10 seconds
