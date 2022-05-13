@@ -23,6 +23,32 @@ class Anritsu8821(Anritsu8820):
     def __init__(self):
         super().__init__()
 
+    def set_init_before_calling_lte(self, dl_ch, bw):
+        """
+            preset before start to calling for LTE
+        """
+        self.preset()
+        self.set_band_cal()
+        self.set_screen('OFF')
+        self.set_display_remain()
+        self.preset_extarb()
+        self.set_lvl_status('OFF')
+        self.set_test_mode('OFF')
+        self.set_integrity('LTE', 'SNOW3G')
+        self.set_scenario()
+        self.set_pdn_type()
+        self.set_mcc_mnc()
+        self.set_ant_config()
+        self.set_imsi()
+        self.set_authentication()
+        self.set_all_measurement_items_off()
+        self.set_init_miscs('LTE')
+        self.set_path_loss('LTE')
+        self.set_init_level('LTE')
+        self.set_handover('LTE', dl_ch, bw)
+        self.inst.write('ULRB_POS MIN')
+        self.inst.query('*OPC?')
+
     def set_path_loss(self, standard):
         logger.info('Set LOSS')
         self.inst.write('DELLOSSTBL')  # delete the unknown loss table first
@@ -51,6 +77,7 @@ class Anritsu8821(Anritsu8820):
     def set_init_miscs(self, standard):
         s = standard
         if s == 'LTE':
+            self.inst.write('SEM_ADDREQ REL11')
             self.inst.write('RRCUPDATE PAGING')
             self.inst.write('PT_TRGSRC FRAME')
             self.inst.write('MODIFPERIOD N2')
@@ -64,7 +91,39 @@ class Anritsu8821(Anritsu8820):
             self.inst.write('ULTPSEL 1')
             self.inst.write('DLTPSEL 1')
             self.inst.write('TXOUT 1,MAIN')
+
             logger.debug(self.inst.query('UE_CAP? REL'))
+
+    def set_registration_calling_lte(self, times=30):
+        """
+            ANRITSU_IDLE = 1	        #Idle state
+            ANRITSU_REGIST = 3			# Under location registration
+            ANRITSU_CONNECTED = 6	    # Under communication or connected
+        """
+        self.inst.write('CALLTHLD 1')
+        self.set_lvl_status('ON')
+        self.set_test_mode()
+        conn_state = int(self.inst.query("CALLSTAT?").strip())
+        while conn_state != cm_pmt.ANRITSU_CONNECTED:  # this is for waiting connection
+            self.inst.write('CALLRFR')
+            while conn_state == cm_pmt.ANRITSU_IDLE:
+                self.inst.write('CALLSO')
+                logger.info('IDLE')
+                logger.info('Start to ON and OFF')
+                self.flymode_circle()
+                time.sleep(2)
+                self.inst.write('CALLSA')
+                while conn_state != cm_pmt.ANRITSU_CONNECTED:
+                    logger.info('Waiting for connection...')
+                    time.sleep(1)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+                # logger.info('Start calling')
+                # conn_state = int(self.inst.query("CALLSTAT?").strip())
+            # logger.info('START CALL')
+            # self.inst.write('CALLSA')
+            logger.info('Connected')
+            time.sleep(1)
 
     def get_power_aclr_evm_lte(self):
         """
@@ -100,8 +159,7 @@ class Anritsu8821(Anritsu8820):
                 logger.info('Call drops...')
                 if self.count == 0:
                     # equipment end call and start call
-                    logger.info('waiting for 10 seconds to etimes to wait 10 second'
-                                'End call and then start call')
+                    logger.info('End call and then start call')
                     self.flymode_circle()
                     time.sleep(5)
                     self.inst.write('CALLSO')
@@ -120,32 +178,34 @@ class Anritsu8821(Anritsu8820):
                     conn_state = int(self.inst.query("CALLSTAT?").strip())
 
             validation_list = []
-            # if mod in ['TESTPRM TX_MAXPWR_Q_1', 'TESTPRM TX_MAXPWR_Q_P', 'TESTPRM TX_MAXPWR_Q_F']:
-            #     self.inst.write(mod)
-            #     self.inst.write('ULRMC_64QAM ENABLED')
-            #     self.inst.write('ULRMC_256QAM ENABLED')
-            #     self.inst.write('ULIMCS 5')
-            #
-            # elif mod in ['TESTPRM TX_MAXPWR_16_P', 'TESTPRM TX_MAXPWR_16_F']:
-            #     self.inst.write(mod)
-            #     self.inst.write('ULRMC_64QAM ENABLED')
-            #     self.inst.write('ULRMC_256QAM ENABLED')
-            #     self.inst.write('ULIMCS 15')
-            #
-            # elif mod in ['TESTPRM TX_MAXPWR_64_P', 'TESTPRM TX_MAXPWR_64_F']:
-            #     self.inst.write(mod)
-            #     self.inst.write('ULRMC_64QAM ENABLED')
-            #     self.inst.write('ULRMC_256QAM ENABLED')
-            #     self.inst.write('ULIMCS 22')
-            #
-            # elif mod in ['TESTPRM TX_MAXPWR_256_F']:
-            #     self.inst.write(mod)
-            #     self.inst.write('ULRMC_64QAM ENABLED')
-            #     self.inst.write('ULRMC_256QAM ENABLED')
-            #     self.inst.write('ULIMCS 28')
+            if wt.fdd_tdd_cross_test == 1:
+                if mod in ['TESTPRM TX_MAXPWR_Q_1', 'TESTPRM TX_MAXPWR_Q_P', 'TESTPRM TX_MAXPWR_Q_F']:
+                    self.inst.write(mod)
+                    self.inst.write('ULRMC_64QAM ENABLED')
+                    self.inst.write('ULRMC_256QAM ENABLED')
+                    self.inst.write('ULIMCS 5')
 
-            self.inst.write(mod)
+                elif mod in ['TESTPRM TX_MAXPWR_16_P', 'TESTPRM TX_MAXPWR_16_F']:
+                    self.inst.write(mod)
+                    self.inst.write('ULRMC_64QAM ENABLED')
+                    self.inst.write('ULRMC_256QAM ENABLED')
+                    self.inst.write('ULIMCS 13')
+
+                elif mod in ['TESTPRM TX_MAXPWR_64_P', 'TESTPRM TX_MAXPWR_64_F']:
+                    self.inst.write(mod)
+                    self.inst.write('ULRMC_64QAM ENABLED')
+                    self.inst.write('ULRMC_256QAM ENABLED')
+                    self.inst.write('ULIMCS 22')
+
+                elif mod in ['TESTPRM TX_MAXPWR_256_F']:
+                    self.inst.write(mod)
+                    self.inst.write('ULRMC_64QAM ENABLED')
+                    self.inst.write('ULRMC_256QAM ENABLED')
+                    self.inst.write('ULIMCS 28')
+            else:
+                self.inst.write(mod)
             self.set_to_measure()
+            self.inst.query('*OPC?')
             meas_status = int(self.inst.query('MSTAT?').strip())
 
             while meas_status == cm_pmt.MESUREMENT_BAD:  # this is for the reference signal is not found
@@ -288,7 +348,7 @@ class Anritsu8821(Anritsu8820):
                                 time.sleep(2)
                                 data = self.get_validation(standard)
                                 self.excel_path = self.fill_values(data, band, dl_ch, bw)
-                                # self.set_test_parameter_normal()
+                                self.set_test_parameter_normal()
                         else:
                             logger.info(f'B{band} do not have BW {bw}MHZ')
                     self.excel_plot_line(standard, self.excel_path)
@@ -303,7 +363,6 @@ def main():
     anritsu.run()
 
     stop = datetime.datetime.now()
-
     logger.info(f'Timer: {stop - start}')
 
 

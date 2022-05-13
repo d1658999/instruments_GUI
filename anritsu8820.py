@@ -139,6 +139,8 @@ class Anritsu8820(pyvisa.ResourceManager):
             preset Anritsu 8820C
         """
         logger.info("Preset Anritsu 8820/8821")
+        self.inst.write('*ESR?')
+        self.inst.write('CALLSO')
         s = self.query_standard()  # WCDMA|GSM|LTE|CDMA2K
         if s == 'WCDMA':
             self.inst.write('CALLSO')
@@ -180,7 +182,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.set_band_cal()
         self.preset()
         self.set_integrity('WCDMA', 'ON')
-        self.set_screen_on()
+        self.set_screen()
         self.set_display_remain()
         self.set_init_miscs('WCDMA')
         self.set_test_mode('OFF')
@@ -198,7 +200,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.preset()
         self.set_band_cal()
-        self.set_screen_on()
+        self.set_screen()
         self.set_display_remain()
         self.preset_extarb()
         self.set_lvl_status('OFF')
@@ -290,20 +292,22 @@ class Anritsu8820(pyvisa.ResourceManager):
         while conn_state != cm_pmt.ANRITSU_CONNECTED:  # this is for waiting connection
             self.inst.write('CALLRFR')
             while conn_state == cm_pmt.ANRITSU_IDLE:
-                logger.info('IDLE')
+                self.inst.write('CALLSO')
                 time.sleep(5)
+                logger.info('IDLE')
+                logger.info('Start to ON and OFF')
                 self.flymode_circle()
-                time.sleep(1)
-                self.inst.write('CALLSA')
                 logger.info('Waiting for 10 seconds')
                 time.sleep(10)
+                logger.info('Start calling')
                 conn_state = int(self.inst.query("CALLSTAT?").strip())
-            conn_state = int(self.inst.query("CALLSTAT?").strip())
             logger.info('START CALL')
             self.inst.write('CALLSA')
-            self.inst.query('*OPC?')
             logger.info('Connected')
             time.sleep(1)
+
+
+
 
     def set_registration_calling_wcdma(self, times=30):
         """
@@ -393,8 +397,8 @@ class Anritsu8820(pyvisa.ResourceManager):
     # def set_imei(self, IMEI):
     #     self.inst.write(IMEI)
 
-    def set_screen_on(self):
-        self.inst.write('SCREEN ON')
+    def set_screen(self, on_off='ON'):
+        self.inst.write(f'SCREEN {on_off}')
 
     def set_display_remain(self):
         self.inst.write('REMDISP REMAIN')
