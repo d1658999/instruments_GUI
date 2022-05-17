@@ -694,7 +694,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 power = self.inst.query('POWER? AVG').strip()
                 self.inst.query('*OPC?')
                 logger.info(f'Final: POWER: {power}, SENSITIVITY: {sensitivity}, PER:{per}')
-                return power, sensitivity, per
+                return [power, sensitivity, per]
 
             elif conn_state != cm_pmt.ANRITSU_CONNECTED:
                 count = 3
@@ -722,10 +722,14 @@ class Anritsu8820(pyvisa.ResourceManager):
     def get_sensitivity(self, standard, band, dl_ch, bw=None):
         s = standard
         if s == 'LTE':
+            """
+                sens_list = [power, sensitivity, per]
+            """
             self.set_handover(s, dl_ch, bw)
             time.sleep(0.1)
             self.set_rb_location(band, bw)
-            self.sweep_sensitivity()
+            sens_list = self.sweep_sensitivity()
+            return sens_list
 
         elif s == 'WCDMA':
             pass
@@ -962,7 +966,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             pass
 
     @staticmethod
-    def creat_excel_rx(standard, bw=None):
+    def create_excel_rx(standard, bw=None):
         if standard == 'LTE':
             wb = openpyxl.Workbook()
             wb.remove(wb['Sheet'])
@@ -981,7 +985,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             pass
 
     @staticmethod
-    def creat_excel_tx(standard, bw=None):
+    def create_excel_tx(standard, bw=None):
         if standard == 'LTE':
             wb = openpyxl.Workbook()
             wb.remove(wb['Sheet'])
@@ -1206,7 +1210,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 LTE format:{Q1:[power], Q_P:[power, ACLR, EVM], ...} and ACLR format is [L, M, H] 
             """
             if pathlib.Path(f'results_{bw}MHZ_LTE.xlsx').exists() is False:
-                self.creat_excel_tx(self.std, bw)
+                self.create_excel_tx(self.std, bw)
                 logger.debug('Create Excel')
 
             wb = openpyxl.load_workbook(f'results_{bw}MHZ_LTE.xlsx')
@@ -1238,7 +1242,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 WCDMA format:[power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
             """
             if pathlib.Path(f'results_WCDMA.xlsx').exists() is False:
-                self.creat_excel_tx(self.std)
+                self.create_excel_tx(self.std)
                 logger.debug('Create Excel')
 
             wb = openpyxl.load_workbook(f'results_WCDMA.xlsx')
@@ -1282,6 +1286,33 @@ class Anritsu8820(pyvisa.ResourceManager):
                             chart.y_axis.title = f'{ws_name[:3]}(dBm)'
                         elif 'EVM' in ws_name:
                             chart.y_axis.title = f'{ws_name[:3]}%'
+
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].graphicalProperties.line.dashStyle = 'dash'  # for L_ch
+                        chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
+                        chart.series[2].marker.symbol = 'circle'  # for H_ch
+                        chart.series[2].marker.size = 10
+
+                        ws.add_chart(chart, "F1")
+
+                        wb.save(excel_path)
+                        wb.close()
+
+                    elif 'sensitivity' in ws_name:
+                        chart = LineChart()
+                        chart.title = f'{ws_name[:3]}'
+                        if 'PWR' in ws_name:
+                            chart.y_axis.title = f'Sensitivity(dBm)'
 
                         chart.x_axis.title = 'Band'
                         chart.x_axis.tickLblPos = 'low'
@@ -1495,11 +1526,13 @@ class Anritsu8820(pyvisa.ResourceManager):
                                 if wt.tx_max_pwr_sensitivity == 1:
                                     self.set_input_level(30)
                                     self.set_tpc('ALL1')
-                                    self.get_sensitivity(standard, band, dl_ch, bw)
+                                    sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
+                                    logger.debug(f'Sensitivity list:{sens_list}')
                                     self.set_output_level(-70)
                                 elif wt.tx_max_pwr_sensitivity == 0:
                                     self.set_input_level(-10)
-                                    self.get_sensitivity(standard, band, dl_ch, bw)
+                                    sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
+                                    logger.debug(f'Sensitivity list:{sens_list}')
                                     self.set_output_level(-70)
 
             elif tech == 'WCDMA' and wt.wcdma_bands != []:

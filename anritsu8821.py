@@ -243,7 +243,7 @@ class Anritsu8821(Anritsu8820):
         return validation_dict
 
     @staticmethod
-    def creat_excel_tx(standard, bw=None):
+    def create_excel_tx(standard, bw=None):
         if standard == 'LTE':
             wb = openpyxl.Workbook()
             wb.remove(wb['Sheet'])
@@ -360,7 +360,8 @@ def main():
     start = datetime.datetime.now()
 
     anritsu = Anritsu8821()
-    anritsu.run_rx()
+    anritsu.create_excel_rx('LTE', 5)
+    # anritsu.run_rx()
 
     stop = datetime.datetime.now()
     logger.info(f'Timer: {stop - start}')
