@@ -243,7 +243,7 @@ class Anritsu8821(Anritsu8820):
         return validation_dict
 
     @staticmethod
-    def creat_excel(standard, bw=None):
+    def creat_excel_tx(standard, bw=None):
         if standard == 'LTE':
             wb = openpyxl.Workbook()
             wb.remove(wb['Sheet'])
@@ -318,7 +318,7 @@ class Anritsu8821(Anritsu8820):
             wb.save(f'results_WCDMA.xlsx')
             wb.close()
 
-    def run(self):
+    def run_tx(self):
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 standard = self.switch_to_lte()
@@ -360,7 +360,7 @@ def main():
     start = datetime.datetime.now()
 
     anritsu = Anritsu8821()
-    anritsu.run()
+    anritsu.run_rx()
 
     stop = datetime.datetime.now()
     logger.info(f'Timer: {stop - start}')

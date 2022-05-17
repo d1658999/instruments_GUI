@@ -109,6 +109,47 @@ def dl_ch_selected(standard, band, bw=5):
         pass
 
 
+def special_uplink_config_sensitivity(band, bw):
+    if (int(band) in [2,3,25]) and int(bw) == 15:
+        return 50, 25
+    elif (int(band) in [2,3,25]) and int(bw) == 20:
+        return 50, 50
+    elif int(band) in [5,8,18,19,21,26,28,30]  and int(bw) == 10:
+        return 25, 25
+    elif int(band) == 7 and int(bw) == 20:
+        return 75, 25
+    elif int(band) == 7 and int(bw) == 20:
+        return 75, 25
+    elif int(band) in [12,17] and int(bw) == 5:
+        return 20, 5
+    elif int(band) == 12 and int(bw) == 10:
+        return 20, 30
+    elif int(band) == 13 and (int(bw) in [5,10]):
+        return 20, 0
+    elif int(band) == 14 and (int(bw) in [5,10]):
+        return 15, 0
+    elif int(band) == 17 and int(bw) == 10:
+        return 20, 30
+    elif (int(band) == 18 in [18,19,21,26,28]) and int(bw) == 15:
+        return 25, 50
+    elif int(band) == 20 and int(bw) == 10:
+        return 20, 0
+    elif int(band) == 20 and int(bw) == 15:
+        return 20, 11
+    elif int(band) == 20 and int(bw) == 20:
+        return 20, 16
+    elif int(band) == 28 and int(bw) == 20:
+        return 25, 75
+    else:
+        if int(bw) == 1.4:
+            return 6, 0
+        else:
+            return int(bw) * 5, 0
+
+
+
+
+
 def main():
     """
     this main() function is used for testing some function

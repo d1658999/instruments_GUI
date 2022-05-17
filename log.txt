@@ -1,3 +1,2117 @@
-[20220513 16:00:34 INFO    ] Modem comport is: COM19
-[20220513 16:00:34 INFO    ] flymode is on, 0
-[20220513 16:00:35 INFO    ] flymode is off, 1
+[20220517 18:16:48 INFO    ] start to connect
+[20220517 18:16:49 DEBUG   ] GPIB0::1::INSTR
+[20220517 18:16:49 INFO    ] Modem comport is: COM19
+[20220517 18:16:49 DEBUG   ] ANRITSU,MT8821C,6200910051,40.10S #052,1
+[20220517 18:16:51 INFO    ] Current Format: LTE
+[20220517 18:16:51 INFO    ] Already LTE mode
+[20220517 18:16:51 INFO    ] LTE
+[20220517 18:16:52 DEBUG   ] Test Channel List: 2, 1.4MHZ, downlink channel list:[607, 900, 1193]
+[20220517 18:16:52 INFO    ] init equipment before calling
+[20220517 18:16:52 INFO    ] Preset Anritsu 8820/8821
+[20220517 18:16:53 DEBUG   ] -
+
+[20220517 18:16:53 INFO    ] Set LOSS
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 500MHZ, 0.5, 0.5,,, 0.5,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 1000MHZ, 0.5, 0.5,,, 0.5,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 1100MHZ, 0.6, 0.6,,, 0.6,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 1500MHZ, 0.6, 0.6,,, 0.6,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 1600MHZ, 0.8, 0.8,,, 0.8,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 2000MHZ, 0.8, 0.8,,, 0.8,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 2100MHZ, 0.9, 0.9,,, 0.9,,,
+[20220517 18:16:53 INFO    ] LOSSTBLVAL2 2500MHZ, 0.9, 0.9,,, 0.9,,,
+[20220517 18:16:53 DEBUG   ] Current Format: LTE
+[20220517 18:16:53 DEBUG   ] Current Format: LTE
+[20220517 18:16:54 INFO    ] Start to calling
+[20220517 18:16:54 DEBUG   ] Current Format: LTE
+[20220517 18:16:54 INFO    ] Start registration and calling
+[20220517 18:16:54 INFO    ] IDLE
+[20220517 18:16:54 INFO    ] Start to ON and OFF
+[20220517 18:16:54 INFO    ] flymode is on, 0
+[20220517 18:16:57 INFO    ] flymode is off, 1
+[20220517 18:16:59 INFO    ] Waiting for connection...
+[20220517 18:17:00 INFO    ] Waiting for connection...
+[20220517 18:17:01 INFO    ] Connected
+[20220517 18:17:02 INFO    ] Start to sensitivity B2, bandwidth: 1.4 MHz, downlink_chan: 607
+[20220517 18:17:03 DEBUG   ] Current Format: LTE
+[20220517 18:17:03 INFO    ] Search sensitivity: -70.0
+[20220517 18:17:03 INFO    ] Search sensitivity: -71.0
+[20220517 18:17:03 INFO    ] Search sensitivity: -72.0
+[20220517 18:17:03 INFO    ] Search sensitivity: -73.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -74.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -75.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -76.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -77.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -78.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -79.0
+[20220517 18:17:04 INFO    ] Search sensitivity: -80.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -81.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -82.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -83.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -84.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -85.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:05 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -89.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -90.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -91.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -92.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -93.0
+[20220517 18:17:06 INFO    ] Search sensitivity: -94.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -95.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -96.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -97.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -98.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -99.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -100.0
+[20220517 18:17:07 INFO    ] Search sensitivity: -101.0
+[20220517 18:17:08 INFO    ] Search sensitivity: -102.0
+[20220517 18:17:08 INFO    ] Search sensitivity: -103.0
+[20220517 18:17:08 INFO    ] Search sensitivity: -104.0
+[20220517 18:17:08 INFO    ] Search sensitivity: -105.0
+[20220517 18:17:08 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:08 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:08 INFO    ] FAIL
+[20220517 18:17:09 INFO    ] FAIL
+[20220517 18:17:09 INFO    ] FAIL
+[20220517 18:17:09 INFO    ] Back to higher 2dB
+[20220517 18:17:09 INFO    ] Search sensitivity: -105.0
+[20220517 18:17:09 INFO    ] Search sensitivity: -105.2
+[20220517 18:17:09 INFO    ] Search sensitivity: -105.4
+[20220517 18:17:09 INFO    ] Search sensitivity: -105.6
+[20220517 18:17:09 INFO    ] Search sensitivity: -105.8
+[20220517 18:17:09 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:10 INFO    ] Search sensitivity: -106.2
+[20220517 18:17:10 INFO    ] Search sensitivity: -106.4
+[20220517 18:17:10 INFO    ] level -106.2, PASS
+[20220517 18:17:10 INFO    ] sensitivity: -106.2, pass 1 times
+[20220517 18:17:10 INFO    ] sensitivity: -106.2, pass 2 times
+[20220517 18:17:10 INFO    ] sensitivity: -106.2, pass 3 times
+[20220517 18:17:11 INFO    ] Final: POWER: 24.34, SENSITIVITY: -106.2, PER:100.00
+[20220517 18:17:11 INFO    ] Start to sensitivity B2, bandwidth: 1.4 MHz, downlink_chan: 900
+[20220517 18:17:11 DEBUG   ] Current Format: LTE
+[20220517 18:17:11 INFO    ] Search sensitivity: -70.0
+[20220517 18:17:11 INFO    ] Search sensitivity: -71.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -72.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -73.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -74.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -75.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -76.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -77.0
+[20220517 18:17:12 INFO    ] Search sensitivity: -78.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -79.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -80.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -81.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -82.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -83.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -84.0
+[20220517 18:17:13 INFO    ] Search sensitivity: -85.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -89.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -90.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -91.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -92.0
+[20220517 18:17:14 INFO    ] Search sensitivity: -93.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -94.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -95.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -96.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -97.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -98.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -99.0
+[20220517 18:17:15 INFO    ] Search sensitivity: -100.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -101.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -102.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -103.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -104.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -105.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:16 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:17 INFO    ] Search sensitivity: -108.0
+[20220517 18:17:17 INFO    ] Search sensitivity: -109.0
+[20220517 18:17:17 INFO    ] FAIL
+[20220517 18:17:17 INFO    ] FAIL
+[20220517 18:17:17 INFO    ] FAIL
+[20220517 18:17:17 INFO    ] Back to higher 2dB
+[20220517 18:17:17 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:17 INFO    ] Search sensitivity: -107.2
+[20220517 18:17:18 INFO    ] Search sensitivity: -107.4
+[20220517 18:17:18 INFO    ] Search sensitivity: -107.6
+[20220517 18:17:18 INFO    ] Search sensitivity: -107.8
+[20220517 18:17:18 INFO    ] Search sensitivity: -108.0
+[20220517 18:17:18 INFO    ] Search sensitivity: -108.2
+[20220517 18:17:18 INFO    ] Search sensitivity: -108.4
+[20220517 18:17:18 INFO    ] Search sensitivity: -108.6
+[20220517 18:17:19 INFO    ] Search sensitivity: -108.8
+[20220517 18:17:19 INFO    ] Search sensitivity: -109.0
+[20220517 18:17:20 INFO    ] level -108.8, PASS
+[20220517 18:17:20 INFO    ] 1 times fail
+[20220517 18:17:20 INFO    ] level -108.6, PASS
+[20220517 18:17:20 INFO    ] sensitivity: -108.6, pass 1 times
+[20220517 18:17:20 INFO    ] 2 times fail
+[20220517 18:17:20 INFO    ] level -108.4, PASS
+[20220517 18:17:20 INFO    ] sensitivity: -108.4, pass 1 times
+[20220517 18:17:21 INFO    ] sensitivity: -108.4, pass 2 times
+[20220517 18:17:21 INFO    ] sensitivity: -108.4, pass 3 times
+[20220517 18:17:21 INFO    ] Final: POWER: 24.44, SENSITIVITY: -108.4, PER:100.00
+[20220517 18:17:21 INFO    ] Start to sensitivity B2, bandwidth: 1.4 MHz, downlink_chan: 1193
+[20220517 18:17:21 DEBUG   ] Current Format: LTE
+[20220517 18:17:22 INFO    ] Search sensitivity: -70.0
+[20220517 18:17:22 INFO    ] Search sensitivity: -71.0
+[20220517 18:17:22 INFO    ] Search sensitivity: -72.0
+[20220517 18:17:22 INFO    ] Search sensitivity: -73.0
+[20220517 18:17:22 INFO    ] Search sensitivity: -74.0
+[20220517 18:17:22 INFO    ] Search sensitivity: -75.0
+[20220517 18:17:22 INFO    ] Search sensitivity: -76.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -77.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -78.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -79.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -80.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -81.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -82.0
+[20220517 18:17:23 INFO    ] Search sensitivity: -83.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -84.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -85.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -89.0
+[20220517 18:17:24 INFO    ] Search sensitivity: -90.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -91.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -92.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -93.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -94.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -95.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -96.0
+[20220517 18:17:25 INFO    ] Search sensitivity: -97.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -98.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -99.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -100.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -101.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -102.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -103.0
+[20220517 18:17:26 INFO    ] Search sensitivity: -104.0
+[20220517 18:17:27 INFO    ] Search sensitivity: -105.0
+[20220517 18:17:27 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:27 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:27 INFO    ] Search sensitivity: -108.0
+[20220517 18:17:27 INFO    ] Search sensitivity: -109.0
+[20220517 18:17:28 INFO    ] FAIL
+[20220517 18:17:28 INFO    ] FAIL
+[20220517 18:17:28 INFO    ] FAIL
+[20220517 18:17:28 INFO    ] Back to higher 2dB
+[20220517 18:17:28 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:28 INFO    ] Search sensitivity: -107.2
+[20220517 18:17:28 INFO    ] Search sensitivity: -107.4
+[20220517 18:17:28 INFO    ] Search sensitivity: -107.6
+[20220517 18:17:28 INFO    ] Search sensitivity: -107.8
+[20220517 18:17:29 INFO    ] Search sensitivity: -108.0
+[20220517 18:17:29 INFO    ] Search sensitivity: -108.2
+[20220517 18:17:30 INFO    ] level -108.0, PASS
+[20220517 18:17:30 INFO    ] sensitivity: -108.0, pass 1 times
+[20220517 18:17:31 INFO    ] 2 times fail
+[20220517 18:17:31 INFO    ] level -107.8, FAIL
+[20220517 18:17:31 INFO    ] level -107.6, PASS
+[20220517 18:17:31 INFO    ] sensitivity: -107.6, pass 1 times
+[20220517 18:17:31 INFO    ] sensitivity: -107.6, pass 2 times
+[20220517 18:17:31 INFO    ] sensitivity: -107.6, pass 3 times
+[20220517 18:17:31 INFO    ] Final: POWER: 24.49, SENSITIVITY: -107.6, PER:99.58
+[20220517 18:17:32 DEBUG   ] Test Channel List: 3, 1.4MHZ, downlink channel list:[1207, 1575, 1943]
+[20220517 18:17:32 INFO    ] Start to sensitivity B3, bandwidth: 1.4 MHz, downlink_chan: 1207
+[20220517 18:17:33 DEBUG   ] Current Format: LTE
+[20220517 18:17:33 INFO    ] Search sensitivity: -70.0
+[20220517 18:17:33 INFO    ] Search sensitivity: -71.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -72.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -73.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -74.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -75.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -76.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -77.0
+[20220517 18:17:34 INFO    ] Search sensitivity: -78.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -79.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -80.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -81.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -82.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -83.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -84.0
+[20220517 18:17:35 INFO    ] Search sensitivity: -85.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -89.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -90.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -91.0
+[20220517 18:17:36 INFO    ] Search sensitivity: -92.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -93.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -94.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -95.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -96.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -97.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -98.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -99.0
+[20220517 18:17:37 INFO    ] Search sensitivity: -100.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -101.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -102.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -103.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -104.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -105.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:38 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:39 INFO    ] Search sensitivity: -108.0
+[20220517 18:17:39 INFO    ] FAIL
+[20220517 18:17:39 INFO    ] FAIL
+[20220517 18:17:39 INFO    ] FAIL
+[20220517 18:17:39 INFO    ] Back to higher 2dB
+[20220517 18:17:39 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:39 INFO    ] Search sensitivity: -106.2
+[20220517 18:17:39 INFO    ] Search sensitivity: -106.4
+[20220517 18:17:40 INFO    ] Search sensitivity: -106.6
+[20220517 18:17:40 INFO    ] Search sensitivity: -106.8
+[20220517 18:17:40 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:40 INFO    ] Search sensitivity: -107.2
+[20220517 18:17:40 INFO    ] Search sensitivity: -107.4
+[20220517 18:17:40 INFO    ] Search sensitivity: -107.6
+[20220517 18:17:41 INFO    ] level -107.4, PASS
+[20220517 18:17:41 INFO    ] sensitivity: -107.4, pass 1 times
+[20220517 18:17:41 INFO    ] 2 times fail
+[20220517 18:17:41 INFO    ] level -107.2, PASS
+[20220517 18:17:41 INFO    ] sensitivity: -107.2, pass 1 times
+[20220517 18:17:41 INFO    ] sensitivity: -107.2, pass 2 times
+[20220517 18:17:41 INFO    ] sensitivity: -107.2, pass 3 times
+[20220517 18:17:42 INFO    ] Final: POWER: 24.59, SENSITIVITY: -107.2, PER:100.00
+[20220517 18:17:42 INFO    ] Start to sensitivity B3, bandwidth: 1.4 MHz, downlink_chan: 1575
+[20220517 18:17:42 DEBUG   ] Current Format: LTE
+[20220517 18:17:42 INFO    ] Search sensitivity: -70.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -71.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -72.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -73.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -74.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -75.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -76.0
+[20220517 18:17:43 INFO    ] Search sensitivity: -77.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -78.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -79.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -80.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -81.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -82.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -83.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -84.0
+[20220517 18:17:44 INFO    ] Search sensitivity: -85.0
+[20220517 18:17:45 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:45 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:45 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:45 INFO    ] FAIL
+[20220517 18:17:46 INFO    ] FAIL
+[20220517 18:17:46 INFO    ] FAIL
+[20220517 18:17:46 INFO    ] Back to higher 2dB
+[20220517 18:17:46 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:46 INFO    ] Search sensitivity: -86.2
+[20220517 18:17:46 INFO    ] Search sensitivity: -86.4
+[20220517 18:17:46 INFO    ] Search sensitivity: -86.6
+[20220517 18:17:46 INFO    ] Search sensitivity: -86.8
+[20220517 18:17:47 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:47 INFO    ] Search sensitivity: -87.2
+[20220517 18:17:47 INFO    ] Search sensitivity: -87.4
+[20220517 18:17:47 INFO    ] Search sensitivity: -87.6
+[20220517 18:17:48 INFO    ] Search sensitivity: -87.8
+[20220517 18:17:48 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:50 INFO    ] level -87.8, PASS
+[20220517 18:17:50 INFO    ] 1 times fail
+[20220517 18:17:50 INFO    ] level -87.6, FAIL
+[20220517 18:17:50 INFO    ] level -87.4, FAIL
+[20220517 18:17:51 INFO    ] level -87.2, FAIL
+[20220517 18:17:51 INFO    ] level -87.0, FAIL
+[20220517 18:17:51 INFO    ] level -86.8, FAIL
+[20220517 18:17:51 INFO    ] level -86.6, FAIL
+[20220517 18:17:51 INFO    ] level -86.4, FAIL
+[20220517 18:17:51 INFO    ] level -86.2, FAIL
+[20220517 18:17:52 INFO    ] level -86.0, FAIL
+[20220517 18:17:52 INFO    ] level -85.8, PASS
+[20220517 18:17:52 INFO    ] sensitivity: -85.8, pass 1 times
+[20220517 18:17:52 INFO    ] sensitivity: -85.8, pass 2 times
+[20220517 18:17:52 INFO    ] 3 times fail
+[20220517 18:17:52 INFO    ] level -85.6, PASS
+[20220517 18:17:52 INFO    ] sensitivity: -85.6, pass 1 times
+[20220517 18:17:53 INFO    ] sensitivity: -85.6, pass 2 times
+[20220517 18:17:53 INFO    ] sensitivity: -85.6, pass 3 times
+[20220517 18:17:53 INFO    ] Final: POWER: 24.60, SENSITIVITY: -85.6, PER:100.00
+[20220517 18:17:53 INFO    ] Start to sensitivity B3, bandwidth: 1.4 MHz, downlink_chan: 1943
+[20220517 18:17:53 DEBUG   ] Current Format: LTE
+[20220517 18:17:54 INFO    ] Search sensitivity: -70.0
+[20220517 18:17:54 INFO    ] Search sensitivity: -71.0
+[20220517 18:17:54 INFO    ] Search sensitivity: -72.0
+[20220517 18:17:54 INFO    ] Search sensitivity: -73.0
+[20220517 18:17:54 INFO    ] Search sensitivity: -74.0
+[20220517 18:17:54 INFO    ] Search sensitivity: -75.0
+[20220517 18:17:54 INFO    ] Search sensitivity: -76.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -77.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -78.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -79.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -80.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -81.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -82.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -83.0
+[20220517 18:17:55 INFO    ] Search sensitivity: -84.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -85.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -86.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -87.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -88.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -89.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -90.0
+[20220517 18:17:56 INFO    ] Search sensitivity: -91.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -92.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -93.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -94.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -95.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -96.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -97.0
+[20220517 18:17:57 INFO    ] Search sensitivity: -98.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -99.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -100.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -101.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -102.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -103.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -104.0
+[20220517 18:17:58 INFO    ] Search sensitivity: -105.0
+[20220517 18:17:59 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:59 INFO    ] Search sensitivity: -107.0
+[20220517 18:17:59 INFO    ] Search sensitivity: -108.0
+[20220517 18:17:59 INFO    ] FAIL
+[20220517 18:17:59 INFO    ] FAIL
+[20220517 18:17:59 INFO    ] FAIL
+[20220517 18:17:59 INFO    ] Back to higher 2dB
+[20220517 18:17:59 INFO    ] Search sensitivity: -106.0
+[20220517 18:17:59 INFO    ] Search sensitivity: -106.2
+[20220517 18:18:00 INFO    ] Search sensitivity: -106.4
+[20220517 18:18:00 INFO    ] Search sensitivity: -106.6
+[20220517 18:18:00 INFO    ] Search sensitivity: -106.8
+[20220517 18:18:00 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:00 INFO    ] Search sensitivity: -107.2
+[20220517 18:18:00 INFO    ] Search sensitivity: -107.4
+[20220517 18:18:01 INFO    ] Search sensitivity: -107.6
+[20220517 18:18:01 INFO    ] level -107.4, PASS
+[20220517 18:18:01 INFO    ] sensitivity: -107.4, pass 1 times
+[20220517 18:18:01 INFO    ] sensitivity: -107.4, pass 2 times
+[20220517 18:18:02 INFO    ] sensitivity: -107.4, pass 3 times
+[20220517 18:18:02 INFO    ] Final: POWER: 24.65, SENSITIVITY: -107.4, PER:98.75
+[20220517 18:18:02 DEBUG   ] Test Channel List: 4, 1.4MHZ, downlink channel list:[1957, 2175, 2393]
+[20220517 18:18:02 INFO    ] Start to sensitivity B4, bandwidth: 1.4 MHz, downlink_chan: 1957
+[20220517 18:18:03 DEBUG   ] Current Format: LTE
+[20220517 18:18:04 INFO    ] Search sensitivity: -70.0
+[20220517 18:18:04 INFO    ] Search sensitivity: -71.0
+[20220517 18:18:04 INFO    ] Search sensitivity: -72.0
+[20220517 18:18:04 INFO    ] Search sensitivity: -73.0
+[20220517 18:18:04 INFO    ] Search sensitivity: -74.0
+[20220517 18:18:04 INFO    ] Search sensitivity: -75.0
+[20220517 18:18:04 INFO    ] Search sensitivity: -76.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -77.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -78.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -79.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -80.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -81.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -82.0
+[20220517 18:18:05 INFO    ] Search sensitivity: -83.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -84.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -85.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -86.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -87.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -88.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -89.0
+[20220517 18:18:06 INFO    ] Search sensitivity: -90.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -91.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -92.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -93.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -94.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -95.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -96.0
+[20220517 18:18:07 INFO    ] Search sensitivity: -97.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -98.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -99.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -102.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -103.0
+[20220517 18:18:08 INFO    ] Search sensitivity: -104.0
+[20220517 18:18:09 INFO    ] Search sensitivity: -105.0
+[20220517 18:18:09 INFO    ] Search sensitivity: -106.0
+[20220517 18:18:09 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:09 INFO    ] Search sensitivity: -108.0
+[20220517 18:18:09 INFO    ] Search sensitivity: -109.0
+[20220517 18:18:10 INFO    ] FAIL
+[20220517 18:18:10 INFO    ] FAIL
+[20220517 18:18:10 INFO    ] FAIL
+[20220517 18:18:10 INFO    ] Back to higher 2dB
+[20220517 18:18:10 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:10 INFO    ] Search sensitivity: -107.2
+[20220517 18:18:10 INFO    ] Search sensitivity: -107.4
+[20220517 18:18:10 INFO    ] Search sensitivity: -107.6
+[20220517 18:18:10 INFO    ] Search sensitivity: -107.8
+[20220517 18:18:11 INFO    ] Search sensitivity: -108.0
+[20220517 18:18:11 INFO    ] Search sensitivity: -108.2
+[20220517 18:18:12 INFO    ] level -108.0, PASS
+[20220517 18:18:12 INFO    ] sensitivity: -108.0, pass 1 times
+[20220517 18:18:13 INFO    ] sensitivity: -108.0, pass 2 times
+[20220517 18:18:14 INFO    ] sensitivity: -108.0, pass 3 times
+[20220517 18:18:14 INFO    ] Final: POWER: 24.15, SENSITIVITY: -108.0, PER:96.04
+[20220517 18:18:14 INFO    ] Start to sensitivity B4, bandwidth: 1.4 MHz, downlink_chan: 2175
+[20220517 18:18:14 DEBUG   ] Current Format: LTE
+[20220517 18:18:15 INFO    ] Search sensitivity: -70.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -71.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -72.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -73.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -74.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -75.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -76.0
+[20220517 18:18:15 INFO    ] Search sensitivity: -77.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -78.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -79.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -80.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -81.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -82.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -83.0
+[20220517 18:18:16 INFO    ] Search sensitivity: -84.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -85.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -86.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -87.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -88.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -89.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -90.0
+[20220517 18:18:17 INFO    ] Search sensitivity: -91.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -92.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -93.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -94.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -95.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -96.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -97.0
+[20220517 18:18:18 INFO    ] Search sensitivity: -98.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -99.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -102.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -103.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -104.0
+[20220517 18:18:19 INFO    ] Search sensitivity: -105.0
+[20220517 18:18:20 INFO    ] Search sensitivity: -106.0
+[20220517 18:18:20 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:20 INFO    ] Search sensitivity: -108.0
+[20220517 18:18:20 INFO    ] Search sensitivity: -109.0
+[20220517 18:18:20 INFO    ] FAIL
+[20220517 18:18:20 INFO    ] FAIL
+[20220517 18:18:20 INFO    ] FAIL
+[20220517 18:18:20 INFO    ] Back to higher 2dB
+[20220517 18:18:20 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:21 INFO    ] Search sensitivity: -107.2
+[20220517 18:18:21 INFO    ] Search sensitivity: -107.4
+[20220517 18:18:21 INFO    ] Search sensitivity: -107.6
+[20220517 18:18:21 INFO    ] Search sensitivity: -107.8
+[20220517 18:18:21 INFO    ] Search sensitivity: -108.0
+[20220517 18:18:21 INFO    ] Search sensitivity: -108.2
+[20220517 18:18:22 INFO    ] Search sensitivity: -108.4
+[20220517 18:18:22 INFO    ] level -108.2, PASS
+[20220517 18:18:22 INFO    ] sensitivity: -108.2, pass 1 times
+[20220517 18:18:23 INFO    ] sensitivity: -108.2, pass 2 times
+[20220517 18:18:23 INFO    ] sensitivity: -108.2, pass 3 times
+[20220517 18:18:23 INFO    ] Final: POWER: 24.06, SENSITIVITY: -108.2, PER:100.00
+[20220517 18:18:23 INFO    ] Start to sensitivity B4, bandwidth: 1.4 MHz, downlink_chan: 2393
+[20220517 18:18:23 DEBUG   ] Current Format: LTE
+[20220517 18:18:24 INFO    ] Search sensitivity: -70.0
+[20220517 18:18:24 INFO    ] Search sensitivity: -71.0
+[20220517 18:18:24 INFO    ] Search sensitivity: -72.0
+[20220517 18:18:24 INFO    ] Search sensitivity: -73.0
+[20220517 18:18:24 INFO    ] Search sensitivity: -74.0
+[20220517 18:18:24 INFO    ] Search sensitivity: -75.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -76.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -77.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -78.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -79.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -80.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -81.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -82.0
+[20220517 18:18:25 INFO    ] Search sensitivity: -83.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -84.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -85.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -86.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -87.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -88.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -89.0
+[20220517 18:18:26 INFO    ] Search sensitivity: -90.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -91.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -92.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -93.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -94.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -95.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -96.0
+[20220517 18:18:27 INFO    ] Search sensitivity: -97.0
+[20220517 18:18:28 INFO    ] Search sensitivity: -98.0
+[20220517 18:18:28 INFO    ] Search sensitivity: -99.0
+[20220517 18:18:28 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:28 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:29 INFO    ] PASS
+[20220517 18:18:29 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:29 INFO    ] Search sensitivity: -102.0
+[20220517 18:18:29 INFO    ] FAIL
+[20220517 18:18:29 INFO    ] FAIL
+[20220517 18:18:29 INFO    ] Back to higher 2dB
+[20220517 18:18:29 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:29 INFO    ] Search sensitivity: -100.2
+[20220517 18:18:30 INFO    ] Search sensitivity: -100.4
+[20220517 18:18:30 INFO    ] Search sensitivity: -100.6
+[20220517 18:18:30 INFO    ] Search sensitivity: -100.8
+[20220517 18:18:31 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:31 INFO    ] Search sensitivity: -101.2
+[20220517 18:18:31 INFO    ] Search sensitivity: -101.4
+[20220517 18:18:32 INFO    ] level -101.2, PASS
+[20220517 18:18:33 INFO    ] sensitivity: -101.2, pass 1 times
+[20220517 18:18:33 INFO    ] sensitivity: -101.2, pass 2 times
+[20220517 18:18:34 INFO    ] sensitivity: -101.2, pass 3 times
+[20220517 18:18:34 INFO    ] Final: POWER: 24.13, SENSITIVITY: -101.2, PER:96.26
+[20220517 18:18:34 DEBUG   ] Test Channel List: 25, 1.4MHZ, downlink channel list:[8047, 8365, 8683]
+[20220517 18:18:34 INFO    ] Start to sensitivity B25, bandwidth: 1.4 MHz, downlink_chan: 8047
+[20220517 18:18:35 DEBUG   ] Current Format: LTE
+[20220517 18:18:36 INFO    ] Search sensitivity: -70.0
+[20220517 18:18:36 INFO    ] Search sensitivity: -71.0
+[20220517 18:18:36 INFO    ] Search sensitivity: -72.0
+[20220517 18:18:36 INFO    ] Search sensitivity: -73.0
+[20220517 18:18:36 INFO    ] Search sensitivity: -74.0
+[20220517 18:18:36 INFO    ] Search sensitivity: -75.0
+[20220517 18:18:36 INFO    ] Search sensitivity: -76.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -77.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -78.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -79.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -80.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -81.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -82.0
+[20220517 18:18:37 INFO    ] Search sensitivity: -83.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -84.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -85.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -86.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -87.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -88.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -89.0
+[20220517 18:18:38 INFO    ] Search sensitivity: -90.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -91.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -92.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -93.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -94.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -95.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -96.0
+[20220517 18:18:39 INFO    ] Search sensitivity: -97.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -98.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -99.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -102.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -103.0
+[20220517 18:18:40 INFO    ] Search sensitivity: -104.0
+[20220517 18:18:41 INFO    ] Search sensitivity: -105.0
+[20220517 18:18:41 INFO    ] Search sensitivity: -106.0
+[20220517 18:18:41 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:41 INFO    ] FAIL
+[20220517 18:18:41 INFO    ] FAIL
+[20220517 18:18:41 INFO    ] FAIL
+[20220517 18:18:41 INFO    ] Back to higher 2dB
+[20220517 18:18:41 INFO    ] Search sensitivity: -105.0
+[20220517 18:18:41 INFO    ] Search sensitivity: -105.2
+[20220517 18:18:42 INFO    ] Search sensitivity: -105.4
+[20220517 18:18:42 INFO    ] Search sensitivity: -105.6
+[20220517 18:18:42 INFO    ] Search sensitivity: -105.8
+[20220517 18:18:42 INFO    ] Search sensitivity: -106.0
+[20220517 18:18:42 INFO    ] Search sensitivity: -106.2
+[20220517 18:18:42 INFO    ] Search sensitivity: -106.4
+[20220517 18:18:42 INFO    ] Search sensitivity: -106.6
+[20220517 18:18:43 INFO    ] Search sensitivity: -106.8
+[20220517 18:18:43 INFO    ] level -106.6, PASS
+[20220517 18:18:44 INFO    ] sensitivity: -106.6, pass 1 times
+[20220517 18:18:45 INFO    ] sensitivity: -106.6, pass 2 times
+[20220517 18:18:45 INFO    ] sensitivity: -106.6, pass 3 times
+[20220517 18:18:45 INFO    ] Final: POWER: 24.51, SENSITIVITY: -106.6, PER:98.19
+[20220517 18:18:45 INFO    ] Start to sensitivity B25, bandwidth: 1.4 MHz, downlink_chan: 8365
+[20220517 18:18:45 DEBUG   ] Current Format: LTE
+[20220517 18:18:46 INFO    ] Search sensitivity: -70.0
+[20220517 18:18:46 INFO    ] Search sensitivity: -71.0
+[20220517 18:18:46 INFO    ] Search sensitivity: -72.0
+[20220517 18:18:46 INFO    ] Search sensitivity: -73.0
+[20220517 18:18:46 INFO    ] Search sensitivity: -74.0
+[20220517 18:18:46 INFO    ] Search sensitivity: -75.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -76.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -77.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -78.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -79.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -80.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -81.0
+[20220517 18:18:47 INFO    ] Search sensitivity: -82.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -83.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -84.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -85.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -86.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -87.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -88.0
+[20220517 18:18:48 INFO    ] Search sensitivity: -89.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -90.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -91.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -92.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -93.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -94.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -95.0
+[20220517 18:18:49 INFO    ] Search sensitivity: -96.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -97.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -98.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -99.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -102.0
+[20220517 18:18:50 INFO    ] Search sensitivity: -103.0
+[20220517 18:18:51 INFO    ] Search sensitivity: -104.0
+[20220517 18:18:51 INFO    ] Search sensitivity: -105.0
+[20220517 18:18:51 INFO    ] Search sensitivity: -106.0
+[20220517 18:18:51 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:51 INFO    ] Search sensitivity: -108.0
+[20220517 18:18:51 INFO    ] Search sensitivity: -109.0
+[20220517 18:18:52 INFO    ] FAIL
+[20220517 18:18:52 INFO    ] FAIL
+[20220517 18:18:52 INFO    ] FAIL
+[20220517 18:18:52 INFO    ] Back to higher 2dB
+[20220517 18:18:52 INFO    ] Search sensitivity: -107.0
+[20220517 18:18:52 INFO    ] Search sensitivity: -107.2
+[20220517 18:18:52 INFO    ] Search sensitivity: -107.4
+[20220517 18:18:52 INFO    ] Search sensitivity: -107.6
+[20220517 18:18:52 INFO    ] Search sensitivity: -107.8
+[20220517 18:18:52 INFO    ] Search sensitivity: -108.0
+[20220517 18:18:53 INFO    ] Search sensitivity: -108.2
+[20220517 18:18:53 INFO    ] Search sensitivity: -108.4
+[20220517 18:18:53 INFO    ] Search sensitivity: -108.6
+[20220517 18:18:53 INFO    ] level -108.4, PASS
+[20220517 18:18:53 INFO    ] sensitivity: -108.4, pass 1 times
+[20220517 18:18:54 INFO    ] sensitivity: -108.4, pass 2 times
+[20220517 18:18:54 INFO    ] sensitivity: -108.4, pass 3 times
+[20220517 18:18:54 INFO    ] Final: POWER: 24.58, SENSITIVITY: -108.4, PER:99.32
+[20220517 18:18:54 INFO    ] Start to sensitivity B25, bandwidth: 1.4 MHz, downlink_chan: 8683
+[20220517 18:18:54 DEBUG   ] Current Format: LTE
+[20220517 18:18:55 INFO    ] Search sensitivity: -70.0
+[20220517 18:18:55 INFO    ] Search sensitivity: -71.0
+[20220517 18:18:55 INFO    ] Search sensitivity: -72.0
+[20220517 18:18:55 INFO    ] Search sensitivity: -73.0
+[20220517 18:18:55 INFO    ] Search sensitivity: -74.0
+[20220517 18:18:55 INFO    ] Search sensitivity: -75.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -76.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -77.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -78.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -79.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -80.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -81.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -82.0
+[20220517 18:18:56 INFO    ] Search sensitivity: -83.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -84.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -85.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -86.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -87.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -88.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -89.0
+[20220517 18:18:57 INFO    ] Search sensitivity: -90.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -91.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -92.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -93.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -94.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -95.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -96.0
+[20220517 18:18:58 INFO    ] Search sensitivity: -97.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -98.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -99.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -100.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -101.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -102.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -103.0
+[20220517 18:18:59 INFO    ] Search sensitivity: -104.0
+[20220517 18:19:00 INFO    ] Search sensitivity: -105.0
+[20220517 18:19:00 INFO    ] Search sensitivity: -106.0
+[20220517 18:19:00 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:00 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:00 INFO    ] FAIL
+[20220517 18:19:00 INFO    ] FAIL
+[20220517 18:19:00 INFO    ] FAIL
+[20220517 18:19:00 INFO    ] Back to higher 2dB
+[20220517 18:19:00 INFO    ] Search sensitivity: -106.0
+[20220517 18:19:01 INFO    ] Search sensitivity: -106.2
+[20220517 18:19:01 INFO    ] Search sensitivity: -106.4
+[20220517 18:19:01 INFO    ] Search sensitivity: -106.6
+[20220517 18:19:01 INFO    ] Search sensitivity: -106.8
+[20220517 18:19:01 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:01 INFO    ] Search sensitivity: -107.2
+[20220517 18:19:01 INFO    ] Search sensitivity: -107.4
+[20220517 18:19:02 INFO    ] Search sensitivity: -107.6
+[20220517 18:19:02 INFO    ] Search sensitivity: -107.8
+[20220517 18:19:03 INFO    ] level -107.6, FAIL
+[20220517 18:19:03 INFO    ] level -107.4, PASS
+[20220517 18:19:03 INFO    ] 1 times fail
+[20220517 18:19:03 INFO    ] level -107.2, PASS
+[20220517 18:19:03 INFO    ] sensitivity: -107.2, pass 1 times
+[20220517 18:19:03 INFO    ] sensitivity: -107.2, pass 2 times
+[20220517 18:19:04 INFO    ] sensitivity: -107.2, pass 3 times
+[20220517 18:19:04 INFO    ] Final: POWER: 24.21, SENSITIVITY: -107.2, PER:100.00
+[20220517 18:19:04 DEBUG   ] Test Channel List: 66, 1.4MHZ, downlink channel list:[66443, 66786, 67129]
+[20220517 18:19:04 INFO    ] Start to sensitivity B66, bandwidth: 1.4 MHz, downlink_chan: 66443
+[20220517 18:19:05 DEBUG   ] Current Format: LTE
+[20220517 18:19:06 INFO    ] Search sensitivity: -70.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -71.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -72.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -73.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -74.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -75.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -76.0
+[20220517 18:19:06 INFO    ] Search sensitivity: -77.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -78.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -79.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -80.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -81.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -82.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -83.0
+[20220517 18:19:07 INFO    ] Search sensitivity: -84.0
+[20220517 18:19:08 INFO    ] Search sensitivity: -85.0
+[20220517 18:19:08 INFO    ] Search sensitivity: -86.0
+[20220517 18:19:08 INFO    ] Search sensitivity: -87.0
+[20220517 18:19:08 INFO    ] Search sensitivity: -88.0
+[20220517 18:19:08 INFO    ] Search sensitivity: -89.0
+[20220517 18:19:08 INFO    ] Search sensitivity: -90.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -91.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -92.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -93.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -94.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -95.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -96.0
+[20220517 18:19:09 INFO    ] Search sensitivity: -97.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -98.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -99.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -100.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -101.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -102.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -103.0
+[20220517 18:19:10 INFO    ] Search sensitivity: -104.0
+[20220517 18:19:11 INFO    ] Search sensitivity: -105.0
+[20220517 18:19:11 INFO    ] Search sensitivity: -106.0
+[20220517 18:19:11 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:11 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:12 INFO    ] Search sensitivity: -109.0
+[20220517 18:19:12 INFO    ] FAIL
+[20220517 18:19:12 INFO    ] FAIL
+[20220517 18:19:12 INFO    ] FAIL
+[20220517 18:19:12 INFO    ] Back to higher 2dB
+[20220517 18:19:12 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:12 INFO    ] Search sensitivity: -107.2
+[20220517 18:19:12 INFO    ] Search sensitivity: -107.4
+[20220517 18:19:13 INFO    ] Search sensitivity: -107.6
+[20220517 18:19:13 INFO    ] Search sensitivity: -107.8
+[20220517 18:19:13 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:14 INFO    ] Search sensitivity: -108.2
+[20220517 18:19:15 INFO    ] level -108.0, FAIL
+[20220517 18:19:15 INFO    ] level -107.8, PASS
+[20220517 18:19:15 INFO    ] 1 times fail
+[20220517 18:19:15 INFO    ] level -107.6, PASS
+[20220517 18:19:15 INFO    ] sensitivity: -107.6, pass 1 times
+[20220517 18:19:16 INFO    ] sensitivity: -107.6, pass 2 times
+[20220517 18:19:16 INFO    ] sensitivity: -107.6, pass 3 times
+[20220517 18:19:16 INFO    ] Final: POWER: 24.49, SENSITIVITY: -107.6, PER:98.86
+[20220517 18:19:16 INFO    ] Start to sensitivity B66, bandwidth: 1.4 MHz, downlink_chan: 66786
+[20220517 18:19:16 DEBUG   ] Current Format: LTE
+[20220517 18:19:17 INFO    ] Search sensitivity: -70.0
+[20220517 18:19:17 INFO    ] Search sensitivity: -71.0
+[20220517 18:19:17 INFO    ] Search sensitivity: -72.0
+[20220517 18:19:17 INFO    ] Search sensitivity: -73.0
+[20220517 18:19:17 INFO    ] Search sensitivity: -74.0
+[20220517 18:19:17 INFO    ] Search sensitivity: -75.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -76.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -77.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -78.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -79.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -80.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -81.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -82.0
+[20220517 18:19:18 INFO    ] Search sensitivity: -83.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -84.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -85.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -86.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -87.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -88.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -89.0
+[20220517 18:19:19 INFO    ] Search sensitivity: -90.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -91.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -92.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -93.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -94.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -95.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -96.0
+[20220517 18:19:20 INFO    ] Search sensitivity: -97.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -98.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -99.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -100.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -101.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -102.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -103.0
+[20220517 18:19:21 INFO    ] Search sensitivity: -104.0
+[20220517 18:19:22 INFO    ] Search sensitivity: -105.0
+[20220517 18:19:22 INFO    ] Search sensitivity: -106.0
+[20220517 18:19:22 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:22 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:22 INFO    ] Search sensitivity: -109.0
+[20220517 18:19:22 INFO    ] FAIL
+[20220517 18:19:22 INFO    ] FAIL
+[20220517 18:19:23 INFO    ] FAIL
+[20220517 18:19:23 INFO    ] Back to higher 2dB
+[20220517 18:19:23 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:23 INFO    ] Search sensitivity: -107.2
+[20220517 18:19:23 INFO    ] Search sensitivity: -107.4
+[20220517 18:19:23 INFO    ] Search sensitivity: -107.6
+[20220517 18:19:23 INFO    ] Search sensitivity: -107.8
+[20220517 18:19:23 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:24 INFO    ] Search sensitivity: -108.2
+[20220517 18:19:24 INFO    ] Search sensitivity: -108.4
+[20220517 18:19:26 INFO    ] Search sensitivity: -108.6
+[20220517 18:19:26 INFO    ] level -108.4, FAIL
+[20220517 18:19:26 INFO    ] level -108.2, PASS
+[20220517 18:19:27 INFO    ] sensitivity: -108.2, pass 1 times
+[20220517 18:19:27 INFO    ] 2 times fail
+[20220517 18:19:27 INFO    ] level -108.0, FAIL
+[20220517 18:19:27 INFO    ] level -107.8, PASS
+[20220517 18:19:27 INFO    ] sensitivity: -107.8, pass 1 times
+[20220517 18:19:27 INFO    ] sensitivity: -107.8, pass 2 times
+[20220517 18:19:28 INFO    ] sensitivity: -107.8, pass 3 times
+[20220517 18:19:28 INFO    ] Final: POWER: 24.41, SENSITIVITY: -107.8, PER:100.00
+[20220517 18:19:28 INFO    ] Start to sensitivity B66, bandwidth: 1.4 MHz, downlink_chan: 67129
+[20220517 18:19:28 DEBUG   ] Current Format: LTE
+[20220517 18:19:28 INFO    ] Search sensitivity: -70.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -71.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -72.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -73.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -74.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -75.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -76.0
+[20220517 18:19:29 INFO    ] Search sensitivity: -77.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -78.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -79.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -80.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -81.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -82.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -83.0
+[20220517 18:19:30 INFO    ] Search sensitivity: -84.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -85.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -86.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -87.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -88.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -89.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -90.0
+[20220517 18:19:31 INFO    ] Search sensitivity: -91.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -92.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -93.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -94.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -95.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -96.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -97.0
+[20220517 18:19:32 INFO    ] Search sensitivity: -98.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -99.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -100.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -101.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -102.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -103.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -104.0
+[20220517 18:19:33 INFO    ] Search sensitivity: -105.0
+[20220517 18:19:34 INFO    ] Search sensitivity: -106.0
+[20220517 18:19:34 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:34 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:34 INFO    ] Search sensitivity: -109.0
+[20220517 18:19:34 INFO    ] FAIL
+[20220517 18:19:34 INFO    ] FAIL
+[20220517 18:19:34 INFO    ] FAIL
+[20220517 18:19:34 INFO    ] Back to higher 2dB
+[20220517 18:19:34 INFO    ] Search sensitivity: -107.0
+[20220517 18:19:35 INFO    ] Search sensitivity: -107.2
+[20220517 18:19:35 INFO    ] Search sensitivity: -107.4
+[20220517 18:19:35 INFO    ] Search sensitivity: -107.6
+[20220517 18:19:35 INFO    ] Search sensitivity: -107.8
+[20220517 18:19:35 INFO    ] Search sensitivity: -108.0
+[20220517 18:19:35 INFO    ] Search sensitivity: -108.2
+[20220517 18:19:35 INFO    ] Search sensitivity: -108.4
+[20220517 18:19:36 INFO    ] Search sensitivity: -108.6
+[20220517 18:19:36 INFO    ] level -108.4, FAIL
+[20220517 18:19:37 INFO    ] level -108.2, PASS
+[20220517 18:19:37 INFO    ] sensitivity: -108.2, pass 1 times
+[20220517 18:19:37 INFO    ] sensitivity: -108.2, pass 2 times
+[20220517 18:19:37 INFO    ] sensitivity: -108.2, pass 3 times
+[20220517 18:19:37 INFO    ] Final: POWER: 24.39, SENSITIVITY: -108.2, PER:100.00
+[20220517 18:19:38 DEBUG   ] Test Channel List: 2, 3MHZ, downlink channel list:[615, 900, 1185]
+[20220517 18:19:38 INFO    ] Start to sensitivity B2, bandwidth: 3 MHz, downlink_chan: 615
+[20220517 18:19:39 DEBUG   ] Current Format: LTE
+[20220517 18:19:42 INFO    ] Search sensitivity: -70.0
+[20220517 18:19:47 INFO    ] Search sensitivity: -71.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -72.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -73.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -74.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -75.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -76.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -77.0
+[20220517 18:19:48 INFO    ] Search sensitivity: -78.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -79.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -80.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -81.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -82.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -83.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -84.0
+[20220517 18:19:49 INFO    ] Search sensitivity: -85.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -86.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -87.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -88.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -89.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -90.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -91.0
+[20220517 18:19:50 INFO    ] Search sensitivity: -92.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -93.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -94.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -95.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -96.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -97.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -98.0
+[20220517 18:19:51 INFO    ] Search sensitivity: -99.0
+[20220517 18:19:52 INFO    ] Search sensitivity: -100.0
+[20220517 18:19:52 INFO    ] Search sensitivity: -101.0
+[20220517 18:19:52 INFO    ] Search sensitivity: -102.0
+[20220517 18:19:52 INFO    ] Search sensitivity: -103.0
+[20220517 18:19:52 INFO    ] Search sensitivity: -104.0
+[20220517 18:19:52 INFO    ] Search sensitivity: -105.0
+[20220517 18:19:53 INFO    ] FAIL
+[20220517 18:19:53 INFO    ] FAIL
+[20220517 18:19:53 INFO    ] FAIL
+[20220517 18:19:53 INFO    ] Back to higher 2dB
+[20220517 18:19:53 INFO    ] Search sensitivity: -103.0
+[20220517 18:19:53 INFO    ] Search sensitivity: -103.2
+[20220517 18:19:53 INFO    ] Search sensitivity: -103.4
+[20220517 18:19:53 INFO    ] Search sensitivity: -103.6
+[20220517 18:19:53 INFO    ] Search sensitivity: -103.8
+[20220517 18:19:54 INFO    ] level -103.6, PASS
+[20220517 18:19:54 INFO    ] sensitivity: -103.6, pass 1 times
+[20220517 18:19:54 INFO    ] 2 times fail
+[20220517 18:19:54 INFO    ] level -103.4, PASS
+[20220517 18:19:54 INFO    ] sensitivity: -103.4, pass 1 times
+[20220517 18:19:55 INFO    ] sensitivity: -103.4, pass 2 times
+[20220517 18:19:55 INFO    ] sensitivity: -103.4, pass 3 times
+[20220517 18:19:55 INFO    ] Final: POWER: 23.57, SENSITIVITY: -103.4, PER:100.00
+[20220517 18:19:55 INFO    ] Start to sensitivity B2, bandwidth: 3 MHz, downlink_chan: 900
+[20220517 18:19:55 DEBUG   ] Current Format: LTE
+[20220517 18:19:56 INFO    ] Search sensitivity: -70.0
+[20220517 18:19:56 INFO    ] Search sensitivity: -71.0
+[20220517 18:19:56 INFO    ] Search sensitivity: -72.0
+[20220517 18:19:56 INFO    ] Search sensitivity: -73.0
+[20220517 18:19:56 INFO    ] Search sensitivity: -74.0
+[20220517 18:19:56 INFO    ] Search sensitivity: -75.0
+[20220517 18:19:56 INFO    ] Search sensitivity: -76.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -77.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -78.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -79.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -80.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -81.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -82.0
+[20220517 18:19:57 INFO    ] Search sensitivity: -83.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -84.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -85.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -86.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -87.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -88.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -89.0
+[20220517 18:19:58 INFO    ] Search sensitivity: -90.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -91.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -92.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -93.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -94.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -95.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -96.0
+[20220517 18:19:59 INFO    ] Search sensitivity: -97.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -98.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -99.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -100.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -101.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -102.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -103.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -104.0
+[20220517 18:20:00 INFO    ] Search sensitivity: -105.0
+[20220517 18:20:01 INFO    ] FAIL
+[20220517 18:20:01 INFO    ] FAIL
+[20220517 18:20:01 INFO    ] FAIL
+[20220517 18:20:01 INFO    ] Back to higher 2dB
+[20220517 18:20:01 INFO    ] Search sensitivity: -103.0
+[20220517 18:20:01 INFO    ] level -102.8, FAIL
+[20220517 18:20:01 INFO    ] level -102.6, FAIL
+[20220517 18:20:01 INFO    ] level -102.3, FAIL
+[20220517 18:20:02 INFO    ] level -102.1, FAIL
+[20220517 18:20:02 INFO    ] level -101.9, FAIL
+[20220517 18:20:02 INFO    ] level -101.7, FAIL
+[20220517 18:20:13 INFO    ] level -101.5, *
+[20220517 18:20:13 INFO    ] Connection is dropped
+[20220517 18:20:13 INFO    ] Retest again from output level -70dBm
+[20220517 18:20:17 INFO    ] flymode is on, 0
+[20220517 18:20:20 INFO    ] flymode is off, 1
+[20220517 18:20:20 INFO    ] waiting 10 seconds
+[20220517 18:20:30 INFO    ] reconnedted level -70.2: PASS
+[20220517 18:20:30 INFO    ] reconnedted level -70.4: PASS
+[20220517 18:20:30 INFO    ] reconnedted level -70.6: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -70.8: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -71.0: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -71.2: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -71.4: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -71.6: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -71.8: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -72.0: PASS
+[20220517 18:20:31 INFO    ] reconnedted level -72.2: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -72.4: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -72.6: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -72.8: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -73.0: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -73.2: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -73.4: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -73.6: PASS
+[20220517 18:20:32 INFO    ] reconnedted level -73.8: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -74.0: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -74.2: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -74.4: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -74.6: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -74.8: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -75.0: PASS
+[20220517 18:20:33 INFO    ] reconnedted level -75.2: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -75.4: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -75.6: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -75.8: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -76.0: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -76.2: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -76.4: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -76.6: PASS
+[20220517 18:20:34 INFO    ] reconnedted level -76.8: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -77.0: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -77.2: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -77.4: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -77.6: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -77.8: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -78.0: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -78.2: PASS
+[20220517 18:20:35 INFO    ] reconnedted level -78.4: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -78.6: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -78.8: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -79.0: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -79.2: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -79.4: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -79.6: PASS
+[20220517 18:20:36 INFO    ] reconnedted level -79.8: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -80.0: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -80.2: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -80.4: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -80.6: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -80.8: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -81.0: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -81.2: PASS
+[20220517 18:20:37 INFO    ] reconnedted level -81.4: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -81.6: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -81.8: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -82.0: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -82.2: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -82.4: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -82.6: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -82.8: PASS
+[20220517 18:20:38 INFO    ] reconnedted level -83.0: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -83.2: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -83.4: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -83.6: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -83.8: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -84.0: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -84.2: PASS
+[20220517 18:20:39 INFO    ] reconnedted level -84.4: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -84.6: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -84.8: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -85.0: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -85.2: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -85.4: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -85.6: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -85.8: PASS
+[20220517 18:20:40 INFO    ] reconnedted level -86.0: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -86.2: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -86.4: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -86.6: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -86.8: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -87.0: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -87.2: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -87.4: PASS
+[20220517 18:20:41 INFO    ] reconnedted level -87.6: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -87.8: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -88.0: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -88.2: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -88.4: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -88.6: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -88.8: PASS
+[20220517 18:20:42 INFO    ] reconnedted level -89.0: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -89.2: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -89.4: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -89.6: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -89.8: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -90.0: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -90.2: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -90.4: PASS
+[20220517 18:20:43 INFO    ] reconnedted level -90.6: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -90.8: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -91.0: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -91.2: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -91.4: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -91.6: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -91.8: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -92.0: PASS
+[20220517 18:20:44 INFO    ] reconnedted level -92.2: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -92.4: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -92.6: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -92.8: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -93.0: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -93.2: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -93.4: PASS
+[20220517 18:20:45 INFO    ] reconnedted level -93.6: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -93.8: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -94.0: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -94.2: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -94.4: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -94.6: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -94.8: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -95.0: PASS
+[20220517 18:20:46 INFO    ] reconnedted level -95.2: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -95.4: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -95.6: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -95.8: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -96.0: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -96.2: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -96.4: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -96.6: PASS
+[20220517 18:20:47 INFO    ] reconnedted level -96.8: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -97.0: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -97.2: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -97.4: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -97.6: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -97.8: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -98.0: PASS
+[20220517 18:20:48 INFO    ] reconnedted level -98.2: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -98.4: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -98.6: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -98.8: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -99.0: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -99.2: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -99.4: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -99.6: PASS
+[20220517 18:20:49 INFO    ] reconnedted level -99.8: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -100.0: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -100.2: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -100.4: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -100.6: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -100.8: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -101.0: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -101.2: PASS
+[20220517 18:20:50 INFO    ] reconnedted level -101.4: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -101.6: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -101.8: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -102.0: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -102.2: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -102.4: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -102.6: PASS
+[20220517 18:20:51 INFO    ] reconnedted level -102.8: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -103.0: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -103.2: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -103.4: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -103.6: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -103.8: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -104.0: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -104.2: PASS
+[20220517 18:20:52 INFO    ] reconnedted level -104.4: PASS
+[20220517 18:20:53 INFO    ] reconnedted level -104.6: PASS
+[20220517 18:20:53 INFO    ] reconnedted level -104.8: PASS
+[20220517 18:20:53 INFO    ] reconnedted level -105.0: FAIL
+[20220517 18:20:53 INFO    ] level -105.0, FAIL
+[20220517 18:20:53 INFO    ] level -104.8, PASS
+[20220517 18:20:53 INFO    ] sensitivity: -104.8, pass 1 times
+[20220517 18:20:54 INFO    ] sensitivity: -104.8, pass 2 times
+[20220517 18:20:54 INFO    ] sensitivity: -104.8, pass 3 times
+[20220517 18:20:54 INFO    ] Final: POWER: 23.55, SENSITIVITY: -104.8, PER:96.91
+[20220517 18:20:54 INFO    ] Start to sensitivity B2, bandwidth: 3 MHz, downlink_chan: 1185
+[20220517 18:20:54 DEBUG   ] Current Format: LTE
+[20220517 18:20:55 INFO    ] Search sensitivity: -70.0
+[20220517 18:20:55 INFO    ] Search sensitivity: -71.0
+[20220517 18:20:55 INFO    ] Search sensitivity: -72.0
+[20220517 18:20:55 INFO    ] Search sensitivity: -73.0
+[20220517 18:20:55 INFO    ] Search sensitivity: -74.0
+[20220517 18:20:55 INFO    ] Search sensitivity: -75.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -76.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -77.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -78.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -79.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -80.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -81.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -82.0
+[20220517 18:20:56 INFO    ] Search sensitivity: -83.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -84.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -85.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -86.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -87.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -88.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -89.0
+[20220517 18:20:57 INFO    ] Search sensitivity: -90.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -91.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -92.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -93.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -94.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -95.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -96.0
+[20220517 18:20:58 INFO    ] Search sensitivity: -97.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -98.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -99.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -100.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -101.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -102.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -103.0
+[20220517 18:20:59 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:00 INFO    ] Search sensitivity: -105.0
+[20220517 18:21:00 INFO    ] FAIL
+[20220517 18:21:00 INFO    ] FAIL
+[20220517 18:21:00 INFO    ] FAIL
+[20220517 18:21:00 INFO    ] Back to higher 2dB
+[20220517 18:21:00 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:00 INFO    ] Search sensitivity: -103.2
+[20220517 18:21:00 INFO    ] Search sensitivity: -103.4
+[20220517 18:21:01 INFO    ] Search sensitivity: -103.6
+[20220517 18:21:01 INFO    ] Search sensitivity: -103.8
+[20220517 18:21:01 INFO    ] level -103.6, PASS
+[20220517 18:21:01 INFO    ] sensitivity: -103.6, pass 1 times
+[20220517 18:21:01 INFO    ] sensitivity: -103.6, pass 2 times
+[20220517 18:21:01 INFO    ] sensitivity: -103.6, pass 3 times
+[20220517 18:21:01 INFO    ] Final: POWER: 23.58, SENSITIVITY: -103.6, PER:100.00
+[20220517 18:21:02 DEBUG   ] Test Channel List: 3, 3MHZ, downlink channel list:[1215, 1575, 1935]
+[20220517 18:21:02 INFO    ] Start to sensitivity B3, bandwidth: 3 MHz, downlink_chan: 1215
+[20220517 18:21:03 DEBUG   ] Current Format: LTE
+[20220517 18:21:03 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:03 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:04 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -83.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -84.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -85.0
+[20220517 18:21:05 INFO    ] Search sensitivity: -86.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -87.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -88.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -89.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -90.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -91.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -92.0
+[20220517 18:21:06 INFO    ] Search sensitivity: -93.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -94.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -97.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -98.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -99.0
+[20220517 18:21:07 INFO    ] Search sensitivity: -100.0
+[20220517 18:21:08 INFO    ] Search sensitivity: -101.0
+[20220517 18:21:08 INFO    ] Search sensitivity: -102.0
+[20220517 18:21:08 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:08 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:08 INFO    ] FAIL
+[20220517 18:21:08 INFO    ] FAIL
+[20220517 18:21:08 INFO    ] FAIL
+[20220517 18:21:08 INFO    ] Back to higher 2dB
+[20220517 18:21:08 INFO    ] Search sensitivity: -102.0
+[20220517 18:21:09 INFO    ] Search sensitivity: -102.2
+[20220517 18:21:09 INFO    ] Search sensitivity: -102.4
+[20220517 18:21:09 INFO    ] Search sensitivity: -102.6
+[20220517 18:21:09 INFO    ] Search sensitivity: -102.8
+[20220517 18:21:09 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:09 INFO    ] Search sensitivity: -103.2
+[20220517 18:21:09 INFO    ] Search sensitivity: -103.4
+[20220517 18:21:10 INFO    ] Search sensitivity: -103.6
+[20220517 18:21:10 INFO    ] level -103.4, PASS
+[20220517 18:21:10 INFO    ] sensitivity: -103.4, pass 1 times
+[20220517 18:21:10 INFO    ] sensitivity: -103.4, pass 2 times
+[20220517 18:21:10 INFO    ] sensitivity: -103.4, pass 3 times
+[20220517 18:21:10 INFO    ] Final: POWER: 23.52, SENSITIVITY: -103.4, PER:100.00
+[20220517 18:21:10 INFO    ] Start to sensitivity B3, bandwidth: 3 MHz, downlink_chan: 1575
+[20220517 18:21:10 DEBUG   ] Current Format: LTE
+[20220517 18:21:11 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:11 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:11 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:11 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:12 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:13 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:14 INFO    ] FAIL
+[20220517 18:21:14 INFO    ] FAIL
+[20220517 18:21:14 INFO    ] FAIL
+[20220517 18:21:14 INFO    ] Back to higher 2dB
+[20220517 18:21:14 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:15 INFO    ] Search sensitivity: -80.2
+[20220517 18:21:15 INFO    ] Search sensitivity: -80.4
+[20220517 18:21:15 INFO    ] Search sensitivity: -80.6
+[20220517 18:21:15 INFO    ] Search sensitivity: -80.8
+[20220517 18:21:15 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:15 INFO    ] Search sensitivity: -81.2
+[20220517 18:21:16 INFO    ] Search sensitivity: -81.4
+[20220517 18:21:16 INFO    ] Search sensitivity: -81.6
+[20220517 18:21:18 INFO    ] level -81.4, PASS
+[20220517 18:21:18 INFO    ] sensitivity: -81.4, pass 1 times
+[20220517 18:21:19 INFO    ] sensitivity: -81.4, pass 2 times
+[20220517 18:21:19 INFO    ] sensitivity: -81.4, pass 3 times
+[20220517 18:21:19 INFO    ] Final: POWER: 23.61, SENSITIVITY: -81.4, PER:98.90
+[20220517 18:21:19 INFO    ] Start to sensitivity B3, bandwidth: 3 MHz, downlink_chan: 1935
+[20220517 18:21:19 DEBUG   ] Current Format: LTE
+[20220517 18:21:20 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:20 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:20 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:20 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:20 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:20 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:20 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:21 INFO    ] Search sensitivity: -83.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -84.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -85.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -86.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -87.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -88.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -89.0
+[20220517 18:21:22 INFO    ] Search sensitivity: -90.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -91.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -92.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -93.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -94.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:23 INFO    ] Search sensitivity: -97.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -98.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -99.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -100.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -101.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -102.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:24 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:25 INFO    ] Search sensitivity: -105.0
+[20220517 18:21:25 INFO    ] FAIL
+[20220517 18:21:25 INFO    ] FAIL
+[20220517 18:21:25 INFO    ] FAIL
+[20220517 18:21:25 INFO    ] Back to higher 2dB
+[20220517 18:21:25 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:25 INFO    ] Search sensitivity: -103.2
+[20220517 18:21:25 INFO    ] Search sensitivity: -103.4
+[20220517 18:21:25 INFO    ] Search sensitivity: -103.6
+[20220517 18:21:26 INFO    ] Search sensitivity: -103.8
+[20220517 18:21:26 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:26 INFO    ] Search sensitivity: -104.2
+[20220517 18:21:26 INFO    ] level -104.0, PASS
+[20220517 18:21:26 INFO    ] sensitivity: -104.0, pass 1 times
+[20220517 18:21:27 INFO    ] 2 times fail
+[20220517 18:21:27 INFO    ] level -103.8, PASS
+[20220517 18:21:27 INFO    ] sensitivity: -103.8, pass 1 times
+[20220517 18:21:27 INFO    ] sensitivity: -103.8, pass 2 times
+[20220517 18:21:27 INFO    ] sensitivity: -103.8, pass 3 times
+[20220517 18:21:27 INFO    ] Final: POWER: 23.61, SENSITIVITY: -103.8, PER:100.00
+[20220517 18:21:28 DEBUG   ] Test Channel List: 4, 3MHZ, downlink channel list:[1965, 2175, 2385]
+[20220517 18:21:28 INFO    ] Start to sensitivity B4, bandwidth: 3 MHz, downlink_chan: 1965
+[20220517 18:21:28 DEBUG   ] Current Format: LTE
+[20220517 18:21:29 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:29 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:29 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:29 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:29 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:30 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -83.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -84.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -85.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -86.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -87.0
+[20220517 18:21:31 INFO    ] Search sensitivity: -88.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -89.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -90.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -91.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -92.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -93.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -94.0
+[20220517 18:21:32 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -97.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -98.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -99.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -100.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -101.0
+[20220517 18:21:33 INFO    ] Search sensitivity: -102.0
+[20220517 18:21:34 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:34 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:34 INFO    ] Search sensitivity: -105.0
+[20220517 18:21:34 INFO    ] FAIL
+[20220517 18:21:34 INFO    ] FAIL
+[20220517 18:21:34 INFO    ] FAIL
+[20220517 18:21:34 INFO    ] Back to higher 2dB
+[20220517 18:21:34 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:34 INFO    ] Search sensitivity: -103.2
+[20220517 18:21:35 INFO    ] Search sensitivity: -103.4
+[20220517 18:21:35 INFO    ] Search sensitivity: -103.6
+[20220517 18:21:35 INFO    ] Search sensitivity: -103.8
+[20220517 18:21:35 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:35 INFO    ] Search sensitivity: -104.2
+[20220517 18:21:35 INFO    ] Search sensitivity: -104.4
+[20220517 18:21:36 INFO    ] level -104.2, FAIL
+[20220517 18:21:36 INFO    ] level -104.0, PASS
+[20220517 18:21:36 INFO    ] sensitivity: -104.0, pass 1 times
+[20220517 18:21:36 INFO    ] 2 times fail
+[20220517 18:21:36 INFO    ] level -103.8, PASS
+[20220517 18:21:36 INFO    ] sensitivity: -103.8, pass 1 times
+[20220517 18:21:37 INFO    ] sensitivity: -103.8, pass 2 times
+[20220517 18:21:37 INFO    ] sensitivity: -103.8, pass 3 times
+[20220517 18:21:37 INFO    ] Final: POWER: 23.20, SENSITIVITY: -103.8, PER:100.00
+[20220517 18:21:37 INFO    ] Start to sensitivity B4, bandwidth: 3 MHz, downlink_chan: 2175
+[20220517 18:21:37 DEBUG   ] Current Format: LTE
+[20220517 18:21:37 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:38 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -83.0
+[20220517 18:21:39 INFO    ] Search sensitivity: -84.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -85.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -86.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -87.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -88.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -89.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -90.0
+[20220517 18:21:40 INFO    ] Search sensitivity: -91.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -92.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -93.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -94.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -97.0
+[20220517 18:21:41 INFO    ] Search sensitivity: -98.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -99.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -100.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -101.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -102.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:42 INFO    ] Search sensitivity: -105.0
+[20220517 18:21:43 INFO    ] FAIL
+[20220517 18:21:43 INFO    ] FAIL
+[20220517 18:21:43 INFO    ] FAIL
+[20220517 18:21:43 INFO    ] Back to higher 2dB
+[20220517 18:21:43 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:43 INFO    ] Search sensitivity: -103.2
+[20220517 18:21:43 INFO    ] Search sensitivity: -103.4
+[20220517 18:21:43 INFO    ] Search sensitivity: -103.6
+[20220517 18:21:43 INFO    ] Search sensitivity: -103.8
+[20220517 18:21:44 INFO    ] Search sensitivity: -104.0
+[20220517 18:21:44 INFO    ] Search sensitivity: -104.2
+[20220517 18:21:44 INFO    ] Search sensitivity: -104.4
+[20220517 18:21:44 INFO    ] Search sensitivity: -104.6
+[20220517 18:21:44 INFO    ] level -104.4, PASS
+[20220517 18:21:44 INFO    ] sensitivity: -104.4, pass 1 times
+[20220517 18:21:45 INFO    ] sensitivity: -104.4, pass 2 times
+[20220517 18:21:45 INFO    ] sensitivity: -104.4, pass 3 times
+[20220517 18:21:45 INFO    ] Final: POWER: 23.08, SENSITIVITY: -104.4, PER:98.90
+[20220517 18:21:45 INFO    ] Start to sensitivity B4, bandwidth: 3 MHz, downlink_chan: 2385
+[20220517 18:21:45 DEBUG   ] Current Format: LTE
+[20220517 18:21:45 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:46 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -83.0
+[20220517 18:21:47 INFO    ] Search sensitivity: -84.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -85.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -86.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -87.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -88.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -89.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -90.0
+[20220517 18:21:48 INFO    ] Search sensitivity: -91.0
+[20220517 18:21:49 INFO    ] Search sensitivity: -92.0
+[20220517 18:21:49 INFO    ] Search sensitivity: -93.0
+[20220517 18:21:49 INFO    ] Search sensitivity: -94.0
+[20220517 18:21:49 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:49 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:49 INFO    ] Search sensitivity: -97.0
+[20220517 18:21:50 INFO    ] FAIL
+[20220517 18:21:50 INFO    ] FAIL
+[20220517 18:21:50 INFO    ] FAIL
+[20220517 18:21:50 INFO    ] Back to higher 2dB
+[20220517 18:21:50 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:50 INFO    ] Search sensitivity: -95.2
+[20220517 18:21:50 INFO    ] Search sensitivity: -95.4
+[20220517 18:21:50 INFO    ] Search sensitivity: -95.6
+[20220517 18:21:50 INFO    ] Search sensitivity: -95.8
+[20220517 18:21:50 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:51 INFO    ] Search sensitivity: -96.2
+[20220517 18:21:51 INFO    ] Search sensitivity: -96.4
+[20220517 18:21:52 INFO    ] Search sensitivity: -96.6
+[20220517 18:21:52 INFO    ] level -96.4, PASS
+[20220517 18:21:52 INFO    ] sensitivity: -96.4, pass 1 times
+[20220517 18:21:52 INFO    ] 2 times fail
+[20220517 18:21:52 INFO    ] level -96.2, PASS
+[20220517 18:21:52 INFO    ] sensitivity: -96.2, pass 1 times
+[20220517 18:21:53 INFO    ] sensitivity: -96.2, pass 2 times
+[20220517 18:21:53 INFO    ] sensitivity: -96.2, pass 3 times
+[20220517 18:21:53 INFO    ] Final: POWER: 23.17, SENSITIVITY: -96.2, PER:100.00
+[20220517 18:21:53 DEBUG   ] Test Channel List: 25, 3MHZ, downlink channel list:[8055, 8365, 8675]
+[20220517 18:21:53 INFO    ] Start to sensitivity B25, bandwidth: 3 MHz, downlink_chan: 8055
+[20220517 18:21:54 DEBUG   ] Current Format: LTE
+[20220517 18:21:55 INFO    ] Search sensitivity: -70.0
+[20220517 18:21:55 INFO    ] Search sensitivity: -71.0
+[20220517 18:21:55 INFO    ] Search sensitivity: -72.0
+[20220517 18:21:55 INFO    ] Search sensitivity: -73.0
+[20220517 18:21:55 INFO    ] Search sensitivity: -74.0
+[20220517 18:21:55 INFO    ] Search sensitivity: -75.0
+[20220517 18:21:55 INFO    ] Search sensitivity: -76.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -77.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -78.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -79.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -80.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -81.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -82.0
+[20220517 18:21:56 INFO    ] Search sensitivity: -83.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -84.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -85.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -86.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -87.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -88.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -89.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -90.0
+[20220517 18:21:57 INFO    ] Search sensitivity: -91.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -92.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -93.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -94.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -95.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -96.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -97.0
+[20220517 18:21:58 INFO    ] Search sensitivity: -98.0
+[20220517 18:21:59 INFO    ] Search sensitivity: -99.0
+[20220517 18:21:59 INFO    ] Search sensitivity: -100.0
+[20220517 18:21:59 INFO    ] Search sensitivity: -101.0
+[20220517 18:21:59 INFO    ] Search sensitivity: -102.0
+[20220517 18:21:59 INFO    ] Search sensitivity: -103.0
+[20220517 18:21:59 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:00 INFO    ] FAIL
+[20220517 18:22:00 INFO    ] FAIL
+[20220517 18:22:00 INFO    ] FAIL
+[20220517 18:22:00 INFO    ] Back to higher 2dB
+[20220517 18:22:00 INFO    ] Search sensitivity: -102.0
+[20220517 18:22:00 INFO    ] Search sensitivity: -102.2
+[20220517 18:22:00 INFO    ] Search sensitivity: -102.4
+[20220517 18:22:00 INFO    ] Search sensitivity: -102.6
+[20220517 18:22:00 INFO    ] Search sensitivity: -102.8
+[20220517 18:22:00 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:01 INFO    ] Search sensitivity: -103.2
+[20220517 18:22:01 INFO    ] Search sensitivity: -103.4
+[20220517 18:22:01 INFO    ] level -103.2, PASS
+[20220517 18:22:01 INFO    ] sensitivity: -103.2, pass 1 times
+[20220517 18:22:02 INFO    ] sensitivity: -103.2, pass 2 times
+[20220517 18:22:02 INFO    ] sensitivity: -103.2, pass 3 times
+[20220517 18:22:02 INFO    ] Final: POWER: 23.58, SENSITIVITY: -103.2, PER:96.72
+[20220517 18:22:02 INFO    ] Start to sensitivity B25, bandwidth: 3 MHz, downlink_chan: 8365
+[20220517 18:22:02 DEBUG   ] Current Format: LTE
+[20220517 18:22:03 INFO    ] Search sensitivity: -70.0
+[20220517 18:22:03 INFO    ] Search sensitivity: -71.0
+[20220517 18:22:03 INFO    ] Search sensitivity: -72.0
+[20220517 18:22:03 INFO    ] Search sensitivity: -73.0
+[20220517 18:22:03 INFO    ] Search sensitivity: -74.0
+[20220517 18:22:03 INFO    ] Search sensitivity: -75.0
+[20220517 18:22:03 INFO    ] Search sensitivity: -76.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -77.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -78.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -79.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -80.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -81.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -82.0
+[20220517 18:22:04 INFO    ] Search sensitivity: -83.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -84.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -85.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -86.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -87.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -88.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -89.0
+[20220517 18:22:05 INFO    ] Search sensitivity: -90.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -91.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -92.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -93.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -94.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -95.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -96.0
+[20220517 18:22:06 INFO    ] Search sensitivity: -97.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -98.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -99.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -100.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -101.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -102.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:07 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:08 INFO    ] Search sensitivity: -105.0
+[20220517 18:22:08 INFO    ] FAIL
+[20220517 18:22:08 INFO    ] FAIL
+[20220517 18:22:08 INFO    ] FAIL
+[20220517 18:22:08 INFO    ] Back to higher 2dB
+[20220517 18:22:08 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:08 INFO    ] Search sensitivity: -103.2
+[20220517 18:22:08 INFO    ] Search sensitivity: -103.4
+[20220517 18:22:08 INFO    ] Search sensitivity: -103.6
+[20220517 18:22:09 INFO    ] Search sensitivity: -103.8
+[20220517 18:22:09 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:09 INFO    ] Search sensitivity: -104.2
+[20220517 18:22:09 INFO    ] Search sensitivity: -104.4
+[20220517 18:22:09 INFO    ] Search sensitivity: -104.6
+[20220517 18:22:09 INFO    ] Search sensitivity: -104.8
+[20220517 18:22:10 INFO    ] Search sensitivity: -105.0
+[20220517 18:22:10 INFO    ] level -104.8, PASS
+[20220517 18:22:10 INFO    ] sensitivity: -104.8, pass 1 times
+[20220517 18:22:11 INFO    ] sensitivity: -104.8, pass 2 times
+[20220517 18:22:11 INFO    ] sensitivity: -104.8, pass 3 times
+[20220517 18:22:11 INFO    ] Final: POWER: 23.57, SENSITIVITY: -104.8, PER:98.25
+[20220517 18:22:11 INFO    ] Start to sensitivity B25, bandwidth: 3 MHz, downlink_chan: 8675
+[20220517 18:22:12 DEBUG   ] Current Format: LTE
+[20220517 18:22:12 INFO    ] Search sensitivity: -70.0
+[20220517 18:22:12 INFO    ] Search sensitivity: -71.0
+[20220517 18:22:12 INFO    ] Search sensitivity: -72.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -73.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -74.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -75.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -76.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -77.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -78.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -79.0
+[20220517 18:22:13 INFO    ] Search sensitivity: -80.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -81.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -82.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -83.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -84.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -85.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -86.0
+[20220517 18:22:14 INFO    ] Search sensitivity: -87.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -88.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -89.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -90.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -91.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -92.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -93.0
+[20220517 18:22:15 INFO    ] Search sensitivity: -94.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -95.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -96.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -97.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -98.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -99.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -100.0
+[20220517 18:22:16 INFO    ] Search sensitivity: -101.0
+[20220517 18:22:17 INFO    ] Search sensitivity: -102.0
+[20220517 18:22:17 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:17 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:17 INFO    ] Search sensitivity: -105.0
+[20220517 18:22:17 INFO    ] FAIL
+[20220517 18:22:17 INFO    ] FAIL
+[20220517 18:22:18 INFO    ] FAIL
+[20220517 18:22:18 INFO    ] Back to higher 2dB
+[20220517 18:22:18 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:18 INFO    ] Search sensitivity: -103.2
+[20220517 18:22:18 INFO    ] Search sensitivity: -103.4
+[20220517 18:22:18 INFO    ] Search sensitivity: -103.6
+[20220517 18:22:18 INFO    ] Search sensitivity: -103.8
+[20220517 18:22:18 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:19 INFO    ] level -103.8, PASS
+[20220517 18:22:19 INFO    ] sensitivity: -103.8, pass 1 times
+[20220517 18:22:19 INFO    ] 2 times fail
+[20220517 18:22:19 INFO    ] level -103.6, PASS
+[20220517 18:22:19 INFO    ] sensitivity: -103.6, pass 1 times
+[20220517 18:22:19 INFO    ] sensitivity: -103.6, pass 2 times
+[20220517 18:22:20 INFO    ] sensitivity: -103.6, pass 3 times
+[20220517 18:22:20 INFO    ] Final: POWER: 23.55, SENSITIVITY: -103.6, PER:96.91
+[20220517 18:22:20 DEBUG   ] Test Channel List: 66, 3MHZ, downlink channel list:[66451, 66786, 67121]
+[20220517 18:22:20 INFO    ] Start to sensitivity B66, bandwidth: 3 MHz, downlink_chan: 66451
+[20220517 18:22:21 DEBUG   ] Current Format: LTE
+[20220517 18:22:21 INFO    ] Search sensitivity: -70.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -71.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -72.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -73.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -74.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -75.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -76.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -77.0
+[20220517 18:22:22 INFO    ] Search sensitivity: -78.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -79.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -80.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -81.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -82.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -83.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -84.0
+[20220517 18:22:23 INFO    ] Search sensitivity: -85.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -86.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -87.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -88.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -89.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -90.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -91.0
+[20220517 18:22:24 INFO    ] Search sensitivity: -92.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -93.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -94.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -95.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -96.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -97.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -98.0
+[20220517 18:22:25 INFO    ] Search sensitivity: -99.0
+[20220517 18:22:26 INFO    ] Search sensitivity: -100.0
+[20220517 18:22:26 INFO    ] Search sensitivity: -101.0
+[20220517 18:22:26 INFO    ] Search sensitivity: -102.0
+[20220517 18:22:26 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:26 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:26 INFO    ] Search sensitivity: -105.0
+[20220517 18:22:27 INFO    ] FAIL
+[20220517 18:22:27 INFO    ] FAIL
+[20220517 18:22:27 INFO    ] FAIL
+[20220517 18:22:27 INFO    ] Back to higher 2dB
+[20220517 18:22:27 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:27 INFO    ] Search sensitivity: -103.2
+[20220517 18:22:27 INFO    ] Search sensitivity: -103.4
+[20220517 18:22:27 INFO    ] Search sensitivity: -103.6
+[20220517 18:22:27 INFO    ] Search sensitivity: -103.8
+[20220517 18:22:27 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:28 INFO    ] Search sensitivity: -104.2
+[20220517 18:22:28 INFO    ] level -104.0, PASS
+[20220517 18:22:28 INFO    ] sensitivity: -104.0, pass 1 times
+[20220517 18:22:28 INFO    ] sensitivity: -104.0, pass 2 times
+[20220517 18:22:28 INFO    ] 3 times fail
+[20220517 18:22:28 INFO    ] level -103.8, PASS
+[20220517 18:22:29 INFO    ] sensitivity: -103.8, pass 1 times
+[20220517 18:22:29 INFO    ] sensitivity: -103.8, pass 2 times
+[20220517 18:22:29 INFO    ] sensitivity: -103.8, pass 3 times
+[20220517 18:22:29 INFO    ] Final: POWER: 23.45, SENSITIVITY: -103.8, PER:100.00
+[20220517 18:22:29 INFO    ] Start to sensitivity B66, bandwidth: 3 MHz, downlink_chan: 66786
+[20220517 18:22:29 DEBUG   ] Current Format: LTE
+[20220517 18:22:30 INFO    ] Search sensitivity: -70.0
+[20220517 18:22:30 INFO    ] Search sensitivity: -71.0
+[20220517 18:22:30 INFO    ] Search sensitivity: -72.0
+[20220517 18:22:30 INFO    ] Search sensitivity: -73.0
+[20220517 18:22:30 INFO    ] Search sensitivity: -74.0
+[20220517 18:22:30 INFO    ] Search sensitivity: -75.0
+[20220517 18:22:30 INFO    ] Search sensitivity: -76.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -77.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -78.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -79.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -80.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -81.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -82.0
+[20220517 18:22:31 INFO    ] Search sensitivity: -83.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -84.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -85.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -86.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -87.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -88.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -89.0
+[20220517 18:22:32 INFO    ] Search sensitivity: -90.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -91.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -92.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -93.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -94.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -95.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -96.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -97.0
+[20220517 18:22:33 INFO    ] Search sensitivity: -98.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -99.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -100.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -101.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -102.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:34 INFO    ] Search sensitivity: -105.0
+[20220517 18:22:35 INFO    ] FAIL
+[20220517 18:22:35 INFO    ] FAIL
+[20220517 18:22:35 INFO    ] FAIL
+[20220517 18:22:35 INFO    ] Back to higher 2dB
+[20220517 18:22:35 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:35 INFO    ] Search sensitivity: -103.2
+[20220517 18:22:35 INFO    ] Search sensitivity: -103.4
+[20220517 18:22:35 INFO    ] Search sensitivity: -103.6
+[20220517 18:22:36 INFO    ] Search sensitivity: -103.8
+[20220517 18:22:36 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:36 INFO    ] Search sensitivity: -104.2
+[20220517 18:22:36 INFO    ] Search sensitivity: -104.4
+[20220517 18:22:36 INFO    ] Search sensitivity: -104.6
+[20220517 18:22:36 INFO    ] level -104.4, PASS
+[20220517 18:22:37 INFO    ] 1 times fail
+[20220517 18:22:37 INFO    ] level -104.2, PASS
+[20220517 18:22:37 INFO    ] 1 times fail
+[20220517 18:22:37 INFO    ] level -104.0, PASS
+[20220517 18:22:37 INFO    ] sensitivity: -104.0, pass 1 times
+[20220517 18:22:37 INFO    ] sensitivity: -104.0, pass 2 times
+[20220517 18:22:37 INFO    ] sensitivity: -104.0, pass 3 times
+[20220517 18:22:37 INFO    ] Final: POWER: 23.36, SENSITIVITY: -104.0, PER:100.00
+[20220517 18:22:37 INFO    ] Start to sensitivity B66, bandwidth: 3 MHz, downlink_chan: 67121
+[20220517 18:22:38 DEBUG   ] Current Format: LTE
+[20220517 18:22:38 INFO    ] Search sensitivity: -70.0
+[20220517 18:22:38 INFO    ] Search sensitivity: -71.0
+[20220517 18:22:38 INFO    ] Search sensitivity: -72.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -73.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -74.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -75.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -76.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -77.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -78.0
+[20220517 18:22:39 INFO    ] Search sensitivity: -79.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -80.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -81.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -82.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -83.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -84.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -85.0
+[20220517 18:22:40 INFO    ] Search sensitivity: -86.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -87.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -88.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -89.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -90.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -91.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -92.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -93.0
+[20220517 18:22:41 INFO    ] Search sensitivity: -94.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -95.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -96.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -97.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -98.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -99.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -100.0
+[20220517 18:22:42 INFO    ] Search sensitivity: -101.0
+[20220517 18:22:43 INFO    ] Search sensitivity: -102.0
+[20220517 18:22:43 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:43 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:43 INFO    ] Search sensitivity: -105.0
+[20220517 18:22:43 INFO    ] FAIL
+[20220517 18:22:43 INFO    ] FAIL
+[20220517 18:22:43 INFO    ] FAIL
+[20220517 18:22:43 INFO    ] Back to higher 2dB
+[20220517 18:22:44 INFO    ] Search sensitivity: -103.0
+[20220517 18:22:44 INFO    ] Search sensitivity: -103.2
+[20220517 18:22:44 INFO    ] Search sensitivity: -103.4
+[20220517 18:22:44 INFO    ] Search sensitivity: -103.6
+[20220517 18:22:44 INFO    ] Search sensitivity: -103.8
+[20220517 18:22:44 INFO    ] Search sensitivity: -104.0
+[20220517 18:22:44 INFO    ] Search sensitivity: -104.2
+[20220517 18:22:44 INFO    ] Search sensitivity: -104.4
+[20220517 18:22:45 INFO    ] Search sensitivity: -104.6
+[20220517 18:22:45 INFO    ] Search sensitivity: -104.8
+[20220517 18:22:46 INFO    ] level -104.6, PASS
+[20220517 18:22:46 INFO    ] sensitivity: -104.6, pass 1 times
+[20220517 18:22:46 INFO    ] sensitivity: -104.6, pass 2 times
+[20220517 18:22:46 INFO    ] 3 times fail
+[20220517 18:22:46 INFO    ] level -104.4, PASS
+[20220517 18:22:46 INFO    ] 1 times fail
+[20220517 18:22:47 INFO    ] level -104.2, PASS
+[20220517 18:22:47 INFO    ] sensitivity: -104.2, pass 1 times
+[20220517 18:22:47 INFO    ] sensitivity: -104.2, pass 2 times
+[20220517 18:22:47 INFO    ] sensitivity: -104.2, pass 3 times
+[20220517 18:22:47 INFO    ] Final: POWER: 23.49, SENSITIVITY: -104.2, PER:100.00
+[20220517 18:22:48 DEBUG   ] Test Channel List: 1, 5MHZ, downlink channel list:[25, 300, 575]
+[20220517 18:22:48 INFO    ] Start to sensitivity B1, bandwidth: 5 MHz, downlink_chan: 25
+[20220517 18:22:48 DEBUG   ] Current Format: LTE
+[20220517 18:22:52 INFO    ] Search sensitivity: -70.0
+[20220517 18:22:57 INFO    ] Search sensitivity: -71.0
+[20220517 18:22:57 INFO    ] Search sensitivity: -72.0
+[20220517 18:22:57 INFO    ] Search sensitivity: -73.0
+[20220517 18:22:57 INFO    ] Search sensitivity: -74.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -75.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -76.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -77.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -78.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -79.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -80.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -81.0
+[20220517 18:22:58 INFO    ] Search sensitivity: -82.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -83.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -84.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -85.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -86.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -87.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -88.0
+[20220517 18:22:59 INFO    ] Search sensitivity: -89.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -90.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -91.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -92.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -93.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -94.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -95.0
+[20220517 18:23:00 INFO    ] Search sensitivity: -96.0
+[20220517 18:23:01 INFO    ] Search sensitivity: -97.0
+[20220517 18:23:01 INFO    ] Search sensitivity: -98.0
+[20220517 18:23:01 INFO    ] Search sensitivity: -99.0
+[20220517 18:23:01 INFO    ] Search sensitivity: -100.0
+[20220517 18:23:01 INFO    ] Search sensitivity: -101.0
+[20220517 18:23:01 INFO    ] Search sensitivity: -102.0
+[20220517 18:23:02 INFO    ] FAIL
+[20220517 18:23:02 INFO    ] FAIL
+[20220517 18:23:02 INFO    ] FAIL
+[20220517 18:23:02 INFO    ] Back to higher 2dB
+[20220517 18:23:02 INFO    ] Search sensitivity: -100.0
+[20220517 18:23:02 INFO    ] Search sensitivity: -100.2
+[20220517 18:23:02 INFO    ] Search sensitivity: -100.4
+[20220517 18:23:02 INFO    ] Search sensitivity: -100.6
+[20220517 18:23:02 INFO    ] Search sensitivity: -100.8
+[20220517 18:23:02 INFO    ] Search sensitivity: -101.0
+[20220517 18:23:03 INFO    ] Search sensitivity: -101.2
+[20220517 18:23:03 INFO    ] Search sensitivity: -101.4
+[20220517 18:23:03 INFO    ] Search sensitivity: -101.6
+[20220517 18:23:03 INFO    ] Search sensitivity: -101.8
+[20220517 18:23:03 INFO    ] Search sensitivity: -102.0
+[20220517 18:23:04 INFO    ] level -101.8, FAIL
+[20220517 18:23:04 INFO    ] level -101.6, PASS
+[20220517 18:23:04 INFO    ] 1 times fail
+[20220517 18:23:04 INFO    ] level -101.4, PASS
+[20220517 18:23:05 INFO    ] sensitivity: -101.4, pass 1 times
+[20220517 18:23:05 INFO    ] sensitivity: -101.4, pass 2 times
+[20220517 18:23:05 INFO    ] sensitivity: -101.4, pass 3 times
+[20220517 18:23:05 INFO    ] Final: POWER: 23.55, SENSITIVITY: -101.4, PER:100.00
+[20220517 18:23:05 INFO    ] Start to sensitivity B1, bandwidth: 5 MHz, downlink_chan: 300
+[20220517 18:23:05 DEBUG   ] Current Format: LTE
+[20220517 18:23:06 INFO    ] Search sensitivity: -70.0
+[20220517 18:23:06 INFO    ] Search sensitivity: -71.0
+[20220517 18:23:06 INFO    ] Search sensitivity: -72.0
+[20220517 18:23:06 INFO    ] Search sensitivity: -73.0
+[20220517 18:23:06 INFO    ] Search sensitivity: -74.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -75.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -76.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -77.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -78.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -79.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -80.0
+[20220517 18:23:07 INFO    ] Search sensitivity: -81.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -82.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -83.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -84.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -85.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -86.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -87.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -88.0
+[20220517 18:23:08 INFO    ] Search sensitivity: -89.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -90.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -91.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -92.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -93.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -94.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -95.0
+[20220517 18:23:09 INFO    ] Search sensitivity: -96.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -97.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -98.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -99.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -100.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -101.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -102.0
+[20220517 18:23:10 INFO    ] Search sensitivity: -103.0
+[20220517 18:23:11 INFO    ] FAIL
+[20220517 18:23:11 INFO    ] FAIL
+[20220517 18:23:11 INFO    ] FAIL
+[20220517 18:23:11 INFO    ] Back to higher 2dB
+[20220517 18:23:11 INFO    ] Search sensitivity: -101.0
+[20220517 18:23:11 INFO    ] Search sensitivity: -101.2
+[20220517 18:23:11 INFO    ] Search sensitivity: -101.4
+[20220517 18:23:11 INFO    ] Search sensitivity: -101.6
+[20220517 18:23:11 INFO    ] Search sensitivity: -101.8
+[20220517 18:23:12 INFO    ] Search sensitivity: -102.0
+[20220517 18:23:12 INFO    ] Search sensitivity: -102.2
+[20220517 18:23:12 INFO    ] Search sensitivity: -102.4
+[20220517 18:23:12 INFO    ] Search sensitivity: -102.6
+[20220517 18:23:12 INFO    ] Search sensitivity: -102.8
+[20220517 18:23:13 INFO    ] level -102.6, PASS
+[20220517 18:23:13 INFO    ] sensitivity: -102.6, pass 1 times
+[20220517 18:23:13 INFO    ] sensitivity: -102.6, pass 2 times
+[20220517 18:23:14 INFO    ] sensitivity: -102.6, pass 3 times
+[20220517 18:23:14 INFO    ] Final: POWER: 23.48, SENSITIVITY: -102.6, PER:97.83
+[20220517 18:23:14 INFO    ] Start to sensitivity B1, bandwidth: 5 MHz, downlink_chan: 575
+[20220517 18:23:14 DEBUG   ] Current Format: LTE
+[20220517 18:23:14 INFO    ] Search sensitivity: -70.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -71.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -72.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -73.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -74.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -75.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -76.0
+[20220517 18:23:15 INFO    ] Search sensitivity: -77.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -78.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -79.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -80.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -81.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -82.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -83.0
+[20220517 18:23:16 INFO    ] Search sensitivity: -84.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -85.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -86.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -87.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -88.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -89.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -90.0
+[20220517 18:23:17 INFO    ] Search sensitivity: -91.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -92.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -93.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -94.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -95.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -96.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -97.0
+[20220517 18:23:18 INFO    ] Search sensitivity: -98.0
+[20220517 18:23:19 INFO    ] Search sensitivity: -99.0
+[20220517 18:23:19 INFO    ] Search sensitivity: -100.0
+[20220517 18:23:19 INFO    ] Search sensitivity: -101.0
+[20220517 18:23:19 INFO    ] Search sensitivity: -102.0
+[20220517 18:23:19 INFO    ] Search sensitivity: -103.0
+[20220517 18:23:20 INFO    ] FAIL
+[20220517 18:23:20 INFO    ] FAIL
+[20220517 18:23:20 INFO    ] FAIL
+[20220517 18:23:20 INFO    ] Back to higher 2dB
+[20220517 18:23:20 INFO    ] Search sensitivity: -101.0
+[20220517 18:23:20 INFO    ] Search sensitivity: -101.2
+[20220517 18:23:20 INFO    ] Search sensitivity: -101.4
+[20220517 18:23:20 INFO    ] Search sensitivity: -101.6
+[20220517 18:23:20 INFO    ] Search sensitivity: -101.8
+[20220517 18:23:20 INFO    ] Search sensitivity: -102.0
+[20220517 18:23:21 INFO    ] Search sensitivity: -102.2
+[20220517 18:23:21 INFO    ] level -102.0, PASS
+[20220517 18:23:22 INFO    ] sensitivity: -102.0, pass 1 times
+[20220517 18:23:22 INFO    ] sensitivity: -102.0, pass 2 times
+[20220517 18:23:22 INFO    ] sensitivity: -102.0, pass 3 times
+[20220517 18:23:22 INFO    ] Final: POWER: 23.53, SENSITIVITY: -102.0, PER:98.28
+[20220517 18:23:23 DEBUG   ] Test Channel List: 2, 5MHZ, downlink channel list:[625, 900, 1175]
+[20220517 18:23:23 INFO    ] Start to sensitivity B2, bandwidth: 5 MHz, downlink_chan: 625
+[20220517 18:23:23 DEBUG   ] Current Format: LTE
+[20220517 18:23:27 INFO    ] Search sensitivity: -70.0
