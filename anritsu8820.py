@@ -970,13 +970,18 @@ class Anritsu8820(pyvisa.ResourceManager):
         if standard == 'LTE':
             wb = openpyxl.Workbook()
             wb.remove(wb['Sheet'])
-            wb.create_sheet('sensitivity')
+            wb.create_sheet('Sensitivity_TxMax')
+            wb.create_sheet('Sensitivity_TxMin')
+            wb.create_sheet('Desense')
+            wb.create_sheet('Power_TxMax')
+            wb.create_sheet('Power_TxMin')
 
-            sh = wb['sensitivity']
-            sh['A1'] = 'Band'
-            sh['B1'] = 'ch0'
-            sh['C1'] = 'ch1'
-            sh['D1'] = 'ch2'
+            for sheet in wb.sheetnames:
+                sh = wb[sheet]
+                sh['A1'] = 'Band'
+                sh['B1'] = 'ch0'
+                sh['C1'] = 'ch1'
+                sh['D1'] = 'ch2'
 
             wb.save(f'Sensitivity_{bw}MHZ_LTE.xlsx')
             wb.close()
