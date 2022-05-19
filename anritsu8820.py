@@ -691,7 +691,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 sensitivity = Decimal(self.inst.query('OLVL?').strip())
                 time.sleep(0.1)
                 per = self.inst.query('TPUT? PER').strip()
-                power = self.inst.query('POWER? AVG').strip()
+                power = Decimal(self.inst.query('POWER? AVG').strip())
                 self.inst.query('*OPC?')
                 logger.info(f'Final: POWER: {power}, SENSITIVITY: {sensitivity}, PER:{per}')
                 return [power, sensitivity, per]
@@ -719,7 +719,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                     break
 
 
-    def get_sensitivity(self, standard, band, dl_ch, bw=None):
+    def get_sensitivity(self, standard, band, dl_ch,bw=None):
         s = standard
         if s == 'LTE':
             """
@@ -972,9 +972,9 @@ class Anritsu8820(pyvisa.ResourceManager):
             wb.remove(wb['Sheet'])
             wb.create_sheet('Sensitivity_TxMax')
             wb.create_sheet('Sensitivity_TxMin')
-            wb.create_sheet('Desense')
-            wb.create_sheet('Power_TxMax')
-            wb.create_sheet('Power_TxMin')
+            wb.create_sheet('Desens')
+            wb.create_sheet('PWR_TxMax')
+            wb.create_sheet('PWR_TxMin')
 
             for sheet in wb.sheetnames:
                 sh = wb[sheet]
@@ -1062,6 +1062,33 @@ class Anritsu8820(pyvisa.ResourceManager):
             wb.save(f'results_WCDMA.xlsx')
             wb.close()
 
+    def fill_sensitivity(self, standard, row, ws, band, dl_ch, data, items_selected, bw=None):
+        # items_selected: 0 = power, 1 = sensitivity, 2 = PER
+        if standard == 'LTE':
+            ws.cell(row, 1).value = band
+
+            if dl_ch < cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                ws.cell(row, 2).value = data[items_selected]
+                if items_selected == 0:
+                    logger.debug('power of L ch')
+                elif items_selected == 1:
+                    logger.debug('sensitivity of L ch')
+            elif dl_ch == cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                ws.cell(row, 3).value = data[items_selected]
+                if items_selected == 0:
+                    logger.debug('power of M ch')
+                elif items_selected == 1:
+                    logger.debug('sensitivity of M ch')
+            elif dl_ch > cm_pmt.dl_ch_selected(self.std, band, bw)[1]:
+                ws.cell(row, 4).value = data[items_selected]
+                if items_selected == 0:
+                    logger.debug('power of H ch')
+                elif items_selected == 1:
+                    logger.debug('sensitivity of H ch')
+
+        elif standard == 'WCDMA':
+            pass
+
     def fill_power_aclr_evm(self, standard, row, ws, band, dl_ch, test_items, items_selected,
                             bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
         if standard == 'LTE':
@@ -1141,8 +1168,40 @@ class Anritsu8820(pyvisa.ResourceManager):
                         ws.cell(row, 3 + col).value = aclr_item
                     logger.debug('the ACLR of H ch')
 
-    def fill_progress(self, standard, ws, band, dl_ch, test_items, test_items_selected,
-                      bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
+    def fill_progress_rx(self, standard, ws, band, dl_ch, data, items_selected , power_selected,
+                         bw=None):  # items_selected: 0 = power, 1 = sensitivity, 2 = PER
+        if standard == 'LTE':
+            if power_selected == 1:
+                logger.debug(f'capture band: {band}, {bw}MHZ, {dl_ch}, TxMax, sensitivity')
+            elif power_selected == 0:
+                logger.debug(f'capture band: {band}, {bw}MHZ, {dl_ch}, TxMin, sensitivity')
+
+            if ws.max_row == 1:  # only title
+                self.fill_sensitivity(standard, 2, ws, band, dl_ch, data, items_selected, bw)
+                logger.debug('Only title')
+            else:
+                for row in range(2, ws.max_row + 1):  # not only title
+                    if ws.cell(row, 1).value == band:  # if band is in the row
+                        # POWER and EVM
+                        self.fill_sensitivity(standard, row, ws, band, dl_ch, data, items_selected, bw)
+                        logger.debug('Band is found')
+                        break
+
+                    elif ws.cell(row, 1).value != band and row == ws.max_row:  # if band is not in the row and final row
+                        self.fill_sensitivity(standard, row + 1, ws, band, dl_ch, data, items_selected, bw)
+                        logger.debug('Band is not found and the row is final and then to add new line')
+                        break
+                    else:
+                        logger.debug('continue to search')
+                        continue
+
+        elif standard == 'WCDMA':
+            pass
+        elif standard == 'GSM':
+            pass
+
+    def fill_progress_tx(self, standard, ws, band, dl_ch, test_items, test_items_selected,
+                         bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
         self.aclr_ch_judge(self.std, band, dl_ch, bw)  # this is for ACLR fill in ACLR_TAB
 
         if standard == 'LTE':
@@ -1209,7 +1268,48 @@ class Anritsu8820(pyvisa.ResourceManager):
                         logger.debug('continue to search')
                         continue
 
-    def fill_values(self, data, band, dl_ch, bw=None):
+    def fill_values_rx(self, data, band, dl_ch, power_selected, bw=None):
+        """
+            data format:[Tx Power, Sensitivity, PER]
+        """
+        if self.std == 'LTE':
+            if pathlib.Path(f'Sensitivity_{bw}MHZ_LTE.xlsx').exists() is False:
+                self.create_excel_rx(self.std, bw)
+                logger.debug('Create Excel')
+
+            wb = openpyxl.load_workbook(f'Sensitivity_{bw}MHZ_LTE.xlsx')
+            logger.debug('Open Excel')
+
+            if power_selected == 1:
+                logger.debug(f'start to fill Sensitivity and Tx Power and Desens')
+                ws = wb['Sensitivity_TxMax']
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 1, power_selected, bw)  # fill sensitivity
+                ws = wb['PWR_TxMax']
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected, bw)  # fill power
+                # ws = wb['Desens']   # fill Desens
+                # self.fill_desens()
+
+            elif power_selected == 0:
+                logger.debug(f'start to fill Sensitivity and Tx Power and Desens')
+                ws = wb['Sensitivity_TxMin']
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 1, power_selected, bw)  # fill sensitivity
+                ws = wb['PWR_TxMin']
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected, bw)  # fill power
+                # ws = wb['Desens']   # fill Desens
+                # self.fill_desens()
+
+
+            wb.save(f'Sensitivity_{bw}MHZ_LTE.xlsx')
+            wb.close()
+
+            excel_path = f'Sensitivity_{bw}MHZ_LTE.xlsx'
+
+            return excel_path
+
+        elif self.std == 'WCDMA':
+            pass
+
+    def fill_values_tx(self, data, band, dl_ch, bw=None):
         if self.std == 'LTE':
             """
                 LTE format:{Q1:[power], Q_P:[power, ACLR, EVM], ...} and ACLR format is [L, M, H] 
@@ -1224,16 +1324,16 @@ class Anritsu8820(pyvisa.ResourceManager):
 
                 ws = wb[f'PWR_{mod}']  # POWER
                 logger.debug('start to fill Power')
-                self.fill_progress(self.std, ws, band, dl_ch, test_items, 0, bw)
+                self.fill_progress_tx(self.std, ws, band, dl_ch, test_items, 0, bw)
 
                 if mod != 'Q_1':
                     ws = wb[f'ACLR_{mod}']  # ACLR
                     logger.debug('start to fill ACLR')
-                    self.fill_progress(self.std, ws, band, dl_ch, test_items, 1, bw)
+                    self.fill_progress_tx(self.std, ws, band, dl_ch, test_items, 1, bw)
 
                     ws = wb[f'EVM_{mod}']  # EVM
                     logger.debug('start to fill EVM')
-                    self.fill_progress(self.std, ws, band, dl_ch, test_items, 2, bw)
+                    self.fill_progress_tx(self.std, ws, band, dl_ch, test_items, 2, bw)
 
             wb.save(f'results_{bw}MHZ_LTE.xlsx')
             wb.close()
@@ -1255,15 +1355,15 @@ class Anritsu8820(pyvisa.ResourceManager):
 
             ws = wb[f'PWR']  # POWER
             logger.debug('start to fill Power')
-            self.fill_progress(self.std, ws, band, dl_ch, data, 0)
+            self.fill_progress_tx(self.std, ws, band, dl_ch, data, 0)
 
             ws = wb[f'ACLR']  # ACLR
             logger.debug('start to fill ACLR')
-            self.fill_progress(self.std, ws, band, dl_ch, data, 1)
+            self.fill_progress_tx(self.std, ws, band, dl_ch, data, 1)
 
             ws = wb[f'EVM']  # EVM
             logger.debug('start to fill EVM')
-            self.fill_progress(self.std, ws, band, dl_ch, data, 2)
+            self.fill_progress_tx(self.std, ws, band, dl_ch, data, 2)
 
             wb.save(f'results_WCDMA.xlsx')
             wb.close()
@@ -1313,11 +1413,11 @@ class Anritsu8820(pyvisa.ResourceManager):
                         wb.save(excel_path)
                         wb.close()
 
-                    elif 'sensitivity' in ws_name:
+                    elif 'Sensitivity' in ws_name:
                         chart = LineChart()
-                        chart.title = f'{ws_name[:3]}'
-                        if 'PWR' in ws_name:
-                            chart.y_axis.title = f'Sensitivity(dBm)'
+                        chart.title = f'{ws_name[:11]}'
+
+                        chart.y_axis.title = f'Sensitivity(dBm)'
 
                         chart.x_axis.title = 'Band'
                         chart.x_axis.tickLblPos = 'low'
@@ -1469,7 +1569,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                                 logger.info(f'Start to measure B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
                                 self.set_handover(standard, dl_ch, bw)
                                 data = self.get_validation(standard)
-                                self.excel_path = self.fill_values(data, band, dl_ch, bw)
+                                self.excel_path = self.fill_values_tx(data, band, dl_ch, bw)
                         else:
                             logger.info(f'B{band} do not have BW {bw}MHZ')
                     self.excel_plot_line(standard, self.excel_path)
@@ -1495,7 +1595,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                         logger.info(f'Start to measure B{band}, downlink_chan: {dl_ch}')
                         self.set_handover(standard, dl_ch)
                         data = self.get_validation(standard)
-                        self.excel_path = self.fill_values(data, band, dl_ch)
+                        self.excel_path = self.fill_values_tx(data, band, dl_ch)
                 self.excel_plot_line(standard, self.excel_path)
             elif tech == wt.gsm_bands:
                 pass
@@ -1528,18 +1628,22 @@ class Anritsu8820(pyvisa.ResourceManager):
                                 logger.info(
                                     f'Start to sensitivity B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
                                 self.set_init_rx(standard)
-                                if wt.tx_max_pwr_sensitivity == 1:
-                                    self.set_input_level(30)
-                                    self.set_tpc('ALL1')
-                                    sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
-                                    logger.debug(f'Sensitivity list:{sens_list}')
-                                    self.set_output_level(-70)
-                                elif wt.tx_max_pwr_sensitivity == 0:
-                                    self.set_input_level(-10)
-                                    sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
-                                    logger.debug(f'Sensitivity list:{sens_list}')
-                                    self.set_output_level(-70)
-
+                                for power_selected in wt.tx_max_pwr_sensitivity:
+                                    if power_selected == 1:
+                                        self.set_tpc('ALL1')
+                                        self.set_input_level(30)
+                                        sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
+                                        logger.debug(f'Sensitivity list:{sens_list}')
+                                        self.excel_path = self.fill_values_rx(sens_list, band, dl_ch, power_selected, bw)
+                                        self.set_output_level(-70)
+                                    elif power_selected == 0:
+                                        self.set_tpc('AUTO')
+                                        self.set_input_level(-10)
+                                        sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
+                                        logger.debug(f'Sensitivity list:{sens_list}')
+                                        self.excel_path = self.fill_values_rx(sens_list, band, dl_ch, power_selected, bw)
+                                        self.set_output_level(-70)
+                    self.excel_plot_line(standard, self.excel_path)
             elif tech == 'WCDMA' and wt.wcdma_bands != []:
                 pass
             elif tech == wt.gsm_bands:

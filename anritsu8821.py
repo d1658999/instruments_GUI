@@ -111,7 +111,7 @@ class Anritsu8821(Anritsu8820):
                 logger.info('IDLE')
                 logger.info('Start to ON and OFF')
                 self.flymode_circle()
-                time.sleep(2)
+                time.sleep(3)
                 self.inst.write('CALLSA')
                 while conn_state != cm_pmt.ANRITSU_CONNECTED:
                     logger.info('Waiting for connection...')
@@ -347,7 +347,7 @@ class Anritsu8821(Anritsu8820):
                                 self.set_handover(standard, dl_ch, bw)
                                 time.sleep(2)
                                 data = self.get_validation(standard)
-                                self.excel_path = self.fill_values(data, band, dl_ch, bw)
+                                self.excel_path = self.fill_values_tx(data, band, dl_ch, bw)
                                 self.set_test_parameter_normal()
                         else:
                             logger.info(f'B{band} do not have BW {bw}MHZ')
@@ -360,8 +360,8 @@ def main():
     start = datetime.datetime.now()
 
     anritsu = Anritsu8821()
-    anritsu.create_excel_rx('LTE', 5)
-    # anritsu.run_rx()
+    # anritsu.create_excel_rx('LTE', 5)
+    anritsu.run_rx()
 
     stop = datetime.datetime.now()
     logger.info(f'Timer: {stop - start}')
