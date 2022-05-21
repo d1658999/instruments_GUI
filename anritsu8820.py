@@ -182,7 +182,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.set_band_cal()
         self.preset()
         self.set_integrity('WCDMA', 'ON')
-        self.set_screen()
+        self.set_screen('OFF')
         self.set_display_remain()
         self.set_init_miscs('WCDMA')
         self.set_test_mode('OFF')
@@ -200,7 +200,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.preset()
         self.set_band_cal()
-        self.set_screen()
+        self.set_screen('OFF')
         self.set_display_remain()
         self.preset_extarb()
         self.set_lvl_status('OFF')
@@ -321,6 +321,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.count = 10
         while conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:  # this is for waiting connection
             if conn_state == cm_pmt.ANRITSU_IDLE:
+                self.inst.write('CALLSO')
                 logger.info('IDLE')
                 time.sleep(5)
                 logger.info('START CALL')
@@ -342,7 +343,10 @@ class Anritsu8820(pyvisa.ResourceManager):
             elif conn_state == cm_pmt.ANRITSU_LOOP_MODE_1_CLOSE:
                 if self.count < 0:
                     logger.info('END CALL and FLY ON and OFF')
+                    self.preset()
                     self.inst.write('CALLSO')
+                    time.sleep(3)
+                    self.inst.write('CALLSA')
                     time.sleep(3)
                     self.flymode_circle()
                     self.count = 10
@@ -350,7 +354,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                     conn_state = int(self.inst.query("CALLSTAT?").strip())
                 else:
                     logger.info('Status: LOOP MODE(CLOSE)')
-                    time.sleep(1)
+                    time.sleep(2)
                     conn_state = int(self.inst.query("CALLSTAT?").strip())
                     self.count -= 1
 
@@ -578,13 +582,17 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.set_tpc('AUTO')
             self.set_input_level(5)
             self.set_output_level(-70)
-            self.set_RX_sample(10000)
+            self.set_RX_sample(1000)
             self.inst.write('TPUT_EARLY ON')
             self.set_init_power()
             self.inst.write('MOD_MEAS OFF')
 
         elif s == 'WCDMA':
-            pass
+            self.set_input_level(5)
+            self.set_output_level(-70)
+            self.set_RX_sample(1000)
+            self.inst.write('TPUT_EARLY OFF')
+            self.set_init_power()
         elif s == 'GSM':
             pass
 
@@ -594,131 +602,297 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.write(f'ULRB_START {rb_location}')
 
     def sweep_sensitivity(self, start=-70, coarse=1, fine=0.2):
-        touch = 0  # flag if 0: reduce power by coarse, if 1: reduce power by fine
-        count = 3
-        while True:
-            self.inst.write(f'OLVL {start}')
-            logger.info(f"Search sensitivity: {self.inst.query('OLVL?').strip()}")
-            self.set_to_measure()
-            time.sleep(0.1)
-            status = self.inst.query('TPUTPASS?').strip()
-            conn_state = int(self.inst.query("CALLSTAT?").strip())
-
-            if status == 'PASS' and touch == 0:  # by coarse
-                start -= coarse
-                touch = 0
-
-            elif status == 'PASS' and touch == 1:  # by fine
-                start -= fine
+        if self.std == 'LTE':
+            touch = 0  # flag if 0: reduce power by coarse, if 1: reduce power by fine
+            count = 3
+            while True:
+                self.inst.write(f'OLVL {start}')
+                logger.info(f"Search sensitivity: {self.inst.query('OLVL?').strip()}")
+                self.set_to_measure()
+                time.sleep(0.1)
                 status = self.inst.query('TPUTPASS?').strip()
-                while count > 1 and status == 'PASS':
-                    status = self.inst.query('TPUTPASS?').strip()
-                    count -= 1
-                count = 3
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
 
-            elif status == 'FAIL' and touch == 0:
-                while count > 0 and status == 'FAIL':  # retest 3 time to judge if it is real sensitivity
-                    self.set_to_measure()
-                    time.sleep(0.1)
-                    status = self.inst.query('TPUTPASS?').strip()
-                    logger.info(f'{status}')
-                    count -= 1
-                if count != 0:  # if it meets some sudden noise from environment
-                    continue
-                else:  # real sensitivity failed
-                    logger.info('Back to higher 2dB')
-                    start += 2
-                    count = 3
-                    touch = 1
+                if status == 'PASS' and touch == 0:  # by coarse
+                    start -= coarse
+                    touch = 0
 
-            elif status == 'FAIL' and touch == 1:  # it might be the real sensitivity
-                while True:
-                    if status == 'FAIL':
-                        start += fine
-                        self.inst.write(f'OLVL {start}')
-                        self.set_to_measure()
+                elif status == 'PASS' and touch == 1:  # by fine
+                    start -= fine
+                    status = self.inst.query('TPUTPASS?').strip()
+                    while count > 1 and status == 'PASS':
                         status = self.inst.query('TPUTPASS?').strip()
-                        output_level = self.inst.query(f'OLVL?').strip()
-                        logger.info(f'level {output_level}, {status}')
-                        output_level = self.inst.query(f'OLVL?').strip()
+                        count -= 1
+                    count = 3
 
-                    elif status == '*':
-                        logger.info('Connection is dropped')
-                        logger.info('Retest again from output level -70dBm')
-                        start = -70
-                        self.inst.write(f'OLVL {start}')
+                elif status == 'FAIL' and touch == 0:
+                    while count > 0 and status == 'FAIL':  # retest 3 time to judge if it is real sensitivity
+                        self.set_to_measure()
+                        time.sleep(0.1)
+                        status = self.inst.query('TPUTPASS?').strip()
+                        logger.info(f'{status}')
+                        count -= 1
+                    if count != 0:  # if it meets some sudden noise from environment
+                        continue
+                    else:  # real sensitivity failed
+                        logger.info('Back to higher 2dB')
+                        start += 2
+                        count = 3
+                        touch = 1
+
+                elif status == 'FAIL' and touch == 1:  # it might be the real sensitivity
+                    while True:
+                        if status == 'FAIL':
+                            start += fine
+                            start = round(start, 1)
+                            self.inst.write(f'OLVL {start}')
+                            self.set_to_measure()
+                            status = self.inst.query('TPUTPASS?').strip()
+                            output_level = self.inst.query(f'OLVL?').strip()
+                            logger.info(f'level {output_level}, {status}')
+
+
+                        elif status == '*':
+                            logger.info('Connection is dropped')
+                            logger.info('Retest again from output level -70dBm')
+                            start = -70
+                            self.inst.write(f'OLVL {start}')
+                            self.inst.write('CALLSO')
+                            time.sleep(2)
+                            self.inst.write('CALLSA')
+                            time.sleep(2)
+                            self.flymode_circle()
+                            logger.info('waiting 10 seconds')
+                            time.sleep(10)
+                            conn_state = int(self.inst.query("CALLSTAT?").strip())
+                            if conn_state == cm_pmt.ANRITSU_CONNECTED:
+                                start -= fine
+                                self.set_to_measure()
+                                status = self.inst.query('TPUTPASS?').strip()
+                                while status == 'PASS':
+                                    self.inst.write(f'OLVL {start}')
+                                    self.set_to_measure()
+                                    status = self.inst.query('TPUTPASS?').strip()
+                                    output_level = self.inst.query(f'OLVL?').strip()
+                                    logger.info(f'reconnedted level {output_level}: {status}')
+                                    start -= fine
+                            else:
+                                start = -70
+                                logger.info('Skip this channel, and set the output level to -70dBm for notice')
+
+                        elif status == 'PASS':
+                            while count > 0:
+                                self.set_to_measure()
+                                output_level = self.inst.query('OLVL?').strip()
+                                status = self.inst.query('TPUTPASS?').strip()
+                                if status == 'FAIL':
+                                    logger.info(f'{4 - count} times fail')
+                                    break
+                                logger.info(f"sensitivity: {output_level}, pass {4 - count} times")
+                                count -= 1
+
+                            count = 3
+
+                            if status == 'FAIL':
+                                continue
+                            else:
+                                break
+                    sensitivity = Decimal(self.inst.query('OLVL?').strip())
+                    time.sleep(0.1)
+                    per = self.inst.query('TPUT? PER').strip()
+                    power = Decimal(self.inst.query('POWER? AVG').strip())
+                    self.inst.query('*OPC?')
+                    logger.info(f'Final: POWER: {power}, SENSITIVITY: {sensitivity}, PER:{per}')
+                    return [power, sensitivity, per]
+
+                elif conn_state != cm_pmt.ANRITSU_CONNECTED:
+                    count = 3
+                    sub_count = 100
+                    while count > 0 and conn_state != cm_pmt.ANRITSU_CONNECTED:
+                        logger.info('Call drop and fly on and off')
                         self.inst.write('CALLSO')
                         time.sleep(2)
                         self.inst.write('CALLSA')
                         time.sleep(2)
                         self.flymode_circle()
-                        logger.info('waiting 10 seconds')
-                        time.sleep(10)
-                        conn_state = int(self.inst.query("CALLSTAT?").strip())
-                        if conn_state == cm_pmt.ANRITSU_CONNECTED:
-                            start -= fine
-                            self.set_to_measure()
-                            status = self.inst.query('TPUTPASS?').strip()
-                            while status == 'PASS':
-                                self.inst.write(f'OLVL {start}')
-                                self.set_to_measure()
-                                status = self.inst.query('TPUTPASS?').strip()
-                                output_level = self.inst.query(f'OLVL?').strip()
-                                logger.info(f'reconnedted level {output_level}: {status}')
-                                start -= fine
-                        else:
-                            start = -70
-                            logger.info('Skip this channel, and set the output level to -70dBm for notice')
-
-                    elif status == 'PASS':
-                        while count > 0:
-                            self.set_to_measure()
-                            output_level = self.inst.query('OLVL?').strip()
-                            status = self.inst.query('TPUTPASS?').strip()
-                            if status == 'FAIL':
-                                logger.info(f'{4 - count} times fail')
-                                break
-                            logger.info(f"sensitivity: {output_level}, pass {4 - count} times")
-                            count -= 1
-
-                        count = 3
-
-                        if status == 'FAIL':
-                            continue
-                        else:
-                            break
-                sensitivity = Decimal(self.inst.query('OLVL?').strip())
+                        while conn_state != cm_pmt.ANRITSU_CONNECTED and sub_count > 0:
+                            time.sleep(1)
+                            logger.info('Wait 1 second to connect')
+                            conn_state = int(self.inst.query("CALLSTAT?").strip())
+                            sub_count -= 1
+                        logger.info('Reconnected')
+                        sub_count = 100
+                        count -= 1
+                    if count == 0:
+                        logger.info('Stop this circle')
+                        break
+        elif self.std == 'WCDMA':
+            touch = 0  # flag if 0: reduce power by coarse, if 1: reduce power by fine
+            count = 3
+            mstate = int(self.inst.query('MSTAT?').strip())
+            while True:
+                self.set_output_level(start)
+                logger.info(f"Search sensitivity: {self.inst.query('OLVL?').strip()}")
                 time.sleep(0.1)
-                per = self.inst.query('TPUT? PER').strip()
-                power = Decimal(self.inst.query('POWER? AVG').strip())
-                self.inst.query('*OPC?')
-                logger.info(f'Final: POWER: {power}, SENSITIVITY: {sensitivity}, PER:{per}')
-                return [power, sensitivity, per]
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+                self.set_to_measure()
+                status = self.get_ber()
+                mstate = int(self.inst.query('MSTAT?').strip())
+                logger.debug(f'measuring statuse: {mstate}')
 
-            elif conn_state != cm_pmt.ANRITSU_CONNECTED:
-                count = 3
-                sub_count = 100
-                while count > 0 and conn_state != cm_pmt.ANRITSU_CONNECTED:
+                if mstate == cm_pmt.MESUREMENT_GOOD and conn_state == cm_pmt.ANRITSU_LOOP_MODE_1 and status == 'PASS' and touch == 0:  # by coarse
+                    start -= coarse
+                    touch = 0
+
+
+
+                elif mstate == cm_pmt.MESUREMENT_GOOD and conn_state == cm_pmt.ANRITSU_LOOP_MODE_1 and status == 'PASS' and touch == 1:  # by fine
+                    start -= fine
+                    status = self.get_ber()
+                    while count > 1 and status == 'PASS':
+                        status = self.get_ber()
+                        count -= 1
+                    count = 3
+
+
+                elif mstate == cm_pmt.MESUREMENT_GOOD and conn_state == cm_pmt.ANRITSU_LOOP_MODE_1 and status == 'FAIL' and touch == 0:
+                    while count > 0 and status == 'FAIL':  # retest 3 time to judge if it is real sensitivity
+                        self.set_to_measure()
+                        time.sleep(0.1)
+                        status = self.get_ber()
+                        logger.info(f'{status}')
+                        count -= 1
+                    if count != 0:  # if it meets some sudden noise from environment
+                        continue
+                    else:  # real sensitivity failed
+                        logger.info('Back to higher 2dB')
+                        start += 2
+                        count = 3
+                        touch = 1
+
+                elif mstate == cm_pmt.MESUREMENT_GOOD and conn_state == cm_pmt.ANRITSU_LOOP_MODE_1 and status == 'FAIL' and touch == 1:  # it might be the real sensitivity
+                    while mstate != cm_pmt.MESUREMENT_TIMEOUT:
+                        if status == 'FAIL':
+                            start += fine
+                            start = round(start, 1)
+                            self.inst.write(f'OLVL {start}')
+                            self.set_to_measure()
+                            status = self.get_ber()
+                            output_level = self.inst.query(f'OLVL?').strip()
+                            logger.info(f'level {output_level}, {status}')
+                            mstate = int(self.inst.query('MSTAT?').strip())
+
+                        elif conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
+                            logger.debug(f'measuring statuse: {mstate}')
+                            logger.info('Connection is dropped')
+                            logger.info('Retest again from output level -70dBm')
+                            start = -70
+                            self.set_output_level(start)
+                            self.set_input_level()
+                            self.inst.write('CALLSO')
+                            time.sleep(2)
+                            self.inst.write('CALLSA')
+                            time.sleep(2)
+                            self.flymode_circle()
+                            logger.info('waiting 10 seconds')
+                            time.sleep(10)
+                            conn_state = int(self.inst.query("CALLSTAT?").strip())
+                            if conn_state == ANRITSU_LOOP_MODE_1:
+                                self.set_input_level(30)
+                                start -= fine
+                                self.set_to_measure()
+                                status = self.get_ber()
+                                while status == 'PASS':
+                                    self.inst.write(f'OLVL {start}')
+                                    self.set_to_measure()
+                                    status = self.get_ber()
+                                    output_level = self.inst.query(f'OLVL?').strip()
+                                    logger.info(f'reconnedted level {output_level}: {status}')
+                                    start -= fine
+
+                            else:
+                                start = -70
+                                logger.info('Skip this channel, and set the output level to -70dBm for notice')
+
+
+                        elif status == 'PASS':
+                            while count > 0:
+                                self.set_to_measure()
+                                output_level = self.inst.query('OLVL?').strip()
+                                status = self.get_ber()
+                                if status == 'FAIL':
+                                    logger.info(f'{4 - count} times fail')
+                                    break
+                                logger.info(f"sensitivity: {output_level}, pass {4 - count} times")
+                                count -= 1
+                                mstate = int(self.inst.query('MSTAT?').strip())
+
+                            count = 3
+
+                            if status == 'FAIL':
+                                continue
+                            else:
+                                break
+                    sensitivity = Decimal(self.inst.query('OLVL?').strip())
+                    time.sleep(0.1)
+                    per = self.inst.query('BER? PER').strip()
+                    power = Decimal(self.inst.query('AVG_POWER?').strip())
+                    self.inst.query('*OPC?')
+                    logger.info(f'Final: POWER: {power}, SENSITIVITY: {sensitivity}, PER:{per}')
+                    return [power, sensitivity, per]
+
+                elif mstate != cm_pmt.MESUREMENT_TIMEOUT and conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
+                    logger.debug(f'measuring statuse: {mstate}')
                     logger.info('Call drop and fly on and off')
-                    self.inst.write('CALLSO')
-                    time.sleep(2)
-                    self.inst.write('CALLSA')
-                    time.sleep(2)
-                    self.flymode_circle()
-                    while conn_state != cm_pmt.ANRITSU_CONNECTED and sub_count > 0:
-                        time.sleep(1)
-                        logger.info('Wait 1 second to connect')
-                        conn_state = int(self.inst.query("CALLSTAT?").strip())
-                        sub_count -= 1
-                    logger.info('Reconnected')
-                    sub_count = 100
-                    count -= 1
-                if count == 0:
-                    logger.info('Stop this circle')
-                    break
+                    logger.info('Retest again and Reconnected')
+                    touch = 0
+                    start = -70
+                    dl_ch = int(self.inst.query('DLCHAN?'))
+                    tpc_status = self.inst.query('TPCPAT?').strip()
+                    self.set_init_before_calling(self.std, dl_ch)
+                    self.set_registration_calling(self.std)
+                    self.set_init_rx(self.std)
+                    self.set_tpc(tpc_status)
+                    if tpc_status == 'ALL1':
+                        self.set_input_level(30)
+                    elif tpc_status == 'ILPC':
+                        self.set_input_level(-10)
+
+                    self.inst.write('BER_MEAS ON')
+                    self.inst.write('PWR_MEAS ON')
+
+                elif mstate == cm_pmt.MESUREMENT_TIMEOUT:
+                    logger.info('Time out')
+                    logger.info('Retest again and Reconnected')
+                    touch = 0
+                    start = -70
+                    dl_ch = int(self.inst.query('DLCHAN?'))
+                    tpc_status = self.inst.query('TPCPAT?').strip()
+                    self.set_init_before_calling(self.std, dl_ch)
+                    self.set_registration_calling(self.std)
+                    self.set_init_rx(self.std)
+                    self.set_tpc(tpc_status)
+                    if tpc_status == 'ALL1':
+                        self.set_input_level(30)
+                    elif tpc_status == 'ILPC':
+                        self.set_input_level(-10)
+
+                    self.inst.write('BER_MEAS ON')
+                    self.inst.write('PWR_MEAS ON')
+
+    def get_ber(self):
+        """
+        write (BER? PER) and we can get the x % and the x will lower than 0.1
+        :return: PASS or FAIL
+        """
+        ber = Decimal(self.inst.query('BER? PER').strip())
+        if ber >= 0.1:
+            return 'FAIL'
+        else:
+            return 'PASS'
 
     def get_sensitivity(self, standard, band, dl_ch, bw=None):
-        s = standard
+        self.std = s = standard
         if s == 'LTE':
             """
                 sens_list = [power, sensitivity, per]
@@ -730,7 +904,15 @@ class Anritsu8820(pyvisa.ResourceManager):
             return sens_list
 
         elif s == 'WCDMA':
-            pass
+            """
+                sens_list = [power, sensitivity, per]
+            """
+            self.inst.write('BER_MEAS ON')
+            self.inst.write('PWR_MEAS ON')
+            self.set_handover(s, dl_ch)
+            time.sleep(0.1)
+            sens_list = self.sweep_sensitivity()
+            return sens_list
         elif s == 'GSM':
             pass
 
@@ -824,8 +1006,6 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.info('measure it again')
                 self.set_to_measure()
                 meas_status = int(self.inst.query('MSTAT?').strip())
-
-            # self.inst.query('*OPC?')
 
             if mod == 'TESTPRM TX_MAXPWR_Q_1':  # mod[18:] -> Q_1
                 logger.info(mod)
@@ -985,7 +1165,23 @@ class Anritsu8820(pyvisa.ResourceManager):
             wb.close()
 
         elif standard == 'WCDMA':
-            pass
+            wb = openpyxl.Workbook()
+            wb.remove(wb['Sheet'])
+            wb.create_sheet('Sensitivity_TxMax')
+            wb.create_sheet('Sensitivity_TxMin')
+            wb.create_sheet('Desens')
+            wb.create_sheet('PWR_TxMax')
+            wb.create_sheet('PWR_TxMin')
+
+            for sheet in wb.sheetnames:
+                sh = wb[sheet]
+                sh['A1'] = 'Band'
+                sh['B1'] = 'ch0'
+                sh['C1'] = 'ch1'
+                sh['D1'] = 'ch2'
+
+            wb.save(f'Sensitivity_WCDMA.xlsx')
+            wb.close()
 
     @staticmethod
     def create_excel_tx(standard, bw=None):
@@ -1077,21 +1273,20 @@ class Anritsu8820(pyvisa.ResourceManager):
                     try:
                         logger.debug(ws_s_txmax.cell(row, col).value)
                         logger.debug(ws_s_txmin.cell(row, col).value)
-                        ws.cell(row, col).value = Decimal(ws_s_txmax.cell(row, col).value) - Decimal(ws_s_txmin.cell(row, col).value)
+                        ws.cell(row, col).value = Decimal(ws_s_txmax.cell(row, col).value) - Decimal(
+                            ws_s_txmin.cell(row, col).value)
                     except TypeError:
-                        if ws_s_txmax.cell(row, col).value is None:
+                        if ws_s_txmax.cell(row, col).value is None and ws_s_txmin.cell(row, col).value is not None:
                             logger.debug('Sensitivity_TxMax is None')
                             ws.cell(row, col).value = - Decimal(ws_s_txmin.cell(row, col).value)
-                        elif ws_s_txmin.cell(row, col).value is None:
+                        elif ws_s_txmin.cell(row, col).value is None and ws_s_txmax.cell(row, col).value is not None:
                             logger.debug('Sensitivity_TxMin is None')
                             ws.cell(row, col).value = Decimal(ws_s_txmax.cell(row, col).value)
+                        else:
+                            logger.debug('Sensitivity_TxMax and Sensitivity_TxMin are None')
+
         wb.save(excel_path)
         wb.close()
-
-
-
-
-
 
     def fill_sensitivity(self, standard, row, ws, band, dl_ch, data, items_selected, bw=None):
         # items_selected: 0 = power, 1 = sensitivity, 2 = PER
@@ -1118,7 +1313,26 @@ class Anritsu8820(pyvisa.ResourceManager):
                     logger.debug('sensitivity of H ch')
 
         elif standard == 'WCDMA':
-            pass
+            ws.cell(row, 1).value = band
+
+            if dl_ch < cm_pmt.dl_ch_selected(self.std, band)[1]:
+                ws.cell(row, 2).value = data[items_selected]
+                if items_selected == 0:
+                    logger.debug('power of L ch')
+                elif items_selected == 1:
+                    logger.debug('sensitivity of L ch')
+            elif dl_ch == cm_pmt.dl_ch_selected(self.std, band)[1]:
+                ws.cell(row, 3).value = data[items_selected]
+                if items_selected == 0:
+                    logger.debug('power of M ch')
+                elif items_selected == 1:
+                    logger.debug('sensitivity of M ch')
+            elif dl_ch > cm_pmt.dl_ch_selected(self.std, band)[1]:
+                ws.cell(row, 4).value = data[items_selected]
+                if items_selected == 0:
+                    logger.debug('power of H ch')
+                elif items_selected == 1:
+                    logger.debug('sensitivity of H ch')
 
     def fill_power_aclr_evm(self, standard, row, ws, band, dl_ch, test_items, items_selected,
                             bw=None):  # items_selected: 0 = POWER, 1 = ACLR, 2 = EVM
@@ -1227,7 +1441,29 @@ class Anritsu8820(pyvisa.ResourceManager):
                         continue
 
         elif standard == 'WCDMA':
-            pass
+            if power_selected == 1:
+                logger.debug(f'capture band: {band}, {dl_ch}, TxMax, sensitivity')
+            elif power_selected == 0:
+                logger.debug(f'capture band: {band}, {dl_ch}, TxMin, sensitivity')
+
+            if ws.max_row == 1:  # only title
+                self.fill_sensitivity(standard, 2, ws, band, dl_ch, data, items_selected)
+                logger.debug('Only title')
+            else:
+                for row in range(2, ws.max_row + 1):  # not only title
+                    if ws.cell(row, 1).value == band:  # if band is in the row
+                        # POWER and EVM
+                        self.fill_sensitivity(standard, row, ws, band, dl_ch, data, items_selected)
+                        logger.debug('Band is found')
+                        break
+
+                    elif ws.cell(row, 1).value != band and row == ws.max_row:  # if band is not in the row and final row
+                        self.fill_sensitivity(standard, row + 1, ws, band, dl_ch, data, items_selected)
+                        logger.debug('Band is not found and the row is final and then to add new line')
+                        break
+                    else:
+                        logger.debug('continue to search')
+                        continue
         elif standard == 'GSM':
             pass
 
@@ -1329,7 +1565,6 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.debug('fill power')
                 self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected, bw)  # fill power
 
-
             wb.save(f'Sensitivity_{bw}MHZ_LTE.xlsx')
             wb.close()
 
@@ -1338,7 +1573,37 @@ class Anritsu8820(pyvisa.ResourceManager):
             return excel_path
 
         elif self.std == 'WCDMA':
-            pass
+            if pathlib.Path(f'Sensitivity_WCDMA.xlsx').exists() is False:
+                self.create_excel_rx(self.std, bw)
+                logger.debug('Create Excel')
+
+            wb = openpyxl.load_workbook(f'Sensitivity_WCDMA.xlsx')
+            logger.debug('Open Excel')
+
+            if power_selected == 1:
+                logger.debug(f'start to fill Sensitivity and Tx Power and Desens')
+                ws = wb['Sensitivity_TxMax']
+                logger.debug('fill sensitivity')
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 1, power_selected)  # fill sensitivity
+                ws = wb['PWR_TxMax']
+                logger.debug('fill power')
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected)  # fill power
+
+            elif power_selected == 0:
+                logger.debug(f'start to fill Sensitivity and Tx Power and Desens')
+                ws = wb['Sensitivity_TxMin']
+                logger.debug('fill sensitivity')
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 1, power_selected)  # fill sensitivity
+                ws = wb['PWR_TxMin']
+                logger.debug('fill power')
+                self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected)  # fill power
+
+            wb.save(f'Sensitivity_WCDMA.xlsx')
+            wb.close()
+
+            excel_path = f'Sensitivity_WCDMA.xlsx'
+
+            return excel_path
 
     def fill_values_tx(self, data, band, dl_ch, bw=None):
         if self.std == 'LTE':
@@ -1567,6 +1832,34 @@ class Anritsu8820(pyvisa.ResourceManager):
 
                     wb.save(excel_path)
                     wb.close()
+
+                elif 'Sensitivity' in ws_name or 'Desens' in ws_name:
+                    chart = LineChart()
+                    chart.title = f'{ws_name[:11]}'
+
+                    chart.y_axis.title = f'Sensitivity(dBm)'
+
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+
+                    chart.height = 20
+                    chart.width = 32
+
+                    y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].graphicalProperties.line.dashStyle = 'dash'  # for L_ch
+                    chart.series[1].graphicalProperties.line.width = 50000  # for M_ch
+                    chart.series[2].marker.symbol = 'circle'  # for H_ch
+                    chart.series[2].marker.size = 10
+
+                    ws.add_chart(chart, "F1")
+
+                    wb.save(excel_path)
+                    wb.close()
+
         elif standard == 'GSM':
             pass
 
@@ -1678,7 +1971,45 @@ class Anritsu8820(pyvisa.ResourceManager):
                     self.fill_desens(self.excel_path)
                     self.excel_plot_line(standard, self.excel_path)
             elif tech == 'WCDMA' and wt.wcdma_bands != []:
-                pass
+                standard = self.switch_to_wcdma()
+                for band in wt.wcdma_bands:
+                    ch_list = []
+                    for wt_ch in wt.channel:
+                        if wt_ch == 'L':
+                            ch_list.append(cm_pmt.dl_ch_selected(standard, band)[0])
+                        elif wt_ch == 'M':
+                            ch_list.append(cm_pmt.dl_ch_selected(standard, band)[1])
+                        elif wt_ch == 'H':
+                            ch_list.append(cm_pmt.dl_ch_selected(standard, band)[2])
+                    logger.debug(f'Test Channel List: {band}, downlink channel list:{ch_list}')
+                    for dl_ch in ch_list:
+                        self.band = band
+                        self.dl_ch = dl_ch
+                        conn_state = int(self.inst.query("CALLSTAT?").strip())
+                        if conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
+                            self.set_init_before_calling(standard, dl_ch)
+                            self.set_registration_calling(standard)
+                        logger.info(f'Start to sensitivity B{band}, downlink_chan: {dl_ch}')
+                        self.set_init_rx(standard)
+                        for power_selected in wt.tx_max_pwr_sensitivity:
+                            if power_selected == 1:
+                                logger.info('start to measure sensitivity on HPM ')
+                                self.set_tpc('ALL1')
+                                self.set_input_level(30)
+                                sens_list = self.get_sensitivity(standard, band, dl_ch)
+                                logger.debug(f'Sensitivity list:{sens_list}')
+                                self.excel_path = self.fill_values_rx(sens_list, band, dl_ch, power_selected)
+                                self.set_output_level(-70)
+                            elif power_selected == 0:
+                                logger.info('start to measure sensitivity on LPM ')
+                                self.set_tpc('ILPC')
+                                self.set_input_level(-10)
+                                sens_list = self.get_sensitivity(standard, band, dl_ch)
+                                logger.debug(f'Sensitivity list:{sens_list}')
+                                self.excel_path = self.fill_values_rx(sens_list, band, dl_ch, power_selected)
+                                self.set_output_level(-70)
+                self.fill_desens(self.excel_path)
+                self.excel_plot_line(standard, self.excel_path)
             elif tech == wt.gsm_bands:
                 pass
             else:
@@ -1689,7 +2020,7 @@ def main():
     start = datetime.datetime.now()
 
     anritsu = Anritsu8820()
-    anritsu.run_tx()
+    anritsu.run_rx()
 
     stop = datetime.datetime.now()
 

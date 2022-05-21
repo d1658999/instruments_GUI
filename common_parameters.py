@@ -4,13 +4,15 @@ ANRITSU_OFF = 0  # Call processing function set to Off
 ANRITSU_IDLE = 1  # Idle state
 ANRITSU_IDLE_REGIST = 2  # Idle( Regist ) Idle state (location registered)
 ANRITSU_REGIST = 3			# Under location registration
-ANRITSU_CONNECTED = 6  # Under communication or connected
-ANRITSU_LOOP_MODE_1 = 7  # Loopback mode 1
+ANRITSU_CONNECTED = 6  # Under communication or connected for LTE
+ANRITSU_LOOP_MODE_1 = 7  # Loopback mode 1 for WCDMA
 ANRITSU_LOOP_MODE_1_OPEN = 8  # Loop mode(open)
 ANRITSU_LOOP_MODE_1_CLOSE = 9  # loop mode(close)
 
 MESUREMENT_GOOD = 0  # if the measurement status is good
 MESUREMENT_BAD = 5  # if the measurement status is bad, it might be low reference signal
+MESUREMENT_TIMEOUT = 13
+MESUREMENT_X = 7
 
 
 # bandwidth index
