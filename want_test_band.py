@@ -5,7 +5,7 @@ gsm_bands = []
 
 lte_bandwidths = [10]     # 1.4,3,5,10,15,20
 
-tech = ['LTE','WCDMA']  # LTE | WCDMA | GSM
+tech = ['WCDMA']  # LTE | WCDMA | GSM
 channel = 'LMH'
 
 fdd_tdd_cross_test = 0
