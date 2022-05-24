@@ -437,8 +437,8 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.write('SCRSEL FMEAS')
         self.inst.write('SET_PWRPAT HSMAXPWR')
         self.set_output_level(-86)
-        self.set_init_power(20)
-        self.set_init_aclr('WCDMA', 20)
+        self.set_init_power(1)
+        self.set_init_aclr('WCDMA', 1)
         self.inst.write('TPUTU_MEAS ON')
         self.inst.write('TPUTU_SAMPLE 15')
         self.inst.write('EHICHPAT ACK')
@@ -899,15 +899,17 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('SET_HSSUBTEST SUBTEST5')
             self.set_tpc('ILPC')
             self.set_input_level(16)
-            time.sleep(0.2)
-            self.set_tpc('ALL1')
+            time.sleep(0.15)
             self.set_input_level(26)
-            time.sleep(2)
+            self.set_tpc('ALL1')
+            time.sleep(1)
             self.set_to_measure()
             logger.info('subtest5:')
             power = self.get_uplink_power('WCDMA')
             aclr = self.get_uplink_aclr('WCDMA')
 
+            self.inst.write('TPUTU_MEAS OFF')
+            self.inst.write('SET_HSSUBTEST SUBTEST1')
             self.set_tpc('ILPC')
             self.set_input_level(5)
 
@@ -925,9 +927,9 @@ class Anritsu8820(pyvisa.ResourceManager):
         data = {}
         subtests = [
             self.get_subtest1_power_aclr(),
-            self.get_subtest2_power_aclr(),
-            self.get_subtest3_power_aclr(),
-            self.get_subtest4_power_aclr(),
+            # self.get_subtest2_power_aclr(),
+            # self.get_subtest3_power_aclr(),
+            # self.get_subtest4_power_aclr(),
             self.get_subtest5_power_aclr(),
         ]
         for subtest in subtests:
