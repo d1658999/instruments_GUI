@@ -14,6 +14,12 @@ MESUREMENT_BAD = 5  # if the measurement status is bad, it might be low referenc
 MESUREMENT_TIMEOUT = 13
 MESUREMENT_X = 7
 
+HSUPA_ETFCI_SUBTEST1 = 75
+HSUPA_ETFCI_SUBTEST2 = 67
+HSUPA_ETFCI_SUBTEST3 = 92
+HSUPA_ETFCI_SUBTEST4 = 71
+HSUPA_ETFCI_SUBTEST5 = 81  # this is for old versionm before v8.7.0, now not used
+
 
 # bandwidth index
 def bandwidths_selected(band):

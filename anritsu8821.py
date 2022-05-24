@@ -348,7 +348,7 @@ class Anritsu8821(Anritsu8820):
                                 time.sleep(2)
                                 data = self.get_validation(standard)
                                 self.excel_path = self.fill_values_tx(data, band, dl_ch, bw)
-                                self.set_test_parameter_normal()
+                                self.set_test_parameter_normal()  # this is for 8821 to be more stable
                         else:
                             logger.info(f'B{band} do not have BW {bw}MHZ')
                     self.excel_plot_line(standard, self.excel_path)
