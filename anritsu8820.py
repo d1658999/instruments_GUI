@@ -327,7 +327,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.set_lvl_status('ON')
         self.set_test_mode()
-        self.flymode_circle()
+        # self.flymode_circle()
         conn_state = int(self.inst.query("CALLSTAT?").strip())
 
         self.count = 10
@@ -335,64 +335,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             if conn_state == cm_pmt.ANRITSU_IDLE:
                 self.inst.write('CALLSO')
                 logger.info('IDLE')
-                time.sleep(5)
-                logger.info('START CALL')
-                self.inst.write('CALLSA')
-                time.sleep(8)
-                conn_state = int(self.inst.query("CALLSTAT?").strip())
-
-            elif conn_state == cm_pmt.ANRITSU_IDLE_REGIST:
-                logger.info('Status: IDLE_REGIST')
-                self.inst.write('CALLSA')
-                time.sleep(1)
-                conn_state = int(self.inst.query("CALLSTAT?").strip())
-
-            elif conn_state == cm_pmt.ANRITSU_REGIST:
-                logger.info('Status: REGIST')
-                time.sleep(1)
-                conn_state = int(self.inst.query("CALLSTAT?").strip())
-
-            elif conn_state == cm_pmt.ANRITSU_LOOP_MODE_1_CLOSE:
-                if self.count < 0:
-                    logger.info('END CALL and FLY ON and OFF')
-                    self.preset()
-                    self.inst.write('CALLSO')
-                    time.sleep(3)
-                    self.inst.write('CALLSA')
-                    time.sleep(3)
-                    self.flymode_circle()
-                    self.count = 10
-                    time.sleep(5)
-                    conn_state = int(self.inst.query("CALLSTAT?").strip())
-                else:
-                    logger.info('Status: LOOP MODE(CLOSE)')
-                    time.sleep(2)
-                    conn_state = int(self.inst.query("CALLSTAT?").strip())
-                    self.count -= 1
-
-        logger.info('Loop mode 1 and connected')
-
-    def set_registration_calling_hsupa(self):
-        """
-            ANRITSU_IDLE = 1	        #Idle state
-            ANRITSU_IDLE_REGIST = 2		#Idle( Regist ) Idle state (location registered)
-            ANRITSU_LOOP_MODE_1 = 7	    # Under communication or connected
-            ANRITSU_LOOP_MODE_1_CLOSED = 9  # it seems like waiting to loop mode between Loopback mode 1 and IDLE
-        """
-        self.set_lvl_status('ON')
-        self.set_test_mode()
-        self.set_init_hsupa()
-        self.flymode_circle()
-        time.sleep(3)
-
-        conn_state = int(self.inst.query("CALLSTAT?").strip())
-
-        self.count = 10
-        while conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:  # this is for waiting connection
-            if conn_state == cm_pmt.ANRITSU_IDLE:
-                self.inst.write('CALLSO')
-                logger.info('IDLE')
-                time.sleep(5)
+                time.sleep(10)
                 logger.info('START CALL')
                 self.flymode_circle()
                 time.sleep(10)
@@ -412,16 +355,75 @@ class Anritsu8820(pyvisa.ResourceManager):
 
             elif conn_state == cm_pmt.ANRITSU_LOOP_MODE_1_CLOSE:
                 if self.count < 0:
-                    logger.info('END CALL and FLY ON and OFF')
-                    self.preset()
+                    logger.info('END CALL and FLY ON and OFF for WCDMA')
+                    self.set_init_before_calling_wcdma(self.dl_ch)
                     self.inst.write('CALLSO')
-                    time.sleep(3)
-                    self.inst.write('CALLSA')
-                    time.sleep(3)
+                    self.set_test_mode()
+                    self.set_lvl_status('ON')
+                    time.sleep(10)
                     self.flymode_circle()
+                    time.sleep(10)
+                    self.inst.write('CALLSA')
                     self.count = 10
-                    time.sleep(5)
                     conn_state = int(self.inst.query("CALLSTAT?").strip())
+                else:
+                    logger.info('Status: LOOP MODE(CLOSE)')
+                    time.sleep(2)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+                    self.count -= 1
+
+        logger.info('Loop mode 1 and connected')
+
+    def set_registration_calling_hsupa(self):
+        """
+            ANRITSU_IDLE = 1	        #Idle state
+            ANRITSU_IDLE_REGIST = 2		#Idle( Regist ) Idle state (location registered)
+            ANRITSU_LOOP_MODE_1 = 7	    # Under communication or connected
+            ANRITSU_LOOP_MODE_1_CLOSED = 9  # it seems like waiting to loop mode between Loopback mode 1 and IDLE
+        """
+        self.set_lvl_status('ON')
+        self.set_test_mode()
+        self.set_init_hsupa()
+        # self.flymode_circle()
+
+        conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+        self.count = 10
+        while conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:  # this is for waiting connection
+            if conn_state == cm_pmt.ANRITSU_IDLE:
+                self.inst.write('CALLSO')
+                logger.info('IDLE')
+                time.sleep(10)
+                logger.info('START CALL')
+                self.flymode_circle()
+                time.sleep(10)
+                self.inst.write('CALLSA')
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+            elif conn_state == cm_pmt.ANRITSU_IDLE_REGIST:
+                logger.info('Status: IDLE_REGIST')
+                self.inst.write('CALLSA')
+                time.sleep(1)
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+            elif conn_state == cm_pmt.ANRITSU_REGIST:
+                logger.info('Status: REGIST')
+                time.sleep(1)
+                conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+            elif conn_state == cm_pmt.ANRITSU_LOOP_MODE_1_CLOSE:
+                if self.count < 0:
+                    logger.info('END CALL and FLY ON and OFF for HSUPA')
+                    self.set_init_before_calling_wcdma(self.dl_ch)
+                    self.inst.write('CALLSO')
+                    self.set_test_mode()
+                    self.set_lvl_status('ON')
+                    time.sleep(10)
+                    self.flymode_circle()
+                    time.sleep(10)
+                    self.inst.write('CALLSA')
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+                    self.count = 10
                 else:
                     logger.info('Status: LOOP MODE(CLOSE)')
                     time.sleep(2)
@@ -546,7 +548,7 @@ class Anritsu8820(pyvisa.ResourceManager):
 
         elif s == 'WCDMA':
             self.inst.write('RFOUT MAIN')
-            self.inst.write('BANDIND OFF')
+            self.inst.write('BANDIND AUTO')
             # self.inst.write('ATTFLAG OFF')
             # self.inst.write('MEASREP OFF')
             self.inst.write('DRXCYCLNG 64')
@@ -701,23 +703,34 @@ class Anritsu8820(pyvisa.ResourceManager):
         result = Decimal(self.inst.query('AVG_ETFCI?').strip())
         return result
 
+    def preset_subtest1(self):
+        self.inst.write('SET_HSDELTA_CQI 8')
+        self.inst.write('SET_HSSUBTEST SUBTEST1')
+        self.set_tpc('ILPC')
+        self.set_input_level(16)
+        time.sleep(0.15)
+        self.set_tpc('ALT')
+        self.set_input_level(26)
+        logger.debug('TPC DOWN')
+        time.sleep(0.15)
+        self.inst.write('TPC_CMD_DOWN')
+        self.set_to_measure()
+
     def get_subtest1_power_aclr(self):
         logger.info('Start to subtest1')
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
-            self.inst.write('SET_HSDELTA_CQI 8')
-            self.inst.write('SET_HSSUBTEST SUBTEST1')
-            self.set_tpc('ILPC')
-            self.set_input_level(16)
-            time.sleep(0.15)
-            self.set_tpc('ALT')
-            self.set_input_level(26)
-            logger.debug('TPC DOWN')
-            time.sleep(0.15)
-            self.inst.write('TPC_CMD_DOWN')
-            self.set_to_measure()
+            self.preset_subtest1()
             power = self.get_uplink_power('WCDMA')
             result = self.query_etfci()
             logger.debug(f'Now ETFCI result is: {result}')
+            mstat = int(self.inst.query('mstat?').strip())
+            logger.debug(f'mstat: {mstat}')
+            if mstat == cm_pmt.MESUREMENT_TIMEOUT:
+                logger.debug('time out and recall')
+                self.inst.write('CALLSO')
+                time.sleep(3)
+                self.inst.write('CALLSA')
+                self.preset_subtest1()
             result = cm_pmt.HSUPA_ETFCI_SUBTEST1
             logger.debug('force to the subtest1 ETFCI')
             while result == cm_pmt.HSUPA_ETFCI_SUBTEST1:
@@ -748,23 +761,30 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             pass
 
+    def preset_subtest2(self):
+        self.inst.write('SET_HSDELTA_CQI 8')
+        self.inst.write('SET_HSSUBTEST SUBTEST2')
+        self.set_tpc('ILPC')
+        self.set_input_level(14)
+        time.sleep(0.15)
+        self.set_tpc('ALT')
+        self.set_input_level(26)
+        logger.debug('TPC DOWN')
+        self.inst.write('TPC_CMD_DOWN')
+        time.sleep(0.15)
+        self.set_to_measure()
+
     def get_subtest2_power_aclr(self):
         logger.info('Start to subtest2')
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
-            self.inst.write('SET_HSDELTA_CQI 8')
-            self.inst.write('SET_HSSUBTEST SUBTEST2')
-            self.set_tpc('ILPC')
-            self.set_input_level(14)
-            time.sleep(0.15)
-            self.set_tpc('ALT')
-            self.set_input_level(26)
-            logger.debug('TPC DOWN')
-            self.inst.write('TPC_CMD_DOWN')
-            time.sleep(0.15)
-            self.set_to_measure()
+            self.preset_subtest2()
             power = self.get_uplink_power('WCDMA')
             result = self.query_etfci()
             logger.debug(f'Now ETFCI result is: {result}')
+            mstat = int(self.inst.query('mstat?').strip())
+            logger.debug(f'mstat: {mstat}')
+            if mstat == cm_pmt.MESUREMENT_TIMEOUT:
+                self.preset_subtest2()
             result = cm_pmt.HSUPA_ETFCI_SUBTEST2
             logger.debug('force to the subtest2 ETFCI')
             while result == cm_pmt.HSUPA_ETFCI_SUBTEST2:
@@ -796,23 +816,30 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             pass
 
+    def preset_subtest3(self):
+        self.inst.write('SET_HSDELTA_CQI 8')
+        self.inst.write('SET_HSSUBTEST SUBTEST3')
+        self.set_tpc('ILPC')
+        self.set_input_level(15)
+        time.sleep(0.15)
+        self.set_tpc('ALT')
+        self.set_input_level(26)
+        logger.debug('TPC DOWN')
+        self.inst.write('TPC_CMD_DOWN')
+        time.sleep(0.15)
+        self.set_to_measure()
+
     def get_subtest3_power_aclr(self):
         logger.info('Start to subtest3')
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
-            self.inst.write('SET_HSDELTA_CQI 8')
-            self.inst.write('SET_HSSUBTEST SUBTEST3')
-            self.set_tpc('ILPC')
-            self.set_input_level(15)
-            time.sleep(0.15)
-            self.set_tpc('ALT')
-            self.set_input_level(26)
-            logger.debug('TPC DOWN')
-            self.inst.write('TPC_CMD_DOWN')
-            time.sleep(0.15)
-            self.set_to_measure()
+            self.preset_subtest3()
             power = self.get_uplink_power('WCDMA')
             result = self.query_etfci()
             logger.debug(f'Now ETFCI result is: {result}')
+            mstat = int(self.inst.query('mstat?').strip())
+            logger.debug(f'mstat: {mstat}')
+            if mstat == cm_pmt.MESUREMENT_TIMEOUT:
+                self.preset_subtest3()
             result = cm_pmt.HSUPA_ETFCI_SUBTEST3
             logger.debug('force to the subtest3 ETFCI')
             while result == cm_pmt.HSUPA_ETFCI_SUBTEST3:
@@ -843,23 +870,30 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             pass
 
+    def preset_subtest4(self):
+        self.inst.write('SET_HSDELTA_CQI 8')
+        self.inst.write('SET_HSSUBTEST SUBTEST4')
+        self.set_tpc('ILPC')
+        self.set_input_level(14)
+        time.sleep(0.15)
+        self.set_tpc('ALT')
+        self.set_input_level(26)
+        logger.debug('TPC DOWN')
+        self.inst.write('TPC_CMD_DOWN')
+        time.sleep(0.15)
+        self.set_to_measure()
+
     def get_subtest4_power_aclr(self):
         logger.info('Start to subtest4')
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
-            self.inst.write('SET_HSDELTA_CQI 8')
-            self.inst.write('SET_HSSUBTEST SUBTEST4')
-            self.set_tpc('ILPC')
-            self.set_input_level(14)
-            time.sleep(0.15)
-            self.set_tpc('ALT')
-            self.set_input_level(26)
-            logger.debug('TPC DOWN')
-            self.inst.write('TPC_CMD_DOWN')
-            time.sleep(0.15)
-            self.set_to_measure()
+            self.preset_subtest4()
             power = self.get_uplink_power('WCDMA')
             result = self.query_etfci()
             logger.debug(f'Now ETFCI result is: {result}')
+            mstat = int(self.inst.query('mstat?').strip())
+            logger.debug(f'mstat: {mstat}')
+            if mstat == cm_pmt.MESUREMENT_TIMEOUT:
+                self.preset_subtest4()
             result = cm_pmt.HSUPA_ETFCI_SUBTEST4
             logger.debug('force to the subtest4 ETFCI')
             while result == cm_pmt.HSUPA_ETFCI_SUBTEST4:
@@ -890,20 +924,27 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             pass
 
+    def preset_subtest5(self):
+        self.inst.write('TPUTU_MEAS OFF')
+        self.inst.write('SUBTEST5_VER NEW')
+        self.inst.write('SET_HSDELTA_CQI 8')
+        self.inst.write('SET_HSSUBTEST SUBTEST5')
+        self.set_tpc('ILPC')
+        self.set_input_level(16)
+        time.sleep(0.15)
+        self.set_input_level(26)
+        self.set_tpc('ALL1')
+        time.sleep(1)
+        self.set_to_measure()
+
     def get_subtest5_power_aclr(self):
         logger.info('Start to subtest5')
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
-            self.inst.write('TPUTU_MEAS OFF')
-            self.inst.write('SUBTEST5_VER NEW')
-            self.inst.write('SET_HSDELTA_CQI 8')
-            self.inst.write('SET_HSSUBTEST SUBTEST5')
-            self.set_tpc('ILPC')
-            self.set_input_level(16)
-            time.sleep(0.15)
-            self.set_input_level(26)
-            self.set_tpc('ALL1')
-            time.sleep(1)
-            self.set_to_measure()
+            self.preset_subtest5()
+            mstat = int(self.inst.query('mstat?').strip())
+            logger.debug(f'mstat: {mstat}')
+            if mstat == cm_pmt.MESUREMENT_TIMEOUT:
+                self.preset_subtest5()
             logger.info('subtest5:')
             power = self.get_uplink_power('WCDMA')
             aclr = self.get_uplink_aclr('WCDMA')
@@ -927,9 +968,9 @@ class Anritsu8820(pyvisa.ResourceManager):
         data = {}
         subtests = [
             self.get_subtest1_power_aclr(),
-            # self.get_subtest2_power_aclr(),
-            # self.get_subtest3_power_aclr(),
-            # self.get_subtest4_power_aclr(),
+            self.get_subtest2_power_aclr(),
+            self.get_subtest3_power_aclr(),
+            self.get_subtest4_power_aclr(),
             self.get_subtest5_power_aclr(),
         ]
         for subtest in subtests:
@@ -1932,41 +1973,51 @@ class Anritsu8820(pyvisa.ResourceManager):
 
         else:
             for row in range(2, ws.max_row + 1):  # not only title
-                if ws.cell(row, 1).value == band and (test_items_selected == 0 or test_items_selected == 2):  # if band is in the row
+                if ws.cell(row, 1).value == band and (
+                        test_items_selected == 0 or test_items_selected == 2):  # if band is in the row
                     # POWER and EVM
                     if ws.cell(row, 5).value == subtest:
-                        self.fill_power_aclr_evm_hspa(standard, row, ws, band, dl_ch, test_items, test_items_selected, subtest)
+                        self.fill_power_aclr_evm_hspa(standard, row, ws, band, dl_ch, test_items, test_items_selected,
+                                                      subtest)
                         logger.debug('Band is found')
                         break
                     elif ws.cell(row, 5).value != subtest and row == ws.max_row:
-                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected, subtest)
+                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items,
+                                                      test_items_selected, subtest)
                         logger.debug('Band is the same, but subtest in not the same')
                         break
 
                 elif ws.cell(row, 1).value != band and row == ws.max_row:  # if band is not in the row and final row
-                    self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected, subtest)
+                    self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected,
+                                                  subtest)
                     logger.debug('Band is not found and the row is final and then to add new line')
                     break
 
 
-                elif ws.cell(row, 1).value == band and test_items_selected == 1 and ws.cell(row, 2).value == self.aclr_ch:
+                elif ws.cell(row, 1).value == band and test_items_selected == 1 and ws.cell(row,
+                                                                                            2).value == self.aclr_ch:
 
                     if ws.cell(row, 7).value == subtest:
-                        self.fill_power_aclr_evm_hspa(standard, row, ws, band, dl_ch, test_items, test_items_selected, subtest)
-                        logger.debug('ch is the same for ACLR and subtest is the same' )
+                        self.fill_power_aclr_evm_hspa(standard, row, ws, band, dl_ch, test_items, test_items_selected,
+                                                      subtest)
+                        logger.debug('ch is the same for ACLR and subtest is the same')
                         break
                     elif ws.cell(row, 7).value != subtest and row == ws.max_row:
-                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected, subtest)
-                        logger.debug('ch is the same for ACLR and subtest is not the same' )
+                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items,
+                                                      test_items_selected, subtest)
+                        logger.debug('ch is the same for ACLR and subtest is not the same')
                         break
 
-                elif ws.cell(row, 1).value == band and row == ws.max_row and test_items_selected == 1 and ws.cell(row, 2).value != self.aclr_ch:
+                elif ws.cell(row, 1).value == band and row == ws.max_row and test_items_selected == 1 and ws.cell(row,
+                                                                                                                  2).value != self.aclr_ch:
                     if ws.cell(row, 7).value == subtest:
-                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected, subtest)
+                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items,
+                                                      test_items_selected, subtest)
                         logger.debug('ch is not the same for ACLR and subtest is the same')
                         break
                     elif ws.cell(row, 7).value != subtest:
-                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items, test_items_selected, subtest)
+                        self.fill_power_aclr_evm_hspa(standard, row + 1, ws, band, dl_ch, test_items,
+                                                      test_items_selected, subtest)
                         logger.debug('ch is not the same for ACLR and subtest is not the same')
                         break
                 else:
@@ -2117,11 +2168,13 @@ class Anritsu8820(pyvisa.ResourceManager):
             """
                 LTE format:{Q1:[power], Q_P:[power, ACLR, EVM], ...} and ACLR format is [L, M, H] 
             """
-            if pathlib.Path(f'results_{bw}MHZ_LTE.xlsx').exists() is False:
+            excel_path = f'results_{bw}MHZ_LTE.xlsx'
+
+            if pathlib.Path(excel_path).exists() is False:
                 self.create_excel_tx(self.std, bw)
                 logger.debug('Create Excel')
 
-            wb = openpyxl.load_workbook(f'results_{bw}MHZ_LTE.xlsx')
+            wb = openpyxl.load_workbook(excel_path)
             logger.debug('Open Excel')
             for mod, test_items in data.items():
 
@@ -2138,10 +2191,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     logger.debug('start to fill EVM')
                     self.fill_progress_tx(self.std, ws, band, dl_ch, test_items, 2, bw)
 
-            wb.save(f'results_{bw}MHZ_LTE.xlsx')
+            wb.save(excel_path)
             wb.close()
-
-            excel_path = f'results_{bw}MHZ_LTE.xlsx'
 
             return excel_path
 
@@ -2149,13 +2200,14 @@ class Anritsu8820(pyvisa.ResourceManager):
             """
                 WCDMA format:[power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
             """
+            excel_path = f'results_WCDMA.xlsx'
 
             if self.chcoding == 'REFMEASCH':  # this is WCDMA
-                if pathlib.Path(f'results_WCDMA.xlsx').exists() is False:
+                if pathlib.Path(excel_path).exists() is False:
                     self.create_excel_tx(self.std)
                     logger.debug('Create Excel')
 
-                wb = openpyxl.load_workbook(f'results_WCDMA.xlsx')
+                wb = openpyxl.load_workbook(excel_path)
 
                 logger.debug('Open Excel')
 
@@ -2171,9 +2223,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.debug('start to fill EVM')
                 self.fill_progress_tx(self.std, ws, band, dl_ch, data, 2)
 
-                wb.save(f'results_WCDMA.xlsx')
+                wb.save(excel_path)
                 wb.close()
-                excel_path = f'results_WCDMA.xlsx'
 
                 return excel_path
 
@@ -2181,12 +2232,15 @@ class Anritsu8820(pyvisa.ResourceManager):
                 """
                     HSUPA format:{subtest_number: [power, ACLR], ...} and ACLR format is list format like [L, M, H]  
                 """
-                if pathlib.Path(f'results_HSUPA.xlsx').exists() is False:
+                excel_path = f'results_HSUPA.xlsx'
+
+                if pathlib.Path(excel_path).exists() is False:
                     self.create_excel_tx(self.std, bw)
                     logger.debug('Create Excel')
 
-                wb = openpyxl.load_workbook(f'results_HSUPA.xlsx')
+                wb = openpyxl.load_workbook(excel_path)
                 logger.debug('Open Excel')
+
                 for subtest, test_items in data.items():
                     logger.info(f'start to fill subtest{subtest}')
 
@@ -2198,23 +2252,22 @@ class Anritsu8820(pyvisa.ResourceManager):
                     logger.debug('start to fill ACLR')
                     self.fill_progress_hspa_tx(self.std, ws, band, dl_ch, test_items, 1, subtest)
 
-
-                    wb.save(f'results_HSUPA.xlsx')
+                    wb.save(excel_path)
                     wb.close()
 
-                    excel_path = f'results_HSUPA.xlsx'
-
-                    return excel_path
+                return excel_path
 
             elif self.chcoding == 'FIXREFCH':  # this is HSDPA
                 """
                     HSDPA format:{subtest_number: [power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
                 """
-                if pathlib.Path(f'results_HSUPA.xlsx').exists() is False:
+                excel_path = f'results_HSUPA.xlsx'
+
+                if pathlib.Path(excel_path).exists() is False:
                     self.create_excel_tx(self.std, bw)
                     logger.debug('Create Excel')
 
-                wb = openpyxl.load_workbook(f'results_HSUPA.xlsx')
+                wb = openpyxl.load_workbook(excel_path)
                 logger.debug('Open Excel')
                 for subtest, test_items in data.items():
                     ws = wb[f'PWR']  # POWER
@@ -2229,9 +2282,10 @@ class Anritsu8820(pyvisa.ResourceManager):
                     logger.debug('start to fill EVM')
                     self.fill_progress_hspa_tx(self.std, ws, band, dl_ch, test_items, 2, subtest)
 
-                    excel_path = f'results_HSDPA.xlsx'
+                    wb.save(excel_path)
+                    wb.close()
 
-                    return excel_path
+                return excel_path
 
     def excel_plot_line(self, standard, excel_path):
         logger.debug('Start to plot line chart in Excel')
@@ -2362,8 +2416,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                         chart.add_data(y_data, titles_from_data=True)
                         chart.set_categories(x_data)
 
-                    else: # HSUPA, HSDPA
-                        y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column-1, max_row=ws.max_row)
+                    else:  # HSUPA, HSDPA
+                        y_data = Reference(ws, min_col=2, min_row=1, max_col=ws.max_column - 1, max_row=ws.max_row)
                         x_data = Reference(ws, min_col=1, min_row=2, max_col=1, max_row=ws.max_row)
                         chart.add_data(y_data, titles_from_data=True)
                         chart.set_categories(x_data)
@@ -2397,7 +2451,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                         chart.set_categories(x_data)
 
                     else:
-                        y_data = Reference(ws, min_col=3, min_row=1, max_col=ws.max_column-1, max_row=ws.max_row)
+                        y_data = Reference(ws, min_col=3, min_row=1, max_col=ws.max_column - 1, max_row=ws.max_row)
                         x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
                         chart.add_data(y_data, titles_from_data=True)
                         chart.set_categories(x_data)
@@ -2444,6 +2498,7 @@ class Anritsu8820(pyvisa.ResourceManager):
 
     def tx_core(self, standard, band, dl_ch, bw=None):
         conn_state = int(self.inst.query("CALLSTAT?").strip())
+        self.dl_ch = dl_ch
         if standard == 'LTE':
             if conn_state != cm_pmt.ANRITSU_CONNECTED:
                 self.set_init_before_calling(standard, dl_ch, bw)
@@ -2515,6 +2570,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 standard = self.switch_to_lte()
+                self.inst.query('*OPC?')
                 logger.info(standard)
                 for bw in wt.lte_bandwidths:
                     for band in wt.lte_bands:
@@ -2537,14 +2593,21 @@ class Anritsu8820(pyvisa.ResourceManager):
             elif (tech == 'WCDMA' or tech == 'HSUPA' or tech == 'HSDPA') and (
                     wt.wcdma_bands != [] or wt.hsupa_bands != [] or wt.hsdpa_bands != []):
                 standard = self.switch_to_wcdma()
+                self.inst.query('*OPC?')
+                self.inst.write('CALLSO')
+
                 if tech == 'WCDMA':
                     self.inst.write('CHCODING REFMEASCH')
+                    logger.info('Set to WCDMA')
                 elif tech == 'HSUPA':
                     self.inst.write('CHCODING EDCHTEST')
+                    logger.info('Set to HSUPA')
                 elif tech == 'HSDPA':
                     self.inst.write('CHCODING FIXREFCH')
+                    logger.info('Set to HSDPA')
 
                 self.chcoding = self.inst.query('CHCODING?').strip()
+                logger.info(f'CHCODING: {self.chcoding}')
 
                 if self.chcoding == 'REFMEASCH':  # this is WCDMA
                     for band in wt.wcdma_bands:
