@@ -20,6 +20,8 @@ HSUPA_ETFCI_SUBTEST3 = 92
 HSUPA_ETFCI_SUBTEST4 = 71
 HSUPA_ETFCI_SUBTEST5 = 81  # this is for old versionm before v8.7.0, now not used
 
+SWEEP_STEP = 2  # this is step when sensitivity all channel sweep
+CHAN_LIST = []  # if wanting to measure single channel when RX sweep by special resason, use it. Or let it empty
 
 # bandwidth index
 def bandwidths_selected(band):
@@ -163,13 +165,18 @@ def main():
     this main() function is used for testing some function
     """
 
-    print(dl_ch_selected('LTE', 1, 10))
-    print(dl_ch_selected('WCDMA', 5))
-    for _ in [1.4, 3, 5, 10]:
-        if _ in bandwidths_selected(1):
-            print(_)
-        else:
-            continue
+    # print(dl_ch_selected('LTE', 1, 10))
+    # print(dl_ch_selected('WCDMA', 5))
+    # for _ in [1.4, 3, 5, 10]:
+    #     if _ in bandwidths_selected(1):
+    #         print(_)
+    #     else:
+    #         continue
+
+    if CHAN_LIST:
+        print(CHAN_LIST)
+    else:
+        print('others')
 
 
 if __name__ == "__main__" :

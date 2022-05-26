@@ -687,7 +687,14 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.write(f'ULRB_START {rb_location}')
 
     def set_init_hsdpa(self):
-        pass
+        self.inst.write('CHCODING EDCHTEST')
+        self.inst.write('DDPCHTOFS 6')
+        self.inst.write('MAXULPWR 21')
+        self.inst.write('TPCALGO 2')
+        self.inst.write('DOMAINIDRMC CS')
+        self.inst.write('AUTHENT_ALGO XOR')
+        self.inst.write('HSUSET TTI10_QPSK')
+        self.inst.write('*OPC?')
 
     def set_init_hsupa(self):
         self.inst.write('CHCODING EDCHTEST')
@@ -1533,6 +1540,39 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif standard == 'GSM':
             pass
 
+    def create_sheet_title(self, sheet):
+        sh = sheet
+        sh['A1'] = 'Band'
+        sh['B1'] = 'DL_chan'
+        sh['C1'] = 'Sensitivity'
+        sh['D1'] = 'Tx_power'
+
+    def create_excel_rx_sweep(self, standard, power_selected, bw=None):
+        wb = openpyxl.Workbook()
+        wb.remove(wb['Sheet'])
+
+        sheet = None
+        if power_selected == 1:
+            sheet = f'Band{self.band}_Sweep_TxMax'
+            wb.create_sheet(sheet)
+        else:
+            sheet = f'Band{self.band}_Sweep_TxMin'
+            wb.create_sheet(sheet)
+
+        # create titile for first row
+        sh = wb[sheet]
+        sh['A1'] = 'Band'
+        sh['B1'] = 'DL_chan'
+        sh['C1'] = 'Sensitivity'
+        sh['D1'] = 'Tx_power'
+
+        if standard == 'LTE':
+            wb.save(f'Sweep_{bw}MHZ_LTE.xlsx')
+        elif standard == 'WCDMA':
+            wb.save(f'Sweep_WCDMA.xlsx')
+
+        wb.close()
+
     @staticmethod
     def create_excel_rx(standard, bw=None):
         if standard == 'LTE':
@@ -1732,6 +1772,15 @@ class Anritsu8820(pyvisa.ResourceManager):
         wb.save(excel_path)
         wb.close()
 
+    def fill_sensitivity_sweep(self, row, ws, band, dl_ch, data):
+        # data[x]: 0 = power, 1 = sensitivity, 2 = PER
+        ws.cell(row, 1).value = band
+        ws.cell(row, 2).value = dl_ch
+        logger.debug('sensitivity')
+        ws.cell(row, 3).value = data[1]
+        logger.debug('power')
+        ws.cell(row, 4).value = data[0]
+
     def fill_sensitivity(self, standard, row, ws, band, dl_ch, data, items_selected, bw=None):
         # items_selected: 0 = power, 1 = sensitivity, 2 = PER
         if standard == 'LTE':
@@ -1907,6 +1956,58 @@ class Anritsu8820(pyvisa.ResourceManager):
                         for col, aclr_item in enumerate(test_items[items_selected]):
                             ws.cell(row, 3 + col).value = aclr_item
                         logger.debug('the ACLR of H ch')
+
+    def fill_progress_rx_sweep(self, standard, ws, band, dl_ch, data,
+                               power_selected):  # items_selected: 0 = power, 1 = sensitivity, 2 = PER
+        if standard == 'LTE':
+            if power_selected == 1:
+                logger.debug(f'capture band: {band}, {self.bw}MHZ, {dl_ch}, TxMax, sensitivity')
+            elif power_selected == 0:
+                logger.debug(f'capture band: {band}, {self.bw}MHZ, {dl_ch}, TxMin, sensitivity')
+
+            if ws.max_row == 1:  # only title
+                self.fill_sensitivity_sweep(2, ws, band, dl_ch, data)
+                logger.debug('Only title')
+            else:
+                for row in range(2, ws.max_row + 1):  # not only title
+                    if ws.cell(row, 1).value == band and ws.cell(row, 2).value == dl_ch:  # if band is in the row
+                        self.fill_sensitivity_sweep(row, ws, band, dl_ch, data)
+                        logger.debug('Band and dl_ch are found')
+                        break
+
+                    elif row == ws.max_row:  # if band and dl_ch are found and final row
+                        self.fill_sensitivity_sweep(row + 1, ws, band, dl_ch, data)
+                        logger.debug('Band and dl_ch are not found')
+                        break
+                    else:
+                        logger.debug('continue to search')
+                        continue
+
+        elif standard == 'WCDMA':
+            if power_selected == 1:
+                logger.debug(f'capture band: {band}, {dl_ch}, TxMax, sensitivity')
+            elif power_selected == 0:
+                logger.debug(f'capture band: {band}, {dl_ch}, TxMin, sensitivity')
+
+            if ws.max_row == 1:  # only title
+                self.fill_sensitivity_sweep(2, ws, band, dl_ch, data)
+                logger.debug('Only title')
+            else:
+                for row in range(2, ws.max_row + 1):  # not only title
+                    if ws.cell(row, 1).value == band and ws.cell(row, 2).value == dl_ch:  # if band is in the row
+                        self.fill_sensitivity_sweep(row, ws, band, dl_ch, data)
+                        logger.debug('Band and dl_ch are found')
+                        break
+
+                    elif row == ws.max_row:  # if band and dl_ch are found and final row
+                        self.fill_sensitivity_sweep(row + 1, ws, band, dl_ch, data)
+                        logger.debug('Band and dl_ch are not found')
+                        break
+                    else:
+                        logger.debug('continue to search')
+                        continue
+        elif standard == 'GSM':
+            pass
 
     def fill_progress_rx(self, standard, ws, band, dl_ch, data, items_selected, power_selected,
                          bw=None):  # items_selected: 0 = power, 1 = sensitivity, 2 = PER
@@ -2091,6 +2192,108 @@ class Anritsu8820(pyvisa.ResourceManager):
                     else:
                         logger.debug('continue to search')
                         continue
+
+    def fill_values_rx_sweep(self, data, band, dl_ch, power_selected, bw=None):
+        """
+        data format:[Tx Power, Sensitivity, PER]
+        """
+        self.band = band
+        self.bw = bw
+        if self.std == 'LTE':
+            if pathlib.Path(f'Sweep_{bw}MHZ_LTE.xlsx').exists() is False:
+                self.create_excel_rx_sweep(self.std, power_selected, bw)
+                logger.debug('Create Excel')
+
+            wb = openpyxl.load_workbook(f'Sweep_{bw}MHZ_LTE.xlsx')
+            logger.debug('Open Excel')
+
+            if power_selected == 1:
+                logger.debug(f'start to fill Sweep of Sensitivity and Power level')
+                ws_name = f'Band{self.band}_Sweep_TxMax'
+                # check sheet if it is in the workboook
+                if ws_name not in wb.sheetnames:
+                    wb.create_sheet(ws_name)
+
+                ws = wb[ws_name]
+                # check if it has the title at first row
+                if ws.cell(1, 1).value is None:
+                    self.create_sheet_title(ws)
+
+                logger.debug('fill sensitivity and power')
+                self.fill_progress_rx_sweep(self.std, ws, band, dl_ch, data,
+                                            power_selected)  # progress of filling sensitivity progress
+
+
+            elif power_selected == 0:
+                logger.debug(f'start to fill Sweep of Sensitivity and Power level')
+                ws_name = f'Band{self.band}_Sweep_TxMin'
+
+                # check sheet if it is in the workboook
+                if ws_name not in wb.sheetnames:
+                    wb.create_sheet(f'Band{band}_Sweep_TxMin')
+
+                ws = wb[ws_name]
+                # check if it has the title at first row
+                if ws.cell(1, 1).value is None:
+                    self.create_sheet_title(ws)
+
+                logger.debug('fill sensitivity')
+                self.fill_progress_rx_sweep(self.std, ws, band, dl_ch, data,
+                                            power_selected)  # progress of filling sensitivity progress
+
+            wb.save(f'Sweep_{bw}MHZ_LTE.xlsx')
+            wb.close()
+
+            excel_path = f'Sweep_{bw}MHZ_LTE.xlsx'
+
+            return excel_path
+
+        elif self.std == 'WCDMA':
+            if pathlib.Path(f'Sweep_WCDMA.xlsx').exists() is False:
+                self.create_excel_rx_sweep(self.std, power_selected, bw)
+                logger.debug('Create Excel')
+
+            wb = openpyxl.load_workbook(f'Sweep_WCDMA.xlsx')
+            logger.debug('Open Excel')
+
+            if power_selected == 1:
+                logger.debug(f'start to fill Sweep of  Sensitivity and Power level')
+                ws_name = f'Band{band}_Sweep_TxMax'
+                # check sheet if it is in the workboook
+                if ws_name not in wb.sheetnames:
+                    wb.create_sheet(ws_name)
+
+                ws = wb[ws_name]
+                # check if it has the title at first row
+                if ws.cell(1, 1).value is None:
+                    self.create_sheet_title(ws)
+
+                logger.debug('fill sensitivity and power')
+                self.fill_progress_rx_sweep(self.std, ws, band, dl_ch, data,
+                                            power_selected)  # progress of filling sensitivity progress
+
+            elif power_selected == 0:
+                logger.debug(f'start to fill Sweep of  Sensitivity and Power level')
+                ws_name = f'Band{band}_Sweep_TxMin'
+                # check sheet if it is in the workboook
+                if ws_name not in wb.sheetnames:
+                    wb.create_sheet(ws_name)
+
+                ws = wb[ws_name]
+                # check if it has the title at first row
+                if ws.cell(1, 1).value is None:
+                    self.create_sheet_title(ws)
+
+                logger.debug('fill sensitivity')
+                self.fill_progress_rx_sweep(self.std, ws, band, dl_ch, data,
+                                            power_selected)  # progress of filling sensitivity progress
+
+            wb.save(f'Sweep_WCDMA.xlsx')
+            wb.close()
+
+            excel_path = f'Sweep_WCDMA.xlsx'
+
+            return excel_path
 
     def fill_values_rx(self, data, band, dl_ch, power_selected, bw=None):
         """
@@ -2354,6 +2557,51 @@ class Anritsu8820(pyvisa.ResourceManager):
                         wb.save(excel_path)
                         wb.close()
 
+                    elif 'Sweep' in ws_name:
+                        chart_sens = LineChart()
+                        chart_sens.title = 'Sensitivity_Rx_Chan_Sweep'
+                        chart_sens.y_axis.title = f'{ws_name[:11]}'
+                        chart_sens.x_axis.title = 'Rx_chan'
+                        chart_sens.x_axis.tickLblPos = 'low'
+                        # chart_sens.y_axis.scaling.min = -60
+                        # chart_sens.y_axis.scaling.max = -20
+
+                        chart_sens.height = 20
+                        chart_sens.width = 40
+
+                        y_data_sens = Reference(ws, min_col=ws.max_column - 1, min_row=1, max_col=ws.max_column - 1,
+                                                max_row=ws.max_row)
+
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart_sens.add_data(y_data_sens, titles_from_data=True)
+                        chart_sens.set_categories(x_data)
+
+                        # chart_sens.y_axis.majorGridlines = None
+
+                        chart_sens.series[0].marker.symbol = 'circle'  # for sensitivity
+                        chart_sens.series[0].marker.size = 3
+
+                        chart_pwr = LineChart()  # create a second chart
+
+                        y_data_pwr = Reference(ws, min_col=ws.max_column, min_row=1, max_col=ws.max_column,
+                                               max_row=ws.max_row)
+                        chart_pwr.add_data(y_data_pwr, titles_from_data=True)
+
+                        chart_pwr.series[0].graphicalProperties.line.dashStyle = 'dash'  # for power
+                        chart_pwr.y_axis.title = 'Power(dBm)'
+                        chart_pwr.y_axis.axId = 200
+                        chart_pwr.y_axis.majorGridlines = None
+
+                        chart_sens.y_axis.crosses = 'max'
+                        chart_sens += chart_pwr
+
+                        ws.add_chart(chart_sens, "J1")
+                        # ws.add_chart(chart_sens, "J42")
+
+                        wb.save(excel_path)
+                        wb.close()
+
+
                     elif 'ACLR' in ws_name:
                         chart = LineChart()
                         chart.title = 'ACLR'
@@ -2547,6 +2795,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             logger.info(f'Start to sensitivity B{band}, downlink_chan: {dl_ch}')
 
         self.set_init_rx(standard)
+
         for power_selected in wt.tx_max_pwr_sensitivity:
             if power_selected == 1:
                 self.set_tpc('ALL1')
@@ -2564,6 +2813,45 @@ class Anritsu8820(pyvisa.ResourceManager):
                 sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
                 logger.debug(f'Sensitivity list:{sens_list}')
                 self.excel_path = self.fill_values_rx(sens_list, band, dl_ch, power_selected, bw)
+                self.set_output_level(-70)
+
+    def rx_sweep_core(self, standard, band, dl_ch, bw=None):
+        conn_state = int(self.inst.query("CALLSTAT?").strip())
+        if standard == 'LTE':
+            if conn_state != cm_pmt.ANRITSU_CONNECTED:
+                self.set_init_before_calling(standard, dl_ch, bw)
+                self.set_registration_calling(standard)
+        elif standard == 'WCDMA':
+            if conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
+                self.set_init_before_calling(standard, dl_ch, bw)
+                self.set_registration_calling(standard)
+
+        if standard == 'LTE':
+            logger.info(f'Start to sweep B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
+        elif standard == 'WCDMA':
+            logger.info(f'Start to sweep B{band}, downlink_chan: {dl_ch}')
+
+        self.set_init_rx(standard)
+
+        for power_selected in wt.tx_max_pwr_sensitivity:
+            if power_selected == 1:
+                self.set_tpc('ALL1')
+                self.set_input_level(30)
+                sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
+                logger.debug(f'Sensitivity list:{sens_list}')
+                self.excel_path = self.fill_values_rx_sweep(sens_list, band, dl_ch, power_selected,
+                                                            bw)  # this is different
+                self.set_output_level(-70)
+            elif power_selected == 0:
+                if standard == 'LTE':
+                    self.set_tpc('AUTO')
+                elif standard == 'WCDMA':
+                    self.set_tpc('ILPC')
+                self.set_input_level(-10)
+                sens_list = self.get_sensitivity(standard, band, dl_ch, bw)
+                logger.debug(f'Sensitivity list:{sens_list}')
+                self.excel_path = self.fill_values_rx_sweep(sens_list, band, dl_ch, power_selected,
+                                                            bw)  # this is different
                 self.set_output_level(-70)
 
     def run_tx(self):
@@ -2700,13 +2988,52 @@ class Anritsu8820(pyvisa.ResourceManager):
             else:
                 logger.info(f'Finished')
 
+    def run_rx_sweep_ch(self):
+        for tech in wt.tech:
+            if tech == 'LTE' and wt.lte_bands != []:
+                standard = self.switch_to_lte()
+                logger.info(standard)
+                for bw in wt.lte_bandwidths:
+                    for band in wt.lte_bands:
+                        if bw in cm_pmt.bandwidths_selected(band):
+                            logger.info(f'Sweep Channel List: {band}, {bw}MHZ')
+                            self.set_test_parameter_normal()
+                            lch = cm_pmt.dl_ch_selected(standard, band, bw)[0]
+                            hch = cm_pmt.dl_ch_selected(standard, band, bw)[2]
+                            step = cm_pmt.SWEEP_STEP
+                            if cm_pmt.CHAN_LIST:
+                                ch_list = cm_pmt.CHAN_LIST
+                            else:
+                                ch_list = range(lch, hch + 1, step)
+                            for dl_ch in ch_list:
+                                self.rx_sweep_core(standard, band, dl_ch, bw)
+                        self.excel_plot_line(standard, self.excel_path)
+            elif tech == 'WCDMA' and wt.wcdma_bands != []:
+                standard = self.switch_to_wcdma()
+                for band in wt.wcdma_bands:
+                    logger.info(f'Sweep Channel List: {band}')
+                    lch = cm_pmt.dl_ch_selected(standard, band)[0]
+                    hch = cm_pmt.dl_ch_selected(standard, band)[2]
+                    step = cm_pmt.SWEEP_STEP
+                    if cm_pmt.CHAN_LIST:
+                        ch_list = cm_pmt.CHAN_LIST
+                    else:
+                        ch_list = range(lch, hch + 1, step)
+                    for dl_ch in ch_list:
+                        self.rx_sweep_core(standard, band, dl_ch)
+                    self.excel_plot_line(standard, self.excel_path)
+            elif tech == wt.gsm_bands:
+                pass
+            else:
+                logger.info(f'Finished')
+
 
 def main():
     start = datetime.datetime.now()
 
     anritsu = Anritsu8820()
-    anritsu.run_tx()
-
+    # anritsu.run_tx()  # run_tx() | run_rx() | run_rx_sweep_ch()
+    anritsu.excel_plot_line('LTE', 'Sweep_10MHZ_LTE.xlsx')
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')

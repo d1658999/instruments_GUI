@@ -1,3 +1,6 @@
-[20220525 18:40:16 INFO    ] Modem comport is: COM19
-[20220525 18:40:16 INFO    ] flymode is on, 0
-[20220525 18:40:17 INFO    ] flymode is off, 1
+[20220526 18:14:27 INFO    ] start to connect
+[20220526 18:14:28 DEBUG   ] GPIB0::1::INSTR
+[20220526 18:14:28 INFO    ] Modem comport is: COM19
+[20220526 18:14:28 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
+[20220526 18:14:28 DEBUG   ] Start to plot line chart in Excel
+[20220526 18:14:28 INFO    ] Timer: 0:00:01.258386
