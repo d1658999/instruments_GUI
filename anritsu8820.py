@@ -285,11 +285,12 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif s == 'GSM':
             pass
         elif s == 'WCDMA' and self.chcoding == 'EDCHTEST':  # this is HSUPA
-            self.set_registration_calling_hsupa()
-            self.set_registration_after_calling_hsupa()
+            self.set_registration_calling_hspa()
+            # self.set_registration_after_calling_hspa()
 
         elif s == 'WCDMA' and self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
+            self.set_registration_calling_hspa()
+            # self.set_registration_after_calling_hspa()
 
     def set_registration_calling_lte(self, times=30):
         """
@@ -374,7 +375,7 @@ class Anritsu8820(pyvisa.ResourceManager):
 
         logger.info('Loop mode 1 and connected')
 
-    def set_registration_calling_hsupa(self):
+    def set_registration_calling_hspa(self):
         """
             ANRITSU_IDLE = 1	        #Idle state
             ANRITSU_IDLE_REGIST = 2		#Idle( Regist ) Idle state (location registered)
@@ -383,7 +384,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         """
         self.set_lvl_status('ON')
         self.set_test_mode()
-        self.set_init_hsupa()
+        self.set_init_hspa()
         # self.flymode_circle()
 
         conn_state = int(self.inst.query("CALLSTAT?").strip())
@@ -415,6 +416,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 if self.count < 0:
                     logger.info('END CALL and FLY ON and OFF for HSUPA')
                     self.set_init_before_calling_wcdma(self.dl_ch)
+                    self.set_init_hspa()
                     self.inst.write('CALLSO')
                     self.set_test_mode()
                     self.set_lvl_status('ON')
@@ -433,7 +435,20 @@ class Anritsu8820(pyvisa.ResourceManager):
         logger.info('Loop mode 1 and connected')
         time.sleep(2)
 
-        self.set_registration_after_calling_hsupa()
+        # self.set_registration_after_calling_hspa()
+
+    def set_registration_after_calling_hspa(self):
+        if self.chcoding == 'EDCHTEST':  # this is HSUPA
+            self.set_registration_after_calling_hsupa()
+
+        elif self.chcoding == 'FIXREFCH':  # this is HSDPA
+            self.set_registration_after_calling_hsdpa()
+
+    def set_registration_after_calling_hsdpa(self):
+        self.inst.write('SCRSEL FMEAS')
+        self.inst.write('SET_PWRPAT HSMAXPWR')
+        self.set_init_power(1)
+        self.set_init_aclr('WCDMA', 1)
 
     def set_registration_after_calling_hsupa(self):
         self.inst.write('SCRSEL FMEAS')
@@ -686,14 +701,22 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.write(f'ULRMC_RB {rb_num}')
         self.inst.write(f'ULRB_START {rb_location}')
 
+    def set_init_hspa(self):
+        if self.chcoding == 'EDCHTEST':  # this is HSUPA
+            self.set_init_hsupa()
+        elif self.chcoding == 'FIXREFCH':  # this is HSDPA
+            self.set_init_hsdpa()
+
     def set_init_hsdpa(self):
-        self.inst.write('CHCODING EDCHTEST')
+        self.inst.write('CHCODING FIXREFCH')
         self.inst.write('DDPCHTOFS 6')
-        self.inst.write('MAXULPWR 21')
-        self.inst.write('TPCALGO 2')
+        self.inst.write('SET_PWRPAT HSMAXPWR')
+        self.inst.write('REGMODE COMBINED')
         self.inst.write('DOMAINIDRMC CS')
         self.inst.write('AUTHENT_ALGO XOR')
-        self.inst.write('HSUSET TTI10_QPSK')
+        self.inst.write('HSHSET HSET1_QPSK')
+        self.inst.write('TPUT_MEAS OFF')
+        self.set_input_level(-10)
         self.inst.write('*OPC?')
 
     def set_init_hsupa(self):
@@ -711,21 +734,35 @@ class Anritsu8820(pyvisa.ResourceManager):
         return result
 
     def preset_subtest1(self):
-        self.inst.write('SET_HSDELTA_CQI 8')
-        self.inst.write('SET_HSSUBTEST SUBTEST1')
-        self.set_tpc('ILPC')
-        self.set_input_level(16)
-        time.sleep(0.15)
-        self.set_tpc('ALT')
-        self.set_input_level(26)
-        logger.debug('TPC DOWN')
-        time.sleep(0.15)
-        self.inst.write('TPC_CMD_DOWN')
-        self.set_to_measure()
+        if self.chcoding == 'EDCHTEST':  # this is HSUPA
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST1')
+            self.set_tpc('ILPC')
+            self.set_input_level(16)
+            time.sleep(0.15)
+            self.set_tpc('ALT')
+            self.set_input_level(26)
+            logger.debug('TPC DOWN')
+            time.sleep(0.15)
+            self.inst.write('TPC_CMD_DOWN')
+            self.set_to_measure()
+        elif self.chcoding == 'FIXREFCH':  # this is HSDPA
+            self.set_input_level(24)
+            self.set_output_level(-86)
+            self.set_tpc('ALL1')
+            self.inst.write('DTCHPAT PN9')
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST1')
+            self.set_to_measure()
 
     def get_subtest1_power_aclr(self):
+        """
+        :return: power, ACLR, subtest_number for HSUPA
+        :return: power, ACLR, EVM, subtest_number for HSDPA
+        """
         logger.info('Start to subtest1')
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
+            logger.info('start to measure HSUPA')
             self.preset_subtest1()
             power = self.get_uplink_power('WCDMA')
             result = self.query_etfci()
@@ -759,6 +796,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.debug(f'Now ETFCI result is: {result}')
 
             logger.info(f'Subtest1 to capture the final power is {power}')
+
             aclr = self.get_uplink_aclr('WCDMA')
 
             self.set_tpc('ILPC')
@@ -766,20 +804,35 @@ class Anritsu8820(pyvisa.ResourceManager):
 
             return power, aclr, 1
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
+            logger.info('start to measure HSDPA')
+            self.preset_subtest1()
+            power = self.get_uplink_power('WCDMA')
+            aclr = self.get_uplink_aclr('WCDMA')
+            evm = self.get_uplink_evm('WCDMA')
+
+            return power, aclr, evm, 1
 
     def preset_subtest2(self):
-        self.inst.write('SET_HSDELTA_CQI 8')
-        self.inst.write('SET_HSSUBTEST SUBTEST2')
-        self.set_tpc('ILPC')
-        self.set_input_level(14)
-        time.sleep(0.15)
-        self.set_tpc('ALT')
-        self.set_input_level(26)
-        logger.debug('TPC DOWN')
-        self.inst.write('TPC_CMD_DOWN')
-        time.sleep(0.15)
-        self.set_to_measure()
+        if self.chcoding == 'EDCHTEST':  # this is HSUPA
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST2')
+            self.set_tpc('ILPC')
+            self.set_input_level(14)
+            time.sleep(0.15)
+            self.set_tpc('ALT')
+            self.set_input_level(26)
+            logger.debug('TPC DOWN')
+            self.inst.write('TPC_CMD_DOWN')
+            time.sleep(0.15)
+            self.set_to_measure()
+        elif self.chcoding == 'FIXREFCH':  # this is HSDPA
+            self.set_input_level(24)
+            self.set_output_level(-86)
+            self.set_tpc('ALL1')
+            self.inst.write('DTCHPAT PN9')
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST2')
+            self.set_to_measure()
 
     def get_subtest2_power_aclr(self):
         logger.info('Start to subtest2')
@@ -821,20 +874,35 @@ class Anritsu8820(pyvisa.ResourceManager):
             return power, aclr, 2
 
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
+            logger.info('start to measure HSDPA')
+            self.preset_subtest2()
+            power = self.get_uplink_power('WCDMA')
+            aclr = self.get_uplink_aclr('WCDMA')
+            evm = self.get_uplink_evm('WCDMA')
+
+            return power, aclr, evm, 2
 
     def preset_subtest3(self):
-        self.inst.write('SET_HSDELTA_CQI 8')
-        self.inst.write('SET_HSSUBTEST SUBTEST3')
-        self.set_tpc('ILPC')
-        self.set_input_level(15)
-        time.sleep(0.15)
-        self.set_tpc('ALT')
-        self.set_input_level(26)
-        logger.debug('TPC DOWN')
-        self.inst.write('TPC_CMD_DOWN')
-        time.sleep(0.15)
-        self.set_to_measure()
+        if self.chcoding == 'EDCHTEST':
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST3')
+            self.set_tpc('ILPC')
+            self.set_input_level(15)
+            time.sleep(0.15)
+            self.set_tpc('ALT')
+            self.set_input_level(26)
+            logger.debug('TPC DOWN')
+            self.inst.write('TPC_CMD_DOWN')
+            time.sleep(0.15)
+            self.set_to_measure()
+        elif self.chcoding == 'FIXREFCH':
+            self.set_input_level(24)
+            self.set_output_level(-86)
+            self.set_tpc('ALL1')
+            self.inst.write('DTCHPAT PN9')
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST3')
+            self.set_to_measure()
 
     def get_subtest3_power_aclr(self):
         logger.info('Start to subtest3')
@@ -875,20 +943,35 @@ class Anritsu8820(pyvisa.ResourceManager):
 
             return power, aclr, 3
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
+            logger.info('start to measure HSDPA')
+            self.preset_subtest3()
+            power = self.get_uplink_power('WCDMA')
+            aclr = self.get_uplink_aclr('WCDMA')
+            evm = self.get_uplink_evm('WCDMA')
+
+            return power, aclr, evm, 3
 
     def preset_subtest4(self):
-        self.inst.write('SET_HSDELTA_CQI 8')
-        self.inst.write('SET_HSSUBTEST SUBTEST4')
-        self.set_tpc('ILPC')
-        self.set_input_level(14)
-        time.sleep(0.15)
-        self.set_tpc('ALT')
-        self.set_input_level(26)
-        logger.debug('TPC DOWN')
-        self.inst.write('TPC_CMD_DOWN')
-        time.sleep(0.15)
-        self.set_to_measure()
+        if self.chcoding == 'EDCHTEST':
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST4')
+            self.set_tpc('ILPC')
+            self.set_input_level(14)
+            time.sleep(0.15)
+            self.set_tpc('ALT')
+            self.set_input_level(26)
+            logger.debug('TPC DOWN')
+            self.inst.write('TPC_CMD_DOWN')
+            time.sleep(0.15)
+            self.set_to_measure()
+        elif self.chcoding == 'FIXREFCH':
+            self.set_input_level(24)
+            self.set_output_level(-86)
+            self.set_tpc('ALL1')
+            self.inst.write('DTCHPAT PN9')
+            self.inst.write('SET_HSDELTA_CQI 8')
+            self.inst.write('SET_HSSUBTEST SUBTEST4')
+            self.set_to_measure()
 
     def get_subtest4_power_aclr(self):
         logger.info('Start to subtest4')
@@ -929,7 +1012,13 @@ class Anritsu8820(pyvisa.ResourceManager):
 
             return power, aclr, 4
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
+            logger.info('start to measure HSDPA')
+            self.preset_subtest4()
+            power = self.get_uplink_power('WCDMA')
+            aclr = self.get_uplink_aclr('WCDMA')
+            evm = self.get_uplink_evm('WCDMA')
+
+            return power, aclr, evm, 4
 
     def preset_subtest5(self):
         self.inst.write('TPUTU_MEAS OFF')
@@ -962,9 +1051,9 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.set_input_level(5)
 
             return power, aclr, 5
+        elif self.chcoding == 'FIXREFCH':
+            logger.info("HSDPA doesn't have subtest5")
 
-        elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
 
     def get_subtest_power_aclr_evm_all(self):
         """
@@ -980,6 +1069,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.get_subtest4_power_aclr(),
             self.get_subtest5_power_aclr(),
         ]
+
         for subtest in subtests:
 
             if self.chcoding == 'EDCHTEST':  # this is HSUPA
@@ -987,8 +1077,9 @@ class Anritsu8820(pyvisa.ResourceManager):
                 data[subtest_number] = [power, aclr]
 
             elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-                power, aclr, evm, subtest_number = subtest
-                data[subtest_number] = [power, aclr, evm]
+                if subtest is not None:
+                    power, aclr, evm, subtest_number = subtest
+                    data[subtest_number] = [power, aclr, evm]
 
         logger.debug(data)
         return data
@@ -1319,7 +1410,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             elif self.chcoding == 'EDCHTEST':  # this is HSUPA
                 return self.get_subtest_power_aclr_evm_all()
             elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-                pass
+                return self.get_subtest_power_aclr_evm_all()
         elif s == 'GSM':
             pass
 
@@ -1829,7 +1920,7 @@ class Anritsu8820(pyvisa.ResourceManager):
 
     def fill_power_aclr_evm_hspa(self, standard, row, ws, band, dl_ch, test_items, items_selected, subtest):
         if standard == 'WCDMA':
-            if self.chcoding == 'EDCHTEST':  # this is HSUPA
+            if self.chcoding == 'EDCHTEST' or self.chcoding == 'FIXREFCH':  # this is for HSUPA pr HSDPA
                 ws.cell(row, 1).value = band
                 if items_selected == 0 or items_selected == 2:  # when select power or evm
                     ws.cell(row, 5).value = subtest
@@ -1871,8 +1962,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                         logger.debug('the ACLR of H ch')
 
 
-            elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-                pass
+            # elif self.chcoding == 'FIXREFCH':  # this is HSDPA
+            #     pass
 
         else:
             logger.info('It might be erro to go here!!')
@@ -2464,7 +2555,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 """
                     HSDPA format:{subtest_number: [power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
                 """
-                excel_path = f'results_HSUPA.xlsx'
+                excel_path = f'results_HSDPA.xlsx'
 
                 if pathlib.Path(excel_path).exists() is False:
                     self.create_excel_tx(self.std, bw)
@@ -2473,6 +2564,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 wb = openpyxl.load_workbook(excel_path)
                 logger.debug('Open Excel')
                 for subtest, test_items in data.items():
+                    logger.info(f'start to fill subtest{subtest}')
+
                     ws = wb[f'PWR']  # POWER
                     logger.debug('start to fill Power')
                     self.fill_progress_hspa_tx(self.std, ws, band, dl_ch, test_items, 0, subtest)
@@ -2747,6 +2840,8 @@ class Anritsu8820(pyvisa.ResourceManager):
     def tx_core(self, standard, band, dl_ch, bw=None):
         conn_state = int(self.inst.query("CALLSTAT?").strip())
         self.dl_ch = dl_ch
+
+        # calling process
         if standard == 'LTE':
             if conn_state != cm_pmt.ANRITSU_CONNECTED:
                 self.set_init_before_calling(standard, dl_ch, bw)
@@ -2758,10 +2853,13 @@ class Anritsu8820(pyvisa.ResourceManager):
         elif standard == 'WCDMA' and self.chcoding == 'EDCHTEST':  # this is HSUPA
             if conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
                 self.set_init_before_calling(standard, dl_ch, bw)
-                self.set_init_hsupa()
+                self.set_init_hspa()
                 self.set_registration_calling(standard)
         elif standard == 'WCDMA' and self.chcoding == 'FIXREFCH':  # this is HSDPA
-            pass
+            if conn_state != cm_pmt.ANRITSU_LOOP_MODE_1:
+                self.set_init_before_calling(standard, dl_ch, bw)
+                self.set_init_hspa()
+                self.set_registration_calling(standard)
 
         if standard == 'LTE':
             logger.info(f'Start to measure B{band}, bandwidth: {bw} MHz, downlink_chan: {dl_ch}')
@@ -2773,8 +2871,11 @@ class Anritsu8820(pyvisa.ResourceManager):
             logger.info(f'Start HSDPA to measure B{band}, downlink_chan: {dl_ch}')
 
         self.set_handover(standard, dl_ch, bw)
+
+        # HSUPA and HSDPA need to setting some parameters
         if standard == 'WCDMA' and (self.chcoding == 'EDCHTEST' or self.chcoding == 'FIXREFCH'):
-            self.set_registration_after_calling_hsupa()
+            self.set_registration_after_calling_hspa()
+
         data = self.get_validation(standard)
         self.excel_path = self.fill_values_tx(data, band, dl_ch, bw)
 
@@ -2925,7 +3026,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                         for dl_ch in ch_list:
                             self.tx_core(standard, band, dl_ch)
                 elif self.chcoding == 'FIXREFCH':  # this is HSDPA
-                    for band in wt.hsdpa_bands_bands:
+                    for band in wt.hsdpa_bands:
                         ch_list = []
                         for wt_ch in wt.channel:
                             if wt_ch == 'L':
@@ -3032,8 +3133,8 @@ def main():
     start = datetime.datetime.now()
 
     anritsu = Anritsu8820()
-    # anritsu.run_tx()  # run_tx() | run_rx() | run_rx_sweep_ch()
-    anritsu.excel_plot_line('LTE', 'Sweep_10MHZ_LTE.xlsx')
+    anritsu.run_tx()  # run_tx() | run_rx() | run_rx_sweep_ch()
+    # anritsu.excel_plot_line('WCDMA', 'results_HSDPA.xlsx')
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')

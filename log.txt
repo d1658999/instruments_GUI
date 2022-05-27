@@ -1,6 +1,82 @@
-[20220526 18:14:27 INFO    ] start to connect
-[20220526 18:14:28 DEBUG   ] GPIB0::1::INSTR
-[20220526 18:14:28 INFO    ] Modem comport is: COM19
-[20220526 18:14:28 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
-[20220526 18:14:28 DEBUG   ] Start to plot line chart in Excel
-[20220526 18:14:28 INFO    ] Timer: 0:00:01.258386
+[20220527 16:58:08 INFO    ] start to connect
+[20220527 16:58:09 DEBUG   ] GPIB0::1::INSTR
+[20220527 16:58:09 INFO    ] Modem comport is: COM19
+[20220527 16:58:09 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
+[20220527 16:58:10 DEBUG   ] Current Function: LTE
+[20220527 16:58:11 INFO    ] Switch to WCDMA mode OK
+[20220527 16:58:11 INFO    ] Set to WCDMA
+[20220527 16:58:11 INFO    ] CHCODING: REFMEASCH
+[20220527 16:58:11 DEBUG   ] Test Channel List: 1, downlink channel list:[10562]
+[20220527 16:58:11 INFO    ] init equipment before calling
+[20220527 16:58:11 INFO    ] Preset Anritsu 8820/8821
+[20220527 16:58:13 INFO    ] Set LOSS
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
+[20220527 16:58:13 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
+[20220527 16:58:13 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:16 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:16 INFO    ] Start to calling
+[20220527 16:58:16 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:16 INFO    ] Start registration and calling
+[20220527 16:58:17 INFO    ] IDLE
+[20220527 16:58:27 INFO    ] START CALL
+[20220527 16:58:27 INFO    ] flymode is on, 0
+[20220527 16:58:30 INFO    ] flymode is off, 1
+[20220527 16:58:40 INFO    ] Status: LOOP MODE(CLOSE)
+[20220527 16:58:42 INFO    ] Status: LOOP MODE(CLOSE)
+[20220527 16:58:44 INFO    ] Loop mode 1 and connected
+[20220527 16:58:44 INFO    ] Start WCDMA to measure B1, downlink_chan: 10562
+[20220527 16:58:44 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:44 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:44 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:44 INFO    ] POWER: 24.94
+[20220527 16:58:44 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:44 INFO    ] ACLR: [Decimal('-46.71'), Decimal('-45.58'), Decimal('-57.67'), Decimal('-55.32')]
+[20220527 16:58:44 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:44 INFO    ] EVM: 1.80
+[20220527 16:58:44 DEBUG   ] [Decimal('24.94'), [Decimal('-46.71'), Decimal('-45.58'), Decimal('-57.67'), Decimal('-55.32')], Decimal('1.80')]
+[20220527 16:58:45 DEBUG   ] Create Excel
+[20220527 16:58:45 DEBUG   ] Open Excel
+[20220527 16:58:45 DEBUG   ] start to fill Power
+[20220527 16:58:45 DEBUG   ] capture band: 1, ch01
+[20220527 16:58:45 DEBUG   ] the power of L ch
+[20220527 16:58:45 DEBUG   ] Only title
+[20220527 16:58:45 DEBUG   ] start to fill ACLR
+[20220527 16:58:45 DEBUG   ] capture band: 1, ch01
+[20220527 16:58:45 DEBUG   ] the ALCR of L ch
+[20220527 16:58:45 DEBUG   ] Only title
+[20220527 16:58:45 DEBUG   ] start to fill EVM
+[20220527 16:58:45 DEBUG   ] capture band: 1, ch01
+[20220527 16:58:45 DEBUG   ] the evm of L ch
+[20220527 16:58:45 DEBUG   ] Only title
+[20220527 16:58:45 DEBUG   ] Test Channel List: 2, downlink channel list:[9662]
+[20220527 16:58:45 INFO    ] Start WCDMA to measure B2, downlink_chan: 9662
+[20220527 16:58:45 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:46 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:46 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:46 INFO    ] POWER: 24.69
+[20220527 16:58:46 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:46 INFO    ] ACLR: [Decimal('-45.24'), Decimal('-45.92'), Decimal('-57.10'), Decimal('-52.73')]
+[20220527 16:58:46 DEBUG   ] Current Format: WCDMA
+[20220527 16:58:46 INFO    ] EVM: 1.64
+[20220527 16:58:46 DEBUG   ] [Decimal('24.69'), [Decimal('-45.24'), Decimal('-45.92'), Decimal('-57.10'), Decimal('-52.73')], Decimal('1.64')]
+[20220527 16:58:46 DEBUG   ] Open Excel
+[20220527 16:58:46 DEBUG   ] start to fill Power
+[20220527 16:58:46 DEBUG   ] capture band: 2, ch01
+[20220527 16:58:46 DEBUG   ] the power of L ch
+[20220527 16:58:46 DEBUG   ] Band is not found and the row is final and then to add new line
+[20220527 16:58:46 DEBUG   ] start to fill ACLR
+[20220527 16:58:46 DEBUG   ] capture band: 2, ch01
+[20220527 16:58:46 DEBUG   ] the ALCR of L ch
+[20220527 16:58:46 DEBUG   ] Band is not found and the row is final and then to add new line
+[20220527 16:58:46 DEBUG   ] start to fill EVM
+[20220527 16:58:46 DEBUG   ] capture band: 2, ch01
+[20220527 16:58:46 DEBUG   ] the evm of L ch
+[20220527 16:58:46 DEBUG   ] Band is not found and the row is final and then to add new line
+[20220527 16:58:46 DEBUG   ] Start to plot line chart in Excel
+[20220527 16:58:46 INFO    ] Timer: 0:00:39.431292
