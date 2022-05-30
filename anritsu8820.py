@@ -755,6 +755,61 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('SET_HSSUBTEST SUBTEST1')
             self.set_to_measure()
 
+    def get_hsdpa_evm(self):
+        """
+        evm = [po, p1, p2, p3], phase_disc = [theta0, theta1]
+        :return:
+        """
+        self.inst.write('DDPCHTOFS 6')
+        # self.inst.write('CHCODING FIXREFCH')
+        self.inst.write('SET_PWRPAT HSPC')
+        self.inst.write('SET_HSDELTA_CQI 7')
+        self.inst.write('SET_HSSUBTEST SUBTEST3')
+        self.inst.write('OLVL -86.0')
+        self.inst.write('DTCHPAT PN9')
+        self.inst.write('SCRSEL TDMEAS')
+        self.inst.write('MEASOBJ HSDPCCH_MA')
+        self.inst.write('HSMA_ITEM EVMPHASE')
+        self.inst.write('TDM_RRC OFF')
+        self.set_input_level(35)
+        self.inst.write('TPCPAT ALL1')
+        time.sleep(0.3)
+        self.inst.write('TPCPAT ALT')
+        self.set_to_measure()
+        evm_hpm = self.inst.query('POINT_EVM? ALL').strip().split(',')   # p0, p1, p2, p3
+        logger.debug(evm_hpm)
+        phase_disc_hpm = self.inst.query('POINT_PHASEDISC? ALL').strip().split(',')    # theta0, theta1
+        logger.debug(phase_disc_hpm)
+
+        # below is for LPM -18dBm
+        # self.set_tpc('ILPC')
+        # self.inst.write('HSSCCH OFF')
+        # self.inst.write('CQIFEEDBACK 0')
+        # self.set_input_level(-18)
+        # time.sleep(1)
+        # self.set_tpc('ALT')
+        # self.inst.write('HSSCCH ON')
+        # self.inst.write('CQIFEEDBACK 4')
+        # self.set_input_level(-10)
+        # self.set_to_measure()
+        # evm_lpm = self.inst.query('POINT_EVM? ALL').strip().split(',')  # p0, p1, p2, p3
+        # logger.debug(evm_lpm)
+        # phase_disc_lpm = self.inst.query('POINT_PHASEDISC? ALL').strip().split(',')  # theta0, theta1
+        # logger.debug(phase_disc_lpm)
+
+        return evm_hpm, phase_disc_hpm
+
+    @staticmethod
+    def get_worse_phase_disc(phase_disc):
+        [temp1, temp2] = phase_disc
+        phase_disc = [Decimal(x) for x in phase_disc]
+        phase_disc_worst = max(list(map(abs, phase_disc)))
+        if abs(Decimal(temp1)) == phase_disc_worst:
+            return Decimal(temp1)
+        elif abs(Decimal(temp2)) == phase_disc_worst:
+            return Decimal(temp2)
+
+
     def get_subtest1_power_aclr(self):
         """
         :return: power, ACLR, subtest_number for HSUPA
@@ -803,14 +858,14 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.set_input_level(5)
 
             return power, aclr, 1
+
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             logger.info('start to measure HSDPA')
             self.preset_subtest1()
             power = self.get_uplink_power('WCDMA')
             aclr = self.get_uplink_aclr('WCDMA')
-            evm = self.get_uplink_evm('WCDMA')
 
-            return power, aclr, evm, 1
+            return power, aclr, 1
 
     def preset_subtest2(self):
         if self.chcoding == 'EDCHTEST':  # this is HSUPA
@@ -880,7 +935,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             aclr = self.get_uplink_aclr('WCDMA')
             evm = self.get_uplink_evm('WCDMA')
 
-            return power, aclr, evm, 2
+            return power, aclr, 2
 
     def preset_subtest3(self):
         if self.chcoding == 'EDCHTEST':
@@ -947,7 +1002,9 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.preset_subtest3()
             power = self.get_uplink_power('WCDMA')
             aclr = self.get_uplink_aclr('WCDMA')
-            evm = self.get_uplink_evm('WCDMA')
+            evm, phase_disc = self.get_hsdpa_evm()
+            evm = Decimal(max(evm))
+            phase_disc = Decimal(self.get_worse_phase_disc(phase_disc))
 
             return power, aclr, evm, 3
 
@@ -1018,7 +1075,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             aclr = self.get_uplink_aclr('WCDMA')
             evm = self.get_uplink_evm('WCDMA')
 
-            return power, aclr, evm, 4
+            return power, aclr, 4
 
     def preset_subtest5(self):
         self.inst.write('TPUTU_MEAS OFF')
@@ -1071,15 +1128,18 @@ class Anritsu8820(pyvisa.ResourceManager):
         ]
 
         for subtest in subtests:
-
             if self.chcoding == 'EDCHTEST':  # this is HSUPA
                 power, aclr, subtest_number = subtest
                 data[subtest_number] = [power, aclr]
 
             elif self.chcoding == 'FIXREFCH':  # this is HSDPA
                 if subtest is not None:
-                    power, aclr, evm, subtest_number = subtest
-                    data[subtest_number] = [power, aclr, evm]
+                    if len(subtest) == 4:
+                        power, aclr, evm, subtest_number = subtest
+                        data[subtest_number] = [power, aclr, evm]
+                    else:
+                        power, aclr, subtest_number = subtest
+                        data[subtest_number] = [power, aclr]
 
         logger.debug(data)
         return data
@@ -2553,7 +2613,8 @@ class Anritsu8820(pyvisa.ResourceManager):
 
             elif self.chcoding == 'FIXREFCH':  # this is HSDPA
                 """
-                    HSDPA format:{subtest_number: [power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
+                    HSDPA format:{subtest_number: [power, ACLR], ...} and ACLR format is list format like [L, M, H]  
+                    only subtest3 is for [power, ACLR, evm], evm to pickup the worst vaule from p0, p1, p2, p3
                 """
                 excel_path = f'results_HSDPA.xlsx'
 
@@ -2574,9 +2635,10 @@ class Anritsu8820(pyvisa.ResourceManager):
                     logger.debug('start to fill ACLR')
                     self.fill_progress_hspa_tx(self.std, ws, band, dl_ch, test_items, 1, subtest)
 
-                    ws = wb[f'EVM']  # EVM
-                    logger.debug('start to fill EVM')
-                    self.fill_progress_hspa_tx(self.std, ws, band, dl_ch, test_items, 2, subtest)
+                    if subtest == 3:
+                        ws = wb[f'EVM']  # EVM
+                        logger.debug('start to fill EVM')
+                        self.fill_progress_hspa_tx(self.std, ws, band, dl_ch, test_items, 2, subtest)
 
                     wb.save(excel_path)
                     wb.close()

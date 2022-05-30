@@ -14,7 +14,10 @@ class MainApp:
         builder.add_from_file(PROJECT_UI)
         self.mainwindow = builder.get_object("toplevel2", master)
 
-        self.equipment = None
+        self.instrument = None
+        self.tx = None
+        self.rx = None
+        self.rx_sweep = None
         self.B5 = None
         self.B8 = None
         self.B12 = None
@@ -59,6 +62,7 @@ class MainApp:
         self.W8 = None
         self.W6 = None
         self.W19 = None
+        self.chcoding = None
         self.GSM850 = None
         self.GSM900 = None
         self.GSM_all = None
@@ -68,7 +72,10 @@ class MainApp:
         builder.import_variables(
             self,
             [
-                "equipment",
+                "instrument",
+                "tx",
+                "rx",
+                "rx_sweep",
                 "B5",
                 "B8",
                 "B12",
@@ -113,6 +120,7 @@ class MainApp:
                 "W8",
                 "W6",
                 "W19",
+                "chcoding",
                 "GSM850",
                 "GSM900",
                 "GSM_all",
@@ -127,120 +135,62 @@ class MainApp:
     def run(self):
         self.mainwindow.mainloop()
 
-    def select(self):
+    def inst_select(self):
+        print(self.instrument.get())
+
+    def measure(self):
+        print(self.B5.get())
+
+    def band_select(self):
+        print(self.B5.get())
+
+    def off_all_none_LB(self, event=None):
         pass
 
-    def LB_all_checked(self, event=1):
-        self.B5.set(1)
-        self.B8.set(1)
-        self.B12.set(1)
-        self.B13.set(1)
-        self.B14.set(1)
-        self.B17.set(1)
-        self.B18.set(1)
-        self.B19.set(1)
-        self.B20.set(1)
-        self.B21.set(1)
-        self.B26.set(1)
-        self.B28.set(1)
-        self.B29.set(1)
-        self.B32.set(1)
-        self.B71.set(1)
-        self.LB_none.set(0)
+    def LB_all_checked(self, event=None):
+        pass
 
-    def LB_none_checked(self, event=1):
-        self.B5.set(0)
-        self.B8.set(0)
-        self.B12.set(0)
-        self.B13.set(0)
-        self.B14.set(0)
-        self.B17.set(0)
-        self.B18.set(0)
-        self.B19.set(0)
-        self.B20.set(0)
-        self.B21.set(0)
-        self.B26.set(0)
-        self.B28.set(0)
-        self.B29.set(0)
-        self.B32.set(0)
-        self.B71.set(0)
-        self.LB_all.set(0)
+    def LB_none_checked(self, event=None):
+        pass
 
-    def MHB_all_checked(self, event=1):
-        self.B1.set(1)
-        self.B2.set(1)
-        self.B25.set(1)
-        self.B3.set(1)
-        self.B4.set(1)
-        self.B66.set(1)
-        self.B7.set(1)
-        self.B30.set(1)
-        self.B39.set(1)
-        self.B40.set(1)
-        self.B38.set(1)
-        self.B41.set(1)
-        self.MHB_none.set(0)
+    def off_all_none_MHB(self, event=None):
+        pass
 
-    def MHB_none_checked(self, event=1):
-        self.B1.set(0)
-        self.B2.set(0)
-        self.B25.set(0)
-        self.B3.set(0)
-        self.B4.set(0)
-        self.B66.set(0)
-        self.B7.set(0)
-        self.B30.set(0)
-        self.B39.set(0)
-        self.B40.set(0)
-        self.B38.set(0)
-        self.B41.set(0)
-        self.MHB_all.set(0)
+    def MHB_all_checked(self, event=None):
+        pass
 
-    def UHB_all_checked(self, event=1):
-        self.B42.set(1)
-        self.B48.set(1)
-        self.UHB_none.set(0)
+    def MHB_none_checked(self, event=None):
+        pass
 
-    def UHB_none_checked(self, event=1):
-        self.B42.set(0)
-        self.B48.set(0)
-        self.UHB_all.set(0)
+    def off_all_none_UHB(self, event=None):
+        pass
 
-    def WCDMA_all_checked(self, event=1):
-        self.W1.set(1)
-        self.W2.set(1)
-        self.W4.set(1)
-        self.W5.set(1)
-        self.W8.set(1)
-        self.W6.set(1)
-        self.W19.set(1)
-        self.WCDMA_none.set(0)
+    def UHB_all_checked(self, event=None):
+        pass
 
-    def WCDMA_none_checked(self, event=1):
-        self.W1.set(0)
-        self.W2.set(0)
-        self.W4.set(0)
-        self.W5.set(0)
-        self.W8.set(0)
-        self.W6.set(0)
-        self.W19.set(0)
-        self.WCDMA_all.set(0)
+    def UHB_none_checked(self, event=None):
+        pass
 
-    def GSM_all_checked(self, event=1):
-        self.GSM850.set(1)
-        self.GSM900.set(1)
-        self.GSM1800.set(1)
-        self.GSM1900.set(1)
-        self.GSM_none.set(0)
+    def off_all_none_WCDMA(self, event=None):
+        pass
 
-    def GSM_none_checked(self, event=1):
-        self.GSM850.set(0)
-        self.GSM900.set(0)
-        self.GSM1800.set(0)
-        self.GSM1900.set(0)
-        self.GSM_all.set(0)
+    def WCDMA_all_checked(self, event=None):
+        pass
 
+    def WCDMA_none_checked(self, event=None):
+        pass
 
+    def chcoding_select(self):
+        pass
+
+    def off_all_none_GSM(self, event=None):
+        pass
+
+    def GSM_all_checked(self, event=None):
+        pass
+
+    def GSM_none_checked(self, event=None):
+        pass
 
 
 if __name__ == "__main__":

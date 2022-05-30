@@ -16,10 +16,10 @@
         </layout>
         <child>
           <object class="ttk.Radiobutton" id="radiobutton_Agilent8960">
-            <property name="command" type="command" cbtype="simple">select</property>
+            <property name="command" type="command" cbtype="simple">inst_select</property>
             <property name="text" translatable="yes">Agilent8960</property>
             <property name="value">Agilent8960</property>
-            <property name="variable">string:equipment</property>
+            <property name="variable">string:instrument</property>
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -31,10 +31,10 @@
         </child>
         <child>
           <object class="ttk.Radiobutton" id="radiobutton_Anritsu8821">
-            <property name="command" type="command" cbtype="simple">select</property>
+            <property name="command" type="command" cbtype="simple">inst_select</property>
             <property name="text" translatable="yes">Anritsu8821</property>
             <property name="value">Anritsu8821</property>
-            <property name="variable">string:equipment</property>
+            <property name="variable">string:instrument</property>
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -46,10 +46,10 @@
         </child>
         <child>
           <object class="ttk.Radiobutton" id="radiobutton_Anritsu8820">
-            <property name="command" type="command" cbtype="simple">select</property>
+            <property name="command" type="command" cbtype="simple">inst_select</property>
             <property name="text" translatable="yes">Anritsu8820</property>
             <property name="value">Anritsu8820</property>
-            <property name="variable">string:equipment</property>
+            <property name="variable">string:instrument</property>
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -61,13 +61,47 @@
         </child>
         <child>
           <object class="ttk.Button" id="button_run">
+            <property name="command" type="command" cbtype="simple">measure</property>
             <property name="text" translatable="yes">Run</property>
             <layout manager="grid">
               <property name="column">0</property>
               <property name="ipadx">15</property>
               <property name="ipady">89</property>
-              <property name="row">3</property>
+              <property name="row">6</property>
               <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_tx">
+            <property name="text" translatable="yes">Tx</property>
+            <property name="variable">boolean:tx</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">3</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_rx">
+            <property name="text" translatable="yes">Rx</property>
+            <property name="variable">boolean:rx</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">4</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_rx_sweep">
+            <property name="text" translatable="yes">Rx_Sweep</property>
+            <property name="variable">boolean:rx_sweep</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">5</property>
+              <property name="sticky">w</property>
             </layout>
           </object>
         </child>
@@ -85,10 +119,11 @@
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B5">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="command" type="command" cbtype="simple">band_select</property>
+            <property name="onvalue">5</property>
             <property name="text" translatable="yes">B5</property>
-            <property name="variable">string:B5</property>
+            <property name="variable">int:B5</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -100,10 +135,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B8">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">12</property>
             <property name="text" translatable="yes">B8</property>
-            <property name="variable">string:B8</property>
+            <property name="variable">int:B8</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -115,10 +150,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B12">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">12</property>
             <property name="text" translatable="yes">B12</property>
-            <property name="variable">string:B12</property>
+            <property name="variable">int:B12</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -130,10 +165,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B13">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">13</property>
             <property name="text" translatable="yes">B13</property>
-            <property name="variable">string:B13</property>
+            <property name="variable">int:B13</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -145,10 +180,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B14">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">14</property>
             <property name="text" translatable="yes">B14</property>
-            <property name="variable">string:B14</property>
+            <property name="variable">int:B14</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -160,10 +195,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B17">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">17</property>
             <property name="text" translatable="yes">B17</property>
-            <property name="variable">string:B17</property>
+            <property name="variable">int:B17</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -175,10 +210,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B18">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">18</property>
             <property name="text" translatable="yes">B18</property>
-            <property name="variable">string:B18</property>
+            <property name="variable">int:B18</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -190,10 +225,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B19">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">19</property>
             <property name="text" translatable="yes">B19</property>
-            <property name="variable">string:B19</property>
+            <property name="variable">int:B19</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -205,10 +240,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B20">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">20</property>
             <property name="text" translatable="yes">B20</property>
-            <property name="variable">string:B20</property>
+            <property name="variable">int:B20</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -220,10 +255,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B26">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">26</property>
             <property name="text" translatable="yes">B26</property>
-            <property name="variable">string:B26</property>
+            <property name="variable">int:B26</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -235,10 +270,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B28">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">28</property>
             <property name="text" translatable="yes">B28</property>
-            <property name="variable">string:B28</property>
+            <property name="variable">int:B28</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -250,10 +285,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B29">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">29</property>
             <property name="text" translatable="yes">B29</property>
-            <property name="variable">string:B29</property>
+            <property name="variable">int:B29</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -265,10 +300,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B32">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">32</property>
             <property name="text" translatable="yes">B32</property>
-            <property name="variable">string:B32</property>
+            <property name="variable">int:B32</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -280,10 +315,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B71">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">71</property>
             <property name="text" translatable="yes">B71</property>
-            <property name="variable">string:B71</property>
+            <property name="variable">int:B71</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -295,10 +330,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_LB_all">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">all</property>
-            <property name="variable">string:LB_all</property>
+            <property name="variable">boolean:LB_all</property>
             <bind sequence="&lt;1&gt;" handler="LB_all_checked" add="" />
             <layout manager="grid">
               <property name="column">1</property>
@@ -311,10 +344,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B21">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">21</property>
             <property name="text" translatable="yes">B21</property>
-            <property name="variable">string:B21</property>
+            <property name="variable">int:B21</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -326,10 +359,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_LB_none">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">none</property>
-            <property name="variable">string:LB_none</property>
+            <property name="variable">boolean:LB_none</property>
             <bind sequence="&lt;1&gt;" handler="LB_none_checked" add="" />
             <layout manager="grid">
               <property name="column">1</property>
@@ -354,10 +385,10 @@
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B1">
-            <property name="offvalue">0</property>
             <property name="onvalue">1</property>
             <property name="text" translatable="yes">B1</property>
-            <property name="variable">string:B1</property>
+            <property name="variable">int:B1</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -369,10 +400,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B2">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">2</property>
             <property name="text" translatable="yes">B2</property>
-            <property name="variable">string:B2</property>
+            <property name="variable">boolean:B2</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -384,10 +415,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B3">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">3</property>
             <property name="text" translatable="yes">B3</property>
-            <property name="variable">string:B3</property>
+            <property name="variable">int:B3</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -399,10 +430,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B4">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">4</property>
             <property name="text" translatable="yes">B4</property>
-            <property name="variable">string:B4</property>
+            <property name="variable">int:B4</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -414,10 +445,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B7">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">7</property>
             <property name="text" translatable="yes">B7</property>
-            <property name="variable">string:B7</property>
+            <property name="variable">int:B7</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -429,10 +460,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B30">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">30</property>
             <property name="text" translatable="yes">B30</property>
-            <property name="variable">string:B30</property>
+            <property name="variable">int:B30</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -444,10 +475,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B25">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">25</property>
             <property name="text" translatable="yes">B25</property>
-            <property name="variable">string:B25</property>
+            <property name="variable">boolean:B25</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -459,10 +490,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B66">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">66</property>
             <property name="text" translatable="yes">B66</property>
-            <property name="variable">string:B66</property>
+            <property name="variable">int:B66</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -474,10 +505,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B39">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">39</property>
             <property name="text" translatable="yes">B39</property>
-            <property name="variable">string:B39</property>
+            <property name="variable">int:B39</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -489,10 +520,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B40">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">40</property>
             <property name="text" translatable="yes">B40</property>
-            <property name="variable">string:B40</property>
+            <property name="variable">int:B40</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -504,10 +535,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B38">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">38</property>
             <property name="text" translatable="yes">B38</property>
-            <property name="variable">string:B38</property>
+            <property name="variable">int:B38</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -519,10 +550,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B41">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">41</property>
             <property name="text" translatable="yes">B41</property>
             <property name="variable">string:B41</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
               <property name="padx">5</property>
@@ -534,10 +565,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_MHB_all">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">all</property>
-            <property name="variable">string:MHB_all</property>
+            <property name="variable">boolean:MHB_all</property>
             <bind sequence="&lt;1&gt;" handler="MHB_all_checked" add="" />
             <layout manager="grid">
               <property name="column">1</property>
@@ -550,10 +579,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_MHB_none">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">none</property>
-            <property name="variable">string:MHB_none</property>
+            <property name="variable">boolean:MHB_none</property>
             <bind sequence="&lt;1&gt;" handler="MHB_none_checked" add="" />
             <layout manager="grid">
               <property name="column">1</property>
@@ -578,10 +605,10 @@
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B42">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">42</property>
             <property name="text" translatable="yes">B42</property>
-            <property name="variable">string:B42</property>
+            <property name="variable">int:B42</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -593,10 +620,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B48">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">48</property>
             <property name="text" translatable="yes">B48</property>
-            <property name="variable">string:B48</property>
+            <property name="variable">int:B48</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -608,10 +635,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_UHB_all">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">all</property>
-            <property name="variable">string:UHB_all</property>
+            <property name="variable">boolean:UHB_all</property>
             <bind sequence="&lt;1&gt;" handler="UHB_all_checked" add="" />
             <layout manager="grid">
               <property name="column">0</property>
@@ -624,10 +649,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_UHB_none">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">none</property>
-            <property name="variable">string:UHB_none</property>
+            <property name="variable">boolean:UHB_none</property>
             <bind sequence="&lt;1&gt;" handler="UHB_none_checked" add="" />
             <layout manager="grid">
               <property name="column">0</property>
@@ -652,10 +675,10 @@
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W1">
-            <property name="offvalue">0</property>
             <property name="onvalue">1</property>
             <property name="text" translatable="yes">B1</property>
-            <property name="variable">string:W1</property>
+            <property name="variable">int:W1</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -667,10 +690,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W2">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">2</property>
             <property name="text" translatable="yes">B2</property>
-            <property name="variable">string:W2</property>
+            <property name="variable">int:W2</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -682,10 +705,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_WCDMA_all">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">all</property>
-            <property name="variable">string:WCDMA_all</property>
+            <property name="variable">boolean:WCDMA_all</property>
             <bind sequence="&lt;1&gt;" handler="WCDMA_all_checked" add="" />
             <layout manager="grid">
               <property name="column">0</property>
@@ -698,10 +719,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_WCDMA_none">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">none</property>
-            <property name="variable">string:WCDMA_none</property>
+            <property name="variable">boolean:WCDMA_none</property>
             <bind sequence="&lt;1&gt;" handler="WCDMA_none_checked" add="" />
             <layout manager="grid">
               <property name="column">0</property>
@@ -714,10 +733,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W4">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">4</property>
             <property name="text" translatable="yes">B4</property>
-            <property name="variable">string:W4</property>
+            <property name="variable">int:W4</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -729,10 +748,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W5">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">5</property>
             <property name="text" translatable="yes">B5</property>
-            <property name="variable">string:W5</property>
+            <property name="variable">int:W5</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -744,10 +763,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W8">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">8</property>
             <property name="text" translatable="yes">B8</property>
-            <property name="variable">string:W8</property>
+            <property name="variable">int:W8</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -759,10 +778,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W6">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">6</property>
             <property name="text" translatable="yes">B6</property>
-            <property name="variable">string:W6</property>
+            <property name="variable">int:W6</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -774,16 +793,55 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W19">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">19</property>
             <property name="text" translatable="yes">B19</property>
-            <property name="variable">string:W19</property>
+            <property name="variable">int:W19</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
               <property name="pady">5</property>
               <property name="row">6</property>
               <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="radiobutton_HSUPA">
+            <property name="command" type="command" cbtype="simple">chcoding_select</property>
+            <property name="text" translatable="yes">HSDPA</property>
+            <property name="value">FIXREFCH</property>
+            <property name="variable">string:chcoding</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">9</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="radiobutton_HSDPA">
+            <property name="command" type="command" cbtype="simple">chcoding_select</property>
+            <property name="text" translatable="yes">HSUPA</property>
+            <property name="value">EDCHTEST</property>
+            <property name="variable">string:chcoding</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">10</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="radiobutton_WCDMA">
+            <property name="command" type="command" cbtype="simple">chcoding_select</property>
+            <property name="text" translatable="yes">WCDMA</property>
+            <property name="value">REFMEASCH</property>
+            <property name="variable">string:chcoding</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">11</property>
+              <property name="sticky">w</property>
             </layout>
           </object>
         </child>
@@ -802,10 +860,10 @@
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM850">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">800</property>
             <property name="text" translatable="yes">GSM850</property>
-            <property name="variable">string:GSM850</property>
+            <property name="variable">int:GSM850</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -817,10 +875,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM900">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">900</property>
             <property name="text" translatable="yes">GSM900</property>
-            <property name="variable">string:GSM900</property>
+            <property name="variable">int:GSM900</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -832,10 +890,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM_all">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">all</property>
-            <property name="variable">string:GSM_all</property>
+            <property name="variable">boolean:GSM_all</property>
             <bind sequence="&lt;1&gt;" handler="GSM_all_checked" add="" />
             <layout manager="grid">
               <property name="column">0</property>
@@ -848,10 +904,8 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM_none">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
             <property name="text" translatable="yes">none</property>
-            <property name="variable">string:GSM_none</property>
+            <property name="variable">boolean:GSM_none</property>
             <bind sequence="&lt;1&gt;" handler="GSM_none_checked" add="" />
             <layout manager="grid">
               <property name="column">0</property>
@@ -864,10 +918,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM1800">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">1800</property>
             <property name="text" translatable="yes">GSM1800</property>
-            <property name="variable">string:GSM1800</property>
+            <property name="variable">int:GSM1800</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
@@ -879,10 +933,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM1900">
-            <property name="offvalue">0</property>
-            <property name="onvalue">1</property>
+            <property name="onvalue">1900</property>
             <property name="text" translatable="yes">GSM1900</property>
-            <property name="variable">string:GSM1900</property>
+            <property name="variable">int:GSM1900</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
             <layout manager="grid">
               <property name="column">0</property>
               <property name="padx">5</property>
