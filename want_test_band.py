@@ -11,7 +11,7 @@ lte_bandwidths = [10]     # 1.4,3,5,10,15,20
 tech = ['LTE']  # LTE | WCDMA | GSM | HSUPA | HSDPA
 channel = 'LMH'
 
-fdd_tdd_cross_test = 0     #this is only for 8821,  0: only measure one of FDD or TDD; 1: measure both FDD and TDD
+fdd_tdd_cross_test = 0     # this is only for 8821,  0: only measure one of FDD or TDD; 1: measure both FDD and TDD
 
 tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 

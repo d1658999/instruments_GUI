@@ -26,6 +26,7 @@
             <child>
               <object class="ttk.Radiobutton" id="radiobutton_Agilent8960">
                 <property name="command" type="command" cbtype="simple">inst_select</property>
+                <property name="state">disabled</property>
                 <property name="text" translatable="yes">Agilent8960</property>
                 <property name="value">Agilent8960</property>
                 <property name="variable">string:instrument</property>
@@ -86,7 +87,23 @@
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="ipadx">10</property>
-                  <property name="ipady">95</property>
+                  <property name="ipady">65</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="button_thd">
+                <property name="command" type="command" cbtype="simple">thermal_dis</property>
+                <property name="text" translatable="yes">Thermal
+Disable</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="ipadx">10</property>
+                  <property name="ipady">10</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
@@ -793,6 +810,7 @@
           <object class="ttk.Checkbutton" id="checkbutton_GSM850">
             <property name="command" type="command" cbtype="simple">wanted_band_GSM</property>
             <property name="onvalue">850</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">GSM850</property>
             <property name="variable">int:GSM850</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
@@ -809,6 +827,7 @@
           <object class="ttk.Checkbutton" id="checkbutton_GSM900">
             <property name="command" type="command" cbtype="simple">wanted_band_GSM</property>
             <property name="onvalue">900</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">GSM900</property>
             <property name="variable">int:GSM900</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
@@ -824,6 +843,7 @@
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM_all">
             <property name="command" type="command" cbtype="simple">GSM_all_state</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">all</property>
             <property name="variable">boolean:GSM_all</property>
             <layout manager="grid">
@@ -839,6 +859,7 @@
           <object class="ttk.Checkbutton" id="checkbutton_GSM1800">
             <property name="command" type="command" cbtype="simple">wanted_band_GSM</property>
             <property name="onvalue">1800</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">GSM1800</property>
             <property name="variable">int:GSM1800</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
@@ -855,6 +876,7 @@
           <object class="ttk.Checkbutton" id="checkbutton_GSM1900">
             <property name="command" type="command" cbtype="simple">wanted_band_GSM</property>
             <property name="onvalue">1900</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">GSM1900</property>
             <property name="variable">int:GSM1900</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_GSM" add="" />
@@ -1172,7 +1194,7 @@
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">w</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -1193,7 +1215,7 @@
             <child>
               <object class="ttk.Checkbutton" id="checkbutton_WCDMA">
                 <property name="command" type="command" cbtype="simple">wanted_tech</property>
-                <property name="text" translatable="yes">WCDMA</property>
+                <property name="text" translatable="yes">WCDMA  </property>
                 <property name="variable">boolean:tech_WCDMA</property>
                 <layout manager="grid">
                   <property name="column">0</property>
@@ -1207,6 +1229,7 @@
             <child>
               <object class="ttk.Checkbutton" id="checkbutton5">
                 <property name="command" type="command" cbtype="simple">wanted_tech</property>
+                <property name="state">disabled</property>
                 <property name="text" translatable="yes">GSM</property>
                 <property name="variable">boolean:tech_GSM</property>
                 <layout manager="grid">
@@ -1247,14 +1270,14 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Label" id="label2">
+              <object class="ttk.Label" id="label_bw">
                 <property name="text" translatable="yes">Bw</property>
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">w</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -1342,6 +1365,47 @@
                 </layout>
               </object>
             </child>
+            <child>
+              <object class="ttk.Label" id="label_rx_txpower">
+                <property name="text" translatable="yes">Tx Power
+(sensitivity use)</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_TxMax">
+                <property name="command" type="command" cbtype="simple">wanted_ue_pwr</property>
+                <property name="text" translatable="yes">TxMax</property>
+                <property name="variable">boolean:TxMax</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_Tx_m10">
+                <property name="command" type="command" cbtype="simple">wanted_ue_pwr</property>
+                <property name="text" translatable="yes">-10dBm</property>
+                <property name="variable">boolean:TxLow</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -1351,6 +1415,7 @@
             <layout manager="grid">
               <property name="column">0</property>
               <property name="row">1</property>
+              <property name="sticky">w</property>
             </layout>
             <child>
               <object class="ttk.Label" id="label3">
@@ -1383,6 +1448,7 @@
                 <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
                 <property name="text" translatable="yes">Rx</property>
                 <property name="variable">boolean:rx</property>
+                <bind sequence="&lt;1&gt;" handler="rx_auto_check_ue_pwr" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">5</property>
@@ -1397,6 +1463,7 @@
                 <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
                 <property name="text" translatable="yes">Rx_Sweep</property>
                 <property name="variable">boolean:rx_sweep</property>
+                <bind sequence="&lt;1&gt;" handler="sweep_auto_check_ue_pwr" add="" />
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">5</property>

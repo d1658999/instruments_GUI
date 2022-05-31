@@ -3,6 +3,7 @@ import time
 import serial.tools.list_ports
 import logging
 from logging.config import fileConfig
+from thermal_disable import thd
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -51,7 +52,6 @@ def main():
     s.fly_on()
     time.sleep(1)
     s.fly_off()
-
 
 if __name__ == '__main__':
     main()

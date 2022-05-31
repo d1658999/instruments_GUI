@@ -744,6 +744,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             logger.debug('TPC DOWN')
             time.sleep(0.15)
             self.inst.write('TPC_CMD_DOWN')
+            time.sleep(0.1)
             self.set_to_measure()
         elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             self.set_input_level(24)
@@ -752,6 +753,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('DTCHPAT PN9')
             self.inst.write('SET_HSDELTA_CQI 8')
             self.inst.write('SET_HSSUBTEST SUBTEST1')
+            time.sleep(0.1)
             self.set_to_measure()
 
     def get_hsdpa_evm(self):
@@ -774,6 +776,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.write('TPCPAT ALL1')
         time.sleep(0.3)
         self.inst.write('TPCPAT ALT')
+        time.sleep(0.1)
         self.set_to_measure()
         evm_hpm = self.inst.query('POINT_EVM? ALL').strip().split(',')   # p0, p1, p2, p3
         logger.debug(evm_hpm)
@@ -886,6 +889,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('DTCHPAT PN9')
             self.inst.write('SET_HSDELTA_CQI 8')
             self.inst.write('SET_HSSUBTEST SUBTEST2')
+            time.sleep(0.15)
             self.set_to_measure()
 
     def get_subtest2_power_aclr(self):
@@ -956,6 +960,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('DTCHPAT PN9')
             self.inst.write('SET_HSDELTA_CQI 8')
             self.inst.write('SET_HSSUBTEST SUBTEST3')
+            time.sleep(0.15)
             self.set_to_measure()
 
     def get_subtest3_power_aclr(self):
@@ -1027,6 +1032,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('DTCHPAT PN9')
             self.inst.write('SET_HSDELTA_CQI 8')
             self.inst.write('SET_HSSUBTEST SUBTEST4')
+            time.sleep(0.15)
             self.set_to_measure()
 
     def get_subtest4_power_aclr(self):
@@ -1588,7 +1594,9 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.query('*OPC?')
 
         validation_list = []
+        time.sleep(0.1)
         self.set_to_measure()
+
 
         self.pwr = self.get_uplink_power('WCDMA')
         validation_list.append(self.pwr)
