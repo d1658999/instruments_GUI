@@ -198,7 +198,7 @@ class MainApp():
         self.mainwindow.mainloop()
 
     def thermal_dis(self):
-        from thermal_disable import test_file
+        from thermal_disable import thd
         thd()
 
     def init_select(self):

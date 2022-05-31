@@ -1,32 +1,3 @@
-[20220531 23:19:34 DEBUG   ] True
-[20220531 23:19:34 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
-[20220531 23:19:34 INFO    ] default instrument: Anritsu8820
-[20220531 23:19:34 DEBUG   ] Nothing to select for LTE
-[20220531 23:19:34 INFO    ] select LTE band: []
-[20220531 23:19:50 DEBUG   ] 1
-[20220531 23:19:50 INFO    ] select WCDMA band: [1]
-[20220531 23:19:50 DEBUG   ] 1
-[20220531 23:19:50 DEBUG   ] 2
-[20220531 23:19:50 INFO    ] select WCDMA band: [1, 2]
-[20220531 23:19:51 DEBUG   ] 2
-[20220531 23:19:51 INFO    ] select WCDMA band: [2]
-[20220531 23:19:52 DEBUG   ] Nothing to select for WCDMA
-[20220531 23:19:52 INFO    ] select WCDMA band: []
-[20220531 23:19:56 DEBUG   ] MHB band all is checked
-[20220531 23:19:56 DEBUG   ] 1
-[20220531 23:19:56 DEBUG   ] 2
-[20220531 23:19:56 DEBUG   ] 3
-[20220531 23:19:56 DEBUG   ] 4
-[20220531 23:19:56 DEBUG   ] 7
-[20220531 23:19:56 DEBUG   ] 25
-[20220531 23:19:56 DEBUG   ] 66
-[20220531 23:19:56 DEBUG   ] 30
-[20220531 23:19:56 DEBUG   ] 39
-[20220531 23:19:56 DEBUG   ] 40
-[20220531 23:19:56 DEBUG   ] 38
-[20220531 23:19:56 INFO    ] select LTE band: [1, 2, 3, 4, 7, 25, 66, 30, 39, 40, 38]
-[20220531 23:20:07 DEBUG   ] True
-[20220531 23:20:07 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
-[20220531 23:20:07 INFO    ] default instrument: Anritsu8820
-[20220531 23:20:07 DEBUG   ] Nothing to select for LTE
-[20220531 23:20:07 INFO    ] select LTE band: []
+[20220531 23:25:00 DEBUG   ] True
+[20220531 23:25:00 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
+[20220531 23:25:00 INFO    ] default instrument: Anritsu8820

@@ -1,6 +1,6 @@
 import os
 import ui_init
-from main import MainApp
+
 
 def thd():
     os.system('adb root')
