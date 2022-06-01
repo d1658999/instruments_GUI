@@ -305,16 +305,20 @@ class Anritsu8820(pyvisa.ResourceManager):
             self.inst.write('CALLRFR')
             while conn_state == cm_pmt.ANRITSU_IDLE:
                 self.inst.write('CALLSO')
-                time.sleep(5)
                 logger.info('IDLE')
                 logger.info('Start to ON and OFF')
                 self.flymode_circle()
-                logger.info('Waiting for 10 seconds')
-                time.sleep(10)
-                logger.info('Start calling')
-                conn_state = int(self.inst.query("CALLSTAT?").strip())
-            logger.info('START CALL')
-            self.inst.write('CALLSA')
+                time.sleep(3)
+                self.inst.write('CALLSA')
+                while conn_state != cm_pmt.ANRITSU_CONNECTED:
+                    logger.info('Waiting for connection...')
+                    time.sleep(1)
+                    conn_state = int(self.inst.query("CALLSTAT?").strip())
+
+                # logger.info('Start calling')
+                # conn_state = int(self.inst.query("CALLSTAT?").strip())
+            # logger.info('START CALL')
+            # self.inst.write('CALLSA')
             logger.info('Connected')
             time.sleep(1)
 

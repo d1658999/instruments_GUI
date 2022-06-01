@@ -5,6 +5,7 @@ import pygubu
 import datetime
 import logging
 from logging.config import fileConfig
+import ui_init
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -191,14 +192,195 @@ class MainApp():
         )
 
         builder.connect_callbacks(self)
-        self.init_select()
+        # self.init_select()
+        self.import_ui_setting()
 
     def run(self):
         self.mainwindow.mainloop()
 
+    def import_ui_setting(self):
+        """
+        skip bands_gsm
+
+        """
+        logger.info('Import the last setting')
+        self.instrument.set(ui_init.instrument)
+        self.off_all_reset_tech()
+        self.off_all_reset_bw()
+        self.off_all_reset_ue_power()
+        self.off_all_reset_ch()
+        self.tx.set(ui_init.tx)
+        self.rx.set(ui_init.rx)
+        self.rx_sweep.set(ui_init.rx_sweep)
+        self.off_all_reset_GSM()
+        self.off_all_reset_HSDPA()
+        self.off_all_reset_HSUPA()
+        self.off_all_reset_WCDMA()
+        self.off_all_reset_LB()
+        self.off_all_reset_MHB()
+        self.off_all_reset_UHB()
+
+        for band_lte in ui_init.bands_lte:
+            if band_lte == 1:
+                self.B1.set(band_lte)
+            elif band_lte == 2:
+                self.B2.set(band_lte)
+            elif band_lte == 3:
+                self.B3.set(band_lte)
+            elif band_lte == 4:
+                self.B4.set(band_lte)
+            elif band_lte == 5:
+                self.B5.set(band_lte)
+            elif band_lte == 7:
+                self.B7.set(band_lte)
+            elif band_lte == 8:
+                self.B8.set(band_lte)
+            elif band_lte == 12:
+                self.B12.set(band_lte)
+            elif band_lte == 13:
+                self.B13.set(band_lte)
+            elif band_lte == 14:
+                self.B14.set(band_lte)
+            elif band_lte == 17:
+                self.B17.set(band_lte)
+            elif band_lte == 18:
+                self.B18.set(band_lte)
+            elif band_lte == 19:
+                self.B19.set(band_lte)
+            elif band_lte == 20:
+                self.B20.set(band_lte)
+            elif band_lte == 21:
+                self.B21.set(band_lte)
+            elif band_lte == 25:
+                self.B25.set(band_lte)
+            elif band_lte == 26:
+                self.B26.set(band_lte)
+            elif band_lte == 28:
+                self.B28.set(band_lte)
+            elif band_lte == 29:
+                self.B29.set(band_lte)
+            elif band_lte == 30:
+                self.B30.set(band_lte)
+            elif band_lte == 32:
+                self.B32.set(band_lte)
+            elif band_lte == 38:
+                self.B38.set(band_lte)
+            elif band_lte == 39:
+                self.B39.set(band_lte)
+            elif band_lte == 40:
+                self.B40.set(band_lte)
+            elif band_lte == 41:
+                self.B41.set(band_lte)
+            elif band_lte == 42:
+                self.B42.set(band_lte)
+            elif band_lte == 48:
+                self.B48.set(band_lte)
+            elif band_lte == 66:
+                self.B66.set(band_lte)
+            elif band_lte == 71:
+                self.B71.set(band_lte)
+
+        for band_wcdma in ui_init.bands_wcdma:
+            if band_wcdma == 1:
+                self.W1.set(band_wcdma)
+            elif band_wcdma == 2:
+                self.W2.set(band_wcdma)
+            elif band_wcdma == 4:
+                self.W4.set(band_wcdma)
+            elif band_wcdma == 5:
+                self.W5.set(band_wcdma)
+            elif band_wcdma == 8:
+                self.W8.set(band_wcdma)
+            elif band_wcdma == 6:
+                self.W6.set(band_wcdma)
+            elif band_wcdma == 19:
+                self.W19.set(band_wcdma)
+
+        for band_hsupa in ui_init.bands_hsupa:
+            if band_hsupa == 1:
+                self.U1.set(band_hsupa)
+            elif band_hsupa == 2:
+                self.U2.set(band_hsupa)
+            elif band_hsupa == 4:
+                self.U4.set(band_hsupa)
+            elif band_hsupa == 5:
+                self.U5.set(band_hsupa)
+            elif band_hsupa == 8:
+                self.U8.set(band_hsupa)
+            elif band_hsupa == 6:
+                self.U6.set(band_hsupa)
+            elif band_hsupa == 19:
+                self.U19.set(band_hsupa)
+
+        for band_hsdpa in ui_init.bands_hsdpa:
+            if band_hsdpa == 1:
+                self.D1.set(band_hsdpa)
+            elif band_hsdpa == 2:
+                self.D2.set(band_hsdpa)
+            elif band_hsdpa == 4:
+                self.D4.set(band_hsdpa)
+            elif band_hsdpa == 5:
+                self.D5.set(band_hsdpa)
+            elif band_hsdpa == 8:
+                self.D8.set(band_hsdpa)
+            elif band_hsdpa == 6:
+                self.D6.set(band_hsdpa)
+            elif band_hsdpa == 19:
+                self.D19.set(band_hsdpa)
+
+        # skip
+        # for band_gsm in ui_init.bands_gsm:
+        #     if band_gsm == 850:
+        #         self.GSM850.set(band_gsm)
+        #     elif band_gsm == 900:
+        #         self.GSM900.set(band_gsm)
+        #     elif band_gsm == 1800:
+        #         self.GSM1800.set(band_gsm)
+        #     elif band_gsm == 1900:
+        #         self.GSM1900.set(band_gsm)
+
+        for tech in ui_init.tech:
+            if tech == 'LTE':
+                self.tech_LTE.set(True)
+            elif tech == 'WCDMA':
+                self.tech_WCDMA.set(True)
+            elif tech == 'HSUPA':
+                self.tech_HSUPA.set(True)
+            elif tech == 'HSDPA':
+                self.tech_HSDPA.set(True)
+            # elif tech == 'GSM':
+            #     self.tech_GSM.set(True)
+
+        for bw in ui_init.bw:
+            if bw == 1.4:
+                self.bw1p4.set(True)
+            elif bw == 3:
+                self.bw3.set(True)
+            elif bw == 5:
+                self.bw5.set(True)
+            elif bw == 10:
+                self.bw10.set(True)
+            elif bw == 15:
+                self.bw15.set(True)
+            elif bw == 20:
+                self.bw20.set(True)
+
+        for ue_pwr in ui_init.ue_power:
+            if ue_pwr == 1:
+                self.TxMax.set(True)
+            elif ue_pwr == 0:
+                self.TxLow.set(True)
+
+        for ch in ui_init.chan:
+            if ch == 'L':
+                self.chan_L.set(True)
+            elif ch == 'M':
+                self.chan_M.set(True)
+            elif ch == 'H':
+                self.chan_H.set(True)
 
     def export_ui_setting(self):
-        print('output test')
+        logger.info('Export ui setting')
         tech = self.wanted_tech()
         bw = self.wanted_bw()
         ue_power = self.wanted_ue_pwr()
@@ -298,15 +480,37 @@ class MainApp():
         with open('ui_init.py', 'w') as f:
             f.writelines(new_data)
 
+    def off_all_reset_GSM(self):
+        self.GSM_all.set(False)
+        self.GSM_all_state()
 
+    def off_all_reset_HSDPA(self):
+        self.HSDPA_all.set(False)
+        self.HSDPA_all_state()
+
+    def off_all_reset_HSUPA(self):
+        self.HSUPA_all.set(False)
+        self.HSUPA_all_state()
+
+    def off_all_reset_WCDMA(self):
+        self.WCDMA_all.set(False)
+        self.WCDMA_all_state()
+
+    def off_all_reset_LB(self):
+        self.LB_all.set(False)
+        self.LB_all_state()
+
+    def off_all_reset_MHB(self):
+        self.MHB_all.set(False)
+        self.MHB_all_state()
+
+    def off_all_reset_UHB(self):
+        self.UHB_all.set(False)
+        self.UHB_all_state()
 
     def thermal_dis(self):
         from thermal_disable import thd
         thd()
-
-        # below is test
-        # print(f'output {self.wanted_band_LTE()}')
-        # self.export_ui_setting()
 
     def init_select(self):
         self.instrument.set('Anritsu8820')
@@ -636,8 +840,32 @@ class MainApp():
         logger.info(f'select tech: {self.tech}')
         return self.tech
 
+    def off_all_reset_bw(self):
+        self.bw1p4.set(False)
+        self.bw3.set(False)
+        self.bw5.set(False)
+        self.bw10.set(False)
+        self.bw20.set(False)
+
+    def off_all_reset_tech(self):
+        self.tech_LTE.set(False)
+        self.tech_WCDMA.set(False)
+        self.tech_HSDPA.set(False)
+        self.tech_HSUPA.set(False)
+        self.tech_GSM.set(False)
+
+    def off_all_reset_ue_power(self):
+        self.TxMax.set(False)
+        self.TxLow.set(False)
+
+
+    def off_all_reset_ch(self):
+        self.chan_L.set(False)
+        self.chan_M.set(False)
+        self.chan_H.set(False)
+
     def off_all_none_LB(self, event=None):
-        self.LB_all.set(0)
+        self.LB_all.set(False)
 
     def LB_all_state(self):
         logger.debug(self.LB_all.get())
@@ -680,7 +908,7 @@ class MainApp():
         self.wanted_band_LTE()
 
     def off_all_none_MHB(self, event=None):
-        self.MHB_all.set(0)
+        self.MHB_all.set(False)
 
     def MHB_all_state(self):
         if self.MHB_all.get():
@@ -716,7 +944,8 @@ class MainApp():
         self.wanted_band_LTE()
 
     def off_all_none_UHB(self, event=None):
-        self.UHB_all.set(0)
+        self.UHB_all.set(False)
+
 
     def UHB_all_state(self):
         if self.UHB_all.get():
@@ -732,13 +961,14 @@ class MainApp():
         self.wanted_band_LTE()
 
     def off_all_none_WCDMA(self, event=None):
-        self.WCDMA_all.set(0)
+        self.WCDMA_all.set(False)
+
 
     def off_all_none_HSUPA(self, event=None):
-        self.HSUPA_all.set(0)
+        self.HSUPA_all.set(False)
 
     def off_all_none_HSDPA(self, event=None):
-        self.HSDPA_all.set(0)
+        self.HSDPA_all.set(False)
 
     def WCDMA_all_state(self):
         if self.WCDMA_all.get():
@@ -764,7 +994,7 @@ class MainApp():
         self.wanted_band_WCDMA()
 
     def off_all_none_GSM(self, event=None):
-        self.GSM_all.set(0)
+        self.GSM_all.set(False)
 
     def GSM_all_state(self):
         if self.GSM_all.get():
@@ -841,6 +1071,7 @@ class MainApp():
 
     def measure(self):
         start = datetime.datetime.now()
+        self.export_ui_setting()
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820
