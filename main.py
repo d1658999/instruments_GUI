@@ -400,79 +400,79 @@ class MainApp():
                 if 'bands_lte' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bands_lte) +'\n'
-                    print('replace band LTE')
+                    logger.debug('replace band LTE')
                     line = '='.join(temp_list)
 
                 elif 'bands_wcdma' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bands_wcdma) +'\n'
-                    print('replace band WCDMA')
+                    logger.debug('replace band WCDMA')
                     line = '='.join(temp_list)
 
                 elif 'bands_hsupa' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bands_hsupa) +'\n'
-                    print('replace band HSUPA')
+                    logger.debug('replace band HSUPA')
                     line = '='.join(temp_list)
 
                 elif 'bands_hsdpa' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bands_hsdpa) +'\n'
-                    print('replace band HSDPA')
+                    logger.debug('replace band HSDPA')
                     line = '='.join(temp_list)
 
                 elif 'bands_gsm' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bands_gsm) +'\n'
-                    print('replace band GSM')
+                    logger.debug('replace band GSM')
                     line = '='.join(temp_list)
 
                 elif 'tech' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(tech) +'\n'
-                    print('replace tech setting')
+                    logger.debug('replace tech setting')
                     line = '='.join(temp_list)
 
                 elif 'bw' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bw) +'\n'
-                    print('replace bw setting')
+                    logger.debug('replace bw setting')
                     line = '='.join(temp_list)
 
                 elif 'ue_power' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(ue_power) +'\n'
-                    print('replace ue power setting')
+                    logger.debug('replace ue power setting')
                     line = '='.join(temp_list)
 
                 elif 'instrument' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + '"' + str(instrument) + '"' +'\n'
-                    print('replace instrument setting')
+                    logger.debug('replace instrument setting')
                     line = '='.join(temp_list)
 
                 elif 'tx' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(tx) +'\n'
-                    print('replace tx setting')
+                    logger.debug('replace tx setting')
                     line = '='.join(temp_list)
 
                 elif 'rx ' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(rx) +'\n'
-                    print('replace rx setting')
+                    logger.debug('replace rx setting')
                     line = '='.join(temp_list)
 
                 elif 'rx_sweep' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(rx_sweep) +'\n'
-                    print('replace rx_sweep setting')
+                    logger.debug('replace rx_sweep setting')
                     line = '='.join(temp_list)
 
                 elif 'chan' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + '"' + str(chan) + '"' +'\n'
-                    print('replace chan setting')
+                    logger.debug('replace chan setting')
                     line = '='.join(temp_list)
 
                 new_data.append(line)
