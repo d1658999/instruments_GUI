@@ -193,13 +193,120 @@ class MainApp():
         builder.connect_callbacks(self)
         self.init_select()
 
-
     def run(self):
         self.mainwindow.mainloop()
+
+
+    def export_ui_setting(self):
+        print('output test')
+        tech = self.wanted_tech()
+        bw = self.wanted_bw()
+        ue_power = self.wanted_ue_pwr()
+        bands_lte = self.wanted_band_LTE()
+        bands_wcdma = self.wanted_band_WCDMA()
+        bands_hsupa = self.wanted_band_HSUPA()
+        bands_hsdpa = self.wanted_band_HSDPA()
+        bands_gsm = self.wanted_band_GSM()
+        instrument = self.instrument.get()
+        chan = self.wanted_chan()
+        tx, rx, rx_sweep = self.wanted_tx_rx_sweep()
+
+        new_data = []
+        with open('ui_init.py', 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if 'bands_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_lte) +'\n'
+                    print('replace band LTE')
+                    line = '='.join(temp_list)
+
+                elif 'bands_wcdma' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_wcdma) +'\n'
+                    print('replace band WCDMA')
+                    line = '='.join(temp_list)
+
+                elif 'bands_hsupa' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_hsupa) +'\n'
+                    print('replace band HSUPA')
+                    line = '='.join(temp_list)
+
+                elif 'bands_hsdpa' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_hsdpa) +'\n'
+                    print('replace band HSDPA')
+                    line = '='.join(temp_list)
+
+                elif 'bands_gsm' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_gsm) +'\n'
+                    print('replace band GSM')
+                    line = '='.join(temp_list)
+
+                elif 'tech' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tech) +'\n'
+                    print('replace tech setting')
+                    line = '='.join(temp_list)
+
+                elif 'bw' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bw) +'\n'
+                    print('replace bw setting')
+                    line = '='.join(temp_list)
+
+                elif 'ue_power' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(ue_power) +'\n'
+                    print('replace ue power setting')
+                    line = '='.join(temp_list)
+
+                elif 'instrument' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(instrument) + '"' +'\n'
+                    print('replace instrument setting')
+                    line = '='.join(temp_list)
+
+                elif 'tx' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx) +'\n'
+                    print('replace tx setting')
+                    line = '='.join(temp_list)
+
+                elif 'rx ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rx) +'\n'
+                    print('replace rx setting')
+                    line = '='.join(temp_list)
+
+                elif 'rx_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rx_sweep) +'\n'
+                    print('replace rx_sweep setting')
+                    line = '='.join(temp_list)
+
+                elif 'chan' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(chan) + '"' +'\n'
+                    print('replace chan setting')
+                    line = '='.join(temp_list)
+
+                new_data.append(line)
+
+        with open('ui_init.py', 'w') as f:
+            f.writelines(new_data)
+
+
 
     def thermal_dis(self):
         from thermal_disable import thd
         thd()
+
+        # below is test
+        # print(f'output {self.wanted_band_LTE()}')
+        # self.export_ui_setting()
 
     def init_select(self):
         self.instrument.set('Anritsu8820')
@@ -410,7 +517,7 @@ class MainApp():
 
     def wanted_tx_rx_sweep(self):
         self.wanted_test = {}
-        self.wanted_test.setdefault('tx', True)
+        self.wanted_test.setdefault('tx', False)
         self.wanted_test.setdefault('rx', False)
         self.wanted_test.setdefault('rx_sweep', False)
 
@@ -430,7 +537,7 @@ class MainApp():
             logger.debug('Nothing to select for test items')
 
         logger.info(self.wanted_test)
-        # return self.wanted_test
+        return self.tx.get(), self.rx.get(), self.rx_sweep.get()
 
     def wanted_ue_pwr(self):
         self.ue_power = []
