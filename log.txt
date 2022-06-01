@@ -1,50 +1,143 @@
-[20220601 19:20:07 INFO    ] Import the last setting
-[20220601 19:20:07 DEBUG   ] now is false
-[20220601 19:20:07 DEBUG   ] now is false
-[20220601 19:20:07 DEBUG   ] Nothing to select for HSDPA
-[20220601 19:20:07 INFO    ] select HSUPA band: []
-[20220601 19:20:07 DEBUG   ] now is false
-[20220601 19:20:07 DEBUG   ] Nothing to select for WCDMA
-[20220601 19:20:07 INFO    ] select HSUPA band: []
-[20220601 19:20:07 DEBUG   ] now is false
-[20220601 19:20:07 DEBUG   ] Nothing to select for WCDMA
-[20220601 19:20:07 INFO    ] select WCDMA band: []
-[20220601 19:20:07 DEBUG   ] False
-[20220601 19:20:07 DEBUG   ] LB band all is unchecked
-[20220601 19:20:07 DEBUG   ] Nothing to select for LTE
-[20220601 19:20:07 INFO    ] select LTE band: []
-[20220601 19:20:07 DEBUG   ] MHB band all is unchecked
-[20220601 19:20:07 DEBUG   ] Nothing to select for LTE
-[20220601 19:20:07 INFO    ] select LTE band: []
-[20220601 19:20:07 DEBUG   ] UHB band all is unchecked
-[20220601 19:20:07 DEBUG   ] Nothing to select for LTE
-[20220601 19:20:07 INFO    ] select LTE band: []
-[20220601 19:20:16 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:16 DEBUG   ] -10dBm for sensitivity
-[20220601 19:20:16 INFO    ] select UE Power when sensitivity: [1, 0]
-[20220601 19:20:16 DEBUG   ] True
-[20220601 19:20:16 DEBUG   ] True
-[20220601 19:20:16 INFO    ] {'tx': True, 'rx': True, 'rx_sweep': False}
-[20220601 19:20:17 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:17 DEBUG   ] -10dBm for sensitivity
-[20220601 19:20:17 INFO    ] select UE Power when sensitivity: [1, 0]
-[20220601 19:20:17 DEBUG   ] True
-[20220601 19:20:17 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
-[20220601 19:20:18 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:18 DEBUG   ] -10dBm for sensitivity
-[20220601 19:20:18 INFO    ] select UE Power when sensitivity: [1, 0]
-[20220601 19:20:18 DEBUG   ] True
-[20220601 19:20:18 DEBUG   ] True
-[20220601 19:20:18 INFO    ] {'tx': True, 'rx': True, 'rx_sweep': False}
-[20220601 19:20:19 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:19 INFO    ] select UE Power when sensitivity: [1]
-[20220601 19:20:19 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:19 DEBUG   ] -10dBm for sensitivity
-[20220601 19:20:19 INFO    ] select UE Power when sensitivity: [1, 0]
-[20220601 19:20:20 DEBUG   ] -10dBm for sensitivity
-[20220601 19:20:20 INFO    ] select UE Power when sensitivity: [0]
-[20220601 19:20:20 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:20 DEBUG   ] -10dBm for sensitivity
-[20220601 19:20:20 INFO    ] select UE Power when sensitivity: [1, 0]
-[20220601 19:20:22 DEBUG   ] TxMax for sensitivity
-[20220601 19:20:22 INFO    ] select UE Power when sensitivity: [1]
+[20220602 00:14:47 DEBUG   ] True
+[20220602 00:14:47 INFO    ] select tech: ['LTE']
+[20220602 00:14:47 DEBUG   ] 1
+[20220602 00:14:47 INFO    ] select LTE band: [1]
+[20220602 00:14:47 DEBUG   ] 1
+[20220602 00:14:47 DEBUG   ] 2
+[20220602 00:14:47 INFO    ] select WCDMA band: [1, 2]
+[20220602 00:14:47 DEBUG   ] Nothing to select for WCDMA
+[20220602 00:14:47 INFO    ] select HSUPA band: []
+[20220602 00:14:47 DEBUG   ] Nothing to select for HSDPA
+[20220602 00:14:47 INFO    ] select HSUPA band: []
+[20220602 00:14:47 DEBUG   ] Bw_10
+[20220602 00:14:47 INFO    ] select BW: [10]
+[20220602 00:14:47 DEBUG   ] L chan
+[20220602 00:14:47 DEBUG   ] M chan
+[20220602 00:14:47 DEBUG   ] H chan
+[20220602 00:14:47 INFO    ] select channel: LMH
+[20220602 00:14:47 INFO    ] select UE Power when sensitivity: []
+[20220602 00:14:47 INFO    ] start to connect
+[20220602 00:14:52 DEBUG   ] GPIB0::1::INSTR
+[20220602 00:14:52 INFO    ] Modem comport is: COM19
+[20220602 00:14:52 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
+[20220602 00:14:54 INFO    ] Current Format: LTE
+[20220602 00:14:54 INFO    ] Already LTE mode
+[20220602 00:14:54 INFO    ] LTE
+[20220602 00:14:54 DEBUG   ] Test Channel List: 1, 10MHZ, downlink channel list:[50, 300, 550]
+[20220602 00:14:54 INFO    ] init equipment before calling
+[20220602 00:14:54 INFO    ] Preset Anritsu 8820/8821
+[20220602 00:14:55 INFO    ] Set LOSS
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
+[20220602 00:14:55 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
+[20220602 00:14:55 DEBUG   ] Current Format: LTE
+[20220602 00:14:56 DEBUG   ] Current Format: LTE
+[20220602 00:14:57 INFO    ] Start to calling
+[20220602 00:14:57 DEBUG   ] Current Format: LTE
+[20220602 00:14:57 INFO    ] Start registration and calling
+[20220602 00:14:57 INFO    ] IDLE
+[20220602 00:14:57 INFO    ] Start to ON and OFF
+[20220602 00:14:57 INFO    ] flymode is on, 0
+[20220602 00:15:00 INFO    ] flymode is off, 1
+[20220602 00:15:03 INFO    ] Waiting for connection...
+[20220602 00:15:04 INFO    ] Waiting for connection...
+[20220602 00:15:05 INFO    ] Connected
+[20220602 00:15:06 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 50
+[20220602 00:15:06 DEBUG   ] Current Format: LTE
+[20220602 00:15:06 DEBUG   ] Current Format: LTE
+[20220602 00:15:06 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 00:15:06 DEBUG   ] Current Format: LTE
+[20220602 00:15:06 INFO    ] POWER: 24.49
+[20220602 00:15:07 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 00:15:07 DEBUG   ] Current Format: LTE
+[20220602 00:15:07 INFO    ] POWER: 24.78
+[20220602 00:15:07 DEBUG   ] Current Format: LTE
+[20220602 00:15:07 INFO    ] ACLR: [Decimal('-45.88'), Decimal('-52.88'), Decimal('-46.51'), Decimal('-56.31'), Decimal('-57.99'), Decimal('-56.83')]
+[20220602 00:15:07 DEBUG   ] Current Format: LTE
+[20220602 00:15:07 INFO    ] EVM: 0.95
+[20220602 00:15:12 INFO    ] Anritsu8821
+[20220602 00:15:13 INFO    ] Anritsu8820
+[20220602 00:15:54 INFO    ] Export ui setting
+[20220602 00:15:54 DEBUG   ] True
+[20220602 00:15:54 INFO    ] select tech: ['LTE']
+[20220602 00:15:54 DEBUG   ] Bw_10
+[20220602 00:15:54 INFO    ] select BW: [10]
+[20220602 00:15:54 INFO    ] select UE Power when sensitivity: []
+[20220602 00:15:54 DEBUG   ] 1
+[20220602 00:15:54 INFO    ] select LTE band: [1]
+[20220602 00:15:54 DEBUG   ] 1
+[20220602 00:15:54 DEBUG   ] 2
+[20220602 00:15:54 INFO    ] select WCDMA band: [1, 2]
+[20220602 00:15:54 DEBUG   ] Nothing to select for WCDMA
+[20220602 00:15:54 INFO    ] select HSUPA band: []
+[20220602 00:15:54 DEBUG   ] Nothing to select for HSDPA
+[20220602 00:15:54 INFO    ] select HSUPA band: []
+[20220602 00:15:54 DEBUG   ] L chan
+[20220602 00:15:54 DEBUG   ] M chan
+[20220602 00:15:54 DEBUG   ] H chan
+[20220602 00:15:54 INFO    ] select channel: LMH
+[20220602 00:15:54 DEBUG   ] True
+[20220602 00:15:54 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
+[20220602 00:15:54 DEBUG   ] replace tech setting
+[20220602 00:15:54 DEBUG   ] replace bw setting
+[20220602 00:15:54 DEBUG   ] replace ue power setting
+[20220602 00:15:54 DEBUG   ] replace chan setting
+[20220602 00:15:54 DEBUG   ] replace band LTE
+[20220602 00:15:54 DEBUG   ] replace band WCDMA
+[20220602 00:15:54 DEBUG   ] replace band HSUPA
+[20220602 00:15:54 DEBUG   ] replace band HSDPA
+[20220602 00:15:54 DEBUG   ] replace band GSM
+[20220602 00:15:54 DEBUG   ] replace tx setting
+[20220602 00:15:54 DEBUG   ] replace rx setting
+[20220602 00:15:54 DEBUG   ] replace rx_sweep setting
+[20220602 00:15:54 DEBUG   ] replace instrument setting
+[20220602 00:15:54 DEBUG   ] True
+[20220602 00:15:54 INFO    ] select tech: ['LTE']
+[20220602 00:15:54 DEBUG   ] 1
+[20220602 00:15:54 INFO    ] select LTE band: [1]
+[20220602 00:15:54 DEBUG   ] 1
+[20220602 00:15:54 DEBUG   ] 2
+[20220602 00:15:54 INFO    ] select WCDMA band: [1, 2]
+[20220602 00:15:54 DEBUG   ] Nothing to select for WCDMA
+[20220602 00:15:54 INFO    ] select HSUPA band: []
+[20220602 00:15:54 DEBUG   ] Nothing to select for HSDPA
+[20220602 00:15:54 INFO    ] select HSUPA band: []
+[20220602 00:15:54 DEBUG   ] Bw_10
+[20220602 00:15:54 INFO    ] select BW: [10]
+[20220602 00:15:54 DEBUG   ] L chan
+[20220602 00:15:54 DEBUG   ] M chan
+[20220602 00:15:54 DEBUG   ] H chan
+[20220602 00:15:54 INFO    ] select channel: LMH
+[20220602 00:15:54 INFO    ] select UE Power when sensitivity: []
+[20220602 00:15:54 INFO    ] start to connect
+[20220602 00:15:54 DEBUG   ] GPIB0::1::INSTR
+[20220602 00:15:54 INFO    ] Modem comport is: COM19
+[20220602 00:15:54 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
+[20220602 00:15:56 INFO    ] Current Format: LTE
+[20220602 00:15:56 INFO    ] Already LTE mode
+[20220602 00:15:56 INFO    ] LTE
+[20220602 00:15:56 DEBUG   ] Test Channel List: 1, 10MHZ, downlink channel list:[50, 300, 550]
+[20220602 00:15:56 INFO    ] init equipment before calling
+[20220602 00:15:56 INFO    ] Preset Anritsu 8820/8821
+[20220602 00:15:57 INFO    ] Set LOSS
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
+[20220602 00:15:57 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
+[20220602 00:15:57 DEBUG   ] Current Format: LTE
+[20220602 00:15:57 DEBUG   ] Current Format: LTE
+[20220602 00:15:58 INFO    ] Start to calling
+[20220602 00:15:58 DEBUG   ] Current Format: LTE
+[20220602 00:15:58 INFO    ] Start registration and calling
+[20220602 00:15:58 INFO    ] IDLE
+[20220602 00:15:58 INFO    ] Start to ON and OFF
+[20220602 00:15:58 INFO    ] flymode is on, 0

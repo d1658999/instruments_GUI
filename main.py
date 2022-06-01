@@ -5,6 +5,8 @@ import pygubu
 import datetime
 import logging
 from logging.config import fileConfig
+import threading
+
 import ui_init
 
 fileConfig('logging.ini')
@@ -14,9 +16,8 @@ PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "main.ui"
 
 
-class MainApp():
+class MainApp:
     def __init__(self, master=None):
-        super().__init__()
         self.builder = builder = pygubu.Builder()
         builder.add_resource_path(PROJECT_PATH)
         builder.add_from_file(PROJECT_UI)
