@@ -1367,7 +1367,7 @@ Disable</property>
             </child>
             <child>
               <object class="ttk.Label" id="label_rx_txpower">
-                <property name="text" translatable="yes">Tx Power
+                <property name="text" translatable="yes">UE Power
 (sensitivity use)</property>
                 <layout manager="grid">
                   <property name="column">2</property>

@@ -1,21 +1,50 @@
-[20220601 18:31:22 INFO    ] Import the last setting
-[20220601 18:31:22 DEBUG   ] now is false
-[20220601 18:31:22 DEBUG   ] now is false
-[20220601 18:31:22 DEBUG   ] Nothing to select for HSDPA
-[20220601 18:31:22 INFO    ] select HSUPA band: []
-[20220601 18:31:22 DEBUG   ] now is false
-[20220601 18:31:22 DEBUG   ] Nothing to select for WCDMA
-[20220601 18:31:22 INFO    ] select HSUPA band: []
-[20220601 18:31:22 DEBUG   ] now is false
-[20220601 18:31:22 DEBUG   ] Nothing to select for WCDMA
-[20220601 18:31:22 INFO    ] select WCDMA band: []
-[20220601 18:31:22 DEBUG   ] False
-[20220601 18:31:22 DEBUG   ] LB band all is unchecked
-[20220601 18:31:22 DEBUG   ] Nothing to select for LTE
-[20220601 18:31:22 INFO    ] select LTE band: []
-[20220601 18:31:22 DEBUG   ] MHB band all is unchecked
-[20220601 18:31:22 DEBUG   ] Nothing to select for LTE
-[20220601 18:31:22 INFO    ] select LTE band: []
-[20220601 18:31:22 DEBUG   ] UHB band all is unchecked
-[20220601 18:31:22 DEBUG   ] Nothing to select for LTE
-[20220601 18:31:22 INFO    ] select LTE band: []
+[20220601 19:20:07 INFO    ] Import the last setting
+[20220601 19:20:07 DEBUG   ] now is false
+[20220601 19:20:07 DEBUG   ] now is false
+[20220601 19:20:07 DEBUG   ] Nothing to select for HSDPA
+[20220601 19:20:07 INFO    ] select HSUPA band: []
+[20220601 19:20:07 DEBUG   ] now is false
+[20220601 19:20:07 DEBUG   ] Nothing to select for WCDMA
+[20220601 19:20:07 INFO    ] select HSUPA band: []
+[20220601 19:20:07 DEBUG   ] now is false
+[20220601 19:20:07 DEBUG   ] Nothing to select for WCDMA
+[20220601 19:20:07 INFO    ] select WCDMA band: []
+[20220601 19:20:07 DEBUG   ] False
+[20220601 19:20:07 DEBUG   ] LB band all is unchecked
+[20220601 19:20:07 DEBUG   ] Nothing to select for LTE
+[20220601 19:20:07 INFO    ] select LTE band: []
+[20220601 19:20:07 DEBUG   ] MHB band all is unchecked
+[20220601 19:20:07 DEBUG   ] Nothing to select for LTE
+[20220601 19:20:07 INFO    ] select LTE band: []
+[20220601 19:20:07 DEBUG   ] UHB band all is unchecked
+[20220601 19:20:07 DEBUG   ] Nothing to select for LTE
+[20220601 19:20:07 INFO    ] select LTE band: []
+[20220601 19:20:16 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:16 DEBUG   ] -10dBm for sensitivity
+[20220601 19:20:16 INFO    ] select UE Power when sensitivity: [1, 0]
+[20220601 19:20:16 DEBUG   ] True
+[20220601 19:20:16 DEBUG   ] True
+[20220601 19:20:16 INFO    ] {'tx': True, 'rx': True, 'rx_sweep': False}
+[20220601 19:20:17 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:17 DEBUG   ] -10dBm for sensitivity
+[20220601 19:20:17 INFO    ] select UE Power when sensitivity: [1, 0]
+[20220601 19:20:17 DEBUG   ] True
+[20220601 19:20:17 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
+[20220601 19:20:18 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:18 DEBUG   ] -10dBm for sensitivity
+[20220601 19:20:18 INFO    ] select UE Power when sensitivity: [1, 0]
+[20220601 19:20:18 DEBUG   ] True
+[20220601 19:20:18 DEBUG   ] True
+[20220601 19:20:18 INFO    ] {'tx': True, 'rx': True, 'rx_sweep': False}
+[20220601 19:20:19 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:19 INFO    ] select UE Power when sensitivity: [1]
+[20220601 19:20:19 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:19 DEBUG   ] -10dBm for sensitivity
+[20220601 19:20:19 INFO    ] select UE Power when sensitivity: [1, 0]
+[20220601 19:20:20 DEBUG   ] -10dBm for sensitivity
+[20220601 19:20:20 INFO    ] select UE Power when sensitivity: [0]
+[20220601 19:20:20 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:20 DEBUG   ] -10dBm for sensitivity
+[20220601 19:20:20 INFO    ] select UE Power when sensitivity: [1, 0]
+[20220601 19:20:22 DEBUG   ] TxMax for sensitivity
+[20220601 19:20:22 INFO    ] select UE Power when sensitivity: [1]
