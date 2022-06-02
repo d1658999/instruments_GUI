@@ -1,143 +1,926 @@
-[20220602 00:14:47 DEBUG   ] True
-[20220602 00:14:47 INFO    ] select tech: ['LTE']
-[20220602 00:14:47 DEBUG   ] 1
-[20220602 00:14:47 INFO    ] select LTE band: [1]
-[20220602 00:14:47 DEBUG   ] 1
-[20220602 00:14:47 DEBUG   ] 2
-[20220602 00:14:47 INFO    ] select WCDMA band: [1, 2]
-[20220602 00:14:47 DEBUG   ] Nothing to select for WCDMA
-[20220602 00:14:47 INFO    ] select HSUPA band: []
-[20220602 00:14:47 DEBUG   ] Nothing to select for HSDPA
-[20220602 00:14:47 INFO    ] select HSUPA band: []
-[20220602 00:14:47 DEBUG   ] Bw_10
-[20220602 00:14:47 INFO    ] select BW: [10]
-[20220602 00:14:47 DEBUG   ] L chan
-[20220602 00:14:47 DEBUG   ] M chan
-[20220602 00:14:47 DEBUG   ] H chan
-[20220602 00:14:47 INFO    ] select channel: LMH
-[20220602 00:14:47 INFO    ] select UE Power when sensitivity: []
-[20220602 00:14:47 INFO    ] start to connect
-[20220602 00:14:52 DEBUG   ] GPIB0::1::INSTR
-[20220602 00:14:52 INFO    ] Modem comport is: COM19
-[20220602 00:14:52 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
-[20220602 00:14:54 INFO    ] Current Format: LTE
-[20220602 00:14:54 INFO    ] Already LTE mode
-[20220602 00:14:54 INFO    ] LTE
-[20220602 00:14:54 DEBUG   ] Test Channel List: 1, 10MHZ, downlink channel list:[50, 300, 550]
-[20220602 00:14:54 INFO    ] init equipment before calling
-[20220602 00:14:54 INFO    ] Preset Anritsu 8820/8821
-[20220602 00:14:55 INFO    ] Set LOSS
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
-[20220602 00:14:55 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
-[20220602 00:14:55 DEBUG   ] Current Format: LTE
-[20220602 00:14:56 DEBUG   ] Current Format: LTE
-[20220602 00:14:57 INFO    ] Start to calling
-[20220602 00:14:57 DEBUG   ] Current Format: LTE
-[20220602 00:14:57 INFO    ] Start registration and calling
-[20220602 00:14:57 INFO    ] IDLE
-[20220602 00:14:57 INFO    ] Start to ON and OFF
-[20220602 00:14:57 INFO    ] flymode is on, 0
-[20220602 00:15:00 INFO    ] flymode is off, 1
-[20220602 00:15:03 INFO    ] Waiting for connection...
-[20220602 00:15:04 INFO    ] Waiting for connection...
-[20220602 00:15:05 INFO    ] Connected
-[20220602 00:15:06 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 50
-[20220602 00:15:06 DEBUG   ] Current Format: LTE
-[20220602 00:15:06 DEBUG   ] Current Format: LTE
-[20220602 00:15:06 INFO    ] TESTPRM TX_MAXPWR_Q_1
-[20220602 00:15:06 DEBUG   ] Current Format: LTE
-[20220602 00:15:06 INFO    ] POWER: 24.49
-[20220602 00:15:07 INFO    ] TESTPRM TX_MAXPWR_Q_P
-[20220602 00:15:07 DEBUG   ] Current Format: LTE
-[20220602 00:15:07 INFO    ] POWER: 24.78
-[20220602 00:15:07 DEBUG   ] Current Format: LTE
-[20220602 00:15:07 INFO    ] ACLR: [Decimal('-45.88'), Decimal('-52.88'), Decimal('-46.51'), Decimal('-56.31'), Decimal('-57.99'), Decimal('-56.83')]
-[20220602 00:15:07 DEBUG   ] Current Format: LTE
-[20220602 00:15:07 INFO    ] EVM: 0.95
-[20220602 00:15:12 INFO    ] Anritsu8821
-[20220602 00:15:13 INFO    ] Anritsu8820
-[20220602 00:15:54 INFO    ] Export ui setting
-[20220602 00:15:54 DEBUG   ] True
-[20220602 00:15:54 INFO    ] select tech: ['LTE']
-[20220602 00:15:54 DEBUG   ] Bw_10
-[20220602 00:15:54 INFO    ] select BW: [10]
-[20220602 00:15:54 INFO    ] select UE Power when sensitivity: []
-[20220602 00:15:54 DEBUG   ] 1
-[20220602 00:15:54 INFO    ] select LTE band: [1]
-[20220602 00:15:54 DEBUG   ] 1
-[20220602 00:15:54 DEBUG   ] 2
-[20220602 00:15:54 INFO    ] select WCDMA band: [1, 2]
-[20220602 00:15:54 DEBUG   ] Nothing to select for WCDMA
-[20220602 00:15:54 INFO    ] select HSUPA band: []
-[20220602 00:15:54 DEBUG   ] Nothing to select for HSDPA
-[20220602 00:15:54 INFO    ] select HSUPA band: []
-[20220602 00:15:54 DEBUG   ] L chan
-[20220602 00:15:54 DEBUG   ] M chan
-[20220602 00:15:54 DEBUG   ] H chan
-[20220602 00:15:54 INFO    ] select channel: LMH
-[20220602 00:15:54 DEBUG   ] True
-[20220602 00:15:54 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
-[20220602 00:15:54 DEBUG   ] replace tech setting
-[20220602 00:15:54 DEBUG   ] replace bw setting
-[20220602 00:15:54 DEBUG   ] replace ue power setting
-[20220602 00:15:54 DEBUG   ] replace chan setting
-[20220602 00:15:54 DEBUG   ] replace band LTE
-[20220602 00:15:54 DEBUG   ] replace band WCDMA
-[20220602 00:15:54 DEBUG   ] replace band HSUPA
-[20220602 00:15:54 DEBUG   ] replace band HSDPA
-[20220602 00:15:54 DEBUG   ] replace band GSM
-[20220602 00:15:54 DEBUG   ] replace tx setting
-[20220602 00:15:54 DEBUG   ] replace rx setting
-[20220602 00:15:54 DEBUG   ] replace rx_sweep setting
-[20220602 00:15:54 DEBUG   ] replace instrument setting
-[20220602 00:15:54 DEBUG   ] True
-[20220602 00:15:54 INFO    ] select tech: ['LTE']
-[20220602 00:15:54 DEBUG   ] 1
-[20220602 00:15:54 INFO    ] select LTE band: [1]
-[20220602 00:15:54 DEBUG   ] 1
-[20220602 00:15:54 DEBUG   ] 2
-[20220602 00:15:54 INFO    ] select WCDMA band: [1, 2]
-[20220602 00:15:54 DEBUG   ] Nothing to select for WCDMA
-[20220602 00:15:54 INFO    ] select HSUPA band: []
-[20220602 00:15:54 DEBUG   ] Nothing to select for HSDPA
-[20220602 00:15:54 INFO    ] select HSUPA band: []
-[20220602 00:15:54 DEBUG   ] Bw_10
-[20220602 00:15:54 INFO    ] select BW: [10]
-[20220602 00:15:54 DEBUG   ] L chan
-[20220602 00:15:54 DEBUG   ] M chan
-[20220602 00:15:54 DEBUG   ] H chan
-[20220602 00:15:54 INFO    ] select channel: LMH
-[20220602 00:15:54 INFO    ] select UE Power when sensitivity: []
-[20220602 00:15:54 INFO    ] start to connect
-[20220602 00:15:54 DEBUG   ] GPIB0::1::INSTR
-[20220602 00:15:54 INFO    ] Modem comport is: COM19
-[20220602 00:15:54 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
-[20220602 00:15:56 INFO    ] Current Format: LTE
-[20220602 00:15:56 INFO    ] Already LTE mode
-[20220602 00:15:56 INFO    ] LTE
-[20220602 00:15:56 DEBUG   ] Test Channel List: 1, 10MHZ, downlink channel list:[50, 300, 550]
-[20220602 00:15:56 INFO    ] init equipment before calling
-[20220602 00:15:56 INFO    ] Preset Anritsu 8820/8821
-[20220602 00:15:57 INFO    ] Set LOSS
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
-[20220602 00:15:57 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
-[20220602 00:15:57 DEBUG   ] Current Format: LTE
-[20220602 00:15:57 DEBUG   ] Current Format: LTE
-[20220602 00:15:58 INFO    ] Start to calling
-[20220602 00:15:58 DEBUG   ] Current Format: LTE
-[20220602 00:15:58 INFO    ] Start registration and calling
-[20220602 00:15:58 INFO    ] IDLE
-[20220602 00:15:58 INFO    ] Start to ON and OFF
-[20220602 00:15:58 INFO    ] flymode is on, 0
+[20220602 01:40:42 DEBUG   ] True
+[20220602 01:40:42 INFO    ] select tech: ['LTE']
+[20220602 01:40:42 DEBUG   ] 1
+[20220602 01:40:42 INFO    ] select LTE band: [1]
+[20220602 01:40:42 DEBUG   ] 1
+[20220602 01:40:42 DEBUG   ] 2
+[20220602 01:40:42 INFO    ] select WCDMA band: [1, 2]
+[20220602 01:40:42 DEBUG   ] Nothing to select for WCDMA
+[20220602 01:40:42 INFO    ] select HSUPA band: []
+[20220602 01:40:42 DEBUG   ] Nothing to select for HSDPA
+[20220602 01:40:42 INFO    ] select HSUPA band: []
+[20220602 01:40:42 DEBUG   ] Bw_10
+[20220602 01:40:42 INFO    ] select BW: [10]
+[20220602 01:40:42 DEBUG   ] L chan
+[20220602 01:40:42 DEBUG   ] M chan
+[20220602 01:40:42 DEBUG   ] H chan
+[20220602 01:40:42 INFO    ] select channel: LMH
+[20220602 01:40:42 INFO    ] select UE Power when sensitivity: []
+[20220602 01:40:42 INFO    ] start to connect
+[20220602 01:40:48 DEBUG   ] GPIB0::1::INSTR
+[20220602 01:40:49 INFO    ] Modem comport is: COM19
+[20220602 01:40:49 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
+[20220602 01:40:51 INFO    ] Current Format: LTE
+[20220602 01:40:51 INFO    ] Already LTE mode
+[20220602 01:40:51 INFO    ] LTE
+[20220602 01:40:51 DEBUG   ] Test Channel List: 1, 10MHZ, downlink channel list:[50, 300, 550]
+[20220602 01:40:51 INFO    ] init equipment before calling
+[20220602 01:40:51 INFO    ] Preset Anritsu 8820/8821
+[20220602 01:40:52 INFO    ] Set LOSS
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
+[20220602 01:40:52 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
+[20220602 01:40:52 DEBUG   ] Current Format: LTE
+[20220602 01:40:53 DEBUG   ] Current Format: LTE
+[20220602 01:40:53 INFO    ] Start to calling
+[20220602 01:40:53 DEBUG   ] Current Format: LTE
+[20220602 01:40:53 INFO    ] Start registration and calling
+[20220602 01:40:53 INFO    ] IDLE
+[20220602 01:40:53 INFO    ] Start to ON and OFF
+[20220602 01:40:53 INFO    ] flymode is on, 0
+[20220602 01:40:56 INFO    ] flymode is off, 1
+[20220602 01:40:59 INFO    ] Waiting for connection...
+[20220602 01:41:00 INFO    ] Connected
+[20220602 01:41:01 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 50
+[20220602 01:41:01 DEBUG   ] Current Format: LTE
+[20220602 01:41:02 DEBUG   ] Current Format: LTE
+[20220602 01:41:02 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 01:41:02 DEBUG   ] Current Format: LTE
+[20220602 01:41:02 INFO    ] POWER: 24.51
+[20220602 01:41:02 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 01:41:02 DEBUG   ] Current Format: LTE
+[20220602 01:41:02 INFO    ] POWER: 24.77
+[20220602 01:41:02 DEBUG   ] Current Format: LTE
+[20220602 01:41:02 INFO    ] ACLR: [Decimal('-45.14'), Decimal('-52.78'), Decimal('-45.73'), Decimal('-56.32'), Decimal('-58.01'), Decimal('-56.79')]
+[20220602 01:41:02 DEBUG   ] Current Format: LTE
+[20220602 01:41:02 INFO    ] EVM: 0.84
+[20220602 01:41:03 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220602 01:41:03 DEBUG   ] Current Format: LTE
+[20220602 01:41:03 INFO    ] POWER: 23.92
+[20220602 01:41:03 DEBUG   ] Current Format: LTE
+[20220602 01:41:03 INFO    ] ACLR: [Decimal('-43.92'), Decimal('-45.68'), Decimal('-46.30'), Decimal('-48.29'), Decimal('-49.25'), Decimal('-50.65')]
+[20220602 01:41:03 DEBUG   ] Current Format: LTE
+[20220602 01:41:03 INFO    ] EVM: 0.85
+[20220602 01:41:04 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220602 01:41:04 DEBUG   ] Current Format: LTE
+[20220602 01:41:04 INFO    ] POWER: 23.79
+[20220602 01:41:04 DEBUG   ] Current Format: LTE
+[20220602 01:41:04 INFO    ] ACLR: [Decimal('-44.52'), Decimal('-52.11'), Decimal('-45.20'), Decimal('-55.80'), Decimal('-56.76'), Decimal('-55.87')]
+[20220602 01:41:04 DEBUG   ] Current Format: LTE
+[20220602 01:41:04 INFO    ] EVM: 1.32
+[20220602 01:41:04 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220602 01:41:04 DEBUG   ] Current Format: LTE
+[20220602 01:41:04 INFO    ] POWER: 22.74
+[20220602 01:41:04 DEBUG   ] Current Format: LTE
+[20220602 01:41:04 INFO    ] ACLR: [Decimal('-43.70'), Decimal('-42.85'), Decimal('-45.89'), Decimal('-45.16'), Decimal('-49.55'), Decimal('-48.76')]
+[20220602 01:41:04 DEBUG   ] Current Format: LTE
+[20220602 01:41:04 INFO    ] EVM: 1.18
+[20220602 01:41:06 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220602 01:41:06 DEBUG   ] Current Format: LTE
+[20220602 01:41:06 INFO    ] POWER: 22.70
+[20220602 01:41:06 DEBUG   ] Current Format: LTE
+[20220602 01:41:06 INFO    ] ACLR: [Decimal('-44.75'), Decimal('-51.81'), Decimal('-45.53'), Decimal('-55.31'), Decimal('-56.56'), Decimal('-55.69')]
+[20220602 01:41:06 DEBUG   ] Current Format: LTE
+[20220602 01:41:06 INFO    ] EVM: 0.78
+[20220602 01:41:07 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220602 01:41:07 DEBUG   ] Current Format: LTE
+[20220602 01:41:07 INFO    ] POWER: 21.73
+[20220602 01:41:07 DEBUG   ] Current Format: LTE
+[20220602 01:41:07 INFO    ] ACLR: [Decimal('-42.18'), Decimal('-41.91'), Decimal('-44.36'), Decimal('-43.98'), Decimal('-48.25'), Decimal('-48.41')]
+[20220602 01:41:07 DEBUG   ] Current Format: LTE
+[20220602 01:41:07 INFO    ] EVM: 1.31
+[20220602 01:41:07 DEBUG   ] {'Q_1': [Decimal('24.51')], 'Q_P': [Decimal('24.77'), [Decimal('-45.14'), Decimal('-52.78'), Decimal('-45.73'), Decimal('-56.32'), Decimal('-58.01'), Decimal('-56.79')], Decimal('0.84')], 'Q_F': [Decimal('23.92'), [Decimal('-43.92'), Decimal('-45.68'), Decimal('-46.30'), Decimal('-48.29'), Decimal('-49.25'), Decimal('-50.65')], Decimal('0.85')], '16_P': [Decimal('23.79'), [Decimal('-44.52'), Decimal('-52.11'), Decimal('-45.20'), Decimal('-55.80'), Decimal('-56.76'), Decimal('-55.87')], Decimal('1.32')], '16_F': [Decimal('22.74'), [Decimal('-43.70'), Decimal('-42.85'), Decimal('-45.89'), Decimal('-45.16'), Decimal('-49.55'), Decimal('-48.76')], Decimal('1.18')], '64_P': [Decimal('22.70'), [Decimal('-44.75'), Decimal('-51.81'), Decimal('-45.53'), Decimal('-55.31'), Decimal('-56.56'), Decimal('-55.69')], Decimal('0.78')], '64_F': [Decimal('21.73'), [Decimal('-42.18'), Decimal('-41.91'), Decimal('-44.36'), Decimal('-43.98'), Decimal('-48.25'), Decimal('-48.41')], Decimal('1.31')]}
+[20220602 01:41:07 DEBUG   ] Open Excel
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill ACLR
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the ALCR of L ch
+[20220602 01:41:07 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:07 DEBUG   ] start to fill EVM
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the evm of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill ACLR
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the ALCR of L ch
+[20220602 01:41:07 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:07 DEBUG   ] start to fill EVM
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the evm of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill ACLR
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the ALCR of L ch
+[20220602 01:41:07 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:07 DEBUG   ] start to fill EVM
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the evm of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill ACLR
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the ALCR of L ch
+[20220602 01:41:07 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:07 DEBUG   ] start to fill EVM
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the evm of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill ACLR
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the ALCR of L ch
+[20220602 01:41:07 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:07 DEBUG   ] start to fill EVM
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the evm of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill Power
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the power of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 DEBUG   ] start to fill ACLR
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the ALCR of L ch
+[20220602 01:41:07 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:07 DEBUG   ] start to fill EVM
+[20220602 01:41:07 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:41:07 DEBUG   ] the evm of L ch
+[20220602 01:41:07 DEBUG   ] Band is found
+[20220602 01:41:07 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 300
+[20220602 01:41:07 DEBUG   ] Current Format: LTE
+[20220602 01:41:08 DEBUG   ] Current Format: LTE
+[20220602 01:41:09 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 01:41:09 DEBUG   ] Current Format: LTE
+[20220602 01:41:09 INFO    ] POWER: 24.52
+[20220602 01:41:10 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 01:41:10 DEBUG   ] Current Format: LTE
+[20220602 01:41:10 INFO    ] POWER: 24.69
+[20220602 01:41:10 DEBUG   ] Current Format: LTE
+[20220602 01:41:10 INFO    ] ACLR: [Decimal('-45.24'), Decimal('-52.81'), Decimal('-45.84'), Decimal('-56.38'), Decimal('-57.73'), Decimal('-56.74')]
+[20220602 01:41:10 DEBUG   ] Current Format: LTE
+[20220602 01:41:10 INFO    ] EVM: 1.02
+[20220602 01:41:10 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220602 01:41:10 DEBUG   ] Current Format: LTE
+[20220602 01:41:10 INFO    ] POWER: 23.82
+[20220602 01:41:10 DEBUG   ] Current Format: LTE
+[20220602 01:41:10 INFO    ] ACLR: [Decimal('-47.02'), Decimal('-45.43'), Decimal('-49.45'), Decimal('-48.34'), Decimal('-52.30'), Decimal('-49.86')]
+[20220602 01:41:10 DEBUG   ] Current Format: LTE
+[20220602 01:41:10 INFO    ] EVM: 1.03
+[20220602 01:41:11 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220602 01:41:11 DEBUG   ] Current Format: LTE
+[20220602 01:41:11 INFO    ] POWER: 23.57
+[20220602 01:41:11 DEBUG   ] Current Format: LTE
+[20220602 01:41:11 INFO    ] ACLR: [Decimal('-46.15'), Decimal('-51.63'), Decimal('-47.01'), Decimal('-55.06'), Decimal('-57.16'), Decimal('-55.74')]
+[20220602 01:41:11 DEBUG   ] Current Format: LTE
+[20220602 01:41:11 INFO    ] EVM: 1.25
+[20220602 01:41:12 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220602 01:41:12 DEBUG   ] Current Format: LTE
+[20220602 01:41:12 INFO    ] POWER: 22.71
+[20220602 01:41:12 DEBUG   ] Current Format: LTE
+[20220602 01:41:12 INFO    ] ACLR: [Decimal('-43.86'), Decimal('-44.05'), Decimal('-45.82'), Decimal('-46.84'), Decimal('-50.44'), Decimal('-48.93')]
+[20220602 01:41:12 DEBUG   ] Current Format: LTE
+[20220602 01:41:12 INFO    ] EVM: 1.18
+[20220602 01:41:13 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220602 01:41:13 DEBUG   ] Current Format: LTE
+[20220602 01:41:13 INFO    ] POWER: 22.62
+[20220602 01:41:13 DEBUG   ] Current Format: LTE
+[20220602 01:41:13 INFO    ] ACLR: [Decimal('-43.91'), Decimal('-51.24'), Decimal('-44.64'), Decimal('-54.64'), Decimal('-56.39'), Decimal('-55.10')]
+[20220602 01:41:13 DEBUG   ] Current Format: LTE
+[20220602 01:41:13 INFO    ] EVM: 1.00
+[20220602 01:41:14 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220602 01:41:14 DEBUG   ] Current Format: LTE
+[20220602 01:41:14 INFO    ] POWER: 21.64
+[20220602 01:41:14 DEBUG   ] Current Format: LTE
+[20220602 01:41:14 INFO    ] ACLR: [Decimal('-43.66'), Decimal('-43.98'), Decimal('-45.65'), Decimal('-46.52'), Decimal('-50.22'), Decimal('-49.07')]
+[20220602 01:41:14 DEBUG   ] Current Format: LTE
+[20220602 01:41:14 INFO    ] EVM: 1.25
+[20220602 01:41:14 DEBUG   ] {'Q_1': [Decimal('24.52')], 'Q_P': [Decimal('24.69'), [Decimal('-45.24'), Decimal('-52.81'), Decimal('-45.84'), Decimal('-56.38'), Decimal('-57.73'), Decimal('-56.74')], Decimal('1.02')], 'Q_F': [Decimal('23.82'), [Decimal('-47.02'), Decimal('-45.43'), Decimal('-49.45'), Decimal('-48.34'), Decimal('-52.30'), Decimal('-49.86')], Decimal('1.03')], '16_P': [Decimal('23.57'), [Decimal('-46.15'), Decimal('-51.63'), Decimal('-47.01'), Decimal('-55.06'), Decimal('-57.16'), Decimal('-55.74')], Decimal('1.25')], '16_F': [Decimal('22.71'), [Decimal('-43.86'), Decimal('-44.05'), Decimal('-45.82'), Decimal('-46.84'), Decimal('-50.44'), Decimal('-48.93')], Decimal('1.18')], '64_P': [Decimal('22.62'), [Decimal('-43.91'), Decimal('-51.24'), Decimal('-44.64'), Decimal('-54.64'), Decimal('-56.39'), Decimal('-55.10')], Decimal('1.00')], '64_F': [Decimal('21.64'), [Decimal('-43.66'), Decimal('-43.98'), Decimal('-45.65'), Decimal('-46.52'), Decimal('-50.22'), Decimal('-49.07')], Decimal('1.25')]}
+[20220602 01:41:14 DEBUG   ] Open Excel
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill ACLR
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] continue to search
+[20220602 01:41:14 DEBUG   ] the ACLR of M ch
+[20220602 01:41:14 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:14 DEBUG   ] start to fill EVM
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the evm of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill ACLR
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] continue to search
+[20220602 01:41:14 DEBUG   ] the ACLR of M ch
+[20220602 01:41:14 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:14 DEBUG   ] start to fill EVM
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the evm of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill ACLR
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] continue to search
+[20220602 01:41:14 DEBUG   ] the ACLR of M ch
+[20220602 01:41:14 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:14 DEBUG   ] start to fill EVM
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the evm of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill ACLR
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] continue to search
+[20220602 01:41:14 DEBUG   ] the ACLR of M ch
+[20220602 01:41:14 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:14 DEBUG   ] start to fill EVM
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the evm of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill ACLR
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] continue to search
+[20220602 01:41:14 DEBUG   ] the ACLR of M ch
+[20220602 01:41:14 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:14 DEBUG   ] start to fill EVM
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the evm of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill Power
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the power of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:14 DEBUG   ] start to fill ACLR
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] continue to search
+[20220602 01:41:14 DEBUG   ] the ACLR of M ch
+[20220602 01:41:14 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:14 DEBUG   ] start to fill EVM
+[20220602 01:41:14 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:41:14 DEBUG   ] the evm of M ch
+[20220602 01:41:14 DEBUG   ] Band is found
+[20220602 01:41:15 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 550
+[20220602 01:41:15 DEBUG   ] Current Format: LTE
+[20220602 01:41:15 DEBUG   ] Current Format: LTE
+[20220602 01:41:16 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 01:41:16 DEBUG   ] Current Format: LTE
+[20220602 01:41:16 INFO    ] POWER: 24.56
+[20220602 01:41:17 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 01:41:17 DEBUG   ] Current Format: LTE
+[20220602 01:41:17 INFO    ] POWER: 24.68
+[20220602 01:41:17 DEBUG   ] Current Format: LTE
+[20220602 01:41:17 INFO    ] ACLR: [Decimal('-45.31'), Decimal('-52.91'), Decimal('-45.98'), Decimal('-56.60'), Decimal('-57.70'), Decimal('-56.66')]
+[20220602 01:41:17 DEBUG   ] Current Format: LTE
+[20220602 01:41:17 INFO    ] EVM: 0.88
+[20220602 01:41:18 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220602 01:41:18 DEBUG   ] Current Format: LTE
+[20220602 01:41:18 INFO    ] POWER: 23.75
+[20220602 01:41:18 DEBUG   ] Current Format: LTE
+[20220602 01:41:18 INFO    ] ACLR: [Decimal('-46.06'), Decimal('-45.29'), Decimal('-48.33'), Decimal('-48.28'), Decimal('-51.72'), Decimal('-49.70')]
+[20220602 01:41:18 DEBUG   ] Current Format: LTE
+[20220602 01:41:18 INFO    ] EVM: 0.90
+[20220602 01:41:18 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220602 01:41:18 DEBUG   ] Current Format: LTE
+[20220602 01:41:18 INFO    ] POWER: 23.68
+[20220602 01:41:18 DEBUG   ] Current Format: LTE
+[20220602 01:41:18 INFO    ] ACLR: [Decimal('-45.22'), Decimal('-52.40'), Decimal('-45.99'), Decimal('-55.90'), Decimal('-56.61'), Decimal('-56.47')]
+[20220602 01:41:18 DEBUG   ] Current Format: LTE
+[20220602 01:41:18 INFO    ] EVM: 0.88
+[20220602 01:41:19 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220602 01:41:19 DEBUG   ] Current Format: LTE
+[20220602 01:41:19 INFO    ] POWER: 22.65
+[20220602 01:41:19 DEBUG   ] Current Format: LTE
+[20220602 01:41:19 INFO    ] ACLR: [Decimal('-44.54'), Decimal('-44.04'), Decimal('-46.83'), Decimal('-46.89'), Decimal('-50.13'), Decimal('-48.70')]
+[20220602 01:41:19 DEBUG   ] Current Format: LTE
+[20220602 01:41:19 INFO    ] EVM: 1.08
+[20220602 01:41:21 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220602 01:41:21 DEBUG   ] Current Format: LTE
+[20220602 01:41:21 INFO    ] POWER: 22.87
+[20220602 01:41:21 DEBUG   ] Current Format: LTE
+[20220602 01:41:21 INFO    ] ACLR: [Decimal('-42.31'), Decimal('-51.59'), Decimal('-42.92'), Decimal('-55.24'), Decimal('-56.01'), Decimal('-55.35')]
+[20220602 01:41:21 DEBUG   ] Current Format: LTE
+[20220602 01:41:21 INFO    ] EVM: 1.31
+[20220602 01:41:21 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220602 01:41:21 DEBUG   ] Current Format: LTE
+[20220602 01:41:21 INFO    ] POWER: 21.67
+[20220602 01:41:21 DEBUG   ] Current Format: LTE
+[20220602 01:41:21 INFO    ] ACLR: [Decimal('-44.36'), Decimal('-43.05'), Decimal('-46.85'), Decimal('-45.57'), Decimal('-49.68'), Decimal('-48.37')]
+[20220602 01:41:21 DEBUG   ] Current Format: LTE
+[20220602 01:41:21 INFO    ] EVM: 0.97
+[20220602 01:41:21 DEBUG   ] {'Q_1': [Decimal('24.56')], 'Q_P': [Decimal('24.68'), [Decimal('-45.31'), Decimal('-52.91'), Decimal('-45.98'), Decimal('-56.60'), Decimal('-57.70'), Decimal('-56.66')], Decimal('0.88')], 'Q_F': [Decimal('23.75'), [Decimal('-46.06'), Decimal('-45.29'), Decimal('-48.33'), Decimal('-48.28'), Decimal('-51.72'), Decimal('-49.70')], Decimal('0.90')], '16_P': [Decimal('23.68'), [Decimal('-45.22'), Decimal('-52.40'), Decimal('-45.99'), Decimal('-55.90'), Decimal('-56.61'), Decimal('-56.47')], Decimal('0.88')], '16_F': [Decimal('22.65'), [Decimal('-44.54'), Decimal('-44.04'), Decimal('-46.83'), Decimal('-46.89'), Decimal('-50.13'), Decimal('-48.70')], Decimal('1.08')], '64_P': [Decimal('22.87'), [Decimal('-42.31'), Decimal('-51.59'), Decimal('-42.92'), Decimal('-55.24'), Decimal('-56.01'), Decimal('-55.35')], Decimal('1.31')], '64_F': [Decimal('21.67'), [Decimal('-44.36'), Decimal('-43.05'), Decimal('-46.85'), Decimal('-45.57'), Decimal('-49.68'), Decimal('-48.37')], Decimal('0.97')]}
+[20220602 01:41:22 DEBUG   ] Open Excel
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill ACLR
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] the ACLR of H ch
+[20220602 01:41:22 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:22 DEBUG   ] start to fill EVM
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the evm of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill ACLR
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] the ACLR of H ch
+[20220602 01:41:22 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:22 DEBUG   ] start to fill EVM
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the evm of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill ACLR
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] the ACLR of H ch
+[20220602 01:41:22 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:22 DEBUG   ] start to fill EVM
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the evm of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill ACLR
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] the ACLR of H ch
+[20220602 01:41:22 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:22 DEBUG   ] start to fill EVM
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the evm of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill ACLR
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] the ACLR of H ch
+[20220602 01:41:22 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:22 DEBUG   ] start to fill EVM
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the evm of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill Power
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the power of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] start to fill ACLR
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] continue to search
+[20220602 01:41:22 DEBUG   ] the ACLR of H ch
+[20220602 01:41:22 DEBUG   ] ch is the same for ACLR
+[20220602 01:41:22 DEBUG   ] start to fill EVM
+[20220602 01:41:22 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:41:22 DEBUG   ] the evm of H ch
+[20220602 01:41:22 DEBUG   ] Band is found
+[20220602 01:41:22 DEBUG   ] Start to plot line chart in Excel
+[20220602 01:41:30 INFO    ] Timer: 0:00:49.442589
+[20220602 01:41:51 INFO    ] Export ui setting
+[20220602 01:41:51 DEBUG   ] True
+[20220602 01:41:51 INFO    ] select tech: ['LTE']
+[20220602 01:41:51 DEBUG   ] Bw_10
+[20220602 01:41:51 INFO    ] select BW: [10]
+[20220602 01:41:51 INFO    ] select UE Power when sensitivity: []
+[20220602 01:41:51 DEBUG   ] 1
+[20220602 01:41:51 INFO    ] select LTE band: [1]
+[20220602 01:41:51 DEBUG   ] 1
+[20220602 01:41:51 DEBUG   ] 2
+[20220602 01:41:51 INFO    ] select WCDMA band: [1, 2]
+[20220602 01:41:51 DEBUG   ] Nothing to select for WCDMA
+[20220602 01:41:51 INFO    ] select HSUPA band: []
+[20220602 01:41:51 DEBUG   ] Nothing to select for HSDPA
+[20220602 01:41:51 INFO    ] select HSUPA band: []
+[20220602 01:41:51 DEBUG   ] L chan
+[20220602 01:41:51 DEBUG   ] M chan
+[20220602 01:41:51 DEBUG   ] H chan
+[20220602 01:41:51 INFO    ] select channel: LMH
+[20220602 01:41:51 DEBUG   ] True
+[20220602 01:41:51 INFO    ] {'tx': True, 'rx': False, 'rx_sweep': False}
+[20220602 01:41:51 DEBUG   ] replace tech setting
+[20220602 01:41:51 DEBUG   ] replace bw setting
+[20220602 01:41:51 DEBUG   ] replace ue power setting
+[20220602 01:41:51 DEBUG   ] replace chan setting
+[20220602 01:41:51 DEBUG   ] replace band LTE
+[20220602 01:41:51 DEBUG   ] replace band WCDMA
+[20220602 01:41:51 DEBUG   ] replace band HSUPA
+[20220602 01:41:51 DEBUG   ] replace band HSDPA
+[20220602 01:41:51 DEBUG   ] replace band GSM
+[20220602 01:41:51 DEBUG   ] replace tx setting
+[20220602 01:41:51 DEBUG   ] replace rx setting
+[20220602 01:41:51 DEBUG   ] replace rx_sweep setting
+[20220602 01:41:51 DEBUG   ] replace instrument setting
+[20220602 01:41:51 DEBUG   ] True
+[20220602 01:41:51 INFO    ] select tech: ['LTE']
+[20220602 01:41:51 DEBUG   ] 1
+[20220602 01:41:51 INFO    ] select LTE band: [1]
+[20220602 01:41:51 DEBUG   ] 1
+[20220602 01:41:51 DEBUG   ] 2
+[20220602 01:41:51 INFO    ] select WCDMA band: [1, 2]
+[20220602 01:41:51 DEBUG   ] Nothing to select for WCDMA
+[20220602 01:41:51 INFO    ] select HSUPA band: []
+[20220602 01:41:51 DEBUG   ] Nothing to select for HSDPA
+[20220602 01:41:51 INFO    ] select HSUPA band: []
+[20220602 01:41:51 DEBUG   ] Bw_10
+[20220602 01:41:51 INFO    ] select BW: [10]
+[20220602 01:41:51 DEBUG   ] L chan
+[20220602 01:41:51 DEBUG   ] M chan
+[20220602 01:41:51 DEBUG   ] H chan
+[20220602 01:41:51 INFO    ] select channel: LMH
+[20220602 01:41:51 INFO    ] select UE Power when sensitivity: []
+[20220602 01:41:51 INFO    ] start to connect
+[20220602 01:41:51 DEBUG   ] GPIB0::1::INSTR
+[20220602 01:41:51 INFO    ] Modem comport is: COM19
+[20220602 01:41:51 DEBUG   ] ANRITSU,MT8820C,6201009986,23.08S #001,1
+[20220602 01:41:53 INFO    ] Current Format: LTE
+[20220602 01:41:53 INFO    ] Already LTE mode
+[20220602 01:41:53 INFO    ] LTE
+[20220602 01:41:53 DEBUG   ] Test Channel List: 1, 10MHZ, downlink channel list:[50, 300, 550]
+[20220602 01:41:53 INFO    ] init equipment before calling
+[20220602 01:41:53 INFO    ] Preset Anritsu 8820/8821
+[20220602 01:41:54 INFO    ] Set LOSS
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 500MHZ, 0.5, 0.5, 0.5 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 1000MHZ, 0.5, 0.5, 0.5 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 1100MHZ, 0.6, 0.6, 0.6 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 1500MHZ, 0.6, 0.6, 0.6 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 1600MHZ, 0.8, 0.8, 0.8 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 2000MHZ, 0.8, 0.8, 0.8 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 2100MHZ, 0.9, 0.9, 0.9 
+[20220602 01:41:54 INFO    ] LOSSTBLVAL 2500MHZ, 0.9, 0.9, 0.9 
+[20220602 01:41:54 DEBUG   ] Current Format: LTE
+[20220602 01:41:55 DEBUG   ] Current Format: LTE
+[20220602 01:41:56 INFO    ] Start to calling
+[20220602 01:41:56 DEBUG   ] Current Format: LTE
+[20220602 01:41:56 INFO    ] Start registration and calling
+[20220602 01:41:56 INFO    ] IDLE
+[20220602 01:41:56 INFO    ] Start to ON and OFF
+[20220602 01:41:56 INFO    ] flymode is on, 0
+[20220602 01:41:59 INFO    ] flymode is off, 1
+[20220602 01:42:02 INFO    ] Waiting for connection...
+[20220602 01:42:03 INFO    ] Connected
+[20220602 01:42:04 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 50
+[20220602 01:42:04 DEBUG   ] Current Format: LTE
+[20220602 01:42:04 DEBUG   ] Current Format: LTE
+[20220602 01:42:04 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 01:42:04 DEBUG   ] Current Format: LTE
+[20220602 01:42:04 INFO    ] POWER: 24.23
+[20220602 01:42:05 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 01:42:05 DEBUG   ] Current Format: LTE
+[20220602 01:42:05 INFO    ] POWER: 24.71
+[20220602 01:42:05 DEBUG   ] Current Format: LTE
+[20220602 01:42:05 INFO    ] ACLR: [Decimal('-44.96'), Decimal('-52.82'), Decimal('-45.57'), Decimal('-56.38'), Decimal('-57.85'), Decimal('-56.71')]
+[20220602 01:42:05 DEBUG   ] Current Format: LTE
+[20220602 01:42:05 INFO    ] EVM: 0.78
+[20220602 01:42:05 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220602 01:42:05 DEBUG   ] Current Format: LTE
+[20220602 01:42:05 INFO    ] POWER: 23.77
+[20220602 01:42:05 DEBUG   ] Current Format: LTE
+[20220602 01:42:05 INFO    ] ACLR: [Decimal('-43.84'), Decimal('-45.94'), Decimal('-46.46'), Decimal('-48.76'), Decimal('-48.60'), Decimal('-50.43')]
+[20220602 01:42:05 DEBUG   ] Current Format: LTE
+[20220602 01:42:05 INFO    ] EVM: 0.98
+[20220602 01:42:06 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220602 01:42:06 DEBUG   ] Current Format: LTE
+[20220602 01:42:06 INFO    ] POWER: 23.65
+[20220602 01:42:06 DEBUG   ] Current Format: LTE
+[20220602 01:42:06 INFO    ] ACLR: [Decimal('-44.02'), Decimal('-51.88'), Decimal('-44.61'), Decimal('-55.28'), Decimal('-56.84'), Decimal('-56.02')]
+[20220602 01:42:06 DEBUG   ] Current Format: LTE
+[20220602 01:42:06 INFO    ] EVM: 1.15
+[20220602 01:42:07 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220602 01:42:07 DEBUG   ] Current Format: LTE
+[20220602 01:42:07 INFO    ] POWER: 22.77
+[20220602 01:42:07 DEBUG   ] Current Format: LTE
+[20220602 01:42:07 INFO    ] ACLR: [Decimal('-43.57'), Decimal('-42.37'), Decimal('-45.95'), Decimal('-44.70'), Decimal('-49.14'), Decimal('-48.52')]
+[20220602 01:42:07 DEBUG   ] Current Format: LTE
+[20220602 01:42:07 INFO    ] EVM: 1.34
+[20220602 01:42:08 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220602 01:42:08 DEBUG   ] Current Format: LTE
+[20220602 01:42:08 INFO    ] POWER: 22.66
+[20220602 01:42:08 DEBUG   ] Current Format: LTE
+[20220602 01:42:08 INFO    ] ACLR: [Decimal('-44.34'), Decimal('-51.73'), Decimal('-45.08'), Decimal('-55.24'), Decimal('-56.61'), Decimal('-55.64')]
+[20220602 01:42:08 DEBUG   ] Current Format: LTE
+[20220602 01:42:08 INFO    ] EVM: 1.16
+[20220602 01:42:09 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220602 01:42:09 DEBUG   ] Current Format: LTE
+[20220602 01:42:09 INFO    ] POWER: 21.77
+[20220602 01:42:09 DEBUG   ] Current Format: LTE
+[20220602 01:42:09 INFO    ] ACLR: [Decimal('-42.83'), Decimal('-42.75'), Decimal('-45.21'), Decimal('-44.94'), Decimal('-48.45'), Decimal('-48.87')]
+[20220602 01:42:09 DEBUG   ] Current Format: LTE
+[20220602 01:42:09 INFO    ] EVM: 1.31
+[20220602 01:42:09 DEBUG   ] {'Q_1': [Decimal('24.23')], 'Q_P': [Decimal('24.71'), [Decimal('-44.96'), Decimal('-52.82'), Decimal('-45.57'), Decimal('-56.38'), Decimal('-57.85'), Decimal('-56.71')], Decimal('0.78')], 'Q_F': [Decimal('23.77'), [Decimal('-43.84'), Decimal('-45.94'), Decimal('-46.46'), Decimal('-48.76'), Decimal('-48.60'), Decimal('-50.43')], Decimal('0.98')], '16_P': [Decimal('23.65'), [Decimal('-44.02'), Decimal('-51.88'), Decimal('-44.61'), Decimal('-55.28'), Decimal('-56.84'), Decimal('-56.02')], Decimal('1.15')], '16_F': [Decimal('22.77'), [Decimal('-43.57'), Decimal('-42.37'), Decimal('-45.95'), Decimal('-44.70'), Decimal('-49.14'), Decimal('-48.52')], Decimal('1.34')], '64_P': [Decimal('22.66'), [Decimal('-44.34'), Decimal('-51.73'), Decimal('-45.08'), Decimal('-55.24'), Decimal('-56.61'), Decimal('-55.64')], Decimal('1.16')], '64_F': [Decimal('21.77'), [Decimal('-42.83'), Decimal('-42.75'), Decimal('-45.21'), Decimal('-44.94'), Decimal('-48.45'), Decimal('-48.87')], Decimal('1.31')]}
+[20220602 01:42:09 DEBUG   ] Open Excel
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill ACLR
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the ALCR of L ch
+[20220602 01:42:09 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:09 DEBUG   ] start to fill EVM
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the evm of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill ACLR
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the ALCR of L ch
+[20220602 01:42:09 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:09 DEBUG   ] start to fill EVM
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the evm of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill ACLR
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the ALCR of L ch
+[20220602 01:42:09 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:09 DEBUG   ] start to fill EVM
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the evm of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill ACLR
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the ALCR of L ch
+[20220602 01:42:09 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:09 DEBUG   ] start to fill EVM
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the evm of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill ACLR
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the ALCR of L ch
+[20220602 01:42:09 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:09 DEBUG   ] start to fill EVM
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the evm of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill Power
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the power of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 DEBUG   ] start to fill ACLR
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the ALCR of L ch
+[20220602 01:42:09 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:09 DEBUG   ] start to fill EVM
+[20220602 01:42:09 DEBUG   ] capture band: 1, 10MHZ, ch01
+[20220602 01:42:09 DEBUG   ] the evm of L ch
+[20220602 01:42:09 DEBUG   ] Band is found
+[20220602 01:42:09 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 300
+[20220602 01:42:09 DEBUG   ] Current Format: LTE
+[20220602 01:42:10 DEBUG   ] Current Format: LTE
+[20220602 01:42:11 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 01:42:11 DEBUG   ] Current Format: LTE
+[20220602 01:42:11 INFO    ] POWER: 24.46
+[20220602 01:42:11 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 01:42:11 DEBUG   ] Current Format: LTE
+[20220602 01:42:11 INFO    ] POWER: 24.61
+[20220602 01:42:11 DEBUG   ] Current Format: LTE
+[20220602 01:42:12 INFO    ] ACLR: [Decimal('-46.54'), Decimal('-52.42'), Decimal('-47.28'), Decimal('-55.96'), Decimal('-57.97'), Decimal('-56.24')]
+[20220602 01:42:12 DEBUG   ] Current Format: LTE
+[20220602 01:42:12 INFO    ] EVM: 0.79
+[20220602 01:42:12 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220602 01:42:12 DEBUG   ] Current Format: LTE
+[20220602 01:42:12 INFO    ] POWER: 23.75
+[20220602 01:42:12 DEBUG   ] Current Format: LTE
+[20220602 01:42:12 INFO    ] ACLR: [Decimal('-47.10'), Decimal('-45.69'), Decimal('-49.50'), Decimal('-48.65'), Decimal('-52.22'), Decimal('-50.03')]
+[20220602 01:42:12 DEBUG   ] Current Format: LTE
+[20220602 01:42:12 INFO    ] EVM: 0.90
+[20220602 01:42:13 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220602 01:42:13 DEBUG   ] Current Format: LTE
+[20220602 01:42:13 INFO    ] POWER: 23.73
+[20220602 01:42:13 DEBUG   ] Current Format: LTE
+[20220602 01:42:13 INFO    ] ACLR: [Decimal('-44.21'), Decimal('-51.87'), Decimal('-44.84'), Decimal('-55.47'), Decimal('-57.29'), Decimal('-55.82')]
+[20220602 01:42:13 DEBUG   ] Current Format: LTE
+[20220602 01:42:13 INFO    ] EVM: 1.06
+[20220602 01:42:13 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220602 01:42:13 DEBUG   ] Current Format: LTE
+[20220602 01:42:13 INFO    ] POWER: 22.66
+[20220602 01:42:13 DEBUG   ] Current Format: LTE
+[20220602 01:42:13 INFO    ] ACLR: [Decimal('-43.23'), Decimal('-43.33'), Decimal('-45.25'), Decimal('-46.01'), Decimal('-49.92'), Decimal('-48.52')]
+[20220602 01:42:13 DEBUG   ] Current Format: LTE
+[20220602 01:42:13 INFO    ] EVM: 1.37
+[20220602 01:42:15 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220602 01:42:15 DEBUG   ] Current Format: LTE
+[20220602 01:42:15 INFO    ] POWER: 22.42
+[20220602 01:42:15 DEBUG   ] Current Format: LTE
+[20220602 01:42:15 INFO    ] ACLR: [Decimal('-44.85'), Decimal('-51.15'), Decimal('-45.64'), Decimal('-54.67'), Decimal('-56.34'), Decimal('-55.16')]
+[20220602 01:42:15 DEBUG   ] Current Format: LTE
+[20220602 01:42:15 INFO    ] EVM: 1.14
+[20220602 01:42:16 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220602 01:42:16 DEBUG   ] Current Format: LTE
+[20220602 01:42:16 INFO    ] POWER: 21.72
+[20220602 01:42:16 DEBUG   ] Current Format: LTE
+[20220602 01:42:16 INFO    ] ACLR: [Decimal('-43.20'), Decimal('-43.30'), Decimal('-45.11'), Decimal('-45.49'), Decimal('-49.66'), Decimal('-49.24')]
+[20220602 01:42:16 DEBUG   ] Current Format: LTE
+[20220602 01:42:16 INFO    ] EVM: 1.20
+[20220602 01:42:16 DEBUG   ] {'Q_1': [Decimal('24.46')], 'Q_P': [Decimal('24.61'), [Decimal('-46.54'), Decimal('-52.42'), Decimal('-47.28'), Decimal('-55.96'), Decimal('-57.97'), Decimal('-56.24')], Decimal('0.79')], 'Q_F': [Decimal('23.75'), [Decimal('-47.10'), Decimal('-45.69'), Decimal('-49.50'), Decimal('-48.65'), Decimal('-52.22'), Decimal('-50.03')], Decimal('0.90')], '16_P': [Decimal('23.73'), [Decimal('-44.21'), Decimal('-51.87'), Decimal('-44.84'), Decimal('-55.47'), Decimal('-57.29'), Decimal('-55.82')], Decimal('1.06')], '16_F': [Decimal('22.66'), [Decimal('-43.23'), Decimal('-43.33'), Decimal('-45.25'), Decimal('-46.01'), Decimal('-49.92'), Decimal('-48.52')], Decimal('1.37')], '64_P': [Decimal('22.42'), [Decimal('-44.85'), Decimal('-51.15'), Decimal('-45.64'), Decimal('-54.67'), Decimal('-56.34'), Decimal('-55.16')], Decimal('1.14')], '64_F': [Decimal('21.72'), [Decimal('-43.20'), Decimal('-43.30'), Decimal('-45.11'), Decimal('-45.49'), Decimal('-49.66'), Decimal('-49.24')], Decimal('1.20')]}
+[20220602 01:42:16 DEBUG   ] Open Excel
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill ACLR
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] continue to search
+[20220602 01:42:16 DEBUG   ] the ACLR of M ch
+[20220602 01:42:16 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:16 DEBUG   ] start to fill EVM
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the evm of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill ACLR
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] continue to search
+[20220602 01:42:16 DEBUG   ] the ACLR of M ch
+[20220602 01:42:16 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:16 DEBUG   ] start to fill EVM
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the evm of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill ACLR
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] continue to search
+[20220602 01:42:16 DEBUG   ] the ACLR of M ch
+[20220602 01:42:16 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:16 DEBUG   ] start to fill EVM
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the evm of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill ACLR
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] continue to search
+[20220602 01:42:16 DEBUG   ] the ACLR of M ch
+[20220602 01:42:16 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:16 DEBUG   ] start to fill EVM
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the evm of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill ACLR
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] continue to search
+[20220602 01:42:16 DEBUG   ] the ACLR of M ch
+[20220602 01:42:16 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:16 DEBUG   ] start to fill EVM
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the evm of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill Power
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the power of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:16 DEBUG   ] start to fill ACLR
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] continue to search
+[20220602 01:42:16 DEBUG   ] the ACLR of M ch
+[20220602 01:42:16 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:16 DEBUG   ] start to fill EVM
+[20220602 01:42:16 DEBUG   ] capture band: 1, 10MHZ, ch02
+[20220602 01:42:16 DEBUG   ] the evm of M ch
+[20220602 01:42:16 DEBUG   ] Band is found
+[20220602 01:42:17 INFO    ] Start to measure B1, bandwidth: 10 MHz, downlink_chan: 550
+[20220602 01:42:17 DEBUG   ] Current Format: LTE
+[20220602 01:42:17 DEBUG   ] Current Format: LTE
+[20220602 01:42:18 INFO    ] TESTPRM TX_MAXPWR_Q_1
+[20220602 01:42:18 DEBUG   ] Current Format: LTE
+[20220602 01:42:18 INFO    ] POWER: 24.61
+[20220602 01:42:19 INFO    ] TESTPRM TX_MAXPWR_Q_P
+[20220602 01:42:19 DEBUG   ] Current Format: LTE
+[20220602 01:42:19 INFO    ] POWER: 24.67
+[20220602 01:42:19 DEBUG   ] Current Format: LTE
+[20220602 01:42:19 INFO    ] ACLR: [Decimal('-46.07'), Decimal('-53.01'), Decimal('-46.77'), Decimal('-56.49'), Decimal('-57.60'), Decimal('-56.95')]
+[20220602 01:42:19 DEBUG   ] Current Format: LTE
+[20220602 01:42:19 INFO    ] EVM: 0.59
+[20220602 01:42:19 INFO    ] TESTPRM TX_MAXPWR_Q_F
+[20220602 01:42:19 DEBUG   ] Current Format: LTE
+[20220602 01:42:19 INFO    ] POWER: 23.69
+[20220602 01:42:19 DEBUG   ] Current Format: LTE
+[20220602 01:42:19 INFO    ] ACLR: [Decimal('-46.29'), Decimal('-45.75'), Decimal('-48.56'), Decimal('-48.94'), Decimal('-51.81'), Decimal('-49.90')]
+[20220602 01:42:19 DEBUG   ] Current Format: LTE
+[20220602 01:42:19 INFO    ] EVM: 0.92
+[20220602 01:42:20 INFO    ] TESTPRM TX_MAXPWR_16_P
+[20220602 01:42:20 DEBUG   ] Current Format: LTE
+[20220602 01:42:20 INFO    ] POWER: 23.71
+[20220602 01:42:20 DEBUG   ] Current Format: LTE
+[20220602 01:42:20 INFO    ] ACLR: [Decimal('-43.23'), Decimal('-52.26'), Decimal('-43.87'), Decimal('-55.70'), Decimal('-56.96'), Decimal('-56.30')]
+[20220602 01:42:20 DEBUG   ] Current Format: LTE
+[20220602 01:42:20 INFO    ] EVM: 1.00
+[20220602 01:42:21 INFO    ] TESTPRM TX_MAXPWR_16_F
+[20220602 01:42:21 DEBUG   ] Current Format: LTE
+[20220602 01:42:21 INFO    ] POWER: 22.59
+[20220602 01:42:21 DEBUG   ] Current Format: LTE
+[20220602 01:42:21 INFO    ] ACLR: [Decimal('-44.23'), Decimal('-43.41'), Decimal('-46.47'), Decimal('-46.08'), Decimal('-50.28'), Decimal('-48.57')]
+[20220602 01:42:21 DEBUG   ] Current Format: LTE
+[20220602 01:42:21 INFO    ] EVM: 1.20
+[20220602 01:42:22 INFO    ] TESTPRM TX_MAXPWR_64_P
+[20220602 01:42:22 DEBUG   ] Current Format: LTE
+[20220602 01:42:22 INFO    ] POWER: 22.63
+[20220602 01:42:22 DEBUG   ] Current Format: LTE
+[20220602 01:42:22 INFO    ] ACLR: [Decimal('-42.91'), Decimal('-51.53'), Decimal('-43.62'), Decimal('-55.16'), Decimal('-55.96'), Decimal('-55.25')]
+[20220602 01:42:22 DEBUG   ] Current Format: LTE
+[20220602 01:42:22 INFO    ] EVM: 0.95
+[20220602 01:42:23 INFO    ] TESTPRM TX_MAXPWR_64_F
+[20220602 01:42:23 DEBUG   ] Current Format: LTE
+[20220602 01:42:23 INFO    ] POWER: 21.72
+[20220602 01:42:23 DEBUG   ] Current Format: LTE
+[20220602 01:42:23 INFO    ] ACLR: [Decimal('-44.63'), Decimal('-43.35'), Decimal('-46.92'), Decimal('-45.90'), Decimal('-50.32'), Decimal('-48.56')]
+[20220602 01:42:23 DEBUG   ] Current Format: LTE
+[20220602 01:42:23 INFO    ] EVM: 1.15
+[20220602 01:42:23 DEBUG   ] {'Q_1': [Decimal('24.61')], 'Q_P': [Decimal('24.67'), [Decimal('-46.07'), Decimal('-53.01'), Decimal('-46.77'), Decimal('-56.49'), Decimal('-57.60'), Decimal('-56.95')], Decimal('0.59')], 'Q_F': [Decimal('23.69'), [Decimal('-46.29'), Decimal('-45.75'), Decimal('-48.56'), Decimal('-48.94'), Decimal('-51.81'), Decimal('-49.90')], Decimal('0.92')], '16_P': [Decimal('23.71'), [Decimal('-43.23'), Decimal('-52.26'), Decimal('-43.87'), Decimal('-55.70'), Decimal('-56.96'), Decimal('-56.30')], Decimal('1.00')], '16_F': [Decimal('22.59'), [Decimal('-44.23'), Decimal('-43.41'), Decimal('-46.47'), Decimal('-46.08'), Decimal('-50.28'), Decimal('-48.57')], Decimal('1.20')], '64_P': [Decimal('22.63'), [Decimal('-42.91'), Decimal('-51.53'), Decimal('-43.62'), Decimal('-55.16'), Decimal('-55.96'), Decimal('-55.25')], Decimal('0.95')], '64_F': [Decimal('21.72'), [Decimal('-44.63'), Decimal('-43.35'), Decimal('-46.92'), Decimal('-45.90'), Decimal('-50.32'), Decimal('-48.56')], Decimal('1.15')]}
+[20220602 01:42:23 DEBUG   ] Open Excel
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill ACLR
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] the ACLR of H ch
+[20220602 01:42:23 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:23 DEBUG   ] start to fill EVM
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the evm of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill ACLR
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] the ACLR of H ch
+[20220602 01:42:23 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:23 DEBUG   ] start to fill EVM
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the evm of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill ACLR
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] the ACLR of H ch
+[20220602 01:42:23 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:23 DEBUG   ] start to fill EVM
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the evm of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill ACLR
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] the ACLR of H ch
+[20220602 01:42:23 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:23 DEBUG   ] start to fill EVM
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the evm of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill ACLR
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] the ACLR of H ch
+[20220602 01:42:23 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:23 DEBUG   ] start to fill EVM
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the evm of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill Power
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the power of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:23 DEBUG   ] start to fill ACLR
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] continue to search
+[20220602 01:42:23 DEBUG   ] the ACLR of H ch
+[20220602 01:42:23 DEBUG   ] ch is the same for ACLR
+[20220602 01:42:23 DEBUG   ] start to fill EVM
+[20220602 01:42:23 DEBUG   ] capture band: 1, 10MHZ, ch03
+[20220602 01:42:23 DEBUG   ] the evm of H ch
+[20220602 01:42:23 DEBUG   ] Band is found
+[20220602 01:42:24 DEBUG   ] Start to plot line chart in Excel
+[20220602 01:42:29 INFO    ] Timer: 0:00:37.754868

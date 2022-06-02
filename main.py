@@ -5,7 +5,6 @@ import pygubu
 import datetime
 import logging
 from logging.config import fileConfig
-import threading
 
 import ui_init
 
@@ -400,79 +399,79 @@ class MainApp:
             for line in lines:
                 if 'bands_lte' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_lte) +'\n'
+                    temp_list[1] = ' ' + str(bands_lte) + '\n'
                     logger.debug('replace band LTE')
                     line = '='.join(temp_list)
 
                 elif 'bands_wcdma' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_wcdma) +'\n'
+                    temp_list[1] = ' ' + str(bands_wcdma) + '\n'
                     logger.debug('replace band WCDMA')
                     line = '='.join(temp_list)
 
                 elif 'bands_hsupa' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_hsupa) +'\n'
+                    temp_list[1] = ' ' + str(bands_hsupa) + '\n'
                     logger.debug('replace band HSUPA')
                     line = '='.join(temp_list)
 
                 elif 'bands_hsdpa' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_hsdpa) +'\n'
+                    temp_list[1] = ' ' + str(bands_hsdpa) + '\n'
                     logger.debug('replace band HSDPA')
                     line = '='.join(temp_list)
 
                 elif 'bands_gsm' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_gsm) +'\n'
+                    temp_list[1] = ' ' + str(bands_gsm) + '\n'
                     logger.debug('replace band GSM')
                     line = '='.join(temp_list)
 
                 elif 'tech' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tech) +'\n'
+                    temp_list[1] = ' ' + str(tech) + '\n'
                     logger.debug('replace tech setting')
                     line = '='.join(temp_list)
 
                 elif 'bw' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bw) +'\n'
+                    temp_list[1] = ' ' + str(bw) + '\n'
                     logger.debug('replace bw setting')
                     line = '='.join(temp_list)
 
                 elif 'ue_power' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(ue_power) +'\n'
+                    temp_list[1] = ' ' + str(ue_power) + '\n'
                     logger.debug('replace ue power setting')
                     line = '='.join(temp_list)
 
                 elif 'instrument' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(instrument) + '"' +'\n'
+                    temp_list[1] = ' ' + '"' + str(instrument) + '"' + '\n'
                     logger.debug('replace instrument setting')
                     line = '='.join(temp_list)
 
                 elif 'tx' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tx) +'\n'
+                    temp_list[1] = ' ' + str(tx) + '\n'
                     logger.debug('replace tx setting')
                     line = '='.join(temp_list)
 
                 elif 'rx ' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rx) +'\n'
+                    temp_list[1] = ' ' + str(rx) + '\n'
                     logger.debug('replace rx setting')
                     line = '='.join(temp_list)
 
                 elif 'rx_sweep' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rx_sweep) +'\n'
+                    temp_list[1] = ' ' + str(rx_sweep) + '\n'
                     logger.debug('replace rx_sweep setting')
                     line = '='.join(temp_list)
 
                 elif 'chan' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(chan) + '"' +'\n'
+                    temp_list[1] = ' ' + '"' + str(chan) + '"' + '\n'
                     logger.debug('replace chan setting')
                     line = '='.join(temp_list)
 
@@ -621,7 +620,6 @@ class MainApp:
 
         logger.info(f'select LTE band: {self.band_lte}')
         return self.band_lte
-
 
     def wanted_band_WCDMA(self):
         self.band_wcdma = []
@@ -859,7 +857,6 @@ class MainApp:
         self.TxMax.set(False)
         self.TxLow.set(False)
 
-
     def off_all_reset_ch(self):
         self.chan_L.set(False)
         self.chan_M.set(False)
@@ -947,7 +944,6 @@ class MainApp:
     def off_all_none_UHB(self, event=None):
         self.UHB_all.set(False)
 
-
     def UHB_all_state(self):
         if self.UHB_all.get():
             logger.debug("UHB band all is checked")
@@ -963,7 +959,6 @@ class MainApp:
 
     def off_all_none_WCDMA(self, event=None):
         self.WCDMA_all.set(False)
-
 
     def off_all_none_HSUPA(self, event=None):
         self.HSUPA_all.set(False)

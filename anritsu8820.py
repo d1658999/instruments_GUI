@@ -782,9 +782,9 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.inst.write('TPCPAT ALT')
         time.sleep(0.1)
         self.set_to_measure()
-        evm_hpm = self.inst.query('POINT_EVM? ALL').strip().split(',')   # p0, p1, p2, p3
+        evm_hpm = self.inst.query('POINT_EVM? ALL').strip().split(',')  # p0, p1, p2, p3
         logger.debug(evm_hpm)
-        phase_disc_hpm = self.inst.query('POINT_PHASEDISC? ALL').strip().split(',')    # theta0, theta1
+        phase_disc_hpm = self.inst.query('POINT_PHASEDISC? ALL').strip().split(',')  # theta0, theta1
         logger.debug(phase_disc_hpm)
 
         # below is for LPM -18dBm
@@ -814,7 +814,6 @@ class Anritsu8820(pyvisa.ResourceManager):
             return Decimal(temp1)
         elif abs(Decimal(temp2)) == phase_disc_worst:
             return Decimal(temp2)
-
 
     def get_subtest1_power_aclr(self):
         """
@@ -1119,7 +1118,6 @@ class Anritsu8820(pyvisa.ResourceManager):
             return power, aclr, 5
         elif self.chcoding == 'FIXREFCH':
             logger.info("HSDPA doesn't have subtest5")
-
 
     def get_subtest_power_aclr_evm_all(self):
         """
@@ -1601,7 +1599,6 @@ class Anritsu8820(pyvisa.ResourceManager):
         time.sleep(0.1)
         self.set_to_measure()
 
-
         self.pwr = self.get_uplink_power('WCDMA')
         validation_list.append(self.pwr)
         self.aclr = self.get_uplink_aclr('WCDMA')
@@ -2031,7 +2028,6 @@ class Anritsu8820(pyvisa.ResourceManager):
                         for col, aclr_item in enumerate(test_items[items_selected]):
                             ws.cell(row, 3 + col).value = aclr_item
                         logger.debug('the ACLR of H ch')
-
 
             # elif self.chcoding == 'FIXREFCH':  # this is HSDPA
             #     pass
