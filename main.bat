@@ -1,1 +1,1 @@
-start cmd /k .\venv\Scripts\python.exe main.py
+start cmd /k .\Python39\python.exe main.py
