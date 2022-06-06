@@ -1,10 +1,14 @@
 #!/usr/bin/python3
 import pathlib
+import tkinter
 import tkinter.ttk as ttk
 import pygubu
 import datetime
 import logging
 from logging.config import fileConfig
+import threading
+import signal
+import os
 
 import ui_init
 
@@ -21,6 +25,7 @@ class MainApp:
         builder.add_resource_path(PROJECT_PATH)
         builder.add_from_file(PROJECT_UI)
         self.mainwindow = builder.get_object("toplevel2", master)
+        self.button_run = builder.get_object("button_run", master)
 
         self.instrument = None
         self.tx = None
@@ -197,6 +202,18 @@ class MainApp:
 
     def run(self):
         self.mainwindow.mainloop()
+
+    def t_stop(self):
+        t = threading.Thread(target=self.stop)
+        t.start()
+
+    def stop(self):
+        print('Crtrl C')
+        os.kill(signal.CTRL_C_EVENT, 0)
+
+    def t_measure(self):
+        t = threading.Thread(target=self.measure, daemon=True)
+        t.start()
 
     def import_ui_setting(self):
         """
@@ -1066,6 +1083,7 @@ class MainApp:
         self.wanted_ue_pwr()
 
     def measure(self):
+        self.button_run['state'] = tkinter.DISABLED
         start = datetime.datetime.now()
         self.export_ui_setting()
 
@@ -1121,6 +1139,7 @@ class MainApp:
         stop = datetime.datetime.now()
 
         logger.info(f'Timer: {stop - start}')
+        self.button_run['state'] = tkinter.NORMAL
 
 
 if __name__ == "__main__":

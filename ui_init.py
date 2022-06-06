@@ -1,11 +1,11 @@
-tech = ['LTE', 'WCDMA']
-bw = [5, 10]
+tech = ['LTE']
+bw = [10]
 ue_power = []
 
 chan = "LMH"
 
-bands_lte = [1, 2, 3, 4, 7, 25, 66, 30]
-bands_wcdma = [1, 2, 4]
+bands_lte = [1]
+bands_wcdma = []
 bands_hsupa = []
 bands_hsdpa = [1, 2, 4]
 bands_gsm = None
