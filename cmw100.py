@@ -454,6 +454,28 @@ class CMW100:
                         except AttributeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
+    def tx_power_relative_test_freq_pipeline_lte(self):
+        for tech in wt.tech:
+            if tech == 'LTE' and wt.lte_bands != []:
+                for tx_path in wt.tx_path:
+                    for bw in wt.lte_bandwidths:
+                        try:
+                            for band in wt.lte_bands:
+                                if bw in cm_pmt_ftm.bandwidths_selected(band):
+                                    # default setting is FRB and GENERAL
+                                    self.script = 'GENERAL'  # force set self.script = 'GENERAL'
+                                    self.rb_state = 'PRB'  # force set self.script = 'PRB'
+                                    self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
+                                    rb_num, rb_start = scripts.GENERAL_LTE[bw][0]  # 0: PRB, # 1: FRB
+                                    self.rb_num = rb_num
+                                    self.rb_start = rb_start
+                                    self.tx_power_relative_test_freq_progress(band, bw, self.rb_num, self.rb_start, self.mcs, 26, wt.port_lte, tx_path, plot=False)
+                                else:
+                                    logger.info(f'B{band} does not have BW {bw}MHZ')
+                            self.txp_aclr_evm_plot(self.filename)
+                        except AttributeError:
+                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
 
     def tx_power_aclr_evm_lmh_lte(self, band_lte, bw_lte, tx_level, rf_port, freq_select, tx_path='TX1', plot=True):
         """
@@ -514,7 +536,7 @@ class CMW100:
             pass
 
 
-    def tx_power_relative_test_freq_progress(self, band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, freq_range_list, tx_path='TX1'):
+    def tx_power_relative_test_freq_progress(self, band_lte, bw_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_path='TX1', plot=True):
         """
         :param band_lte:
         :param bw_lte:
@@ -529,16 +551,20 @@ class CMW100:
         data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         logger.info('----------Relatvie test freq progress ---------')
-        tx_loss = self.get_loss(tx_freq_lte)
-        rx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte))
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)
+        tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq) for rx_freq in rx_freq_list]
+        rx_loss = self.get_loss(rx_freq_list[1])
+        tx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, rx_freq_list[1]))
         self.preset_instrument_lte()
         self.set_test_end_lte()
         self.antenna_switch_v2('LTE')
         self.set_test_end_lte()
         self.set_test_mode_lte(band_lte)
-        self.sig_gen_lte(band_lte, cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte), bw_lte, rx_loss)
-        self.sync_lte(cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte))
+        self.sig_gen_lte(band_lte, rx_freq_list[1], bw_lte, rx_loss)
+        self.sync_lte(rx_freq_list[1])
 
+        # freq_range_list = [tx_freq_list[0], tx_freq_list[2], int((tx_freq_list[2] - tx_freq_list[0])/10)]
+        freq_range_list = [tx_freq_list[0], tx_freq_list[2], 1000]
         step = freq_range_list[2]
 
         data = {}
@@ -552,8 +578,11 @@ class CMW100:
         self.set_test_end_lte()
         logger.debug(data)
 
-        filename = self.tx_power_relative_test_export_excel(data, band_lte, bw_lte, tx_level)
-        self.txp_aclr_evm_plot(filename)
+        self.filename = self.tx_power_relative_test_export_excel(data, band_lte, bw_lte, tx_level)
+        if plot == True:
+            self.txp_aclr_evm_plot(self.filename)
+        else:
+            pass
 
 
     def tx_power_relative_test_progress(self, band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_range_list, tx_path='TX1'):
@@ -773,15 +802,6 @@ def main():
     start = datetime.datetime.now()
     cmw100 = CMW100()
 
-    band_lte = 42
-    bw_lte = 10
-    rx_freq_lte = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)
-    tx_freq_lte = cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_lte)
-
-    loss = 0.8
-
-    rf_port = 1
-
     # cmw100.antenna_switch_v2('LTE')
     # cmw100.set_test_end_lte()
     # cmw100.set_test_mode_lte(1)
@@ -794,7 +814,8 @@ def main():
 
     # cmw100.tx_power_relative_test_freq_progress(band_lte, bw_lte, tx_freq_lte[1], 50, 0, 'QPSK', 25, rf_port, loss, [tx_freq_lte[0], tx_freq_lte[2], int((tx_freq_lte[2] - tx_freq_lte[0])/2)])
     # cmw100.tx_power_aclr_evm_lmh_lte(band_lte, bw_lte, 50, 0, 'QPSK', 25, rf_port, 0.8, 'LMH',)
-    cmw100.tx_power_aclr_evm_lmh_pipeline_lte()
+    # cmw100.tx_power_aclr_evm_lmh_pipeline_lte()
+    cmw100.tx_power_relative_test_freq_pipeline_lte()
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')
