@@ -3,7 +3,6 @@ import time
 import serial.tools.list_ports
 import logging
 from logging.config import fileConfig
-from thermal_disable import thd
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -31,6 +30,7 @@ class Flymode:
     def fly_off(self):
         self.ser.write(self.on.encode())
         logger.info('flymode is off, 1')
+
 
 def get_comport_wanted():
     comports = serial.tools.list_ports.comports()
