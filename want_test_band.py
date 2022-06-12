@@ -9,14 +9,16 @@ lte_bandwidths = [10]     # 1.4,3,5,10,15,20
 
 
 tech = ['LTE']   # 'LTE' | 'WCDMA' | 'GSM' | 'HSUPA' | 'HSDPA'
-channel = 'LMH'
+channel = 'L'
 
 fdd_tdd_cross_test = 0     # this is only for 8821,  0: only measure one of FDD or TDD; 1: measure both FDD and TDD
 
 tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 
 tx_level = 26
+tx_level_range_list = [10, 20]  # tx_level_1, tx_level_2
 mcs = ['QPSK', 'Q16', 'Q64', 'Q256']   # 'QPSK' | 'Q16' | 'Q64' | 'Q256'
+rb_ftm = 'PRB'  # 'PRB' | 'FRB'
 tx_path = ['TX1']   # 'TX1' | 'TX2'
 scripts = ['GENERAL']  # 'GENERAL' | 'CSE_BE' | 'FCC' | 'FACTORY'
 port_lte = 1  # 1 ~ 8 default is  1

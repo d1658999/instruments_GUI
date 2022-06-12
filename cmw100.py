@@ -111,7 +111,12 @@ class CMW100:
 
     def sync_lte(self, rx_freq_lte, sync_path=0, sync_mode=0):
         logger.info('---------Sync----------')
-        self.command(f'AT+LSYNC={sync_path},{sync_mode},{rx_freq_lte}',delay=1.2)
+        response = self.command(f'AT+LSYNC={sync_path},{sync_mode},{rx_freq_lte}',delay=1.2)
+        while b'+LSYNC:1\r\n' not in response:
+            logger.info('**********Sync repeat**********')
+            time.sleep(1)
+            response = self.command(f'AT+LSYNC={sync_path},{sync_mode},{rx_freq_lte}', delay=2)
+
 
     def tx_set_lte(self, tx_path, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level):
         """
@@ -168,6 +173,7 @@ class CMW100:
         :param ant_path:
         :return:
         """
+        logger.info('---------Antenna Switch----------')
         tech_dict = {
             'GSM': 0,
             'WCDMA': 1,
@@ -178,6 +184,14 @@ class CMW100:
         self.command(f'AT+ANTSWSEL={tech_dict[tech]},{ant_path}')
         logger.info(f'RAT: {tech}, ANT_PATH: {ant_path}')
 
+    def chan_judge(self, band_lte, bw_lte, tx_freq_lte ):
+        rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte)
+        if rx_freq_lte < cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)[1]:
+            return 'L'
+        elif rx_freq_lte == cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)[1]:
+            return 'M'
+        elif rx_freq_lte > cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)[1]:
+            return 'H'
 
     def tx_measure(self, band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_loss):
         logger.info('---------Tx Measure----------')
@@ -273,7 +287,7 @@ class CMW100:
         logger.debug(aclr_results + mod_results)
         return aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
 
-    def tx_power_relative_test_export_excel(self, data, band_lte, bw_lte, tx_freq_level_lte):
+    def tx_power_relative_test_export_excel(self, data, band_lte, bw_lte, tx_freq_level_lte, mode=0):  # mode general: 0,  mode LMH: 1
         """
         data is dict like:
         tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET]
@@ -281,98 +295,202 @@ class CMW100:
         logger.info('----------save to excel----------')
         filename = None
         if self.script == 'GENERAL':
-            if tx_freq_level_lte >= 100:
-                filename = f'relative power_{bw_lte}MHZ_LTE.xlsx'
-            elif tx_freq_level_lte <= 100:
-                filename = f'TxP_ACLR_EVM_{bw_lte}MHZ_LTE.xlsx'
+            if mode == 1:
+                if tx_freq_level_lte >= 100:
+                    filename = f'relative power_{bw_lte}MHZ_LTE_LMH.xlsx'
+                elif tx_freq_level_lte <= 100:
+                    filename = f'TxP_ACLR_EVM_{bw_lte}MHZ_LTE_LMH.xlsx'
 
 
-            if pathlib.Path(filename).exists() is False:
-                logger.info('----------file does not exist----------')
-                wb = openpyxl.Workbook()
-                wb.remove(wb['Sheet'])
-                # to create sheet
-                for mcs in ['QPSK', 'Q16', 'Q64', 'Q256']:  # some cmw10 might not have licesnse of Q256
-                    wb.create_sheet(f'Raw_Data_{mcs}_PRB')
-                    wb.create_sheet(f'Raw_Data_{mcs}_FRB')
+                if pathlib.Path(filename).exists() is False:
+                    logger.info('----------file does not exist----------')
+                    wb = openpyxl.Workbook()
+                    wb.remove(wb['Sheet'])
+                    # to create sheet
+                    for mcs in ['QPSK', 'Q16', 'Q64', 'Q256']:  # some cmw10 might not have licesnse of Q256
+                        wb.create_sheet(f'Raw_Data_{mcs}_PRB')
+                        wb.create_sheet(f'Raw_Data_{mcs}_FRB')
 
-                for sheetname in wb.sheetnames:
-                    ws = wb[sheetname]
-                    ws['A1'] = 'Band'
-                    ws['B1'] = 'Tx_Freq'
-                    ws['C1'] = 'Tx_level'
-                    ws['D1'] = 'Measured_Power'
-                    ws['E1'] = 'E_-1'
-                    ws['F1'] = 'E_+1'
-                    ws['G1'] = 'U_-1'
-                    ws['H1'] = 'U_+1'
-                    ws['I1'] = 'U_-2'
-                    ws['J1'] = 'U_+2'
-                    ws['K1'] = 'EVM'
-                    ws['L1'] = 'Freq_Err'
-                    ws['M1'] = 'IQ_OFFSET'
-                    ws['N1'] = 'RB_num'
-                    ws['O1'] = 'RB_start'
-                    ws['P1'] = 'MCS'
+                    for sheetname in wb.sheetnames:
+                        ws = wb[sheetname]
+                        ws['A1'] = 'Band'
+                        ws['B1'] = 'Chan'
+                        ws['C1'] = 'Tx_Freq'
+                        ws['D1'] = 'Tx_level'
+                        ws['E1'] = 'Measured_Power'
+                        ws['F1'] = 'E_-1'
+                        ws['G1'] = 'E_+1'
+                        ws['H1'] = 'U_-1'
+                        ws['I1'] = 'U_+1'
+                        ws['J1'] = 'U_-2'
+                        ws['K1'] = 'U_+2'
+                        ws['L1'] = 'EVM'
+                        ws['M1'] = 'Freq_Err'
+                        ws['N1'] = 'IQ_OFFSET'
+                        ws['O1'] = 'RB_num'
+                        ws['P1'] = 'RB_start'
+                        ws['Q1'] = 'MCS'
+                        ws['R1'] = 'Tx_Path'
+
+                    wb.save(filename)
+                    wb.close()
+
+                logger.info('----------file exist----------')
+                wb = openpyxl.load_workbook(filename)
+                if self.rb_state == 'PRB':
+                    ws = wb[f'Raw_Data_{self.mcs}_{self.rb_state}']
+                else:
+                    ws = wb[f'Raw_Data_{self.mcs}_{self.rb_state}']
+
+                max_row = ws.max_row
+                row = max_row + 1
+                if tx_freq_level_lte >= 100:
+                    for tx_level, measured_data in data.items():
+                        chan = self.chan_judge(band_lte, bw_lte, tx_freq_level_lte)
+                        ws.cell(row, 1).value = band_lte
+                        ws.cell(row, 2).value = chan  # LMH
+                        ws.cell(row, 3).value = tx_freq_level_lte  # this tx_freq_lte
+                        ws.cell(row, 4).value = tx_level
+                        ws.cell(row, 5).value = measured_data[3]
+                        ws.cell(row, 6).value = measured_data[2]
+                        ws.cell(row, 7).value = measured_data[4]
+                        ws.cell(row, 8).value = measured_data[1]
+                        ws.cell(row, 9).value = measured_data[5]
+                        ws.cell(row, 10).value = measured_data[0]
+                        ws.cell(row, 11).value = measured_data[6]
+                        ws.cell(row, 12).value = measured_data[7]
+                        ws.cell(row, 13).value = measured_data[8]
+                        ws.cell(row, 14).value = measured_data[9]
+                        ws.cell(row, 15).value = self.rb_num
+                        ws.cell(row, 16).value = self.rb_start
+                        ws.cell(row, 17).value = self.mcs
+                        ws.cell(row, 18).value = self.tx_path
+
+                        row += 1
+
+                elif tx_freq_level_lte <= 100:
+                    for tx_freq_lte, measured_data in data.items():
+                        chan = self.chan_judge(band_lte, bw_lte, tx_freq_lte)
+                        ws.cell(row, 1).value = band_lte
+                        ws.cell(row, 2).value = chan  # # LMH
+                        ws.cell(row, 3).value = tx_freq_lte
+                        ws.cell(row, 4).value = tx_freq_level_lte  # this tx_level
+                        ws.cell(row, 5).value = measured_data[3]
+                        ws.cell(row, 6).value = measured_data[2]
+                        ws.cell(row, 7).value = measured_data[4]
+                        ws.cell(row, 8).value = measured_data[1]
+                        ws.cell(row, 9).value = measured_data[5]
+                        ws.cell(row, 10).value = measured_data[0]
+                        ws.cell(row, 11).value = measured_data[6]
+                        ws.cell(row, 12).value = measured_data[7]
+                        ws.cell(row, 13).value = measured_data[8]
+                        ws.cell(row, 14).value = measured_data[9]
+                        ws.cell(row, 15).value = self.rb_num
+                        ws.cell(row, 16).value = self.rb_start
+                        ws.cell(row, 17).value = self.mcs
+                        ws.cell(row, 18).value = self.tx_path
+
+                        row += 1
 
                 wb.save(filename)
                 wb.close()
 
-            logger.info('----------file exist----------')
-            wb = openpyxl.load_workbook(filename)
-            if self.rb_state == 'PRB':
-                ws = wb[f'Raw_Data_{self.mcs}_{self.rb_state}']
+                return filename
             else:
-                ws = wb[f'Raw_Data_{self.mcs}_{self.rb_state}']
+                if tx_freq_level_lte >= 100:
+                    filename = f'relative power_{bw_lte}MHZ_LTE.xlsx'
+                elif tx_freq_level_lte <= 100:
+                    filename = f'TxP_ACLR_EVM_{bw_lte}MHZ_LTE.xlsx'
 
-            max_row = ws.max_row
-            row = max_row + 1
-            if tx_freq_level_lte >= 100:
-                for tx_level, measured_data in data.items():
-                    ws.cell(row, 1).value = band_lte
-                    ws.cell(row, 2).value = tx_freq_level_lte  # this tx_freq_lte
-                    ws.cell(row, 3).value = tx_level
-                    ws.cell(row, 4).value = measured_data[3]
-                    ws.cell(row, 5).value = measured_data[2]
-                    ws.cell(row, 6).value = measured_data[4]
-                    ws.cell(row, 7).value = measured_data[1]
-                    ws.cell(row, 8).value = measured_data[5]
-                    ws.cell(row, 9).value = measured_data[0]
-                    ws.cell(row, 10).value = measured_data[6]
-                    ws.cell(row, 11).value = measured_data[7]
-                    ws.cell(row, 12).value = measured_data[8]
-                    ws.cell(row, 13).value = measured_data[9]
-                    ws.cell(row, 14).value = self.rb_num
-                    ws.cell(row, 15).value = self.rb_start
-                    ws.cell(row, 16).value = self.mcs
+                if pathlib.Path(filename).exists() is False:
+                    logger.info('----------file does not exist----------')
+                    wb = openpyxl.Workbook()
+                    wb.remove(wb['Sheet'])
+                    # to create sheet
+                    for mcs in ['QPSK', 'Q16', 'Q64', 'Q256']:  # some cmw10 might not have licesnse of Q256
+                        wb.create_sheet(f'Raw_Data_{mcs}_PRB')
+                        wb.create_sheet(f'Raw_Data_{mcs}_FRB')
 
-                    row += 1
+                    for sheetname in wb.sheetnames:
+                        ws = wb[sheetname]
+                        ws['A1'] = 'Band'
+                        ws['B1'] = 'Tx_Freq'
+                        ws['C1'] = 'Tx_level'
+                        ws['D1'] = 'Measured_Power'
+                        ws['E1'] = 'E_-1'
+                        ws['F1'] = 'E_+1'
+                        ws['G1'] = 'U_-1'
+                        ws['H1'] = 'U_+1'
+                        ws['I1'] = 'U_-2'
+                        ws['J1'] = 'U_+2'
+                        ws['K1'] = 'EVM'
+                        ws['L1'] = 'Freq_Err'
+                        ws['M1'] = 'IQ_OFFSET'
+                        ws['N1'] = 'RB_num'
+                        ws['O1'] = 'RB_start'
+                        ws['P1'] = 'MCS'
+                        ws['Q1'] = 'Tx_Path'
 
-            elif tx_freq_level_lte <= 100:
-                for tx_freq_lte, measured_data in data.items():
-                    ws.cell(row, 1).value = band_lte
-                    ws.cell(row, 2).value = tx_freq_lte
-                    ws.cell(row, 3).value = tx_freq_level_lte  # this tx_level
-                    ws.cell(row, 4).value = measured_data[3]
-                    ws.cell(row, 5).value = measured_data[2]
-                    ws.cell(row, 6).value = measured_data[4]
-                    ws.cell(row, 7).value = measured_data[1]
-                    ws.cell(row, 8).value = measured_data[5]
-                    ws.cell(row, 9).value = measured_data[0]
-                    ws.cell(row, 10).value = measured_data[6]
-                    ws.cell(row, 11).value = measured_data[7]
-                    ws.cell(row, 12).value = measured_data[8]
-                    ws.cell(row, 13).value = measured_data[9]
-                    ws.cell(row, 14).value = self.rb_num
-                    ws.cell(row, 15).value = self.rb_start
-                    ws.cell(row, 16).value = self.mcs
+                    wb.save(filename)
+                    wb.close()
 
-                    row += 1
+                logger.info('----------file exist----------')
+                wb = openpyxl.load_workbook(filename)
+                if self.rb_state == 'PRB':
+                    ws = wb[f'Raw_Data_{self.mcs}_{self.rb_state}']
+                else:
+                    ws = wb[f'Raw_Data_{self.mcs}_{self.rb_state}']
 
-            wb.save(filename)
-            wb.close()
+                max_row = ws.max_row
+                row = max_row + 1
+                if tx_freq_level_lte >= 100:
+                    for tx_level, measured_data in data.items():
+                        ws.cell(row, 1).value = band_lte
+                        ws.cell(row, 2).value = tx_freq_level_lte  # this tx_freq_lte
+                        ws.cell(row, 3).value = tx_level
+                        ws.cell(row, 4).value = measured_data[3]
+                        ws.cell(row, 5).value = measured_data[2]
+                        ws.cell(row, 6).value = measured_data[4]
+                        ws.cell(row, 7).value = measured_data[1]
+                        ws.cell(row, 8).value = measured_data[5]
+                        ws.cell(row, 9).value = measured_data[0]
+                        ws.cell(row, 10).value = measured_data[6]
+                        ws.cell(row, 11).value = measured_data[7]
+                        ws.cell(row, 12).value = measured_data[8]
+                        ws.cell(row, 13).value = measured_data[9]
+                        ws.cell(row, 14).value = self.rb_num
+                        ws.cell(row, 15).value = self.rb_start
+                        ws.cell(row, 16).value = self.mcs
+                        ws.cell(row, 17).value = self.tx_path
 
-            return filename
+                        row += 1
+
+                elif tx_freq_level_lte <= 100:
+                    for tx_freq_lte, measured_data in data.items():
+                        ws.cell(row, 1).value = band_lte
+                        ws.cell(row, 2).value = tx_freq_lte
+                        ws.cell(row, 3).value = tx_freq_level_lte  # this tx_level
+                        ws.cell(row, 4).value = measured_data[3]
+                        ws.cell(row, 5).value = measured_data[2]
+                        ws.cell(row, 6).value = measured_data[4]
+                        ws.cell(row, 7).value = measured_data[1]
+                        ws.cell(row, 8).value = measured_data[5]
+                        ws.cell(row, 9).value = measured_data[0]
+                        ws.cell(row, 10).value = measured_data[6]
+                        ws.cell(row, 11).value = measured_data[7]
+                        ws.cell(row, 12).value = measured_data[8]
+                        ws.cell(row, 13).value = measured_data[9]
+                        ws.cell(row, 14).value = self.rb_num
+                        ws.cell(row, 15).value = self.rb_start
+                        ws.cell(row, 16).value = self.mcs
+                        ws.cell(row, 17).value = self.tx_path
+
+                        row += 1
+
+                wb.save(filename)
+                wb.close()
+
+                return filename
 
 
 
@@ -447,14 +565,19 @@ class CMW100:
                         try:
                             for band in wt.lte_bands:
                                 if bw in cm_pmt_ftm.bandwidths_selected(band):
+                                    self.tx_path = tx_path
                                     self.tx_power_aclr_evm_lmh_lte(band, bw, wt.tx_level, wt.port_lte, wt.channel, tx_path, plot=False)
                                 else:
                                     logger.info(f'B{band} does not have BW {bw}MHZ')
-                            self.txp_aclr_evm_plot(self.filename)
+                            self.txp_aclr_evm_plot(self.filename, 1)
                         except AttributeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
-    def tx_power_relative_test_freq_pipeline_lte(self):
+    def tx_freq_sweep_pipline_lte(self):
+        rb_select = {
+            'PRB': 0,
+            'FRB': 1,
+        }
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 for tx_path in wt.tx_path:
@@ -463,13 +586,44 @@ class CMW100:
                             for band in wt.lte_bands:
                                 if bw in cm_pmt_ftm.bandwidths_selected(band):
                                     # default setting is FRB and GENERAL
+                                    tx_level = wt.tx_level
+                                    self.tx_path = tx_path
                                     self.script = 'GENERAL'  # force set self.script = 'GENERAL'
-                                    self.rb_state = 'PRB'  # force set self.script = 'PRB'
+                                    self.rb_state = wt.rb_ftm  # force set self.script = 'PRB'
                                     self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
-                                    rb_num, rb_start = scripts.GENERAL_LTE[bw][0]  # 0: PRB, # 1: FRB
+                                    rb_num, rb_start = scripts.GENERAL_LTE[bw][rb_select[wt.rb_ftm]]  #  PRB: 0, # FRB: 1
                                     self.rb_num = rb_num
                                     self.rb_start = rb_start
-                                    self.tx_power_relative_test_freq_progress(band, bw, self.rb_num, self.rb_start, self.mcs, 26, wt.port_lte, tx_path, plot=False)
+                                    self.tx_freq_sweep_progress(band, bw, self.rb_num, self.rb_start, self.mcs, tx_level, wt.port_lte, tx_path, plot=False)
+                                else:
+                                    logger.info(f'B{band} does not have BW {bw}MHZ')
+                            self.txp_aclr_evm_plot(self.filename)
+                        except AttributeError:
+                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def tx_level_sweep_pipeline_lte(self):
+        rb_select = {
+            'PRB': 0,
+            'FRB': 1,
+        }
+        for tech in wt.tech:
+            if tech == 'LTE' and wt.lte_bands != []:
+                for tx_path in wt.tx_path:
+                    for bw in wt.lte_bandwidths:
+                        try:
+                            for band in wt.lte_bands:
+                                if bw in cm_pmt_ftm.bandwidths_selected(band):
+                                    # default setting is FRB and GENERAL
+                                    for channel in wt.channel:
+                                        tx_level = wt.tx_level
+                                        self.tx_path = tx_path
+                                        self.script = 'GENERAL'  # force set self.script = 'GENERAL'
+                                        self.rb_state = wt.rb_ftm  # force set self.script = 'PRB'
+                                        self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
+                                        rb_num, rb_start = scripts.GENERAL_LTE[bw][rb_select[wt.rb_ftm]]  #  PRB: 0, # FRB: 1
+                                        self.rb_num = rb_num
+                                        self.rb_start = rb_start
+                                        self.tx_level_sweep_progress(band, bw, channel, self.rb_num, self.rb_start, self.mcs, tx_level, wt.port_lte, tx_path, plot=False)
                                 else:
                                     logger.info(f'B{band} does not have BW {bw}MHZ')
                             self.txp_aclr_evm_plot(self.filename)
@@ -527,16 +681,16 @@ class CMW100:
                             data_freq[tx_freq_lte] = aclr_mod_results
                         logger.debug(data_freq)
                         # ready to export to excel
-                        self.filename = self.tx_power_relative_test_export_excel(data_freq, band_lte, bw_lte, tx_level)
+                        self.filename = self.tx_power_relative_test_export_excel(data_freq, band_lte, bw_lte, tx_level, 1)
 
         self.set_test_end_lte()
         if plot == True:
-            self.txp_aclr_evm_plot(self.filename)
+            self.txp_aclr_evm_plot(self.filename, 1)
         else:
             pass
 
 
-    def tx_power_relative_test_freq_progress(self, band_lte, bw_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_path='TX1', plot=True):
+    def tx_freq_sweep_progress(self, band_lte, bw_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_path='TX1', plot=True):
         """
         :param band_lte:
         :param bw_lte:
@@ -550,7 +704,7 @@ class CMW100:
         :param tx_path:
         data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
-        logger.info('----------Relatvie test freq progress ---------')
+        logger.info('----------Freq Sweep progress ---------')
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)
         tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq) for rx_freq in rx_freq_list]
         rx_loss = self.get_loss(rx_freq_list[1])
@@ -558,12 +712,11 @@ class CMW100:
         self.preset_instrument_lte()
         self.set_test_end_lte()
         self.antenna_switch_v2('LTE')
-        self.set_test_end_lte()
         self.set_test_mode_lte(band_lte)
         self.sig_gen_lte(band_lte, rx_freq_list[1], bw_lte, rx_loss)
         self.sync_lte(rx_freq_list[1])
 
-        # freq_range_list = [tx_freq_list[0], tx_freq_list[2], int((tx_freq_list[2] - tx_freq_list[0])/10)]
+        # freq_range_list = [tx_freq_list[0], tx_freq_list[2], freq_step]
         freq_range_list = [tx_freq_list[0], tx_freq_list[2], 1000]
         step = freq_range_list[2]
 
@@ -585,7 +738,7 @@ class CMW100:
             pass
 
 
-    def tx_power_relative_test_progress(self, band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_range_list, tx_path='TX1'):
+    def tx_level_sweep_progress(self, band_lte, bw_lte, channel, rb_num, rb_start, mcs, tx_level, rf_port, tx_path='TX1', plot=True):
         """
         :param band_lte:
         :param bw_lte:
@@ -596,13 +749,22 @@ class CMW100:
         :param pwr:
         :param rf_port:
         :param loss:
-        :param tx_range_list: [tx_level_1, tx_level_2]
         :param tx_path:
         data {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
+        tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq) for rx_freq in rx_freq_list]
+
+        tx_freq_lte = None
+        if channel == 'L':
+            tx_freq_lte = tx_freq_list[0]
+        elif channel == 'M':
+            tx_freq_lte = tx_freq_list[1]
+        elif channel == 'H':
+            tx_freq_lte = tx_freq_list[2]
 
         tx_loss = self.get_loss(tx_freq_lte)
-        rx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, rx_freq_lte))
+        rx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte))
         self.preset_instrument_lte()
         self.set_test_end_lte()
         self.antenna_switch_v2('LTE')
@@ -611,18 +773,23 @@ class CMW100:
         self.sync_lte(cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte))
         self.tx_set_lte(tx_path, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level)
 
+        #  initial all before tx level prgress
         self.tx_power_relative_test_initial(band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_loss)
-        logger.info('----------Relatvie test progress---------')
+
+        tx_range_list = wt.tx_level_range_list  # [tx_level_1, tx_level_2]
+
+        logger.info('----------TX Level Sweep progress---------')
         logger.info(f'----------from {tx_range_list[0]} dBm to {tx_range_list[1]} dBm----------')
 
         step = -1 if tx_range_list[0] > tx_range_list[1] else 1
 
+        #  following is real change tx level prgress
         data = {}
         for tx_level in range(tx_range_list[0], tx_range_list[1]+step, step):
             logger.info(f'========Now Tx level = {tx_level} dBm========')
             self.command(f'AT+LTXPWRLVLSET={tx_level}')
             self.command(f'AT+LTXCHNSDREQ')
-            self.command_cmw100_write('CONF:LTE:MEAS:RFS:UMAR 15.000000')
+            self.command_cmw100_write('CONF:LTE:MEAS:RFS:UMAR 10.000000')
             self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:ENP {tx_level + 5}.00')
             mod_results = self.command_cmw100_query(f'READ:LTE:MEAS:MEV:MOD:AVER?')
             mod_results = mod_results.split(',')
@@ -647,8 +814,10 @@ class CMW100:
             # logger.info(f'IEM_MARG results: {iem_results}')
             esfl_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:ESFL:EXTR?')
             esfl_results = esfl_results.split(',')
+            ripple1 = f'{eval(esfl_results[2]):.2f}' if esfl_results[2] != 'NCAP' else 'NCAP'
+            ripple2 = f'{eval(esfl_results[3]):.2f}' if esfl_results[3] != 'NCAP' else 'NCAP'
             logger.info(
-                f'Equalize Spectrum Flatness: Ripple1:{eval(esfl_results[2]):.2f} dBpp, Ripple2:{esfl_results[3]} dBpp')
+                f'Equalize Spectrum Flatness: Ripple1:{ripple1} dBpp, Ripple2:{ripple2} dBpp')
             time.sleep(0.2)
             # logger.info(f'ESFL results: {esfl_results}')
             sem_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:SEM:MARG?')
@@ -667,91 +836,173 @@ class CMW100:
         self.set_test_end_lte()
         logger.debug(data)
 
-        filename = self.tx_power_relative_test_export_excel(data, band_lte, bw_lte, tx_freq_lte)
+        self.filename = self.tx_power_relative_test_export_excel(data, band_lte, bw_lte, tx_freq_lte)
+        if plot == True:
+            self.txp_aclr_evm_plot(self.filename)
+        else:
+            pass
 
-    def txp_aclr_evm_plot(self, filename):
+    def txp_aclr_evm_plot(self, filename, mode=0):  # mode 0: general, mode 1: LMH
         logger.info('----------Plot Chart---------')
         wb = openpyxl.load_workbook(filename)
         if self.script == 'GENERAL':
-            for ws_name in wb.sheetnames:
-                ws = wb[ws_name]
+            if mode == 1:
+                for ws_name in wb.sheetnames:
+                    ws = wb[ws_name]
 
-                if ws._charts != []:  # if there is charts, delete it
-                    ws._charts.clear()
+                    if ws._charts != []:  # if there is charts, delete it
+                        ws._charts.clear()
+
+                    logger.info('----------Power---------')
+                    chart = LineChart()
+                    chart.title = 'Power'
+                    chart.y_axis.title = 'Power(dBm)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+
+                    chart.height = 20
+                    chart.width = 32
+
+                    y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[0].marker.size = 10
+
+                    ws.add_chart(chart, "U1")
+
+                    logger.info('----------ACLR---------')
+                    chart = LineChart()
+                    chart.title = 'ACLR'
+                    chart.y_axis.title = 'ACLR(dB)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+                    chart.y_axis.scaling.min = -60
+                    chart.y_axis.scaling.max = -20
+
+                    chart.height = 20
+                    chart.width = 32
+
+                    y_data = Reference(ws, min_col=6, min_row=1, max_col=11, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                    chart.series[0].marker.size = 10
+                    chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[1].marker.size = 10
+                    chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                    chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                    chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                    chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+
+                    ws.add_chart(chart, "U39")
+
+                    logger.info('----------EVM---------')
+                    chart = LineChart()
+                    chart.title = 'EVM'
+                    chart.y_axis.title = 'EVM(%)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+
+                    chart.height = 20
+                    chart.width = 32
+
+                    y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
+
+                    chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[0].marker.size = 10
+
+                    ws.add_chart(chart, "U77")
+
+                wb.save(filename)
+                wb.close()
+            else:
+                for ws_name in wb.sheetnames:
+                    ws = wb[ws_name]
+
+                    if ws._charts != []:  # if there is charts, delete it
+                        ws._charts.clear()
 
 
-                logger.info('----------Power---------')
-                chart = LineChart()
-                chart.title = 'Power'
-                chart.y_axis.title = 'Power(dBm)'
-                chart.x_axis.title = 'Band'
-                chart.x_axis.tickLblPos = 'low'
+                    logger.info('----------Power---------')
+                    chart = LineChart()
+                    chart.title = 'Power'
+                    chart.y_axis.title = 'Power(dBm)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
 
-                chart.height = 20
-                chart.width = 32
+                    chart.height = 20
+                    chart.width = 32
 
-                y_data = Reference(ws, min_col=4, min_row=1, max_col=4, max_row=ws.max_row)
-                x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                chart.add_data(y_data, titles_from_data=True)
-                chart.set_categories(x_data)
+                    y_data = Reference(ws, min_col=4, min_row=1, max_col=4, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
 
-                chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                chart.series[0].marker.size = 10
-
-
-                ws.add_chart(chart, "R1")
+                    chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[0].marker.size = 10
 
 
-                logger.info('----------ACLR---------')
-                chart = LineChart()
-                chart.title = 'ACLR'
-                chart.y_axis.title = 'ACLR(dB)'
-                chart.x_axis.title = 'Band'
-                chart.x_axis.tickLblPos = 'low'
-                chart.y_axis.scaling.min = -60
-                chart.y_axis.scaling.max = -20
+                    ws.add_chart(chart, "R1")
 
-                chart.height = 20
-                chart.width = 32
 
-                y_data = Reference(ws, min_col=5, min_row=1, max_col=10, max_row=ws.max_row)
-                x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                chart.add_data(y_data, titles_from_data=True)
-                chart.set_categories(x_data)
+                    logger.info('----------ACLR---------')
+                    chart = LineChart()
+                    chart.title = 'ACLR'
+                    chart.y_axis.title = 'ACLR(dB)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
+                    chart.y_axis.scaling.min = -60
+                    chart.y_axis.scaling.max = -20
 
-                chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
-                chart.series[0].marker.size = 10
-                chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
-                chart.series[1].marker.size = 10
-                chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
-                chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+                    chart.height = 20
+                    chart.width = 32
 
-                ws.add_chart(chart, "R39")
+                    y_data = Reference(ws, min_col=5, min_row=1, max_col=10, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
 
-                logger.info('----------EVM---------')
-                chart = LineChart()
-                chart.title = 'EVM'
-                chart.y_axis.title = 'EVM(%)'
-                chart.x_axis.title = 'Band'
-                chart.x_axis.tickLblPos = 'low'
+                    chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                    chart.series[0].marker.size = 10
+                    chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[1].marker.size = 10
+                    chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                    chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                    chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                    chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
-                chart.height = 20
-                chart.width = 32
+                    ws.add_chart(chart, "R39")
 
-                y_data = Reference(ws, min_col=11, min_row=1, max_col=11, max_row=ws.max_row)
-                x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                chart.add_data(y_data, titles_from_data=True)
-                chart.set_categories(x_data)
+                    logger.info('----------EVM---------')
+                    chart = LineChart()
+                    chart.title = 'EVM'
+                    chart.y_axis.title = 'EVM(%)'
+                    chart.x_axis.title = 'Band'
+                    chart.x_axis.tickLblPos = 'low'
 
-                chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                chart.series[0].marker.size = 10
+                    chart.height = 20
+                    chart.width = 32
 
-                ws.add_chart(chart, "R77")
+                    y_data = Reference(ws, min_col=11, min_row=1, max_col=11, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    chart.add_data(y_data, titles_from_data=True)
+                    chart.set_categories(x_data)
 
-            wb.save(filename)
-            wb.close()
+                    chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    chart.series[0].marker.size = 10
+
+                    ws.add_chart(chart, "R77")
+
+                wb.save(filename)
+                wb.close()
 
 
     def command_cmw100_query(self, tcpip_command):
@@ -782,20 +1033,24 @@ class CMW100:
                 else:  # only one response
                     logger.info(f'MTM: >>{r[0]}')
 
-        # logger.info('OK is not at the end, so repeat again')
-        # while 'OK' not in response:
-        #     time.sleep(0.1)
-        #     response = self.ser.readlines()
-        #     for res in response:
-        #         r = res.decode().split()
-        #         if len(r) > 1:  # with more than one response
-        #             for rr in r:
-        #                 logger.info(f'MTM: >>{rr}')
-        #         else:
-        #             if r == []:  # sometimes there is not \r\n in the middle response
-        #                 continue
-        #             else:  # only one response
-        #                 logger.info(f'MTM: >>{r[0]}')
+
+        while b'OK\r\n' not in response:
+            logger.info('OK is not at the end, so repeat again')
+            logger.info(f'==========repeat to response again=========')
+            response = self.ser.readlines()
+            time.sleep(1)
+            for res in response:
+                r = res.decode().split()
+                if len(r) > 1:  # with more than one response
+                    for rr in r:
+                        logger.info(f'MTM: >>{rr}')
+                else:
+                    if r == []:  # sometimes there is not \r\n in the middle response
+                        continue
+                    else:  # only one response
+                        logger.info(f'MTM: >>{r[0]}')
+
+        return response
 
 
 def main():
@@ -813,10 +1068,11 @@ def main():
     # cmw100.tx_power_relative_test_progress(band_lte, bw_lte, tx_freq_lte, 50, 0, 'QPSK', 25, rf_port, loss, [0, 25])
 
     # cmw100.tx_power_relative_test_freq_progress(band_lte, bw_lte, tx_freq_lte[1], 50, 0, 'QPSK', 25, rf_port, loss, [tx_freq_lte[0], tx_freq_lte[2], int((tx_freq_lte[2] - tx_freq_lte[0])/2)])
-    # cmw100.tx_power_aclr_evm_lmh_lte(band_lte, bw_lte, 50, 0, 'QPSK', 25, rf_port, 0.8, 'LMH',)
     # cmw100.tx_power_aclr_evm_lmh_pipeline_lte()
-    cmw100.tx_power_relative_test_freq_pipeline_lte()
+    # cmw100.tx_freq_sweep_pipline_lte()
+    cmw100.tx_level_sweep_pipeline_lte()
     stop = datetime.datetime.now()
+
 
     logger.info(f'Timer: {stop - start}')
 
