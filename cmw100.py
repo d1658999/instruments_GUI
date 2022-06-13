@@ -398,9 +398,9 @@ class CMW100:
                 return filename
             else:
                 if tx_freq_level_lte >= 100:
-                    filename = f'relative power_{bw_lte}MHZ_LTE.xlsx'
+                    filename = f'Tx_level_sweep_{bw_lte}MHZ_LTE.xlsx'
                 elif tx_freq_level_lte <= 100:
-                    filename = f'TxP_ACLR_EVM_{bw_lte}MHZ_LTE.xlsx'
+                    filename = f'Freq_sweep_{bw_lte}MHZ_LTE.xlsx'
 
                 if pathlib.Path(filename).exists() is False:
                     logger.info('----------file does not exist----------')
@@ -585,16 +585,17 @@ class CMW100:
                         try:
                             for band in wt.lte_bands:
                                 if bw in cm_pmt_ftm.bandwidths_selected(band):
-                                    # default setting is FRB and GENERAL
-                                    tx_level = wt.tx_level
-                                    self.tx_path = tx_path
-                                    self.script = 'GENERAL'  # force set self.script = 'GENERAL'
-                                    self.rb_state = wt.rb_ftm  # force set self.script = 'PRB'
-                                    self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
-                                    rb_num, rb_start = scripts.GENERAL_LTE[bw][rb_select[wt.rb_ftm]]  #  PRB: 0, # FRB: 1
-                                    self.rb_num = rb_num
-                                    self.rb_start = rb_start
-                                    self.tx_freq_sweep_progress(band, bw, self.rb_num, self.rb_start, self.mcs, tx_level, wt.port_lte, tx_path, plot=False)
+                                    for rb_ftm in wt.rb_ftm_lte:
+                                        # default setting is FRB and GENERAL
+                                        tx_level = wt.tx_level
+                                        self.tx_path = tx_path
+                                        self.script = 'GENERAL'  # force set self.script = 'GENERAL'
+                                        self.rb_state = rb_ftm  # force set self.script = 'PRB'
+                                        self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
+                                        rb_num, rb_start = scripts.GENERAL_LTE[bw][rb_select[rb_ftm]]  #  PRB: 0, # FRB: 1
+                                        self.rb_num = rb_num
+                                        self.rb_start = rb_start
+                                        self.tx_freq_sweep_progress(band, bw, self.rb_num, self.rb_start, self.mcs, tx_level, wt.port_lte, tx_path, plot=False)
                                 else:
                                     logger.info(f'B{band} does not have BW {bw}MHZ')
                             self.txp_aclr_evm_plot(self.filename)
@@ -615,20 +616,54 @@ class CMW100:
                                 if bw in cm_pmt_ftm.bandwidths_selected(band):
                                     # default setting is FRB and GENERAL
                                     for channel in wt.channel:
-                                        tx_level = wt.tx_level
-                                        self.tx_path = tx_path
-                                        self.script = 'GENERAL'  # force set self.script = 'GENERAL'
-                                        self.rb_state = wt.rb_ftm  # force set self.script = 'PRB'
-                                        self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
-                                        rb_num, rb_start = scripts.GENERAL_LTE[bw][rb_select[wt.rb_ftm]]  #  PRB: 0, # FRB: 1
-                                        self.rb_num = rb_num
-                                        self.rb_start = rb_start
-                                        self.tx_level_sweep_progress(band, bw, channel, self.rb_num, self.rb_start, self.mcs, tx_level, wt.port_lte, tx_path, plot=False)
+                                        for rb_ftm in wt.rb_ftm_lte:
+                                            tx_level = wt.tx_level
+                                            self.tx_path = tx_path
+                                            self.script = 'GENERAL'  # force set self.script = 'GENERAL'
+                                            self.rb_state = rb_ftm  # force set self.script = 'PRB'
+                                            self.mcs = 'QPSK'  # force set self.mcs = 'QPSK'
+                                            rb_num, rb_start = scripts.GENERAL_LTE[bw][rb_select[rb_ftm]]  #  PRB: 0, # FRB: 1
+                                            self.rb_num = rb_num
+                                            self.rb_start = rb_start
+                                            self.tx_level_sweep_progress(band, bw, channel, self.rb_num, self.rb_start, self.mcs, tx_level, wt.port_lte, tx_path, plot=False)
                                 else:
                                     logger.info(f'B{band} does not have BW {bw}MHZ')
                             self.txp_aclr_evm_plot(self.filename)
                         except AttributeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def tx_measure_single(self):  # this is incompleted
+        band_lte = wt.band_lte
+        bw_lte = wt.bw_lte
+        tx_freq_lte = wt.tx_freq_lte
+        rb_num = wt.rb_num
+        rb_start = wt.rb_start
+        freq_select = wt.channel
+        mcs = wt.mcs
+        tx_level = wt.tx_level
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
+        # tx_freq_lte_mch = cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1])  # M_tx_freq
+        rx_loss = self.get_loss(rx_freq_list[1])
+        tx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1]))
+        logger.info('----------Test LMH progress---------')
+        self.preset_instrument_lte()
+        self.set_test_end_lte()
+        self.antenna_switch_v2('LTE')
+        self.set_test_mode_lte(band_lte)
+        self.sig_gen_lte(band_lte, rx_freq_list[1], bw_lte, rx_loss)
+        self.sync_lte(rx_freq_list[1])
+
+        freq_list = []
+        for freq in freq_select:
+            if freq == 'L':
+                freq_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[0]))
+            elif freq == 'M':
+                freq_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1]))
+            elif freq == 'H':
+                freq_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[2]))
+
+        self.tx_set_lte(tx_path, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level)
+        self.tx_measure(band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_loss)
 
 
     def tx_power_aclr_evm_lmh_lte(self, band_lte, bw_lte, tx_level, rf_port, freq_select, tx_path='TX1', plot=True):
@@ -642,6 +677,10 @@ class CMW100:
         :param tx_path:
         data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
+        rb_select = {
+            'PRB': 0,
+            'FRB': 1,
+        }
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         # tx_freq_lte_mch = cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1])  # M_tx_freq
         rx_loss = self.get_loss(rx_freq_list[1])
@@ -668,11 +707,13 @@ class CMW100:
             for script in wt.scripts:
                 if script == 'GENERAL':
                     self.script = 'GENERAL'
-                    for num, rb_set in enumerate(scripts.GENERAL_LTE[bw_lte]):
-                        rb_num, rb_start = rb_set
+                    for rb_ftm in wt.rb_ftm_lte:
+                        rb_num, rb_start = scripts.GENERAL_LTE[bw_lte][rb_select[rb_ftm]]  # PRB: 0, # FRB: 1
+                        # for num, rb_set in enumerate(scripts.GENERAL_LTE[bw_lte]):
+                        #     rb_num, rb_start = rb_set
                         self.rb_num = rb_num
                         self.rb_start = rb_start
-                        self.rb_state = 'PRB' if num == 0 else 'FRB'
+                        self.rb_state = rb_ftm
                         data_freq = {}
                         for tx_freq_lte in freq_list:
                             self.tx_set_lte(tx_path, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level)
