@@ -114,8 +114,10 @@ class CMW100:
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {rx_level}.000000')
         self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
 
-    def sig_gen_fr1(self, band_fr1, rx_freq_fr1, bw_fr1, rx_loss, rx_level=-70):
+    def sig_gen_fr1(self, band_fr1, rx_freq_fr1, bw_fr1, scs_fr1, mcs_fr1, rx_loss, rx_level=-70):
         logger.info('----------Sig Gen----------')
+        scs_fr1 = 1 if band_fr1 in [34, 38, 39, 40, 41, 42, 48, 77, 78, 79] else 0 # for now FDD is forced to 15KHz and TDD is to be 30KHz
+        scs_fr1 = 15 * (2 ** scs_fr1)
         self.command_cmw100_query('SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
         self.command_cmw100_write('ROUT:GPRF:GEN:SCEN:SAL R118, TX1')
         self.command_cmw100_query('*OPC?')
@@ -377,32 +379,38 @@ class CMW100:
         logger.debug(aclr_results + mod_results)
         return aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
 
-    def tx_measure_fr1(self):
+    def tx_measure_fr1(self, band_fr1, bw_fr1, scs_fr1, tx_freq_fr1, rb_num, rb_start, mcs_fr1, type_fr1, tx_level, rf_port, tx_loss):
+        scs_fr1 = 1 if band_fr1 in [34, 38, 39, 40, 41, 42, 48, 77, 78, 79] else 0  # for now FDD is forced to 15KHz and TDD is to be 30KHz
+        scs_fr1 = 15 * (2 ** scs_fr1)  # for now TDD only use 30KHz, FDD only use 15KHz
+        logger.info('---------Tx Measure----------')
+
+        mode = "TDD" if band_fr1 in [38, 39, 40, 41, 42, 48, 77, 78, 79, ] else "FDD"
         self.command_cmw100_query(f'SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:DMODe TDD')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:BAND OB77')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:FREQ 3750000KHz')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:DMODe {mode}')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:BAND OB{band_fr1}')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:FREQ {tx_freq_fr1}KHz')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:PLC 0')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:MOEX ON')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S30K, B100')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN100   ON, 0.015MHz, 0.0985MHz, -22.5,K030')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA2:CBAN100   ON,   1.5MHz,    4.5MHz,  -8.5,  M1')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA3:CBAN100   ON,   5.5MHz,   99.5MHz, -11.5,  M1')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA4:CBAN100   ON, 0 100.5MHz,  104.5MHz, -23.5,  M1')
-        self.command_cmw100_write(
-            f'CONFigure:NRSub:MEASurement:MEValuation:PUSChconfig QPSK,A,OFF,270,0,14,0,T1,SING,0,2')
-        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:DFTPrecoding ON')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs_fr1}K, B{bw_fr1}')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{bw_fr1}   ON, 0.015MHz, 0.0985MHz, {round(-13.5-10*math.log10(FR1_BW/5), 1)},K030')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA2:CBAN{bw_fr1}   ON,   1.5MHz,    4.5MHz,  -8.5,  M1')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA3:CBAN{bw_fr1}   ON,   5.5MHz,   {round(-0.5+bw_fr1, 1)}MHz, -11.5,  M1')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA4:CBAN{bw_fr1}   ON, 0 {round(0.5+bw_fr1, 1)}MHz,  {round(4.5+bw_fr1, 1)}MHz, -23.5,  M1')
+        _256Q_flag = 2 if mcs_fr1 == 'Q256' else 0
+        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PUSChconfig {mcs_fr1},A,OFF,{rb_num},{rb_start},14,0,T1,SING,{_256Q_flag},2')
+        type_fr1 = 'ON' if type_fr1 == 'DFTS' else 'OFF'  # DFTS: ON, CP: OFF
+        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:DFTPrecoding {type_fr1}')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PCOMp OFF, 6000E+6')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:REPetition SING')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PLCid 0')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:CTYPe PUSC')
         self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PER MS25')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S30K, 3,0,1,14')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs_fr1}K, 3,0,1,14')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:ENP 31.00')
-        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R11, RX1')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:ENP {tx_level+5}.00')
+        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{rf_port}, RX1')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:SCO:MOD 5')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:SCO:SPEC:ACLR 5')
@@ -414,11 +422,11 @@ class CMW100:
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:NSUB 10')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:NRS:MEAS:SCEN:ACT SAL')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:EATT 0.000000')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:EATT {tx_loss}')
         self.command_cmw100_query(f'*OPC?')
-        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R11, RX1')
+        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{rf_port}, RX1')
         self.command_cmw100_query(f'*OPC?')
-        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R11, RX1')
+        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{rf_port}, RX1')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'INIT:NRS:MEAS:MEV')
         self.command_cmw100_write(f'*OPC?')
@@ -426,19 +434,16 @@ class CMW100:
         while f_state != 'RDY':
             time.sleep(0.2)
             f_state = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:STAT?')
-        time.sleep(0.2)
-        mod_results = self.command_cmw100_query(
-            'READ:NRS:MEAS:MEV:MOD:AVER?')  # P3 is EVM, P15 is Ferr, P14 is IQ Offset
+        mod_results = self.command_cmw100_query('READ:NRS:MEAS:MEV:MOD:AVER?')  # P3 is EVM, P15 is Ferr, P14 is IQ Offset
         mod_results = mod_results.split(',')
         mod_results = [mod_results[3], mod_results[15], mod_results[14]]
         mod_results = [eval(m) for m in mod_results]
         logger.info(f'EVM: {mod_results[0]:.2f}, FREQ_ERR: {mod_results[1]:.2f}, IQ_OFFSET: {mod_results[2]:.2f}')
-        aclr_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:MOD:AVER?')
+        aclr_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:ACLR:AVER?')
         aclr_results = aclr_results.split(',')[1:]
         aclr_results = [eval(aclr) * -1 if eval(aclr) > 30 else eval(aclr) for aclr in
-                        aclr_results]  # #UTRA2(-), UTRA1(-), NR(-), TxP, NR(+), UTRA1(+), UTRA2(+)
-        logger.info(
-            f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
+                        aclr_results]  # UTRA2(-), UTRA1(-), NR(-), TxP, NR(+), UTRA1(+), UTRA2(+)
+        logger.info(f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
         iem_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:IEM:MARG?')
         iem_results = iem_results.split(',')
         logger.info(f'InBandEmissions Margin: {eval(iem_results[2]):.2f}dB')
@@ -450,9 +455,9 @@ class CMW100:
         logger.info(f'Equalize Spectrum Flatness: Ripple1:{ripple1} dBpp, Ripple2:{ripple2} dBpp')
         time.sleep(0.2)
         # logger.info(f'ESFL results: {esfl_results}')
-        sem_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:MARG?')
+        sem_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:MARG:ALL?')
         logger.info(f'SEM_MARG results: {sem_results}')
-        sem_avg_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:AVER?')
+        sem_avg_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:AVERage?')
         sem_avg_results = sem_avg_results.split(',')
         logger.info(
             f'OBW: {eval(sem_avg_results[2]) / 1000000:.3f} MHz, Total TX Power: {eval(sem_avg_results[3]):.2f} dBm')

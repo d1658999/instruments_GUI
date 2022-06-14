@@ -25,8 +25,8 @@ mcs_lte = ['QPSK']   # 'QPSK' | 'Q16' | 'Q64' | 'Q256'
 mcs_fr1 = ['QPSK']   # 'BPSK' | 'QPSK' | 'Q16' | 'Q64' | 'Q256'
 rb_ftm_lte = ['PRB', 'FRB']  # 'PRB' | 'FRB'
 rb_ftm_nr = ['INNER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT'
-scs = []
-
+scs = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz
+# scs_tx = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz
 
 
 
