@@ -481,7 +481,7 @@ class CMW100:
         self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port}, RX1')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'INIT:NRS:MEAS:MEV')
-        self.command_cmw100_write(f'*OPC?')
+        self.command_cmw100_query(f'*OPC?')
         f_state = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:STAT?')
         while f_state != 'RDY':
             f_state = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:STAT?')
