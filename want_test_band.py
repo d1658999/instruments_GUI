@@ -24,9 +24,9 @@ scripts = ['GENERAL']  # 'GENERAL' | 'CSE_BE' | 'FCC' | 'FACTORY'
 tx_path = ['TX1']   # 'TX1' | 'TX2'
 type_fr1 = ['DFTS', 'CP']  # 'DFTS' | 'CP'
 mcs_lte = ['QPSK', 'Q256']   # 'QPSK' | 'Q16' | 'Q64' | 'Q256'
-mcs_fr1 = ['QPSK','Q16','Q64','Q256']   # 'BPSK' | 'QPSK' | 'Q16' | 'Q64' | 'Q256'
+mcs_fr1 = ['QPSK', 'Q16', 'Q64', 'Q256','BPSK']   # 'BPSK' | 'QPSK' | 'Q16' | 'Q64' | 'Q256'
 rb_ftm_lte = ['PRB']  # 'PRB' | 'FRB'
-rb_ftm_fr1 = ['INNER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'EDGE_FULL_LEFT' | 'EDGE_FULL_RIGHT'
+rb_ftm_fr1 = ['INNER_FULL', 'OUTER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'EDGE_FULL_LEFT' | 'EDGE_FULL_RIGHT'
 scs = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz
 
 

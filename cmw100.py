@@ -1700,7 +1700,7 @@ class CMW100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "U1")
+                        ws.add_chart(chart, "V1")
 
                         logger.info('----------ACLR---------')
                         chart = LineChart()
@@ -1728,7 +1728,7 @@ class CMW100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
-                        ws.add_chart(chart, "U39")
+                        ws.add_chart(chart, "V39")
 
                         logger.info('----------EVM---------')
                         chart = LineChart()
@@ -1748,7 +1748,7 @@ class CMW100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "U77")
+                        ws.add_chart(chart, "V77")
 
                     wb.save(filename)
                     wb.close()
@@ -1840,7 +1840,7 @@ class CMW100:
         self.cmw100.write(tcpip_command)
         logger.info(f'TCPIP::<<{tcpip_command}')
 
-    def command(self, command='at', delay=0.1):
+    def command(self, command='at', delay=0.2):
         logger.info(f'MTM: <<{command}')
         command = command + '\r'
         self.ser.write(command.encode())
