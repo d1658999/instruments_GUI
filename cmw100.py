@@ -955,7 +955,7 @@ class CMW100:
         scs = 1 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 0  # for now FDD is forced to 15KHz and TDD is to be 30KHz
         scs = 15 * (2 ** scs)  # for now TDD only use 30KHz, FDD only use 15KHz
         logger.info('----------Relatvie test initial----------')
-        mode = 'TDD' if band_lte in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 'FDD'
+        mode = 'TDD' if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 'FDD'
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:DMODe {mode}')
         self.command_cmw100_write(f'CONF:NRS:MEAS:BAND OB{self.band_fr1}')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:FREQ {self.tx_freq_fr1}KHz')
@@ -992,6 +992,7 @@ class CMW100:
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:NRS:MEAS:SCEN:ACT SAL')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:EATT {self.loss_tx}')
+        self.command_cmw100_query(f'*OPC?')
 
     def tx_power_aclr_evm_lmh_pipeline_lte(self):
         self.tx_level = wt.tx_level
@@ -1055,9 +1056,34 @@ class CMW100:
                             for band in wt.lte_bands:
                                 self.band_lte = band
                                 if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
-                                    self.tx_freq_sweep_progress(plot=False)
+                                    self.tx_freq_sweep_progress_lte(plot=False)
                                 else:
                                     logger.info(f'B{band} does not have BW {bw}MHZ')
+                            self.txp_aclr_evm_plot(self.filename, mode=0)
+                        except TypeError:
+                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def tx_freq_sweep_pipline_fr1(self):
+        self.tx_level = wt.tx_level
+        self.port = wt.port_fr1
+        self.chan = wt.channel
+        self.sa_nsa_mode = wt.sa_nas
+        for tech in wt.tech:
+            if tech == 'FR1' and wt.fr1_bands != []:
+                self.tech = tech
+                for tx_path in wt.tx_path:
+                    self.tx_path = tx_path
+                    for bw in wt.fr1_bandwidths:
+                        self.bw_fr1 = bw
+                        try:
+                            for band in wt.fr1_bands:
+                                self.band_fr1 = band
+                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                                    for type in wt.type_fr1:
+                                        self.type_fr1 = type
+                                        self.tx_freq_sweep_progress_fr1(plot=False)
+                                else:
+                                    logger.info(f'N{band} does not have BW {bw}MHZ')
                             self.txp_aclr_evm_plot(self.filename, mode=0)
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
@@ -1084,38 +1110,60 @@ class CMW100:
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
+    def tx_level_sweep_pipeline_fr1(self):
+        self.tx_level = wt.tx_level
+        self.port = wt.port_fr1
+        self.chan = wt.channel
+        self.sa_nsa_mode = wt.sa_nas
+        for tech in wt.tech:
+            if tech == 'FR1' and wt.lte_bands != []:
+                self.tech = tech
+                for tx_path in wt.tx_path:
+                    self.tx_path = tx_path
+                    for bw in wt.fr1_bandwidths:
+                        self.bw_fr1 = bw
+                        try:
+                            for band in wt.fr1_bands:
+                                self.band_fr1 = band
+                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                                    for type in wt.type_fr1:
+                                        self.type_fr1 = type
+                                        self.tx_level_sweep_progress_fr1(plot=False)
+                                else:
+                                    logger.info(f'N{band} does not have BW {bw}MHZ')
+                            self.txp_aclr_evm_plot(self.filename, mode=0)
+                        except TypeError:
+                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
     def tx_measure_single(self):  # this is incompleted
-        band_lte = wt.band_lte
-        bw_lte = wt.bw_lte
-        tx_freq_lte = wt.tx_freq_lte
-        rb_num = wt.rb_num
-        rb_start = wt.rb_start
-        freq_select = wt.channel
-        mcs = wt.mcs_lte
-        tx_level = wt.tx_level
-        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
-        # tx_freq_lte_mch = cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1])  # M_tx_freq
-        rx_loss = self.get_loss(rx_freq_list[1])
-        tx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1]))
-        logger.info('----------Test LMH progress---------')
-        self.preset_instrument()
-        self.set_test_end_lte()
-        self.antenna_switch_v2('LTE')
-        self.set_test_mode_lte(band_lte)
-        self.sig_gen_lte(band_lte, rx_freq_list[1], bw_lte, rx_loss)
-        self.sync_lte(rx_freq_list[1])
-
-        freq_list = []
-        for freq in freq_select:
-            if freq == 'L':
-                freq_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[0]))
-            elif freq == 'M':
-                freq_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[1]))
-            elif freq == 'H':
-                freq_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(band_lte, rx_freq_list[2]))
-
-        self.tx_set_lte(tx_path, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level)
-        self.tx_measure_lte(band_lte, bw_lte, tx_freq_lte, rb_num, rb_start, mcs, tx_level, rf_port, tx_loss)
+        if 'LTE' in wt.tech:
+            self.port = wt.port_lte
+            self.band_lte = wt.band_lte
+            self.bw_lte = wt.bw_lte
+            self.chan = wt.channel
+            rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte, self.bw_lte)
+            self.chan_single_lte = None
+            if self.chan_singl_lte == 'L':
+                self.tx_freq_lte = cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[0])
+            elif self.chan_single == 'M':
+                self.tx_freq_lte_lte = cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[1])
+            elif self.chan_single == 'H':
+                self.tx_freq_lte_lte = cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[2])
+            self.rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, self.bw_lte)
+            self.chan = wt.channel
+            self.mcs_lte = wt.mcs_lte  # PRB, FRB
+            self.rb_size_lte, self.rb_start_lte = scripts.GENERAL_LTE[self.bw_lte][self.rb_select_lte_dict[self.rb_state]]
+            self.tx_level = wt.tx_level
+            self.loss_tx = self.get_loss(self.tx_freq_lte)
+            self.loss_rx = self.get_loss(self.rx_freq_lte)
+            self.preset_instrument()
+            self.set_test_end_lte()
+            self.antenna_switch_v2()
+            self.set_test_mode_lte()
+            self.sig_gen_lte()
+            self.sync_lte()
+            self.tx_set_lte()
+            self.tx_measure_lte()
 
     def tx_power_aclr_evm_lmh_lte(self, plot=True):
         """
@@ -1176,8 +1224,8 @@ class CMW100:
     def tx_power_aclr_evm_lmh_fr1(self, plot=True):
         """
         order: tx_path > bw > band > mcs > rb > chan
-        :param band_lte:
-        :param bw_lte:
+        :param band_fr1:
+        :param bw_fr1:
         :param tx_level:
         :param rf_port:
         :param freq_select: 'LMH'
@@ -1229,7 +1277,7 @@ class CMW100:
         else:
             pass
 
-    def tx_freq_sweep_progress(self, plot=True):
+    def tx_freq_sweep_progress_lte(self, plot=True):
         """
         :param band_lte:
         :param bw_lte:
@@ -1291,6 +1339,68 @@ class CMW100:
         else:
             pass
 
+    def tx_freq_sweep_progress_fr1(self, plot=True):
+        """
+        :param band_fr1:
+        :param bw_fr1:
+        :param tx_freq_fr1:
+        :param rb_num:
+        :param rb_start:
+        :param mcs:
+        :param tx_level:
+        :param rf_port:
+        :param freq_range_list: [freq_level_1, freq_level_2, freq_step]
+        :param tx_path:
+        data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
+        """
+        logger.info('----------Freq Sweep progress ---------')
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1, self.bw_fr1)
+        tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq) for rx_freq in rx_freq_list]
+        self.rx_freq_fr1 = rx_freq_list[1]
+        self.loss_rx = self.get_loss(rx_freq_list[1])
+        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
+        self.preset_instrument()
+        self.set_test_end_fr1()
+        self.antenna_switch_v2()
+        self.set_test_mode_fr1()
+        self.sig_gen_fr1()
+        self.sync_fr1()
+
+        tx_freq_select_list = []
+        for chan in self.chan:
+            if chan == 'L':
+                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[0]))
+            elif chan == 'M':
+                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
+            elif chan == 'H':
+                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[2]))
+
+        freq_range_list = [tx_freq_list[0], tx_freq_list[2], 10000]
+        step = freq_range_list[2]
+
+        for mcs in wt.mcs_fr1:
+            self.mcs_fr1 = mcs
+            for script in wt.scripts:
+                if script == 'GENERAL':
+                    self.script = script
+                    for rb_ftm in wt.rb_ftm_fr1:  # PRB, FRB
+                        self.rb_size_fr1, self.rb_start_fr1 = scripts.GENERAL_FR1[self.bw_fr1][self.scs][self.type_fr1][self.rb_alloc_fr1_dict[rb_ftm]]  # PRB: 0, # FRB: 1
+                        self.rb_state = rb_ftm  # PRB, FRB
+                        data = {}
+                        for tx_freq_fr1 in range(freq_range_list[0], freq_range_list[1] + step, step):
+                            self.tx_freq_fr1 = tx_freq_fr1
+                            self.tx_set_fr1()
+                            aclr_mod_results = self.tx_measure_fr1()
+                            logger.debug(aclr_mod_results)
+                            data[self.tx_freq_fr1] = aclr_mod_results
+                        logger.debug(data)
+                        self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1, self.tx_level, mode=0)
+        self.set_test_end_fr1()
+        if plot == True:
+            self.txp_aclr_evm_plot(self.filename, mode=0)
+        else:
+            pass
+
     def tx_level_sweep_progress_lte(self, plot=True):
         """
         :param band_lte:
@@ -1327,7 +1437,7 @@ class CMW100:
                         self.rb_size_lte, self.rb_start_lte = scripts.GENERAL_LTE[self.bw_lte][self.rb_select_lte_dict[rb_ftm]]  # PRB: 0, # FRB: 1
                         self.rb_state = rb_ftm  # PRB, FRB
 
-                        self.tx_set_lte()
+
                         tx_freq_select_list = []
                         for chan in self.chan:
                             if chan == 'L':
@@ -1340,76 +1450,78 @@ class CMW100:
                         #  initial all before tx level prgress
                         for tx_freq_select in tx_freq_select_list:
                             self.tx_freq_lte = tx_freq_select
+                            self.tx_set_lte()
                             self.tx_power_relative_test_initial_lte()
 
-                        tx_range_list = wt.tx_level_range_list  # [tx_level_1, tx_level_2]
+                            tx_range_list = wt.tx_level_range_list  # [tx_level_1, tx_level_2]
 
-                        logger.info('----------TX Level Sweep progress---------')
-                        logger.info(f'----------from {tx_range_list[0]} dBm to {tx_range_list[1]} dBm----------')
+                            logger.info('----------TX Level Sweep progress---------')
+                            logger.info(f'----------from {tx_range_list[0]} dBm to {tx_range_list[1]} dBm----------')
 
-                        step = -1 if tx_range_list[0] > tx_range_list[1] else 1
+                            step = -1 if tx_range_list[0] > tx_range_list[1] else 1
 
-                        #  following is real change tx level prgress
+                            #  following is real change tx level prgress
 
 
-                        data = {}
-                        for tx_level in range(tx_range_list[0], tx_range_list[1]+step, step):
-                            self.tx_level = tx_level
-                            logger.info(f'========Now Tx level = {self.tx_level} dBm========')
-                            self.command(f'AT+LTXPWRLVLSET={self.tx_level}')
-                            self.command(f'AT+LTXCHNSDREQ')
-                            self.command_cmw100_write('CONF:LTE:MEAS:RFS:UMAR 10.000000')
-                            self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:ENP {self.tx_level + 5}.00')
-                            mod_results = self.command_cmw100_query(f'READ:LTE:MEAS:MEV:MOD:AVER?')
-                            mod_results = mod_results.split(',')
-                            mod_results = [mod_results[3], mod_results[15], mod_results[14]]
-                            mod_results = [eval(m) for m in mod_results]
-                            logger.info(f'mod_results = {mod_results}')
-                            self.command_cmw100_write('INIT:LTE:MEAS:MEV')
-                            self.command_cmw100_query('*OPC?')
-                            f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
-                            while f_state != 'RDY':
-                                time.sleep(0.2)
+                            data = {}
+                            for tx_level in range(tx_range_list[0], tx_range_list[1]+step, step):
+                                self.tx_level = tx_level
+                                logger.info(f'========Now Tx level = {self.tx_level} dBm========')
+                                self.command(f'AT+LTXPWRLVLSET={self.tx_level}')
+                                self.command(f'AT+LTXCHNSDREQ')
+                                self.command_cmw100_write('CONF:LTE:MEAS:RFS:UMAR 10.000000')
+                                self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:ENP {self.tx_level + 5}.00')
+                                mod_results = self.command_cmw100_query(f'READ:LTE:MEAS:MEV:MOD:AVER?')
+                                mod_results = mod_results.split(',')
+                                mod_results = [mod_results[3], mod_results[15], mod_results[14]]
+                                mod_results = [eval(m) for m in mod_results]
+                                # logger.info(f'mod_results = {mod_results}')
+                                logger.info(f'EVM: {mod_results[0]:.2f}, FREQ_ERR: {mod_results[1]:.2f}, IQ_OFFSET: {mod_results[2]:.2f}')
+                                self.command_cmw100_write('INIT:LTE:MEAS:MEV')
+                                self.command_cmw100_query('*OPC?')
                                 f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
-                            aclr_results = self.command_cmw100_query('FETC:LTE:MEAS:MEV:ACLR:AVER?')
-                            aclr_results = aclr_results.split(',')[1:]
-                            aclr_results = [eval(aclr) * -1 if eval(aclr) > 30 else eval(aclr) for aclr in
-                                            aclr_results]  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2
-                            logger.info(
-                                f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
-                            iem_results = self.command_cmw100_query('FETC:LTE:MEAS:MEV:IEM:MARG?')
-                            iem_results = iem_results.split(',')
-                            logger.info(f'InBandEmissions Margin: {eval(iem_results[2]):.2f}dB')
-                            # logger.info(f'IEM_MARG results: {iem_results}')
-                            esfl_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:ESFL:EXTR?')
-                            esfl_results = esfl_results.split(',')
-                            ripple1 = f'{eval(esfl_results[2]):.2f}' if esfl_results[2] != 'NCAP' else 'NCAP'
-                            ripple2 = f'{eval(esfl_results[3]):.2f}' if esfl_results[3] != 'NCAP' else 'NCAP'
-                            logger.info(
-                                f'Equalize Spectrum Flatness: Ripple1:{ripple1} dBpp, Ripple2:{ripple2} dBpp')
-                            time.sleep(0.2)
-                            # logger.info(f'ESFL results: {esfl_results}')
-                            sem_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:SEM:MARG?')
-                            logger.info(f'SEM_MARG results: {sem_results}')
-                            sem_avg_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:SEM:AVER?')
-                            sem_avg_results = sem_avg_results.split(',')
-                            logger.info(
-                                f'OBW: {eval(sem_avg_results[2]) / 1000000:.3f} MHz, Total TX Power: {eval(sem_avg_results[3]):.2f} dBm')
-                            # logger.info(f'SEM_AVER results: {sem_avg_results}')
-                            self.command_cmw100_write(f'STOP:LTE:MEAS:MEV')
-                            self.command_cmw100_query('*OPC?')
+                                while f_state != 'RDY':
+                                    f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
+                                    time.sleep(0.2)
+                                aclr_results = self.command_cmw100_query('FETC:LTE:MEAS:MEV:ACLR:AVER?')
+                                aclr_results = aclr_results.split(',')[1:]
+                                aclr_results = [eval(aclr) * -1 if eval(aclr) > 30 else eval(aclr) for aclr in
+                                                aclr_results]  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2
+                                logger.info(
+                                    f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
+                                iem_results = self.command_cmw100_query('FETC:LTE:MEAS:MEV:IEM:MARG?')
+                                iem_results = iem_results.split(',')
+                                logger.info(f'InBandEmissions Margin: {eval(iem_results[2]):.2f}dB')
+                                # logger.info(f'IEM_MARG results: {iem_results}')
+                                esfl_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:ESFL:EXTR?')
+                                esfl_results = esfl_results.split(',')
+                                ripple1 = f'{eval(esfl_results[2]):.2f}' if esfl_results[2] != 'NCAP' else 'NCAP'
+                                ripple2 = f'{eval(esfl_results[3]):.2f}' if esfl_results[3] != 'NCAP' else 'NCAP'
+                                logger.info(
+                                    f'Equalize Spectrum Flatness: Ripple1:{ripple1} dBpp, Ripple2:{ripple2} dBpp')
+                                time.sleep(0.2)
+                                # logger.info(f'ESFL results: {esfl_results}')
+                                sem_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:SEM:MARG?')
+                                logger.info(f'SEM_MARG results: {sem_results}')
+                                sem_avg_results = self.command_cmw100_query(f'FETC:LTE:MEAS:MEV:SEM:AVER?')
+                                sem_avg_results = sem_avg_results.split(',')
+                                logger.info(
+                                    f'OBW: {eval(sem_avg_results[2]) / 1000000:.3f} MHz, Total TX Power: {eval(sem_avg_results[3]):.2f} dBm')
+                                # logger.info(f'SEM_AVER results: {sem_avg_results}')
+                                self.command_cmw100_write(f'STOP:LTE:MEAS:MEV')
+                                self.command_cmw100_query('*OPC?')
 
-                            logger.debug(aclr_results + mod_results)
-                            data[tx_level] = aclr_results + mod_results
-                        logger.debug(data)
-                        self.filename = self.tx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte, self.tx_freq_lte)
+                                logger.debug(aclr_results + mod_results)
+                                data[tx_level] = aclr_results + mod_results
+                            logger.debug(data)
+                            self.filename = self.tx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte, self.tx_freq_lte)
         self.set_test_end_lte()
         if plot == True:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
-    def tx_level_sweep_progress_fr1(self, band_fr1, bw_fr1, channel, rb_num, rb_start, mcs, type_fr1, tx_level, rf_port, tx_path='TX1', plot=True):
+    def tx_level_sweep_progress_fr1(self, plot=True):
         """
         :param band_fr1:
         :param bw_fr1:
@@ -1423,92 +1535,107 @@ class CMW100:
         :param tx_path:
         data {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
-        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', band_fr1, bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
-        tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_fr1(band_fr1, rx_freq) for rx_freq in rx_freq_list]
-
-        tx_freq_fr1 = None
-        if channel == 'L':
-            tx_freq_fr1 = tx_freq_list[0]
-        elif channel == 'M':
-            tx_freq_fr1 = tx_freq_list[1]
-        elif channel == 'H':
-            tx_freq_fr1 = tx_freq_list[2]
-
-        tx_loss = self.get_loss(tx_freq_fr1)
-        rx_loss = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(band_fr1, tx_freq_fr1))
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1, self.bw_fr1)
+        tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq) for rx_freq in rx_freq_list]
+        self.rx_freq_fr1 = rx_freq_list[1]
+        self.tx_freq_fr1 = tx_freq_list[1]
+        self.loss_rx = self.get_loss(rx_freq_list[1])
+        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.antenna_switch_v2('LTE')
-        self.set_test_mode_fr1(band_fr1, 0)
-        self.sig_gen_fr1(band_fr1, cm_pmt_ftm.transfer_freq_tx2rx_fr1(band_fr1, tx_freq_fr1), bw_fr1, self.scs,  self.mcs, rx_loss)
-        self.sync_fr1(bw_fr1, cm_pmt_ftm.transfer_freq_tx2rx_fr1(band_fr1,tx_freq_fr1), self.scs)
-        self.tx_set_fr1(tx_path, bw_fr1, tx_freq_fr1, self.scs, rb_num, rb_start, mcs, type, tx_level)
+        self.antenna_switch_v2()
+        self.set_test_mode_fr1()
+        self.sig_gen_fr1()
+        self.sync_fr1()
 
-        #  initial all before tx level prgress
-        self.tx_power_relative_test_initial_fr1(band_fr1, bw_fr1, type_fr1, tx_freq_fr1, self.scs, rb_num, rb_start, mcs, tx_level, rf_port, tx_loss)
+        for mcs in wt.mcs_fr1:
+            self.mcs_fr1 = mcs
+            for script in wt.scripts:
+                if script == 'GENERAL':
+                    self.script = script
+                    for rb_ftm in wt.rb_ftm_fr1:  # INNER, OUTER
+                        self.rb_size_fr1, self.rb_start_fr1 = scripts.GENERAL_FR1[self.bw_fr1][self.scs][self.type_fr1][self.rb_alloc_fr1_dict[rb_ftm]]   # INNER: 0, # OUTER: 1
+                        self.rb_state = rb_ftm  # INNER, OUTER
 
-        tx_range_list = wt.tx_level_range_list  # [tx_level_1, tx_level_2]
+                        tx_freq_select_list = []
+                        for chan in self.chan:
+                            if chan == 'L':
+                                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[0]))
+                            elif chan == 'M':
+                                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
+                            elif chan == 'H':
+                                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[2]))
 
-        logger.info('----------TX Level Sweep progress---------')
-        logger.info(f'----------from {tx_range_list[0]} dBm to {tx_range_list[1]} dBm----------')
+                        #  initial all before tx level prgress
+                        for tx_freq_select in tx_freq_select_list:
+                            self.tx_freq_fr1 = tx_freq_select
+                            self.tx_set_fr1()
+                            self.tx_power_relative_test_initial_fr1()
 
-        step = -1 if tx_range_list[0] > tx_range_list[1] else 1
+                            tx_range_list = wt.tx_level_range_list  # [tx_level_1, tx_level_2]
 
-        #  following is real change tx level prgress
-        data = {}
-        for tx_level in range(tx_range_list[0], tx_range_list[1]+step, step):
-            logger.info(f'========Now Tx level = {tx_level} dBm========')
-            self.command(f'AT+NTXPWRLVLSET={tx_level}')
-            self.command_cmw100_write('CONF:NRS:MEAS:RFS:UMAR 10.000000')
-            self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:ENP {tx_level + 5}.00')
-            self.command_cmw100_write('INIT:NRS:MEAS:MEV')
-            self.command_cmw100_query('*OPC?')
-            f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
-            while f_state != 'RDY':
-                time.sleep(0.2)
-                f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
-            mod_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:MOD:AVER?')
-            mod_results = mod_results.split(',')
-            mod_results = [mod_results[3], mod_results[15], mod_results[14]]
-            mod_results = [eval(m) for m in mod_results]
-            logger.info(f'mod_results = {mod_results}')
-            aclr_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:ACLR:AVER?')
-            aclr_results = aclr_results.split(',')[1:]
-            aclr_results = [eval(aclr) * -1 if eval(aclr) > 30 else eval(aclr) for aclr in
-                            aclr_results]  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2
-            logger.info(
-                f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
-            iem_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:IEM:MARG:AVER?')
-            iem_results = iem_results.split(',')
-            logger.info(f'InBandEmissions Margin: {eval(iem_results[2]):.2f}dB')
-            # logger.info(f'IEM_MARG results: {iem_results}')
-            esfl_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:ESFL:EXTR?')
-            esfl_results = esfl_results.split(',')
-            ripple1 = f'{eval(esfl_results[2]):.2f}' if esfl_results[2] != 'NCAP' else 'NCAP'
-            ripple2 = f'{eval(esfl_results[3]):.2f}' if esfl_results[3] != 'NCAP' else 'NCAP'
-            logger.info(
-                f'Equalize Spectrum Flatness: Ripple1:{ripple1} dBpp, Ripple2:{ripple2} dBpp')
-            time.sleep(0.2)
-            # logger.info(f'ESFL results: {esfl_results}')
-            sem_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:MARG:ALL?')
-            logger.info(f'SEM_MARG results: {sem_results}')
-            sem_avg_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:AVERage?')
-            sem_avg_results = sem_avg_results.split(',')
-            logger.info(
-                f'OBW: {eval(sem_avg_results[2]) / 1000000:.3f} MHz, Total TX Power: {eval(sem_avg_results[3]):.2f} dBm')
-            # logger.info(f'SEM_AVER results: {sem_avg_results}')
-            self.command_cmw100_write(f'STOP:LTE:MEAS:MEV')
-            self.command_cmw100_query('*OPC?')
+                            logger.info('----------TX Level Sweep progress---------')
+                            logger.info(f'----------from {tx_range_list[0]} dBm to {tx_range_list[1]} dBm----------')
 
-            logger.debug(aclr_results + mod_results)
-            data[tx_level] = aclr_results + mod_results
+                            step = -1 if tx_range_list[0] > tx_range_list[1] else 1
 
+                            #  following is real change tx level prgress
+
+
+                            data = {}
+                            for tx_level in range(tx_range_list[0], tx_range_list[1]+step, step):
+                                self.tx_level = tx_level
+                                logger.info(f'========Now Tx level = {self.tx_level} dBm========')
+                                self.command(f'AT+NTXPWRLVLSET={self.tx_level}')
+                                self.command_cmw100_write('CONF:NRS:MEAS:RFS:UMAR 10.000000')
+                                self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:ENP {self.tx_level + 5}.00')
+                                self.command_cmw100_write(f'INIT:NRS:MEAS:MEV')
+                                self.command_cmw100_query('*OPC?')
+                                f_state = self.command_cmw100_query('FETC:NRS:MEAS:MEV:STAT?')
+                                while f_state != 'RDY':
+                                    f_state = self.command_cmw100_query('FETC:NRS:MEAS:MEV:STAT?')
+                                    time.sleep(0.2)
+                                mod_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:MOD:AVER?')  # P3 is EVM, P15 is Ferr, P14 is IQ Offset
+                                mod_results = mod_results.split(',')
+                                mod_results = [mod_results[3], mod_results[15], mod_results[14]]
+                                mod_results = [eval(m) for m in mod_results]
+                                # logger.info(f'mod_results = {mod_results}')
+                                logger.info(f'EVM: {mod_results[0]:.2f}, FREQ_ERR: {mod_results[1]:.2f}, IQ_OFFSET: {mod_results[2]:.2f}')
+                                aclr_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:ACLR:AVER?')
+                                aclr_results = aclr_results.split(',')[1:]
+                                aclr_results = [eval(aclr) * -1 if eval(aclr) > 30 else eval(aclr) for aclr in
+                                                aclr_results]  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2
+                                logger.info(
+                                    f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
+                                iem_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:IEM:MARG:AVER?')
+                                iem_results = iem_results.split(',')
+                                logger.info(f'InBandEmissions Margin: {eval(iem_results[2]):.2f}dB')
+                                # logger.info(f'IEM_MARG results: {iem_results}')
+                                esfl_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:ESFL:EXTR?')
+                                esfl_results = esfl_results.split(',')
+                                ripple1 = f'{eval(esfl_results[2]):.2f}' if esfl_results[2] != 'NCAP' else 'NCAP'
+                                ripple2 = f'{eval(esfl_results[3]):.2f}' if esfl_results[3] != 'NCAP' else 'NCAP'
+                                logger.info(
+                                    f'Equalize Spectrum Flatness: Ripple1:{ripple1} dBpp, Ripple2:{ripple2} dBpp')
+                                time.sleep(0.2)
+                                # logger.info(f'ESFL results: {esfl_results}')
+                                sem_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:MARG:ALL?')
+                                logger.info(f'SEM_MARG results: {sem_results}')
+                                sem_avg_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:SEM:AVERage?')
+                                sem_avg_results = sem_avg_results.split(',')
+                                logger.info(
+                                    f'OBW: {eval(sem_avg_results[2]) / 1000000:.3f} MHz, Total TX Power: {eval(sem_avg_results[3]):.2f} dBm')
+                                # logger.info(f'SEM_AVER results: {sem_avg_results}')
+                                self.command_cmw100_write(f'STOP:NRS:MEAS:MEV')
+                                self.command_cmw100_query('*OPC?')
+
+                                logger.debug(aclr_results + mod_results)
+                                data[tx_level] = aclr_results + mod_results
+                            logger.debug(data)
+                            self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1, self.tx_freq_fr1)
         self.set_test_end_fr1()
-        logger.debug(data)
-
-        self.filename = self.tx_power_relative_test_export_excel(data, band_fr1, bw_fr1, tx_freq_fr1)
         if plot == True:
-            self.txp_aclr_evm_plot(self.filename)
+            self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
@@ -1777,7 +1904,7 @@ class CMW100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "R1")
+                        ws.add_chart(chart, "U1")
 
                         logger.info('----------ACLR---------')
                         chart = LineChart()
@@ -1805,7 +1932,7 @@ class CMW100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
-                        ws.add_chart(chart, "R39")
+                        ws.add_chart(chart, "U39")
 
                         logger.info('----------EVM---------')
                         chart = LineChart()
@@ -1825,7 +1952,7 @@ class CMW100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "R77")
+                        ws.add_chart(chart, "U77")
 
                     wb.save(filename)
                     wb.close()
@@ -1885,7 +2012,9 @@ def main():
     # cmw100.tx_freq_sweep_pipline_lte()
     # cmw100.tx_level_sweep_pipeline_lte()
 
-    cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
+    # cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
+    # cmw100.tx_freq_sweep_pipline_fr1()
+    # cmw100.tx_level_sweep_pipeline_fr1()
 
     stop = datetime.datetime.now()
 
