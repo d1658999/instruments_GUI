@@ -273,7 +273,7 @@ def transfer_freq_tx2rx_fr1(band_fr1, freq):
         return freq
 
 
-def special_uplink_config_sensitivity(band, bw):
+def special_uplink_config_sensitivity_lte(band, bw):
     if (int(band) in [2,3,25]) and int(bw) == 15:
         return 50, 25
     elif (int(band) in [2,3,25]) and int(bw) == 20:

@@ -35,9 +35,12 @@ class CMW100:
         }
         self.asw_tech = None
         self.asw_path = 0
+        self.rx_path_lte = None
+        self.rx_path_fr1 = None
         self.rx_level = -70
         self.tx_level = None
-        self.port = None
+        self.port_tx = None
+        self.port_rx = None
         self.chan = None
         self.sync_path = 0  # 0: Main, 1: 4RX, 2: 6RX
         self.sync_mode = 0  # 0: Main, 1: CA#1, 2: CA#2, 3: CA#3
@@ -127,6 +130,16 @@ class CMW100:
             30: 1,
             60: 2,
         }
+        self.rx_path_lte_dict = {
+            2: 'RX0',
+            1: 'RX1',
+            4: 'RX2',
+            8: 'RX3',
+            3: 'RX0+RX1',
+            12: 'RX2+RX3',
+            15: 'ALL PATH'
+        }
+
     def begin_serial(self):
         self.ser = serial.Serial()
         self.ser.baudrate = 230400
@@ -235,6 +248,7 @@ class CMW100:
             self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_Channel_CC0_RxAnt0_RF_Verification_10M_SIMO_01.wv'")
         else:
             self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_10MHz.wv'")
+            # self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_{self.bw_lte}MHz.wv'")
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_lte}KHz')
@@ -339,6 +353,14 @@ class CMW100:
         self.command(f'AT+ANTSWSEL={self.asw_tech_dict[self.asw_tech]},{self.asw_path}')
         logger.info(f'RAT: {self.asw_tech}, ANT_PATH: {self.asw_path}')
 
+    def rx_path_setting_lte(self):
+        logger.info('----------Rx path setting----------')
+        self.command(f'AT+LRXMODESET={self.rx_path_lte}')
+
+    def rx_path_setting_fr1(self):
+        logger.info('----------Rx path setting----------')
+        self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
+
     def tx_measure_lte(self):
         logger.info('---------Tx Measure----------')
         mode = 'TDD' if self.band_lte in [38, 39, 40, 41, 42, 48] else 'FDD'
@@ -387,9 +409,9 @@ class CMW100:
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MSUB 2, 10, 0')
         self.command_cmw100_write(f'CONF:LTE:MEAS:SCEN:ACT SAL')
         self.command_cmw100_query('SYST:ERR:ALL?')
-        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_write(f'ROUT:LTE:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:LTE:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:EATT {self.loss_tx}')
         self.command_cmw100_query('*OPC?')
@@ -462,7 +484,7 @@ class CMW100:
         self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs}K, 3,0,1,14')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:ENP {self.tx_level+5}.00')
-        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:SCO:MOD 5')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:SCO:SPEC:ACLR 5')
@@ -476,9 +498,9 @@ class CMW100:
         self.command_cmw100_write(f'CONF:NRS:MEAS:SCEN:ACT SAL')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:EATT {self.loss_tx}')
         self.command_cmw100_query(f'*OPC?')
-        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_query(f'*OPC?')
-        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'INIT:NRS:MEAS:MEV')
         self.command_cmw100_query(f'*OPC?')
@@ -521,6 +543,567 @@ class CMW100:
         logger.debug(aclr_results + mod_results)
         return aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
 
+    def set_rx_level(self):
+        logger.info(f'==========Search: {self.rx_level} dBm==========')
+        self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
+
+    def query_rsrp_cinr_lte(self):
+        res = self.command(f'AT+LRXMEAS={self.rx_path_lte},20')
+        for line in res:
+            if '+LRXMEAS:' in line.decode():
+                self.rsrp_list = line.decode().split(':')[1].strip().split(',')[:4]
+                self.cinr_list = line.decode().split(':')[1].strip().split(',')[4:]
+                self.rsrp_list = [eval(rsrp)/100 for rsrp in self.rsrp_list]
+                self.cinr_list = [eval(cinr)/100 for cinr in self.cinr_list]
+                logger.info(f'**** RSRP: {self.rsrp_list} ****')
+                logger.info(f'**** CINR: {self.cinr_list} ****')
+
+    def query_agc_lte(self):
+        res = self.command(f'AT+LRX1RX2AGCIDXRD')
+        for line in res:
+            if '+LRX1RX2AGCIDXRD:' in line.decode():
+                self.agc_list = line.decode().split(':')[1].strip().split(',')
+                self.agc_list = [eval(agc) for agc in self.agc_list]
+                logger.info(f'**** AGC: {self.agc_list} ****')
+
+    def get_esens_lte(self):
+        self.esens_list = [round(self.rx_level - c - 1, 2) for c in self.cinr_list]
+        logger.info(f'**** ESENS: {self.esens_list} ****')
+
+    def query_rx_measure_lte(self):
+        self.query_rsrp_cinr_lte()
+        self.query_agc_lte()
+        self.get_esens_lte()
+
+    def query_fer_measure_lte(self):
+        res = self.command('AT+LFERMEASURE=500', delay=0.5)
+        for line in res:
+            if '+LFERMEASURE:' in line.decode():
+                self.fer = eval(line.decode().split(':')[1])
+                logger.info(f'****FER: {self.fer/100} %****')
+
+    def search_window_lte(self):
+        self.query_fer_measure_lte()
+        while self.fer < 500:
+            self.rx_level = round(self.rx_level - self.window, 1)
+            self.set_rx_level()
+            self.query_fer_measure_lte()
+
+    def search_sensitivity_lte(self):
+        reset_rx_level = -80
+        self.rx_level = reset_rx_level
+        coarse_1 = 2
+        coarse_2 = 1
+        fine = 0.2
+        logger.info('----------Search RX Level----------')
+        self.window = coarse_1
+        self.search_window_lte()  # first time by coarse_1
+        logger.info('Second time to search')
+        self.rx_level += coarse_1 * 2
+        logger.info(f'==========Back to Search: {self.rx_level} dBm==========')
+        self.set_rx_level()
+        self.window = coarse_2
+        self.search_window_lte()  # second time by coarse_2
+        logger.info('Third time to search')
+        self.rx_level += coarse_2 * 2
+        logger.info(f'==========Back to Search: {self.rx_level} dBm==========')
+        self.set_rx_level()
+        self.window = fine
+        self.search_window_lte()  # second time by fine
+        self.rx_level = round(self.rx_level + fine, 1)
+        logger.info(f'Final Rx Level: {self.rx_level}')
+
+    def search_sensitivity_pipline_lte(self):
+        self.port_tx = wt.port_tx_lte
+        self.chan = wt.channel
+        self.mcs_lte = 'QPSK'
+        self.script = 'GENERAL'
+        for tech in wt.tech:
+            if tech == 'LTE' and wt.lte_bands != []:
+                self.tech = 'LTE'
+                for tx_path in wt.tx_path:
+                    self.tx_path = tx_path
+                    for bw in wt.lte_bandwidths:
+                        self.bw_lte = bw
+                        try:
+                            for band in wt.lte_bands:
+                                self.band_lte = band
+                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                                    for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                                        self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
+                                        self.search_sensitivity_lmh_progress_lte()
+                                else:
+                                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+                            # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+                        except TypeError as err:
+                            logger.debug(err)
+                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def search_sensitivity_pipline_fast_lte(self):  # this is for that RSRP and  CINR without issue because this is calculated method
+        self.tx_level = wt.tx_level
+        self.port_tx = wt.port_tx_lte
+        self.chan = wt.channel
+        self.mcs_lte = 'QPSK'
+        for tech in wt.tech:
+            if tech == 'LTE' and wt.lte_bands != []:
+                self.tech = 'LTE'
+                for tx_path in wt.tx_path:
+                    self.tx_path = tx_path
+                    for bw in wt.lte_bandwidths:
+                        self.bw_lte = bw
+                        try:
+                            for band in wt.lte_bands:
+                                self.band_lte = band
+                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                                    self.search_sensitivity_lmh_fast_progress_lte()
+                                else:
+                                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+                            # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+                        except TypeError as err:
+                            logger.debug(err)
+                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def search_sensitivity_lmh_progress_lte(self):
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte, self.bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
+        rx_freq_select_list = []
+        for chan in self.chan:
+            if chan == 'L':
+                rx_freq_select_list.append(rx_freq_list[0])
+            elif chan == 'M':
+                rx_freq_select_list.append(rx_freq_list[1])
+            elif chan == 'H':
+                rx_freq_select_list.append(rx_freq_list[2])
+        for rx_path in wt.rx_paths:
+            self.rx_path_lte = rx_path
+            data = {}
+            for rx_freq in rx_freq_select_list:
+                self.rx_level = -70
+                self.rx_freq_lte = rx_freq
+                self.tx_freq_lte = cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, self.rx_freq_lte)
+                self.loss_rx = self.get_loss(self.rx_freq_lte)
+                self.loss_tx = self.get_loss(self.tx_freq_lte)
+                logger.info('----------Test LMH progress---------')
+                self.preset_instrument()
+                self.set_test_end_lte()
+                self.antenna_switch_v2()
+                self.set_test_mode_lte()
+                self.sig_gen_lte()
+                self.sync_lte()
+                self.rb_size_lte, self.rb_start_lte = cm_pmt_ftm.special_uplink_config_sensitivity_lte(self.band_lte, self.bw_lte)  # for RB set
+                self.tx_set_lte()
+                self.tx_measure_lte()
+                aclr_mod_results = self.tx_measure_lte()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
+                self.rx_path_setting_lte()
+                self.search_sensitivity_lte()
+                self.query_rx_measure_lte()
+                logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
+                data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list, self.agc_list ]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+            self.filename = self.rx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte, self.tx_level, mode=1)  # mode=1: LMH mode
+
+    def search_sensitivity_lmh_fast_progress_lte(self):
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte, self.bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
+        rx_freq_select_list = []
+        for chan in self.chan:
+            if chan == 'L':
+                rx_freq_select_list.append(rx_freq_list[0])
+            elif chan == 'M':
+                rx_freq_select_list.append(rx_freq_list[1])
+            elif chan == 'H':
+                rx_freq_select_list.append(rx_freq_list[2])
+        for rx_freq in rx_freq_select_list:
+            self.rx_level = -70
+            self.rx_freq_lte = rx_freq
+            self.tx_freq_lte = cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, self.rx_freq_lte)
+            self.loss_rx = self.get_loss(self.rx_freq_lte)
+            self.loss_tx = self.get_loss(self.tx_freq_lte)
+            logger.info('----------Test LMH progress---------')
+            self.preset_instrument()
+            self.set_test_end_lte()
+            self.antenna_switch_v2()
+            self.set_test_mode_lte()
+            self.sig_gen_lte()
+            self.sync_lte()
+            self.rb_size_lte, self.rb_start_lte = cm_pmt_ftm.special_uplink_config_sensitivity_lte(self.band_lte, self.bw_lte)  # for RB set
+            self.tx_set_lte()
+            self.tx_measure_lte()
+            aclr_mod_results = self.tx_measure_lte()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
+            self.rx_path_setting_lte()
+            self.query_rx_measure_lte()
+            logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.esens_list}')
+            rsrp_max = max(self.rsrp_list)
+            rsrp_max_index = self.rsrp_list.index(rsrp_max)
+            rx_level = self.esens_list[rsrp_max_index]
+            self.filename = self.rx_power_relative_test_export_excel(data_freq, self.band_lte, self.bw_lte, rx_level, mode=1)  # mode=1: LMH mode
+
+    def rx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level, mode=0):  # mode general: 0,  mode LMH: 1
+        """
+        data is dict like:
+        tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET]
+        """
+        logger.info('----------save to excel----------')
+        filename = None
+        if self.script == 'GENERAL':
+            if mode == 1:
+                if tx_freq_level >= 100:
+                    filename = f'_{bw}MHZ_{self.tech}_LMH.xlsx'
+                elif tx_freq_level <= 100:
+                    filename = f'Sensitivty_{bw}MHZ_{self.tech}_LMH.xlsx'
+
+                if pathlib.Path(filename).exists() is False:
+                    logger.info('----------file does not exist----------')
+                    wb = openpyxl.Workbook()
+                    wb.remove(wb['Sheet'])
+                    # to create sheet
+                    if self.tech == 'LTE':
+                        for mcs in ['QPSK']:  # some cmw10 might not have licesnse of Q256
+                            wb.create_sheet(f'Raw_Data_{mcs}_FRB')
+                            for sheetname in wb.sheetnames:
+                                ws = wb[sheetname]
+                                ws['A1'] = 'Band'
+                                ws['B1'] = 'RX_Path'
+                                ws['C1'] = 'Chan'
+                                ws['D1'] = 'Tx_Freq'
+                                ws['E1'] = 'Tx_level'
+                                ws['F1'] = 'Power'
+                                ws['G1'] = 'Rx_Level'
+                                ws['H1'] = 'RSRP_RX0'
+                                ws['I1'] = 'RSRP_RX1'
+                                ws['J1'] = 'RSRP_RX2'
+                                ws['K1'] = 'RSRP_RX3'
+                                ws['L1'] = 'CINR_RX0'
+                                ws['M1'] = 'CINR_RX1'
+                                ws['N1'] = 'CINR_RX2'
+                                ws['O1'] = 'CINR_RX3'
+                                ws['P1'] = 'AGC_RX0'
+                                ws['Q1'] = 'AGC_RX1'
+                                ws['R1'] = 'AGC_RX2'
+                                ws['S1'] = 'AGC_RX3'
+
+
+                    elif self.tech == 'FR1':
+                        for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
+                            wb.create_sheet(f'Raw_Data_{mcs}')
+
+                            for sheetname in wb.sheetnames:
+                                ws = wb[sheetname]
+                                ws['A1'] = 'Band'
+                                ws['B1'] = 'Chan'
+                                ws['C1'] = 'Tx_Freq'
+                                ws['D1'] = 'Tx_level'
+                                ws['E1'] = 'Measured_Power'
+                                ws['F1'] = 'E_-1'
+                                ws['G1'] = 'E_+1'
+                                ws['H1'] = 'U_-1'
+                                ws['I1'] = 'U_+1'
+                                ws['J1'] = 'U_-2'
+                                ws['K1'] = 'U_+2'
+                                ws['L1'] = 'EVM'
+                                ws['M1'] = 'Freq_Err'
+                                ws['N1'] = 'IQ_OFFSET'
+                                ws['O1'] = 'RB_num'
+                                ws['P1'] = 'RB_start'
+                                ws['Q1'] = 'Type'
+                                ws['R1'] = 'Tx_Path'
+                                ws['S1'] = 'SCS(KHz)'
+                                ws['T1'] = 'RB_STATE'
+
+                    wb.save(filename)
+                    wb.close()
+
+                logger.info('----------file exist----------')
+                wb = openpyxl.load_workbook(filename)
+                ws = None
+                if self.tech == 'LTE':
+                    ws = wb[f'Raw_Data_{self.mcs_lte}_FRB']
+                elif self.tech == 'FR1':
+                    ws = wb[f'Raw_Data_{self.mcs_fr1}']
+
+                if self.tech == 'LTE':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100:
+                        for tx_level, measured_data in data.items():
+                            chan = self.chan_judge_lte(band, bw, tx_freq_level)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = chan  # LMH
+                            ws.cell(row, 3).value = tx_freq_level  # this tx_freq_lte
+                            ws.cell(row, 4).value = tx_level
+                            ws.cell(row, 5).value = measured_data[3]
+                            ws.cell(row, 6).value = measured_data[2]
+                            ws.cell(row, 7).value = measured_data[4]
+                            ws.cell(row, 8).value = measured_data[1]
+                            ws.cell(row, 9).value = measured_data[5]
+                            ws.cell(row, 10).value = measured_data[0]
+                            ws.cell(row, 11).value = measured_data[6]
+                            ws.cell(row, 12).value = measured_data[7]
+                            ws.cell(row, 13).value = measured_data[8]
+                            ws.cell(row, 14).value = measured_data[9]
+                            ws.cell(row, 15).value = self.rb_size_lte
+                            ws.cell(row, 16).value = self.rb_start_lte
+                            ws.cell(row, 17).value = self.mcs_lte
+                            ws.cell(row, 18).value = self.tx_path
+
+                            row += 1
+
+                    elif tx_freq_level <= 100:
+                        for tx_freq, measured_data in data.items():
+                            chan = self.chan_judge_lte(band, bw, tx_freq)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = self.rx_path_lte_dict[self.rx_path_lte]
+                            ws.cell(row, 3).value = chan  # LMH
+                            ws.cell(row, 4).value = tx_freq
+                            ws.cell(row, 5).value = tx_freq_level  # this tx level
+                            ws.cell(row, 6).value = measured_data[0]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[2][0]
+                            ws.cell(row, 9).value = measured_data[2][1]
+                            ws.cell(row, 10).value = measured_data[2][2]
+                            ws.cell(row, 11).value = measured_data[2][3]
+                            ws.cell(row, 12).value = measured_data[3][0]
+                            ws.cell(row, 13).value = measured_data[3][1]
+                            ws.cell(row, 14).value = measured_data[3][2]
+                            ws.cell(row, 15).value = measured_data[3][3]
+                            ws.cell(row, 16).value = measured_data[4][0]
+                            ws.cell(row, 17).value = measured_data[4][1]
+                            ws.cell(row, 18).value = measured_data[4][2]
+                            ws.cell(row, 19).value = measured_data[4][3]
+
+                            row += 1
+                elif self.tech == 'FR1':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100:
+                        for tx_level, measured_data in data.items():
+                            chan = self.chan_judge_fr1(band, bw, tx_freq_level)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = chan  # LMH
+                            ws.cell(row, 3).value = tx_freq_level  # this tx_freq_lte
+                            ws.cell(row, 4).value = tx_level
+                            ws.cell(row, 5).value = measured_data[3]
+                            ws.cell(row, 6).value = measured_data[2]
+                            ws.cell(row, 7).value = measured_data[4]
+                            ws.cell(row, 8).value = measured_data[1]
+                            ws.cell(row, 9).value = measured_data[5]
+                            ws.cell(row, 10).value = measured_data[0]
+                            ws.cell(row, 11).value = measured_data[6]
+                            ws.cell(row, 12).value = measured_data[7]
+                            ws.cell(row, 13).value = measured_data[8]
+                            ws.cell(row, 14).value = measured_data[9]
+                            ws.cell(row, 15).value = self.rb_size_fr1
+                            ws.cell(row, 16).value = self.rb_start_fr1
+                            ws.cell(row, 17).value = self.type_fr1
+                            ws.cell(row, 18).value = self.tx_path
+                            ws.cell(row, 19).value = self.scs
+                            ws.cell(row, 20).value = self.rb_state
+
+                            row += 1
+
+                    elif tx_freq_level <= 100:
+                        for tx_freq, measured_data in data.items():
+                            chan = self.chan_judge_fr1(band, bw, tx_freq)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = chan  # LMH
+                            ws.cell(row, 3).value = tx_freq
+                            ws.cell(row, 4).value = tx_freq_level  # this tx_level
+                            ws.cell(row, 5).value = measured_data[3]
+                            ws.cell(row, 6).value = measured_data[2]
+                            ws.cell(row, 7).value = measured_data[4]
+                            ws.cell(row, 8).value = measured_data[1]
+                            ws.cell(row, 9).value = measured_data[5]
+                            ws.cell(row, 10).value = measured_data[0]
+                            ws.cell(row, 11).value = measured_data[6]
+                            ws.cell(row, 12).value = measured_data[7]
+                            ws.cell(row, 13).value = measured_data[8]
+                            ws.cell(row, 14).value = measured_data[9]
+                            ws.cell(row, 15).value = self.rb_size_fr1
+                            ws.cell(row, 16).value = self.rb_start_fr1
+                            ws.cell(row, 17).value = self.type_fr1
+                            ws.cell(row, 18).value = self.tx_path
+                            ws.cell(row, 19).value = self.scs
+                            ws.cell(row, 20).value = self.rb_state
+
+                            row += 1
+
+                wb.save(filename)
+                wb.close()
+
+                return filename
+            else:  # mode = 0
+                if tx_freq_level >= 100:
+                    filename = f'Sensitivity_Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
+                elif tx_freq_level <= 100:
+                    filename = f'_{bw}MHZ_{self.tech}.xlsx'
+
+                if pathlib.Path(filename).exists() is False:
+                    logger.info('----------file does not exist----------')
+                    wb = openpyxl.Workbook()
+                    wb.remove(wb['Sheet'])
+                    # to create sheet
+                    if self.tech == 'LTE':
+                        for mcs in ['QPSK', 'Q16', 'Q64', 'Q256']:  # some cmw10 might not have licesnse of Q256
+                            wb.create_sheet(f'Raw_Data_{mcs}_PRB')
+                            wb.create_sheet(f'Raw_Data_{mcs}_FRB')
+
+                        for sheetname in wb.sheetnames:
+                            ws = wb[sheetname]
+                            ws['A1'] = 'Band'
+                            ws['B1'] = 'Tx_Freq'
+                            ws['C1'] = 'Tx_level'
+                            ws['D1'] = 'Power'
+                            ws['E1'] = 'Rx_Level'
+                            ws['F1'] = 'RSRP_RX0'
+                            ws['G1'] = 'RSRP_RX1'
+                            ws['H1'] = 'RSRP_RX2'
+                            ws['I1'] = 'RSRP_RX3'
+                            ws['J1'] = 'CINR_RX0'
+                            ws['K1'] = 'CINR_RX1'
+                            ws['L1'] = 'CINR_RX2'
+                            ws['M1'] = 'CINR_RX3'
+                            ws['N1'] = 'AGC_RX0'
+                            ws['O1'] = 'AGC_RX1'
+                            ws['P1'] = 'AGC_RX2'
+                            ws['Q1'] = 'AGC_RX3'
+                            ws['R1'] = ''
+
+                    elif self.tech == 'FR1':
+                        for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
+                            wb.create_sheet(f'Raw_Data_{mcs}')
+
+                            for sheetname in wb.sheetnames:
+                                ws = wb[sheetname]
+                                ws['A1'] = 'Band'
+                                ws['B1'] = 'Tx_Freq'
+                                ws['C1'] = 'Tx_level'
+                                ws['D1'] = 'Measured_Power'
+                                ws['E1'] = 'E_-1'
+                                ws['F1'] = 'E_+1'
+                                ws['G1'] = 'U_-1'
+                                ws['H1'] = 'U_+1'
+                                ws['I1'] = 'U_-2'
+                                ws['J1'] = 'U_+2'
+                                ws['K1'] = 'EVM'
+                                ws['L1'] = 'Freq_Err'
+                                ws['M1'] = 'IQ_OFFSET'
+                                ws['N1'] = 'RB_num'
+                                ws['O1'] = 'RB_start'
+                                ws['P1'] = 'Type'
+                                ws['Q1'] = 'Tx_Path'
+                                ws['R1'] = 'SCS(KHz)'
+                                ws['S1'] = 'RB_STATE'
+
+                    wb.save(filename)
+                    wb.close()
+
+                logger.info('----------file exist----------')
+                wb = openpyxl.load_workbook(filename)
+                ws = None
+                if self.tech == 'LTE':
+                    ws = wb[f'Raw_Data_{self.mcs_lte}_FRB']
+                elif self.tech == 'FR1':
+                    ws = wb[f'Raw_Data_{self.mcs_fr1}']
+
+                if self.tech == 'LTE':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100:
+                        for tx_level, measured_data in data.items():
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = tx_freq_level  # this tx_freq
+                            ws.cell(row, 3).value = tx_level
+                            ws.cell(row, 4).value = measured_data[3]
+                            ws.cell(row, 5).value = measured_data[2]
+                            ws.cell(row, 6).value = measured_data[4]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[5]
+                            ws.cell(row, 9).value = measured_data[0]
+                            ws.cell(row, 10).value = measured_data[6]
+                            ws.cell(row, 11).value = measured_data[7]
+                            ws.cell(row, 12).value = measured_data[8]
+                            ws.cell(row, 13).value = measured_data[9]
+                            ws.cell(row, 14).value = self.rb_size_lte
+                            ws.cell(row, 15).value = self.rb_start_lte
+                            ws.cell(row, 16).value = self.mcs_lte
+                            # ws.cell(row, 17).value = self.tx_path
+
+                            row += 1
+
+                    elif tx_freq_level <= 100:
+                        for tx_freq, measured_data in data.items():
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = tx_freq
+                            ws.cell(row, 3).value = tx_freq_level  # this tx_level
+                            ws.cell(row, 4).value = measured_data[3]
+                            ws.cell(row, 5).value = measured_data[2]
+                            ws.cell(row, 6).value = measured_data[4]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[5]
+                            ws.cell(row, 9).value = measured_data[0]
+                            ws.cell(row, 10).value = measured_data[6]
+                            ws.cell(row, 11).value = measured_data[7]
+                            ws.cell(row, 12).value = measured_data[8]
+                            ws.cell(row, 13).value = measured_data[9]
+                            ws.cell(row, 14).value = self.rb_size_lte
+                            ws.cell(row, 15).value = self.rb_start_lte
+                            ws.cell(row, 16).value = self.mcs_lte
+                            ws.cell(row, 17).value = self.tx_path
+
+                            row += 1
+                elif self.tech == 'FR1':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100:
+                        for tx_level, measured_data in data.items():
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = tx_freq_level  # this tx_freq
+                            ws.cell(row, 3).value = tx_level
+                            ws.cell(row, 4).value = measured_data[3]
+                            ws.cell(row, 5).value = measured_data[2]
+                            ws.cell(row, 6).value = measured_data[4]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[5]
+                            ws.cell(row, 9).value = measured_data[0]
+                            ws.cell(row, 10).value = measured_data[6]
+                            ws.cell(row, 11).value = measured_data[7]
+                            ws.cell(row, 12).value = measured_data[8]
+                            ws.cell(row, 13).value = measured_data[9]
+                            ws.cell(row, 14).value = self.rb_size_fr1
+                            ws.cell(row, 15).value = self.rb_start_fr1
+                            ws.cell(row, 16).value = self.type_fr1
+                            ws.cell(row, 17).value = self.tx_path
+                            ws.cell(row, 18).value = self.scs
+                            ws.cell(row, 19).value = self.rb_state
+
+                            row += 1
+
+                    elif tx_freq_level <= 100:
+                        for tx_freq, measured_data in data.items():
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = tx_freq
+                            ws.cell(row, 3).value = tx_freq_level  # this tx_level
+                            ws.cell(row, 4).value = measured_data[3]
+                            ws.cell(row, 5).value = measured_data[2]
+                            ws.cell(row, 6).value = measured_data[4]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[5]
+                            ws.cell(row, 9).value = measured_data[0]
+                            ws.cell(row, 10).value = measured_data[6]
+                            ws.cell(row, 11).value = measured_data[7]
+                            ws.cell(row, 12).value = measured_data[8]
+                            ws.cell(row, 13).value = measured_data[9]
+                            ws.cell(row, 14).value = self.rb_size_fr1
+                            ws.cell(row, 15).value = self.rb_start_fr1
+                            ws.cell(row, 16).value = self.type_fr1
+                            ws.cell(row, 17).value = self.tx_path
+                            ws.cell(row, 18).value = self.scs
+                            ws.cell(row, 19).value = self.rb_state
+
+                            row += 1
+
+                wb.save(filename)
+                wb.close()
+
+                return filename
+
     def tx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level, mode=0):  # mode general: 0,  mode LMH: 1
         """
         data is dict like:
@@ -534,7 +1117,6 @@ class CMW100:
                     filename = f'relative power_{bw}MHZ_{self.tech}_LMH.xlsx'
                 elif tx_freq_level <= 100:
                     filename = f'TxP_ACLR_EVM_{bw}MHZ_{self.tech}_LMH.xlsx'
-
 
                 if pathlib.Path(filename).exists() is False:
                     logger.info('----------file does not exist----------')
@@ -918,7 +1500,7 @@ class CMW100:
         self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:ENP {self.tx_level+5}')
-        self.command_cmw100_write(f'ROUT:LTE:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:LTE:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:AUTO ON')
@@ -938,7 +1520,7 @@ class CMW100:
         self.command_cmw100_query(f'SYST:ERR:ALL?')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:EATT {self.loss_tx}')
         self.command_cmw100_query(f'*OPC?')
-        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:SCO 2')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:REP SING')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:LIST OFF')
@@ -979,7 +1561,7 @@ class CMW100:
         self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PER MS25')
         self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs}K, 3,0,1,14')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:MSLot ALL')
-        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port}, RX1')
+        self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:SCO:MOD 5')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:SCO:SPEC:ACLR 5')
@@ -996,7 +1578,7 @@ class CMW100:
 
     def tx_power_aclr_evm_lmh_pipeline_lte(self):
         self.tx_level = wt.tx_level
-        self.port = wt.port_lte
+        self.port_tx = wt.port_tx_lte
         self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
@@ -1018,7 +1600,7 @@ class CMW100:
 
     def tx_power_aclr_evm_lmh_pipeline_fr1(self):
         self.tx_level = wt.tx_level
-        self.port = wt.port_lte
+        self.port_tx = wt.port_tx_fr1
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
@@ -1043,7 +1625,7 @@ class CMW100:
 
     def tx_freq_sweep_pipline_lte(self):
         self.tx_level = wt.tx_level
-        self.port = wt.port_lte
+        self.port_tx = wt.port_tx_lte
         self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
@@ -1065,7 +1647,7 @@ class CMW100:
 
     def tx_freq_sweep_pipline_fr1(self):
         self.tx_level = wt.tx_level
-        self.port = wt.port_fr1
+        self.port_tx = wt.port_tx_fr1
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
@@ -1090,7 +1672,7 @@ class CMW100:
 
     def tx_level_sweep_pipeline_lte(self):
         self.tx_level = wt.tx_level
-        self.port = wt.port_lte
+        self.port_tx = wt.port_tx_lte
         self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
@@ -1112,11 +1694,11 @@ class CMW100:
 
     def tx_level_sweep_pipeline_fr1(self):
         self.tx_level = wt.tx_level
-        self.port = wt.port_fr1
+        self.port_tx = wt.port_tx_fr1
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
-            if tech == 'FR1' and wt.lte_bands != []:
+            if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = tech
                 for tx_path in wt.tx_path:
                     self.tx_path = tx_path
@@ -1137,7 +1719,7 @@ class CMW100:
 
     def tx_measure_single(self):  # this is incompleted
         if 'LTE' in wt.tech:
-            self.port = wt.port_lte
+            self.port_tx = wt.port_tx_lte
             self.band_lte = wt.band_lte
             self.bw_lte = wt.bw_lte
             self.chan = wt.channel
@@ -1609,7 +2191,8 @@ class CMW100:
                                     f'Power: {aclr_results[3]:.2f}, E-UTRA: [{aclr_results[2]:.2f}, {aclr_results[4]:.2f}], UTRA_1: [{aclr_results[1]:.2f}, {aclr_results[5]:.2f}], UTRA_2: [{aclr_results[0]:.2f}, {aclr_results[6]:.2f}]')
                                 iem_results = self.command_cmw100_query('FETC:NRS:MEAS:MEV:IEM:MARG:AVER?')
                                 iem_results = iem_results.split(',')
-                                logger.info(f'InBandEmissions Margin: {eval(iem_results[2]):.2f}dB')
+                                iem = f'{eval(iem_results[2]):.2f}' if iem_results[2] != 'INV' else 'INV'
+                                logger.info(f'InBandEmissions Margin: {iem}dB')
                                 # logger.info(f'IEM_MARG results: {iem_results}')
                                 esfl_results = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:ESFL:EXTR?')
                                 esfl_results = esfl_results.split(',')
@@ -2015,6 +2598,8 @@ def main():
     # cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
     # cmw100.tx_freq_sweep_pipline_fr1()
     # cmw100.tx_level_sweep_pipeline_fr1()
+
+    cmw100.search_sensitivity_pipline_lte()
 
     stop = datetime.datetime.now()
 
