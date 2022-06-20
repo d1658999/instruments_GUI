@@ -232,7 +232,6 @@ class CMW100:
         """
         logger.info('----------Set Test Mode----------')
         self.command(f'AT+NRFFINALSTART={self.band_fr1},{self.sa_nsa_mode}')
-        self.command_cmw100_query('*OPC?')
 
     def set_test_end_lte(self):
         logger.info('----------Set End----------')
@@ -241,7 +240,6 @@ class CMW100:
     def set_test_end_fr1(self):
         logger.info('----------Set End----------')
         self.command(f'AT+NRFFINALFINISH')
-        self.command_cmw100_query('*OPC?')
 
     def sig_gen_lte(self):
         logger.info('----------Sig Gen----------')
@@ -766,10 +764,10 @@ class CMW100:
                                 for band in wt.fr1_bands:
                                     self.band_fr1 = band
                                     if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                            for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                                                self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                                                self.search_sensitivity_lmh_progress_fr1()
-                                            self.rx_desense_progress()
+                                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                                            self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
+                                            self.search_sensitivity_lmh_progress_fr1()
+                                        self.rx_desense_progress()
                                     else:
                                         logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
                                 self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
@@ -839,6 +837,7 @@ class CMW100:
                 logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
                 data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
                                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+                self.set_test_end_lte()
             self.filename = self.rx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte, self.tx_level,
                                                                      mode=1)  # mode=1: LMH mode
 
@@ -854,33 +853,31 @@ class CMW100:
                 rx_freq_select_list.append(rx_freq_list[2])
         for rx_path in wt.rx_paths:
             self.rx_path_fr1 = rx_path
-            # self.command_cmw100_query('*OPC?')
             data = {}
             for rx_freq in rx_freq_select_list:
-                self.rb_size_fr1 = 270
-                self.rb_start_fr1 = 0
-
                 self.rx_level = -70
                 self.rx_freq_fr1 = rx_freq
                 self.tx_freq_fr1 = cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, self.rx_freq_fr1)
                 self.loss_rx = self.get_loss(self.rx_freq_fr1)
                 self.loss_tx = self.get_loss(self.tx_freq_fr1)
                 logger.info('----------Test LMH progress---------')
-                # self.preset_instrument()
+                self.preset_instrument()
                 self.set_test_end_fr1()
                 self.antenna_switch_v2()
                 self.set_test_mode_fr1()
                 self.sig_gen_fr1()
                 self.sync_fr1()
-                # self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1, self.scs, self.bw_fr1)  # for RB set(including special tx setting)
+                self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1, self.scs, self.bw_fr1)  # for RB set(including special tx setting)
+                time.sleep(0.2)
                 self.tx_set_fr1()
                 aclr_mod_results = self.tx_measure_fr1()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
-                # self.rx_path_setting_fr1()
-                # self.search_sensitivity_fr1()
-                # self.query_rx_measure_fr1()
-                # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
-                # data[self.tx_freq_fr1] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
-                #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+                self.rx_path_setting_fr1()
+                self.search_sensitivity_fr1()
+                self.query_rx_measure_fr1()
+                logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
+                data[self.tx_freq_fr1] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
+                                          self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+                self.set_test_end_fr1()
             self.filename = self.rx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1, self.tx_level,
                                                                      mode=1)  # mode=1: LMH mode
 
@@ -3209,7 +3206,7 @@ def main():
     # cmw100.tx_freq_sweep_pipline_lte()
     # cmw100.tx_level_sweep_pipeline_lte()
 
-    cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
+    # cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
     # cmw100.tx_freq_sweep_pipline_fr1()
     # cmw100.tx_level_sweep_pipeline_fr1()
 
@@ -3218,7 +3215,7 @@ def main():
     # cmw100.rxs_relative_plot('Sensitivty_10MHZ_LTE_LMH.xlsx', mode=1)
 
     # cmw100.search_sensitivity_pipline_lte()
-    # cmw100.search_sensitivity_pipline_fr1()
+    cmw100.search_sensitivity_pipline_fr1()
 
     stop = datetime.datetime.now()
 
