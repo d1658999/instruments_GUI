@@ -298,7 +298,7 @@ class CMW100:
                 f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_NR_Ant0_NR_{self.bw_fr1}MHz_SCS{scs}_TDD_Sens_MCS{mcs_fr1_wv}_rescale.wv'")
         else:
             self.command_cmw100_write(
-                f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_NR_Ant0_LTE_NR_{self.bw_fr1}MHz_SCS{scs}_FDD_Sens_MCS{mcs_fr1_wv}.wv'")
+                f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_NR_Ant0_LTE_NR_{self.bw_fr1}MHz_SCS{scs}_FDD_Sens_MCS_{mcs_fr1_wv}.wv'")
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_fr1}KHz')
@@ -496,7 +496,8 @@ class CMW100:
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:PLC 0')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:MOEX ON')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{self.bw_fr1}')
+        bw = f'00{self.band_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <=self.bw_fr1 < 100 else self.bw_fr1
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{bw}')
         self.command_cmw100_write(
             f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{self.bw_fr1}   ON, 0.015MHz, 0.0985MHz, {round(-13.5 - 10 * math.log10(self.bw_fr1 / 5), 1)},K030')
         self.command_cmw100_write(
@@ -516,7 +517,7 @@ class CMW100:
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PLCid 0')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:CTYPe PUSC')
         self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PER MS25')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs}K, 3,0,1,14')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs}K, 3,0,1,14 ')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:ENP {self.tx_level + 5}.00')
         self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
@@ -542,7 +543,7 @@ class CMW100:
         f_state = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:STAT?')
         while f_state != 'RDY':
             f_state = self.command_cmw100_query(f'FETC:NRS:MEAS:MEV:STAT?')
-            self.command_cmw100_query(f'*OPC?')
+            self.command_cmw100_query('*OPC?')
         mod_results = self.command_cmw100_query(
             'FETC:NRS:MEAS:MEV:MOD:AVER?')  # P3 is EVM, P15 is Ferr, P14 is IQ Offset
         mod_results = mod_results.split(',')
@@ -746,7 +747,6 @@ class CMW100:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
     def search_sensitivity_pipline_fr1(self):
-        # self.preset_instrument()
         self.port_tx = wt.port_tx_fr1
         self.chan = wt.channel
         self.type_fr1 = 'DFTS'
@@ -854,34 +854,33 @@ class CMW100:
                 rx_freq_select_list.append(rx_freq_list[2])
         for rx_path in wt.rx_paths:
             self.rx_path_fr1 = rx_path
-            self.command_cmw100_query('*OPC?')
+            # self.command_cmw100_query('*OPC?')
             data = {}
             for rx_freq in rx_freq_select_list:
-                self.command_cmw100_query('*OPC?')
+                self.rb_size_fr1 = 270
+                self.rb_start_fr1 = 0
+
                 self.rx_level = -70
                 self.rx_freq_fr1 = rx_freq
                 self.tx_freq_fr1 = cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, self.rx_freq_fr1)
                 self.loss_rx = self.get_loss(self.rx_freq_fr1)
                 self.loss_tx = self.get_loss(self.tx_freq_fr1)
                 logger.info('----------Test LMH progress---------')
-                self.preset_instrument()
+                # self.preset_instrument()
                 self.set_test_end_fr1()
                 self.antenna_switch_v2()
                 self.set_test_mode_fr1()
                 self.sig_gen_fr1()
                 self.sync_fr1()
-                self.command_cmw100_query('*OPC?')
-                self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1, self.scs, self.bw_fr1)  # for RB set(including special tx setting)
-                self.command_cmw100_query('*OPC?')
+                # self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1, self.scs, self.bw_fr1)  # for RB set(including special tx setting)
                 self.tx_set_fr1()
-                self.command_cmw100_query('*OPC?')
                 aclr_mod_results = self.tx_measure_fr1()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
-                self.rx_path_setting_fr1()
-                self.search_sensitivity_fr1()
-                self.query_rx_measure_fr1()
-                logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
-                data[self.tx_freq_fr1] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
-                                          self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+                # self.rx_path_setting_fr1()
+                # self.search_sensitivity_fr1()
+                # self.query_rx_measure_fr1()
+                # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
+                # data[self.tx_freq_fr1] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
+                #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
             self.filename = self.rx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1, self.tx_level,
                                                                      mode=1)  # mode=1: LMH mode
 
@@ -1753,7 +1752,8 @@ class CMW100:
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:PLC 0')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:MOEX ON')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{self.bw_fr1}')
+        bw = f'00{self.band_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <= self.bw_fr1 < 100 else self.bw_fr1
+        self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{bw}')
         self.command_cmw100_write(
             f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{self.bw_fr1}   ON, 0.015MHz, 0.0985MHz, {round(-13.5 - 10 * math.log10(self.bw_fr1 / 5), 1)},K030')
         self.command_cmw100_write(
@@ -1773,7 +1773,7 @@ class CMW100:
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PLCid 0')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:CTYPe PUSC')
         self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PER MS25')
-        self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs}K, 3,0,1,14')
+        self.command_cmw100_write(f'CONF:NRS:MEAS:ULDL:PATT S{scs}K, 3,0,1,14 ')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'ROUT:NRS:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:UMAR 10.000000')
@@ -1813,7 +1813,6 @@ class CMW100:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
     def tx_power_aclr_evm_lmh_pipeline_fr1(self):
-        # self.preset_instrument()
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx_fr1
         self.chan = wt.channel
@@ -3210,7 +3209,7 @@ def main():
     # cmw100.tx_freq_sweep_pipline_lte()
     # cmw100.tx_level_sweep_pipeline_lte()
 
-    # cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
+    cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
     # cmw100.tx_freq_sweep_pipline_fr1()
     # cmw100.tx_level_sweep_pipeline_fr1()
 
@@ -3219,7 +3218,7 @@ def main():
     # cmw100.rxs_relative_plot('Sensitivty_10MHZ_LTE_LMH.xlsx', mode=1)
 
     # cmw100.search_sensitivity_pipline_lte()
-    cmw100.search_sensitivity_pipline_fr1()
+    # cmw100.search_sensitivity_pipline_fr1()
 
     stop = datetime.datetime.now()
 

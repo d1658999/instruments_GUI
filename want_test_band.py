@@ -26,12 +26,12 @@ port_tx_fr1 = 1  # 1 ~ 8 default is  1
 port_rx_fr1 = 1  # 1 ~ 8 default is  1
 scripts = ['GENERAL']  # 'GENERAL' | 'FCC' | 'FACTORY'
 tx_path = ['TX1']   # 'TX1' | 'TX2'
-rx_paths = [2, 4, 15]  #  0: default(free run) | 1: DRX_ONLY | 2: PRX ONLY | 3: PRX+DRX | 4: 4RX_PRX(RX2) ONLY | 8: 4RX_DRX(RX3) ONLY | 12: 4RX_PRX(RX2) + 4RX_DRX(RX3) | 15: ALL PATH
+rx_paths = [2]  #  0: default(free run) | 1: DRX_ONLY | 2: PRX ONLY | 3: PRX+DRX | 4: 4RX_PRX(RX2) ONLY | 8: 4RX_DRX(RX3) ONLY | 12: 4RX_PRX(RX2) + 4RX_DRX(RX3) | 15: ALL PATH
 type_fr1 = ['DFTS']  # 'DFTS' | 'CP'
 mcs_lte = ['QPSK']   # 'QPSK' | 'Q16' | 'Q64' | 'Q256'
 mcs_fr1 = ['QPSK']   # 'BPSK' | 'QPSK' | 'Q16' | 'Q64' | 'Q256'
 rb_ftm_lte = ['PRB']  # 'PRB' | 'FRB'
-rb_ftm_fr1 = ['OUTER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'EDGE_FULL_LEFT' | 'EDGE_FULL_RIGHT'
+rb_ftm_fr1 = ['INNER_FULL', 'OUTER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'EDGE_FULL_LEFT' | 'EDGE_FULL_RIGHT'
 scs = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz
 
 tx_level_range_list = [-10, 27]  # tx_level_1, tx_level_2
