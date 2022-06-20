@@ -15,4 +15,4 @@ rx = False
 rx_sweep = True
 
 instrument = "Anritsu8820"
-
+band_segment = "B"

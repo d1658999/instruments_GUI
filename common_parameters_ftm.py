@@ -51,7 +51,7 @@ def bandwidths_selected_lte(band):
         'B21': [5, 10, 15],
         'B25': [1.4, 3, 5, 10 , 15, 20],
         'B26': [1.4, 3, 5, 10 , 15],
-        'B28': [3, 5, 10, 15, 20],
+        'B28': [3, 5, 10, 15],
         'B29': [3, 5, 10],
         'B30': [5, 10],
         'B32': [5, 10, 15, 20],
@@ -85,6 +85,8 @@ def dl_freq_selected(standard, band, bw=5):
         'N25': [1930 + bw / 2, 1962.5, 1995 - bw / 2],
         'N26': [859 + bw / 2, 876.5, 894 - bw / 2],
         'N28': [758 + bw / 2, 780.5, 803 - bw / 2],
+        'B28A': [758 + bw / 2, 773, 788 - bw / 2],
+        'B28B': [773 + bw / 2, 788, - 803 / 2],
         'N30': [2350 + bw / 2, 2355, 2360 - bw / 2],
         'N34': [2010 + bw / 2, 2017.5, 2025 - bw / 2],
         'N38': [2570 + bw / 2, 2595, 2620 - bw / 2],
@@ -121,7 +123,9 @@ def dl_freq_selected(standard, band, bw=5):
         'B21': [1495.9 + bw / 2, 1503.5, 1510.9 - bw / 2],
         'B25': [1930 + bw / 2, 1962.5, 1995 - bw / 2],
         'B26': [859 + bw / 2, 876.5, 894 - bw / 2],
-        'B28': [758 + bw / 2, 780.5, 803 - bw / 2],
+        'B28': [758 + bw / 2, 780.5, 803 - bw / 2],  # [758 + bw / 2, 780.5, 803 - bw / 2] for 28, [758 + bw / 2, 773, 788 - bw / 2] for 28A, [773 + bw / 2, 788,  - 803/ 2] for 28B
+        'B28A': [758 + bw / 2, 773, 788 - bw / 2],
+        'B28B': [773 + bw / 2, 788,  - 803/ 2],
         'B29': [717 + bw / 2, 722.5, 728 - bw / 2],
         'B30': [2350 + bw / 2, 2355, 2360 - bw / 2],
         'B32': [1452 + bw / 2, 1474, 1496 - bw / 2],
@@ -151,11 +155,19 @@ def dl_freq_selected(standard, band, bw=5):
     }
 
     if standard == 'LTE':
-        return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}']]
+        if band == 28:
+            from want_test_band import band_segmment
+            return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}{band_segmment}']]
+        else:
+            return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}']]
     elif standard == 'WCDMA':
         return [int(freq * 1000) for freq in band_dl_freq_wcdma[f'B{band}']]
     elif standard == 'FR1':
-        return [int(freq * 1000) for freq in band_dl_freq_fr1[f'N{band}']]
+        if band == 28:
+            from want_test_band import band_segmment
+            return [int(freq * 1000) for freq in band_dl_freq_lte[f'N{band}{band_segmment}']]
+        else:
+            return [int(freq * 1000) for freq in band_dl_freq_fr1[f'N{band}']]
     elif 'GSM':
         pass
 
@@ -310,9 +322,848 @@ def special_uplink_config_sensitivity_lte(band, bw):
         else:
             return int(bw) * 5, 0
 
+def special_uplink_config_sensitivity_fr1(band, scs, bw):
+    if int(band) == 1:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 75, 4
+            elif bw == 20:
+                return 100, 6
+            elif bw == 25:
+                return 128, 5
+            elif bw == 30:
+                return 128, 32
+            elif bw == 40:
+                return 128, 88
+            elif bw == 50:
+                return 128, 142
 
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 2
+            elif bw == 20:
+                return 50, 1
+            elif bw == 25:
+                return 64, 1
+            elif bw == 30:
+                return 64, 14
+            elif bw == 40:
+                return 64, 42
+            elif bw == 50:
+                return 64, 69
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 25:
+                return 30, 1
+            elif bw == 30:
+                return 30, 8
+            elif bw == 40:
+                return 30, 21
+            elif bw == 50:
+                return 30, 35
+    elif int(band) == 2:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 50, 29
+            elif bw == 20:
+                return 50, 56
+        elif scs == 30:
+            if bw == 5:
+                return 10, 1
+            elif bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 24, 14
+            elif bw == 20:
+                return 24, 27
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 10, 8
+            elif bw == 20:
+                return 10, 14
+    elif int(band) == 3:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 50, 29
+            elif bw == 20:
+                return 50, 56
+            elif bw == 25:
+                return 50, 83
+            elif bw == 30:
+                return 50, 110
+            elif bw == 40:
+                return 50, 166
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 24, 14
+            elif bw == 20:
+                return 24, 27
+            elif bw == 25:
+                return 24, 41
+            elif bw == 30:
+                return 24, 54
+            elif bw == 40:
+                return 24, 82
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 10, 8
+            elif bw == 20:
+                return 10, 14
+            elif bw == 25:
+                return 10, 21
+            elif bw == 30:
+                return 10, 28
+            elif bw == 40:
+                return 10, 41
+    elif int(band) == 5:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 25, 27
+            elif bw == 15:
+                return 25, 54
+            elif bw == 20:
+                return 25, 81
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+            elif bw == 15:
+                return 10, 28
+            elif bw == 20:
+                return 10, 41
 
-
+    elif int(band) == 7:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 75, 4
+            elif bw == 20:
+                return 75, 31
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 2
+            elif bw == 20:
+                return 36, 15
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 18, 6
+    elif int(band) == 8:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 25, 27
+            elif bw == 15:
+                return 25, 54
+            elif bw == 20:
+                return 25, 81
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+            elif bw == 15:
+                return 10, 28
+            elif bw == 20:
+                return 10, 41
+    elif int(band) == 12:
+        if scs == 15:
+            if bw == 5:
+                return 20, 5
+            elif bw == 10:
+                return 20, 32
+            elif bw == 15:
+                return 20, 59
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+            elif bw == 15:
+                return 10, 28
+    elif int(band) == 14:
+        if scs == 15:
+            if bw == 5:
+                return 20, 5
+            elif bw == 10:
+                return 20, 32
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+    elif int(band) == 20:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 20, 0
+            elif bw == 15:
+                return 20, 11
+            elif bw == 20:
+                return 20, 16
+        elif scs == 30:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 10, 6
+            elif bw == 20:
+                return 10, 8
+    elif int(band) == 25:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 50, 29
+            elif bw == 20:
+                return 50, 56
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 24, 14
+            elif bw == 20:
+                return 24, 27
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 10, 8
+            elif bw == 20:
+                return 10, 14
+    elif int(band) == 26:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 25, 27
+            elif bw == 15:
+                return 25, 54
+            elif bw == 20:
+                return 25, 81
+        elif scs == 30:
+            if bw == 5:
+                return 12, 12
+            elif bw == 10:
+                return 12, 26
+            elif bw == 15:
+                return 12, 39
+    elif int(band) == 28:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 25, 27
+            elif bw == 15:
+                return 25, 54
+            elif bw == 20:
+                return 25, 81
+            elif bw == 30:
+                return 25, 135
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+            elif bw == 15:
+                return 10, 28
+            elif bw == 20:
+                return 10, 41
+            elif bw == 30:
+                return 10, 68
+    elif int(band) == 30:
+        if scs == 15:
+            if bw == 5:
+                return 25, 5
+            elif bw == 10:
+                return 20, 32
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+    elif int(band) == 34:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+    elif int(band) == 38:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 40:
+                return 216, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 40:
+                return 100, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 40:
+                return 50, 0
+    elif int(band) == 39:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 25:
+                return 128, 0
+            elif bw == 30:
+                return 160, 0
+            elif bw == 40:
+                return 216, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 25:
+                return 64, 0
+            elif bw == 30:
+                return 75, 0
+            elif bw == 40:
+                return 100, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 25:
+                return 30, 0
+            elif bw == 30:
+                return 36, 0
+            elif bw == 40:
+                return 50, 0
+    elif int(band) == 40:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 25:
+                return 128, 0
+            elif bw == 30:
+                return 160, 0
+            elif bw == 40:
+                return 216, 0
+            elif bw == 50:
+                return 270, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 25:
+                return 64, 0
+            elif bw == 30:
+                return 75, 0
+            elif bw == 40:
+                return 100, 0
+            elif bw == 50:
+                return 128, 0
+            elif bw == 60:
+                return 162, 0
+            elif bw == 80:
+                return 216, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 25:
+                return 30, 0
+            elif bw == 30:
+                return 36, 0
+            elif bw == 40:
+                return 50, 0
+            elif bw == 50:
+                return 64, 0
+            elif bw == 60:
+                return 75, 0
+            elif bw == 80:
+                return 100, 0
+    elif int(band) == 41:
+        if scs == 15:
+            if bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 30:
+                return 160, 0
+            elif bw == 40:
+                return 216, 0
+            elif bw == 50:
+                return 270, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 30:
+                return 75, 0
+            elif bw == 40:
+                return 100, 0
+            elif bw == 50:
+                return 128, 0
+            elif bw == 60:
+                return 162, 0
+            elif bw == 80:
+                return 216, 0
+            elif bw == 90:
+                return 243, 0
+            elif bw == 100:
+                return 270, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 30:
+                return 36, 0
+            elif bw == 40:
+                return 50, 0
+            elif bw == 50:
+                return 64, 0
+            elif bw == 60:
+                return 75, 0
+            elif bw == 80:
+                return 100, 0
+            elif bw == 90:
+                return 120, 0
+            elif bw == 100:
+                return 135, 0
+    elif int(band) == 48:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 40:
+                return 216, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 40:
+                return 100, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 40:
+                return 50, 0
+    elif int(band) == 50:
+        if scs == 15:
+            if bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 40:
+                return 216, 0
+            elif bw == 50:
+                return 270, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 40:
+                return 100, 0
+            elif bw == 50:
+                return 128, 0
+            elif bw == 60:
+                return 162, 0
+            elif bw == 80:  # note 3?
+                return 216, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 40:
+                return 50, 0
+            elif bw == 50:
+                return 64, 0
+            elif bw == 60:
+                return 75, 0
+            elif bw == 80:  # note 3?
+                return 100, 0
+    elif int(band) == 51:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+    elif int(band) == 53:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+    elif int(band) == 65:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 75, 4
+            elif bw == 20:
+                return 100, 6
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 2
+            elif bw == 15:
+                return 50, 1
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 18, 0
+    elif int(band) == 66:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 75, 4
+            elif bw == 20:
+                return 100, 6
+            elif bw == 25:
+                return 128, 5
+            elif bw == 30:
+                return 160, 0
+            elif bw == 40:
+                return 216, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 2
+            elif bw == 20:
+                return 50, 1
+            elif bw == 25:
+                return 64, 1
+            elif bw == 30:
+                return 75, 3
+            elif bw == 40:
+                return 100, 6
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 25:
+                return 30, 1
+            elif bw == 30:
+                return 36, 2
+            elif bw == 40:
+                return 50, 1
+    elif int(band) == 70:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 2
+            elif bw == 15:
+                return 75, 4
+            elif bw == 20:  # note 3?
+                return 100, 6
+            elif bw == 25:  # note 3?
+                return 128, 5
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 2
+            elif bw == 20:  # note 3?
+                return 50, 1
+            elif bw == 25:  # note 3?
+                return 64, 1
+        elif scs == 60:
+            if bw == 10:
+                return 10, 1
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0  # note 3?
+            elif bw == 25:
+                return 30, 1  # note 3?
+    elif int(band) == 71:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 25, 0
+            elif bw == 15:
+                return 20, 0
+            elif bw == 20:
+                return 20, 0
+        elif scs == 30:
+            if bw == 10:
+                return 12, 0
+            elif bw == 15:
+                return 10, 0
+            elif bw == 20:
+                return 10, 0
+    elif int(band) == 74:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 25, 27
+            elif bw == 15:
+                return 25, 54
+            elif bw == 20:
+                return 25, 81
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+            elif bw == 15:
+                return 10, 28
+            elif bw == 20:
+                return 10, 41
+        elif scs == 60:
+            if bw == 10:
+                return 5, 6
+            elif bw == 15:
+                return 5, 13
+            elif bw == 20:
+                return 5, 19
+    elif int(band) == 77:
+        if scs == 15:
+            if bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 40:
+                return 216, 0
+            elif bw == 50:
+                return 270, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 40:
+                return 100, 0
+            elif bw == 50:
+                return 128, 0
+            elif bw == 60:
+                return 162, 0
+            elif bw == 80:
+                return 216, 0
+            elif bw == 90:
+                return 243, 0
+            elif bw == 100:
+                return 270, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 40:
+                return 50, 0
+            elif bw == 50:
+                return 64, 0
+            elif bw == 60:
+                return 75, 0
+            elif bw == 80:
+                return 100, 0
+            elif bw == 90:
+                return 120, 0
+            elif bw == 100:
+                return 135, 0
+    elif int(band) == 78:
+        if scs == 15:
+            if bw == 10:
+                return 50, 0
+            elif bw == 15:
+                return 75, 0
+            elif bw == 20:
+                return 100, 0
+            elif bw == 40:
+                return 216, 0
+            elif bw == 50:
+                return 270, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+            elif bw == 15:
+                return 36, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 40:
+                return 100, 0
+            elif bw == 50:
+                return 128, 0
+            elif bw == 60:
+                return 162, 0
+            elif bw == 80:
+                return 216, 0
+            elif bw == 90:
+                return 243, 0
+            elif bw == 100:
+                return 270, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
+            elif bw == 15:
+                return 18, 0
+            elif bw == 20:
+                return 24, 0
+            elif bw == 40:
+                return 50, 0
+            elif bw == 50:
+                return 64, 0
+            elif bw == 60:
+                return 75, 0
+            elif bw == 80:
+                return 100, 0
+            elif bw == 90:
+                return 120, 0
+            elif bw == 100:
+                return 135, 0
+    elif int(band) == 79:
+        if scs == 15:
+            if bw == 40:
+                return 216, 0
+            elif bw == 50:
+                return 270, 0
+        elif scs == 30:
+            if bw == 40:
+                return 100, 0
+            elif bw == 50:
+                return 128, 0
+            elif bw == 60:
+                return 162, 0
+            elif bw == 80:
+                return 216, 0
+            elif bw == 90:
+                return 243, 0
+            elif bw == 100:
+                return 270, 0
+        elif scs == 60:
+            if bw == 40:
+                return 50, 0
+            elif bw == 50:
+                return 64, 0
+            elif bw == 60:
+                return 75, 0
+            elif bw == 80:
+                return 100, 0
+            elif bw == 100:
+                return 135, 0
 
 def main():
     """

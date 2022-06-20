@@ -108,6 +108,7 @@ class MainApp:
         self.bw20 = None
         self.TxMax = None
         self.TxLow = None
+        self.band_segment = None
         builder.import_variables(
             self,
             [
@@ -192,6 +193,7 @@ class MainApp:
                 "bw20",
                 "TxMax",
                 "TxLow",
+                "band_segment",
 
             ],
         )
@@ -222,6 +224,7 @@ class MainApp:
         """
         logger.info('Import the last setting')
         self.instrument.set(ui_init.instrument)
+        self.band_segment.set(ui_init.band_segment)
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
@@ -406,7 +409,9 @@ class MainApp:
         bands_hsupa = self.wanted_band_HSUPA()
         bands_hsdpa = self.wanted_band_HSDPA()
         bands_gsm = self.wanted_band_GSM()
+
         instrument = self.instrument.get()
+        band_segment = self.band_segment.get()
         chan = self.wanted_chan()
         tx, rx, rx_sweep = self.wanted_tx_rx_sweep()
 
@@ -465,6 +470,12 @@ class MainApp:
                 elif 'instrument' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + '"' + str(instrument) + '"' + '\n'
+                    logger.debug('replace instrument setting')
+                    line = '='.join(temp_list)
+
+                elif 'band_segment' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(band_segment) + '"' + '\n'
                     logger.debug('replace instrument setting')
                     line = '='.join(temp_list)
 
@@ -734,6 +745,8 @@ class MainApp:
     def inst_select(self):
         logger.info(self.instrument.get())
         # return self.instrument.get()
+    def segment_select(self):
+        logger.info(f'segment: {self.band_segment.get()}')
 
     def wanted_tx_rx_sweep(self):
         self.wanted_test = {}
@@ -1100,6 +1113,7 @@ class MainApp:
             wt.lte_bandwidths = self.wanted_bw()
             wt.channel = self.wanted_chan()
             wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
+            wt.band_segmment = self.band_segment.get()
 
             anritsu = Anritsu8820()
 
@@ -1121,6 +1135,7 @@ class MainApp:
             wt.lte_bandwidths = self.wanted_bw()
             wt.channel = self.wanted_chan()
             wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
+            wt.band_segmment = self.band_segment.get()
 
             anritsu = Anritsu8821()
 

@@ -43,7 +43,7 @@ def bandwidths_selected(band):
         'B21': [5, 10, 15],
         'B25': [1.4, 3, 5, 10 , 15, 20],
         'B26': [1.4, 3, 5, 10 , 15],
-        'B28': [3, 5, 10, 15, 20],
+        'B28': [3, 5, 10, 15],
         'B29': [3, 5, 10],
         'B30': [5, 10],
         'B32': [5, 10, 15, 20],
@@ -83,6 +83,8 @@ def dl_ch_selected(standard, band, bw=5):
         'B25': [int((8040 + bw / 2 * 10)), 8365, int(8689 - (bw / 2) * 10 + 1)],
         'B26': [int((8690 + bw / 2 * 10)), 8865, int(9039 - (bw / 2) * 10 + 1)],
         'B28': [int((9210 + bw / 2 * 10)), 9435, int(9659 - (bw / 2) * 10 + 1)],
+        'B28A': [int((9210 + bw / 2 * 10)), 9360, int(9509 - (bw / 2) * 10 + 1)],
+        'B28B': [int((9360 + bw / 2 * 10)), 9410, int(9659 - (bw / 2) * 10 + 1)],
         'B29': [int((9660 + bw / 2 * 10)), 9715, int(9769 - (bw / 2) * 10 + 1)],
         'B30': [int((9770 + bw / 2 * 10)), 9820, int(9869 - (bw / 2) * 10 + 1)],
         'B32': [int((9920 + bw / 2 * 10)), 10140, int(10359 - (bw / 2) * 10 + 1)],
@@ -112,7 +114,11 @@ def dl_ch_selected(standard, band, bw=5):
     }
 
     if standard == 'LTE':
-        return band_dl_ch_lte[f'B{band}']
+        if band == 28:
+            from want_test_band import band_segmment
+            return band_dl_ch_lte[f'B{band}{band_segmment}']
+        else:
+            return band_dl_ch_lte[f'B{band}']
     elif standard == 'WCDMA':
         return band_dl_ch_wcdma[f'B{band}']
     elif 'GSM':

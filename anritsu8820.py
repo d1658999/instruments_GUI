@@ -30,6 +30,7 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.band = None
         self.dl_ch = None
         self.chcoding = None
+        self.band_segment = None
         try:
             self.build_object()
         except:
@@ -3033,6 +3034,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 for bw in wt.lte_bandwidths:
                     for band in wt.lte_bands:
                         if bw in cm_pmt.bandwidths_selected(band):
+                            if band == 28:
+                                self.band_segment = wt.band_segmment
                             self.set_test_parameter_normal()
                             ch_list = []
                             for wt_ch in wt.channel:
@@ -3123,6 +3126,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 for bw in wt.lte_bandwidths:
                     for band in wt.lte_bands:
                         if bw in cm_pmt.bandwidths_selected(band):
+                            if band == 28:
+                                self.band_segment = wt.band_segmment
                             self.set_test_parameter_normal()
                             ch_list = []
                             for wt_ch in wt.channel:
@@ -3167,6 +3172,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     for band in wt.lte_bands:
                         if bw in cm_pmt.bandwidths_selected(band):
                             logger.info(f'Sweep Channel List: {band}, {bw}MHZ')
+                            if band == 28:
+                                self.band_segment = wt.band_segmment
                             self.set_test_parameter_normal()
                             lch = cm_pmt.dl_ch_selected(standard, band, bw)[0]
                             hch = cm_pmt.dl_ch_selected(standard, band, bw)[2]
