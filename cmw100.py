@@ -153,7 +153,7 @@ class CMW100:
     def begin_serial(self):
         self.ser = serial.Serial()
         self.ser.baudrate = 230400
-        self.ser.timeout = 0.15
+        self.ser.timeout = 0.2
         self.ser.port = self.get_comport_wanted()
         self.com_open()
 
@@ -225,6 +225,7 @@ class CMW100:
         logger.info('----------Set Test Mode----------')
         self.command(f'AT+LRFFINALSTART=1,{self.band_lte}')
         self.command(f'AT+LMODETEST')
+        # self.command_cmw100_query('*OPC?')
 
     def set_test_mode_fr1(self):  # SA: 0, NSA: 1
         """
@@ -232,14 +233,17 @@ class CMW100:
         """
         logger.info('----------Set Test Mode----------')
         self.command(f'AT+NRFFINALSTART={self.band_fr1},{self.sa_nsa_mode}')
+        # self.command_cmw100_query('*OPC?')
 
     def set_test_end_lte(self):
         logger.info('----------Set End----------')
         self.command(f'AT+LRFFINALFINISH')
+        # self.command_cmw100_query('*OPC?')
 
     def set_test_end_fr1(self):
         logger.info('----------Set End----------')
         self.command(f'AT+NRFFINALFINISH')
+        # self.command_cmw100_query('*OPC?')
 
     def sig_gen_lte(self):
         logger.info('----------Sig Gen----------')
@@ -264,8 +268,8 @@ class CMW100:
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_lte}KHz')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}.000000')
-        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:STAT ON')
+        self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
 
     def sig_gen_fr1(self):
@@ -301,7 +305,6 @@ class CMW100:
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_fr1}KHz')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}.000000')
-        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
         self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
@@ -319,7 +322,7 @@ class CMW100:
         scs = 1 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 0
         response = self.command(
             f'AT+NRFSYNC={self.sync_path},{self.sync_mode},{scs},{self.bw_fr1_dict[self.bw_fr1]},0,{self.rx_freq_fr1}',
-            delay=1.2)
+            delay=1)
         while b'+NRFSYNC:1\r\n' not in response:
             logger.info('**********Sync repeat**********')
             time.sleep(1)
@@ -343,6 +346,7 @@ class CMW100:
             f'AT+LTXSENDREQ={self.tx_path_dict[self.tx_path]},{self.bw_lte_dict[self.bw_lte]},{self.tx_freq_lte},{self.rb_size_lte},{self.rb_start_lte},{self.mcs_lte_dict[self.mcs_lte]},2,1,{self.tx_level}')
         logger.info(
             f'TX_PATH: {self.tx_path}, BW: {self.bw_lte}, TX_FREQ: {self.tx_freq_lte}, RB_SIZE: {self.rb_size_lte}, RB_OFFSET: {self.rb_start_lte}, MCS: {self.mcs_lte}, TX_LEVEL: {self.tx_level}')
+        # self.command_cmw100_query('*OPC?')
 
     def tx_set_fr1(self):
         logger.info('---------Tx Set----------')
@@ -350,6 +354,7 @@ class CMW100:
             f'AT+NTXSENDREQ={self.tx_path_dict[self.tx_path]},{self.tx_freq_fr1},{self.bw_fr1_dict[self.bw_fr1]},{self.scs_dict[self.scs]},{self.rb_size_fr1},{self.rb_start_fr1},{self.mcs_fr1_dict[self.mcs_fr1]},{self.type_dict[self.type_fr1]},{self.tx_level}')
         logger.info(
             f'TX_PATH: {self.tx_path}, BW: {self.bw_fr1}, TX_FREQ: {self.tx_freq_fr1}, RB_SIZE: {self.rb_size_fr1}, RB_OFFSET: {self.rb_start_fr1}, MCS: {self.mcs_fr1}, TX_LEVEL: {self.tx_level}')
+        # self.command_cmw100_query('*OPC?')
 
     def antenna_switch(self):  # 1: AS ON, 0: AS OFF
         logger.info('---------Antenna Switch----------')
@@ -374,15 +379,17 @@ class CMW100:
         logger.info('---------Antenna Switch----------')
         self.command(f'AT+ANTSWSEL={self.asw_tech_dict[self.asw_tech]},{self.asw_path}')
         logger.info(f'RAT: {self.asw_tech}, ANT_PATH: {self.asw_path}')
-        self.command_cmw100_query('*OPC?')
+        # self.command_cmw100_query('*OPC?')
 
     def rx_path_setting_lte(self):
         logger.info('----------Rx path setting----------')
         self.command(f'AT+LRXMODESET={self.rx_path_lte}')
+        # self.command_cmw100_query('*OPC?')
 
     def rx_path_setting_fr1(self):
         logger.info('----------Rx path setting----------')
         self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
+        # self.command_cmw100_query('*OPC?')
 
     def tx_measure_lte(self):
         logger.info('---------Tx Measure----------')
@@ -582,6 +589,7 @@ class CMW100:
     def set_rx_level(self):
         logger.info(f'==========Search: {self.rx_level} dBm==========')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
+        self.command_cmw100_query('*OPC?')
 
     def query_rsrp_cinr_lte(self):
         res = self.command(f'AT+LRXMEAS={self.rx_path_lte},20')
@@ -640,14 +648,14 @@ class CMW100:
         self.get_esens_fr1()
 
     def query_fer_measure_lte(self):
-        res = self.command('AT+LFERMEASURE=500', delay=0.5)
+        res = self.command('AT+LFERMEASURE=500', delay=1)
         for line in res:
             if '+LFERMEASURE:' in line.decode():
                 self.fer = eval(line.decode().split(':')[1])
                 logger.info(f'****FER: {self.fer / 100} %****')
 
     def query_fer_measure_fr1(self):
-        res = self.command('AT+NFERMEASURE=500', delay=0.5)
+        res = self.command('AT+NFERMEASURE=500', delay=1)
         for line in res:
             if '+NFERMEASURE:' in line.decode():
                 self.fer = eval(line.decode().split(':')[1])
@@ -659,6 +667,7 @@ class CMW100:
             self.rx_level = round(self.rx_level - self.window, 1)
             self.set_rx_level()
             self.query_fer_measure_lte()
+            # self.command_cmw100_query('*OPC?')
 
     def search_window_fr1(self):
         self.query_fer_measure_fr1()
@@ -666,6 +675,7 @@ class CMW100:
             self.rx_level = round(self.rx_level - self.window, 1)
             self.set_rx_level()
             self.query_fer_measure_fr1()
+            # self.command_cmw100_query('*OPC?')
 
     def search_sensitivity_lte(self):
         reset_rx_level = -80
@@ -718,62 +728,50 @@ class CMW100:
     def search_sensitivity_pipline_lte(self):
         self.port_tx = wt.port_tx_lte
         self.chan = wt.channel
-        mcs = wt.mcs_lte
+        self.mcs_lte = 'QPSK'
         self.script = 'GENERAL'
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 self.tech = 'LTE'
-                for tx_path in wt.tx_path:
-                    self.tx_path = tx_path
-                    for bw in wt.lte_bandwidths:
-                        self.bw_lte = bw
-                        try:
-                            for m in mcs:
-                                self.mcs_lte = m
-                                for band in wt.lte_bands:
-                                    self.band_lte = band
-                                    if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
-                                            for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                                                self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                                                self.search_sensitivity_lmh_progress_lte()
-                                            self.rx_desense_progress()
-                                    else:
-                                        logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-                                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
-                        except TypeError as err:
-                            logger.debug(err)
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+                for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                    self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
+                    for tx_path in wt.tx_path:
+                        self.tx_path = tx_path
+                        for bw in wt.lte_bandwidths:
+                            self.bw_lte = bw
+                            for band in wt.lte_bands:
+                                self.band_lte = band
+                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                                    self.search_sensitivity_lmh_progress_lte()
+                                else:
+                                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+                self.rx_desense_progress()
+                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx_fr1
         self.chan = wt.channel
         self.type_fr1 = 'DFTS'
-        mcs = wt.mcs_fr1
         self.sa_nsa_mode = wt.sa_nas
         self.script = 'GENERAL'
+        self.mcs_fr1 = 'QPSK'
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = 'FR1'
-                for tx_path in wt.tx_path:
-                    self.tx_path = tx_path
-                    for bw in wt.fr1_bandwidths:
-                        self.bw_fr1 = bw
-                        try:
-                            for m in mcs:
-                                self.mcs_fr1 = m
-                                for band in wt.fr1_bands:
-                                    self.band_fr1 = band
-                                    if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                                            self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                                            self.search_sensitivity_lmh_progress_fr1()
-                                        self.rx_desense_progress()
-                                    else:
-                                        logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-                                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
-                        except TypeError as err:
-                            logger.debug(err)
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+                for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                    self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
+                    for tx_path in wt.tx_path:
+                        self.tx_path = tx_path
+                        for bw in wt.fr1_bandwidths:
+                            self.bw_fr1 = bw
+                            for band in wt.fr1_bands:
+                                self.band_fr1 = band
+                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                                    self.search_sensitivity_lmh_progress_fr1()
+                                else:
+                                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+                self.rx_desense_progress()
+                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_pipline_fast_lte(self):  # this is for that RSRP and  CINR without issue because this is calculated method
         self.tx_level = wt.tx_level
@@ -824,14 +822,15 @@ class CMW100:
                 self.set_test_end_lte()
                 self.antenna_switch_v2()
                 self.set_test_mode_lte()
+                # self.command_cmw100_query('*OPC?')
                 self.sig_gen_lte()
                 self.sync_lte()
                 self.rb_size_lte, self.rb_start_lte = cm_pmt_ftm.special_uplink_config_sensitivity_lte(self.band_lte,
                                                                                                        self.bw_lte)  # for RB set
                 self.tx_set_lte()
-                self.tx_measure_lte()
                 aclr_mod_results = self.tx_measure_lte()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
                 self.rx_path_setting_lte()
+                # self.command_cmw100_query('*OPC?')
                 self.search_sensitivity_lte()
                 self.query_rx_measure_lte()
                 logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
@@ -865,13 +864,14 @@ class CMW100:
                 self.set_test_end_fr1()
                 self.antenna_switch_v2()
                 self.set_test_mode_fr1()
+                # self.command_cmw100_query('*OPC?')
                 self.sig_gen_fr1()
                 self.sync_fr1()
                 self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1, self.scs, self.bw_fr1)  # for RB set(including special tx setting)
-                time.sleep(0.2)
                 self.tx_set_fr1()
                 aclr_mod_results = self.tx_measure_fr1()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
                 self.rx_path_setting_fr1()
+                # self.command_cmw100_query('*OPC?')
                 self.search_sensitivity_fr1()
                 self.query_rx_measure_fr1()
                 logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
@@ -903,6 +903,7 @@ class CMW100:
             self.set_test_end_lte()
             self.antenna_switch_v2()
             self.set_test_mode_lte()
+            self.command_cmw100_query('*OPC?')
             self.sig_gen_lte()
             self.sync_lte()
             self.rb_size_lte, self.rb_start_lte = cm_pmt_ftm.special_uplink_config_sensitivity_lte(self.band_lte,
@@ -1954,6 +1955,7 @@ class CMW100:
             self.set_test_end_lte()
             self.antenna_switch_v2()
             self.set_test_mode_lte()
+            self.command_cmw100_query('*OPC?')
             self.sig_gen_lte()
             self.sync_lte()
             self.tx_set_lte()
@@ -1980,6 +1982,7 @@ class CMW100:
         self.set_test_end_lte()
         self.antenna_switch_v2()
         self.set_test_mode_lte()
+        self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
         self.sync_lte()
 
@@ -2040,6 +2043,7 @@ class CMW100:
         self.set_test_end_fr1()
         self.antenna_switch_v2()
         self.set_test_mode_fr1()
+        self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
         self.sync_fr1()
 
@@ -2103,6 +2107,7 @@ class CMW100:
         self.set_test_end_lte()
         self.antenna_switch_v2()
         self.set_test_mode_lte()
+        self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
         self.sync_lte()
 
@@ -2167,6 +2172,7 @@ class CMW100:
         self.set_test_end_fr1()
         self.antenna_switch_v2()
         self.set_test_mode_fr1()
+        self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
         self.sync_fr1()
 
@@ -2231,6 +2237,7 @@ class CMW100:
         self.set_test_end_lte()
         self.antenna_switch_v2()
         self.set_test_mode_lte()
+        self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
         self.sync_lte()
 
@@ -2355,6 +2362,7 @@ class CMW100:
         self.set_test_end_fr1()
         self.antenna_switch_v2()
         self.set_test_mode_fr1()
+        self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
         self.sync_fr1()
 
@@ -3004,74 +3012,6 @@ class CMW100:
 
                     ws_desens.add_chart(chart1, "F1")
 
-                    # logger.info('----------Power---------')
-                    # chart = LineChart()
-                    # chart.title = 'Power'
-                    # chart.y_axis.title = 'Power(dBm)'
-                    # chart.x_axis.title = 'Band'
-                    # chart.x_axis.tickLblPos = 'low'
-                    #
-                    # chart.height = 20
-                    # chart.width = 32
-                    #
-                    # y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
-                    # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                    # chart.add_data(y_data, titles_from_data=True)
-                    # chart.set_categories(x_data)
-                    #
-                    # chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                    # chart.series[0].marker.size = 10
-                    #
-                    # ws.add_chart(chart, "U1")
-                    #
-                    # logger.info('----------ACLR---------')
-                    # chart = LineChart()
-                    # chart.title = 'ACLR'
-                    # chart.y_axis.title = 'ACLR(dB)'
-                    # chart.x_axis.title = 'Band'
-                    # chart.x_axis.tickLblPos = 'low'
-                    # chart.y_axis.scaling.min = -60
-                    # chart.y_axis.scaling.max = -20
-                    #
-                    # chart.height = 20
-                    # chart.width = 32
-                    #
-                    # y_data = Reference(ws, min_col=6, min_row=1, max_col=11, max_row=ws.max_row)
-                    # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                    # chart.add_data(y_data, titles_from_data=True)
-                    # chart.set_categories(x_data)
-                    #
-                    # chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
-                    # chart.series[0].marker.size = 10
-                    # chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
-                    # chart.series[1].marker.size = 10
-                    # chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                    # chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                    # chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
-                    # chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
-                    #
-                    # ws.add_chart(chart, "U39")
-                    #
-                    # logger.info('----------EVM---------')
-                    # chart = LineChart()
-                    # chart.title = 'EVM'
-                    # chart.y_axis.title = 'EVM(%)'
-                    # chart.x_axis.title = 'Band'
-                    # chart.x_axis.tickLblPos = 'low'
-                    #
-                    # chart.height = 20
-                    # chart.width = 32
-                    #
-                    # y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
-                    # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                    # chart.add_data(y_data, titles_from_data=True)
-                    # chart.set_categories(x_data)
-                    #
-                    # chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                    # chart.series[0].marker.size = 10
-                    #
-                    # ws.add_chart(chart, "U77")
-
                     wb.save(filename)
                     wb.close()
                 else:
@@ -3214,8 +3154,9 @@ def main():
     # cmw100.rx_desense_progress()
     # cmw100.rxs_relative_plot('Sensitivty_10MHZ_LTE_LMH.xlsx', mode=1)
 
-    # cmw100.search_sensitivity_pipline_lte()
+    cmw100.search_sensitivity_pipline_lte()
     cmw100.search_sensitivity_pipline_fr1()
+    # cmw100.search_sensitivity_pipline_v2_fr1()
 
     stop = datetime.datetime.now()
 
