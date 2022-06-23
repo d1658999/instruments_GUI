@@ -1,12 +1,12 @@
 tech = ['FR1']
-bw_fr1 = [10]
-bw_lte = [10]
+bw_fr1 = [5]
+bw_lte = [5]
 ue_power = [1]
 
-chan = "LMH"
+chan = "M"
 
-bands_fr1 = [5, 8, 28]
-bands_lte = [28]
+bands_fr1 = [8]
+bands_lte = [8]
 bands_wcdma = []
 bands_hsupa = []
 bands_hsdpa = []
@@ -36,4 +36,4 @@ type_fr1 = ['DFTS']
 mcs_lte = ['QPSK']
 mcs_fr1 = ['QPSK']
 rb_ftm_lte = ['PRB']
-rb_ftm_fr1 = ['OUTER_FULL']
+rb_ftm_fr1 = ['INNER_FULL']

@@ -510,7 +510,7 @@ class Cmw100:
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:PLC 0')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:MOEX ON')
-        bw = f'00{self.band_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <=self.bw_fr1 < 100 else self.bw_fr1
+        bw = f'00{self.bw_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <= self.bw_fr1 < 100 else self.bw_fr1
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{bw}')
         self.command_cmw100_write(
             f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{self.bw_fr1}   ON, 0.015MHz, 0.0985MHz, {round(-13.5 - 10 * math.log10(self.bw_fr1 / 5), 1)},K030')
@@ -1778,7 +1778,7 @@ class Cmw100:
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:PLC 0')
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:MOEX ON')
-        bw = f'00{self.band_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <= self.bw_fr1 < 100 else self.bw_fr1
+        bw = f'00{self.bw_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <= self.bw_fr1 < 100 else self.bw_fr1
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{bw}')
         self.command_cmw100_write(
             f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{self.bw_fr1}   ON, 0.015MHz, 0.0985MHz, {round(-13.5 - 10 * math.log10(self.bw_fr1 / 5), 1)},K030')

@@ -751,6 +751,8 @@ class MainApp:
                     self.q64_fr1.set(True)
                 elif mcs == 'Q256':
                     self.q256_fr1.set(True)
+                elif mcs == 'BPSK':
+                    self.qpsk_fr1.set(True)
 
         for tx_path in ui_init.tx_paths:
             if tx_path == 'TX1':
