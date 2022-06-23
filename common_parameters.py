@@ -115,8 +115,8 @@ def dl_ch_selected(standard, band, bw=5):
 
     if standard == 'LTE':
         if band == 28:
-            from want_test_band import band_segmment
-            return band_dl_ch_lte[f'B{band}{band_segmment}']
+            from want_test_band import band_segment
+            return band_dl_ch_lte[f'B{band}{band_segment}']
         else:
             return band_dl_ch_lte[f'B{band}']
     elif standard == 'WCDMA':

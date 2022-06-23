@@ -85,8 +85,8 @@ def dl_freq_selected(standard, band, bw=5):
         'N25': [1930 + bw / 2, 1962.5, 1995 - bw / 2],
         'N26': [859 + bw / 2, 876.5, 894 - bw / 2],
         'N28': [758 + bw / 2, 780.5, 803 - bw / 2],
-        'B28A': [758 + bw / 2, 773, 788 - bw / 2],
-        'B28B': [773 + bw / 2, 788, - 803 / 2],
+        'N28A': [758 + bw / 2, 773, 788 - bw / 2],
+        'N28B': [773 + bw / 2, 788,  803 - bw / 2],
         'N30': [2350 + bw / 2, 2355, 2360 - bw / 2],
         'N34': [2010 + bw / 2, 2017.5, 2025 - bw / 2],
         'N38': [2570 + bw / 2, 2595, 2620 - bw / 2],
@@ -127,7 +127,7 @@ def dl_freq_selected(standard, band, bw=5):
         'B26': [859 + bw / 2, 876.5, 894 - bw / 2],
         'B28': [758 + bw / 2, 780.5, 803 - bw / 2],  # [758 + bw / 2, 780.5, 803 - bw / 2] for 28, [758 + bw / 2, 773, 788 - bw / 2] for 28A, [773 + bw / 2, 788,  - 803/ 2] for 28B
         'B28A': [758 + bw / 2, 773, 788 - bw / 2],
-        'B28B': [773 + bw / 2, 788,  - 803/ 2],
+        'B28B': [773 + bw / 2, 788, 803 - bw / 2],
         'B29': [717 + bw / 2, 722.5, 728 - bw / 2],
         'B30': [2350 + bw / 2, 2355, 2360 - bw / 2],
         'B32': [1452 + bw / 2, 1474, 1496 - bw / 2],
@@ -158,16 +158,16 @@ def dl_freq_selected(standard, band, bw=5):
 
     if standard == 'LTE':
         if band == 28:
-            from want_test_band import band_segmment
-            return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}{band_segmment}']]
+            from want_test_band import band_segment
+            return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}{band_segment}']]
         else:
             return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}']]
     elif standard == 'WCDMA':
         return [int(freq * 1000) for freq in band_dl_freq_wcdma[f'B{band}']]
     elif standard == 'FR1':
         if band == 28:
-            from want_test_band import band_segmment
-            return [int(freq * 1000) for freq in band_dl_freq_lte[f'N{band}{band_segmment}']]
+            from want_test_band import band_segment_fr1
+            return [int(freq * 1000) for freq in band_dl_freq_fr1[f'N{band}{band_segment_fr1}']]
         else:
             return [int(freq * 1000) for freq in band_dl_freq_fr1[f'N{band}']]
     elif 'GSM':

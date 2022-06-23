@@ -20,7 +20,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 
-class CMW100:
+class Cmw100:
     def __init__(self):
         self.begin_serial()
         self.get_resource()
@@ -35,7 +35,8 @@ class CMW100:
             'FR1': 6,
         }
         self.asw_tech = None
-        self.asw_path = 0
+        self.asw_path = wt.asw_path
+        self.srs_path = wt.srs_path
         self.rx_path_lte = None
         self.rx_path_fr1 = None
         self.rx_level = -70
@@ -43,8 +44,8 @@ class CMW100:
         self.port_tx = None
         self.port_rx = None
         self.chan = None
-        self.sync_path = 0  # 0: Main, 1: 4RX, 2: 6RX
-        self.sync_mode = 0  # 0: Main, 1: CA#1, 2: CA#2, 3: CA#3
+        self.sync_path = wt.sync_path  # 0: Main, 1: CA#1, 2: CA#2, 3: CA#3
+        self.sync_mode = 0  # 0: Main, 1: 4RX, 2: 6RX
         self.sa_nsa_mode = None  # SA: 0, NSA: 1
         self.filename = None
         self.tech = None
@@ -52,6 +53,8 @@ class CMW100:
         self.band_fr1 = None
         self.bw_lte = None
         self.bw_fr1 = None
+        self.band_segment = wt.band_segment
+        self.band_segment_fr1 = wt.band_segment_fr1
         self.tx_freq_lte = None
         self.rx_freq_lte = None
         self.tx_freq_fr1 = None
@@ -589,7 +592,7 @@ class CMW100:
     def set_rx_level(self):
         logger.info(f'==========Search: {self.rx_level} dBm==========')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
-        self.command_cmw100_query('*OPC?')
+        # self.command_cmw100_query('*OPC?')
 
     def query_rsrp_cinr_lte(self):
         res = self.command(f'AT+LRXMEAS={self.rx_path_lte},20')
@@ -648,14 +651,14 @@ class CMW100:
         self.get_esens_fr1()
 
     def query_fer_measure_lte(self):
-        res = self.command('AT+LFERMEASURE=500', delay=1)
+        res = self.command('AT+LFERMEASURE=500', delay=0.5)
         for line in res:
             if '+LFERMEASURE:' in line.decode():
                 self.fer = eval(line.decode().split(':')[1])
                 logger.info(f'****FER: {self.fer / 100} %****')
 
     def query_fer_measure_fr1(self):
-        res = self.command('AT+NFERMEASURE=500', delay=1)
+        res = self.command('AT+NFERMEASURE=500', delay=0.5)
         for line in res:
             if '+NFERMEASURE:' in line.decode():
                 self.fer = eval(line.decode().split(':')[1])
@@ -735,7 +738,7 @@ class CMW100:
                 self.tech = 'LTE'
                 for ue_power_bool in wt.tx_max_pwr_sensitivity:
                     self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                    for tx_path in wt.tx_path:
+                    for tx_path in wt.tx_paths:
                         self.tx_path = tx_path
                         for bw in wt.lte_bandwidths:
                             self.bw_lte = bw
@@ -760,7 +763,7 @@ class CMW100:
                 self.tech = 'FR1'
                 for ue_power_bool in wt.tx_max_pwr_sensitivity:
                     self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                    for tx_path in wt.tx_path:
+                    for tx_path in wt.tx_paths:
                         self.tx_path = tx_path
                         for bw in wt.fr1_bandwidths:
                             self.bw_fr1 = bw
@@ -781,7 +784,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 self.tech = 'LTE'
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.lte_bandwidths:
                         self.bw_lte = bw
@@ -1353,6 +1356,8 @@ class CMW100:
                                 ws['P1'] = 'RB_start'
                                 ws['Q1'] = 'MCS'
                                 ws['R1'] = 'Tx_Path'
+                                ws['S1'] = 'Sync_Path'
+
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -1380,6 +1385,7 @@ class CMW100:
                                 ws['R1'] = 'Tx_Path'
                                 ws['S1'] = 'SCS(KHz)'
                                 ws['T1'] = 'RB_STATE'
+                                ws['U1'] = 'Sync_Path'
 
                     wb.save(filename)
                     wb.close()
@@ -1416,6 +1422,7 @@ class CMW100:
                             ws.cell(row, 16).value = self.rb_start_lte
                             ws.cell(row, 17).value = self.mcs_lte
                             ws.cell(row, 18).value = self.tx_path
+                            ws.cell(row, 19).value = self.sync_path
 
                             row += 1
 
@@ -1440,6 +1447,7 @@ class CMW100:
                             ws.cell(row, 16).value = self.rb_start_lte
                             ws.cell(row, 17).value = self.mcs_lte
                             ws.cell(row, 18).value = self.tx_path
+                            ws.cell(row, 19).value = self.sync_path
 
                             row += 1
                 elif self.tech == 'FR1':
@@ -1468,6 +1476,7 @@ class CMW100:
                             ws.cell(row, 18).value = self.tx_path
                             ws.cell(row, 19).value = self.scs
                             ws.cell(row, 20).value = self.rb_state
+                            ws.cell(row, 21).value = self.sync_path
 
                             row += 1
 
@@ -1494,6 +1503,7 @@ class CMW100:
                             ws.cell(row, 18).value = self.tx_path
                             ws.cell(row, 19).value = self.scs
                             ws.cell(row, 20).value = self.rb_state
+                            ws.cell(row, 21).value = self.sync_path
 
                             row += 1
 
@@ -1536,6 +1546,8 @@ class CMW100:
                             ws['O1'] = 'RB_start'
                             ws['P1'] = 'MCS'
                             ws['Q1'] = 'Tx_Path'
+                            ws['R1'] = 'Sync_Path'
+
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
                             wb.create_sheet(f'Raw_Data_{mcs}')
@@ -1561,6 +1573,7 @@ class CMW100:
                                 ws['Q1'] = 'Tx_Path'
                                 ws['R1'] = 'SCS(KHz)'
                                 ws['S1'] = 'RB_STATE'
+                                ws['T1'] = 'Sync_Path'
 
                     wb.save(filename)
                     wb.close()
@@ -1595,6 +1608,7 @@ class CMW100:
                             ws.cell(row, 15).value = self.rb_start_lte
                             ws.cell(row, 16).value = self.mcs_lte
                             ws.cell(row, 17).value = self.tx_path
+                            ws.cell(row, 18).value = self.sync_path
 
                             row += 1
 
@@ -1617,6 +1631,7 @@ class CMW100:
                             ws.cell(row, 15).value = self.rb_start_lte
                             ws.cell(row, 16).value = self.mcs_lte
                             ws.cell(row, 17).value = self.tx_path
+                            ws.cell(row, 18).value = self.sync_path
 
                             row += 1
                 elif self.tech == 'FR1':
@@ -1643,6 +1658,7 @@ class CMW100:
                             ws.cell(row, 17).value = self.tx_path
                             ws.cell(row, 18).value = self.scs
                             ws.cell(row, 19).value = self.rb_state
+                            ws.cell(row, 20).value = self.sync_path
 
                             row += 1
 
@@ -1667,6 +1683,7 @@ class CMW100:
                             ws.cell(row, 17).value = self.tx_path
                             ws.cell(row, 18).value = self.scs
                             ws.cell(row, 19).value = self.rb_state
+                            ws.cell(row, 20).value = self.sync_path
 
                             row += 1
 
@@ -1795,7 +1812,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 self.tech = 'LTE'
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.lte_bandwidths:
                         self.bw_lte = bw
@@ -1818,7 +1835,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = 'FR1'
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.fr1_bandwidths:
                         self.bw_fr1 = bw
@@ -1842,7 +1859,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 self.tech = tech
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.lte_bandwidths:
                         self.bw_lte = bw
@@ -1865,7 +1882,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = tech
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.fr1_bandwidths:
                         self.bw_fr1 = bw
@@ -1889,7 +1906,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 self.tech = tech
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.lte_bandwidths:
                         self.bw_lte = bw
@@ -1912,7 +1929,7 @@ class CMW100:
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = tech
-                for tx_path in wt.tx_path:
+                for tx_path in wt.tx_paths:
                     self.tx_path = tx_path
                     for bw in wt.fr1_bandwidths:
                         self.bw_fr1 = bw
@@ -3092,6 +3109,36 @@ class CMW100:
                     wb.save(filename)
                     wb.close()
 
+    def run_tx(self):
+        for tech in wt.tech:
+            if tech == 'LTE':
+                self.tx_power_aclr_evm_lmh_pipeline_lte()
+            elif tech == 'FR1':
+                self.tx_power_aclr_evm_lmh_pipeline_fr1()
+
+    def run_rx(self):
+        for tech in wt.tech:
+            if tech == 'LTE':
+                self.search_sensitivity_pipline_lte()
+            elif tech == 'FR1':
+                self.search_sensitivity_pipline_fr1()
+
+    def run_tx_level_sweep(self):
+        for tech in wt.tech:
+            if tech == 'LTE':
+                self.tx_level_sweep_pipeline_lte()
+            elif tech == 'FR1':
+                self.tx_level_sweep_pipeline_fr1()
+
+    def run_tx_freq_sweep(self):
+        for tech in wt.tech:
+            if tech == 'LTE':
+                self.tx_freq_sweep_pipline_lte()
+            elif tech == 'FR1':
+                self.tx_freq_sweep_pipline_fr1()
+
+
+
     def command_cmw100_query(self, tcpip_command):
         tcpip_response = self.cmw100.query(tcpip_command).strip()
         logger.info(f'TCPIP::<<{tcpip_command}')
@@ -3140,8 +3187,7 @@ class CMW100:
 
 def main():
     start = datetime.datetime.now()
-    cmw100 = CMW100()
-
+    cmw100 = Cmw100()
     # cmw100.tx_power_aclr_evm_lmh_pipeline_lte()
     # cmw100.tx_freq_sweep_pipline_lte()
     # cmw100.tx_level_sweep_pipeline_lte()
@@ -3154,8 +3200,8 @@ def main():
     # cmw100.rx_desense_progress()
     # cmw100.rxs_relative_plot('Sensitivty_10MHZ_LTE_LMH.xlsx', mode=1)
 
-    cmw100.search_sensitivity_pipline_lte()
-    cmw100.search_sensitivity_pipline_fr1()
+    # cmw100.search_sensitivity_pipline_lte()
+    # cmw100.search_sensitivity_pipline_fr1()
     # cmw100.search_sensitivity_pipline_v2_fr1()
 
     stop = datetime.datetime.now()

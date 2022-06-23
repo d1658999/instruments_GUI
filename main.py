@@ -28,17 +28,6 @@ class MainApp:
         self.button_run = builder.get_object("button_run", master)
 
         self.instrument = None
-        self.tx = None
-        self.rx = None
-        self.rx_sweep = None
-        self.chan_L = None
-        self.chan_M = None
-        self.chan_H = None
-        self.tech_LTE = None
-        self.tech_WCDMA = None
-        self.tech_GSM = None
-        self.tech_HSUPA = None
-        self.tech_HSDPA = None
         self.B5 = None
         self.B8 = None
         self.B12 = None
@@ -55,6 +44,8 @@ class MainApp:
         self.B71 = None
         self.LB_all = None
         self.B21 = None
+        self.band_segment = None
+        self.band_segment_fr1 = None
         self.B1 = None
         self.B2 = None
         self.B3 = None
@@ -100,6 +91,11 @@ class MainApp:
         self.D8 = None
         self.D6 = None
         self.D19 = None
+        self.tech_LTE = None
+        self.tech_WCDMA = None
+        self.tech_GSM = None
+        self.tech_HSUPA = None
+        self.tech_HSDPA = None
         self.bw1p4 = None
         self.bw3 = None
         self.bw5 = None
@@ -108,22 +104,107 @@ class MainApp:
         self.bw20 = None
         self.TxMax = None
         self.TxLow = None
-        self.band_segment = None
+        self.tech_FR1 = None
+        self.qpsk_lte = None
+        self.q16_lte = None
+        self.q64_lte = None
+        self.q256_lte = None
+        self.prb_lte = None
+        self.frb_lte = None
+        self.tx = None
+        self.rx = None
+        self.rx_sweep = None
+        self.chan_L = None
+        self.chan_M = None
+        self.chan_H = None
+        self.N5 = None
+        self.N8 = None
+        self.N12 = None
+        self.N13 = None
+        self.N14 = None
+        self.N18 = None
+        self.N20 = None
+        self.N26 = None
+        self.N28 = None
+        self.N29 = None
+        self.N32 = None
+        self.N71 = None
+        self.LB_all_fr1 = None
+        self.N24 = None
+        self.N1 = None
+        self.N2 = None
+        self.N3 = None
+        self.N4 = None
+        self.N7 = None
+        self.N30 = None
+        self.N25 = None
+        self.N66 = None
+        self.N39 = None
+        self.N40 = None
+        self.N38 = None
+        self.N41 = None
+        self.N34 = None
+        self.MHB_all_fr1 = None
+        self.N48 = None
+        self.N77 = None
+        self.N78 = None
+        self.N79 = None
+        self.UHB_all_fr1 = None
+        self.bw5_fr1 = None
+        self.bw10_fr1 = None
+        self.bw15_fr1 = None
+        self.bw20_fr1 = None
+        self.bw25_fr1 = None
+        self.bw30_fr1 = None
+        self.bw40_fr1 = None
+        self.bw50_fr1 = None
+        self.bw60_fr1 = None
+        self.bw80_fr1 = None
+        self.bw90_fr1 = None
+        self.bw100_fr1 = None
+        self.bw70_fr1 = None
+        self.qpsk_fr1 = None
+        self.q16_fr1 = None
+        self.q64_fr1 = None
+        self.q256_fr1 = None
+        self.bpsk_fr1 = None
+        self.dfts = None
+        self.cp = None
+        self.inner_full_fr1 = None
+        self.outer_full_fr1 = None
+        self.inner_1rb_left_fr1 = None
+        self.inner_1rb_right_fr1 = None
+        self.edge_1rb_left_fr1 = None
+        self.edge_1rb_right_fr1 = None
+        self.edge_full_left_fr1 = None
+        self.edge_full_right_fr1 = None
+        self.sa_nsa = None
+        self.scs15 = None
+        self.scs30 = None
+        self.scs60 = None
+        self.general = None
+        self.fcc = None
+        self.ce = None
+        self.tx_port_lte = None
+        self.tx_port_fr1 = None
+        self.tx1 = None
+        self.tx2 = None
+        self.rx0 = None
+        self.rx1 = None
+        self.rx2 = None
+        self.rx3 = None
+        self.rx0_rx1 = None
+        self.rx2_rx3 = None
+        self.rx_all_path = None
+        self.asw_path = None
+        self.srs_path = None
+        self.sync_path = None
+        self.tx_level_sweep = None
+        self.tx_freq_sweep = None
         builder.import_variables(
             self,
             [
                 "instrument",
-                "tx",
-                "rx",
-                "rx_sweep",
-                "chan_L",
-                "chan_M",
-                "chan_H",
-                "tech_LTE",
-                "tech_WCDMA",
-                "tech_GSM",
-                "tech_HSUPA",
-                "tech_HSDPA",
                 "B5",
                 "B8",
                 "B12",
@@ -140,6 +221,8 @@ class MainApp:
                 "B71",
                 "LB_all",
                 "B21",
+                "band_segment",
+                "band_segment_fr1",
                 "B1",
                 "B2",
                 "B3",
@@ -185,6 +268,11 @@ class MainApp:
                 "D8",
                 "D6",
                 "D19",
+                "tech_LTE",
+                "tech_WCDMA",
+                "tech_GSM",
+                "tech_HSUPA",
+                "tech_HSDPA",
                 "bw1p4",
                 "bw3",
                 "bw5",
@@ -193,7 +281,103 @@ class MainApp:
                 "bw20",
                 "TxMax",
                 "TxLow",
-                "band_segment",
+                "tech_FR1",
+                "qpsk_lte",
+                "q16_lte",
+                "q64_lte",
+                "q256_lte",
+                "prb_lte",
+                "frb_lte",
+                "tx",
+                "rx",
+                "rx_sweep",
+                "chan_L",
+                "chan_M",
+                "chan_H",
+                "tx_level_sweep",
+                "tx_freq_sweep",
+                "N5",
+                "N8",
+                "N12",
+                "N13",
+                "N14",
+                "N18",
+                "N20",
+                "N24",
+                "N26",
+                "N28",
+                "N29",
+                "N32",
+                "N71",
+                "LB_all_fr1",
+                "N1",
+                "N2",
+                "N3",
+                "N4",
+                "N7",
+                "N30",
+                "N25",
+                "N66",
+                "N39",
+                "N40",
+                "N38",
+                "N41",
+                "N34",
+                "MHB_all_fr1",
+                "N48",
+                "N77",
+                "N78",
+                "N79",
+                "UHB_all_fr1",
+                "bw5_fr1",
+                "bw10_fr1",
+                "bw15_fr1",
+                "bw20_fr1",
+                "bw25_fr1",
+                "bw30_fr1",
+                "bw40_fr1",
+                "bw50_fr1",
+                "bw60_fr1",
+                "bw80_fr1",
+                "bw90_fr1",
+                "bw100_fr1",
+                "bw70_fr1",
+                "qpsk_fr1",
+                "q16_fr1",
+                "q64_fr1",
+                "q256_fr1",
+                "bpsk_fr1",
+                "dfts",
+                "cp",
+                "inner_full_fr1",
+                "outer_full_fr1",
+                "inner_1rb_left_fr1",
+                "inner_1rb_right_fr1",
+                "edge_1rb_left_fr1",
+                "edge_1rb_right_fr1",
+                "edge_full_left_fr1",
+                "edge_full_right_fr1",
+                "sa_nsa",
+                "scs15",
+                "scs30",
+                "scs60",
+                "general",
+                "fcc",
+                "ce",
+                "tx_port_lte",
+                "tx_port_fr1",
+                "tx1",
+                "tx2",
+                "rx0",
+                "rx1",
+                "rx2",
+                "rx3",
+                "rx0_rx1",
+                "rx2_rx3",
+                "rx_all_path",
+                "asw_path",
+                "srs_path",
+                "sync_path",
 
             ],
         )
@@ -223,15 +407,27 @@ class MainApp:
 
         """
         logger.info('Import the last setting')
+        # non list-like
         self.instrument.set(ui_init.instrument)
         self.band_segment.set(ui_init.band_segment)
+        self.band_segment_fr1.set(ui_init.band_segment_fr1)
+        self.tx.set(ui_init.tx)
+        self.rx.set(ui_init.rx)
+        self.rx_sweep.set(ui_init.rx_sweep)
+        self.tx_level_sweep.set(ui_init.tx_level_sweep)
+        self.tx_freq_sweep.set(ui_init.tx_freq_sweep)
+        self.tx_port_lte.set(ui_init.port_tx_lte)
+        self.tx_port_fr1.set(ui_init.port_tx_fr1)
+        self.asw_path.set(ui_init.asw_path)
+        self.srs_path.set(ui_init.srs_path)
+        self.sync_path.set(ui_init.sync_path)
+
+
+        #reet all the check button
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
         self.off_all_reset_ch()
-        self.tx.set(ui_init.tx)
-        self.rx.set(ui_init.rx)
-        self.rx_sweep.set(ui_init.rx_sweep)
         self.off_all_reset_GSM()
         self.off_all_reset_HSDPA()
         self.off_all_reset_HSUPA()
@@ -239,6 +435,75 @@ class MainApp:
         self.off_all_reset_LB()
         self.off_all_reset_MHB()
         self.off_all_reset_UHB()
+
+        # list-like
+        for band_fr1 in ui_init.bands_fr1:
+            if band_fr1 == 1:
+                self.N1.set(band_fr1)
+            elif band_fr1 == 2:
+                self.N2.set(band_fr1)
+            elif band_fr1 == 3:
+                self.N3.set(band_fr1)
+            elif band_fr1 == 4:
+                self.N4.set(band_fr1)
+            elif band_fr1 == 5:
+                self.N5.set(band_fr1)
+            elif band_fr1 == 7:
+                self.N7.set(band_fr1)
+            elif band_fr1 == 8:
+                self.N8.set(band_fr1)
+            elif band_fr1 == 12:
+                self.N12.set(band_fr1)
+            elif band_fr1 == 13:
+                self.N13.set(band_fr1)
+            elif band_fr1 == 14:
+                self.N14.set(band_fr1)
+            elif band_fr1 == 17:
+                self.N17.set(band_fr1)
+            elif band_fr1 == 18:
+                self.N18.set(band_fr1)
+            elif band_fr1 == 19:
+                self.N19.set(band_fr1)
+            elif band_fr1 == 20:
+                self.N20.set(band_fr1)
+            elif band_fr1 == 21:
+                self.N21.set(band_fr1)
+            elif band_fr1 == 24:
+                self.N24.set(band_fr1)
+            elif band_fr1 == 25:
+                self.N25.set(band_fr1)
+            elif band_fr1 == 26:
+                self.N26.set(band_fr1)
+            elif band_fr1 == 28:
+                self.N28.set(band_fr1)
+            elif band_fr1 == 29:
+                self.N29.set(band_fr1)
+            elif band_fr1 == 30:
+                self.N30.set(band_fr1)
+            elif band_fr1 == 32:
+                self.N32.set(band_fr1)
+            elif band_fr1 == 34:
+                self.N34.set(band_fr1)
+            elif band_fr1 == 38:
+                self.N38.set(band_fr1)
+            elif band_fr1 == 39:
+                self.N39.set(band_fr1)
+            elif band_fr1 == 40:
+                self.N40.set(band_fr1)
+            elif band_fr1 == 41:
+                self.N41.set(band_fr1)
+            elif band_fr1 == 42:
+                self.N48.set(band_fr1)
+            elif band_fr1 == 66:
+                self.N66.set(band_fr1)
+            elif band_fr1 == 71:
+                self.N71.set(band_fr1)
+            elif band_fr1 == 77:
+                self.N77.set(band_fr1)
+            elif band_fr1 == 78:
+                self.N78.set(band_fr1)
+            elif band_fr1 == 79:
+                self.N79.set(band_fr1)
 
         for band_lte in ui_init.bands_lte:
             if band_lte == 1:
@@ -368,10 +633,12 @@ class MainApp:
                 self.tech_HSUPA.set(True)
             elif tech == 'HSDPA':
                 self.tech_HSDPA.set(True)
+            elif tech == 'FR1':
+                self.tech_FR1.set(True)
             # elif tech == 'GSM':
             #     self.tech_GSM.set(True)
 
-        for bw in ui_init.bw:
+        for bw in ui_init.bw_lte:
             if bw == 1.4:
                 self.bw1p4.set(True)
             elif bw == 3:
@@ -384,6 +651,34 @@ class MainApp:
                 self.bw15.set(True)
             elif bw == 20:
                 self.bw20.set(True)
+
+        for bw in ui_init.bw_fr1:
+            if bw == 5:
+                self.bw5_fr1.set(True)
+            elif bw == 10:
+                self.bw10_fr1.set(True)
+            elif bw == 15:
+                self.bw15_fr1.set(True)
+            elif bw == 20:
+                self.bw20_fr1.set(True)
+            elif bw == 25:
+                self.bw15_fr1.set(True)
+            elif bw == 30:
+                self.bw30_fr1.set(True)
+            elif bw == 40:
+                self.bw40_fr1.set(True)
+            elif bw == 50:
+                self.bw50_fr1.set(True)
+            elif bw == 60:
+                self.bw60_fr1.set(True)
+            elif bw == 70:
+                self.bw70_fr1.set(True)
+            elif bw == 80:
+                self.bw80_fr1.set(True)
+            elif bw == 90:
+                self.bw90_fr1.set(True)
+            elif bw == 100:
+                self.bw100_fr1.set(True)
 
         for ue_pwr in ui_init.ue_power:
             if ue_pwr == 1:
@@ -399,21 +694,141 @@ class MainApp:
             elif ch == 'H':
                 self.chan_H.set(True)
 
+        for script in ui_init.scripts:
+            if script == 'GENERAL':
+                self.general.set(True)
+            elif script == 'FCC':
+                self.fcc.set(True)
+            elif script == 'CE':
+                self.ce.set(True)
+
+        for type in ui_init.type_fr1:
+            if type == 'DFTS':
+                self.dfts.set(True)
+            elif type == 'CP':
+                self.cp.set(True)
+
+        for rb_ftm in ui_init.rb_ftm_lte:
+            if rb_ftm == 'PRB':
+                self.prb_lte.set(True)
+            elif rb_ftm == 'FRB':
+                self.frb_lte.set(True)
+
+        for rb_ftm in ui_init.rb_ftm_fr1:
+            if rb_ftm == 'INNER_FULL':
+                self.inner_full_fr1.set(True)
+            elif rb_ftm == 'OUTER_FULL':
+                self.outer_full_fr1.set(True)
+            elif rb_ftm == 'EDGE_1RB_LEFT':
+                self.edge_1rb_left_fr1.set(True)
+            elif rb_ftm == 'EDGE_1RB_RIGHT':
+                self.edge_1rb_right_fr1.set(True)
+            elif rb_ftm == 'EDGE_FULL_LEFT':
+                self.edge_full_left_fr1.set(True)
+            elif rb_ftm == 'EDGE_FULL_RIGHT':
+                self.edge_full_right_fr1.set(True)
+            elif rb_ftm == 'INNER_1RB_LEFT':
+                self.inner_1rb_left_fr1.set(True)
+            elif rb_ftm == 'INNER_1RB_RIGHT':
+                self.inner_1rb_right_fr1.set(True)
+
+            for mcs in ui_init.mcs_lte:
+                if mcs == 'QPSK':
+                    self.qpsk_lte.set(True)
+                elif mcs == 'Q16':
+                    self.q16_lte.set(True)
+                elif mcs == 'Q64':
+                    self.q64_lte.set(True)
+                elif mcs == 'Q256':
+                    self.q256_lte.set(True)
+
+            for mcs in ui_init.mcs_fr1:
+                if mcs == 'QPSK':
+                    self.qpsk_fr1.set(True)
+                elif mcs == 'Q16':
+                    self.q16_fr1.set(True)
+                elif mcs == 'Q64':
+                    self.q64_fr1.set(True)
+                elif mcs == 'Q256':
+                    self.q256_fr1.set(True)
+
+        for tx_path in ui_init.tx_paths:
+            if tx_path == 'TX1':
+                self.tx1.set(True)
+            elif tx_path == 'TX2':
+                self.tx2.set(True)
+
+        for rx_path in ui_init.rx_paths:
+            if rx_path == 2:
+                self.rx0.set(True)
+            elif rx_path == 1:
+                self.rx1.set(True)
+            elif rx_path == 4:
+                self.rx2.set(True)
+            elif rx_path == 8:
+                self.rx3.set(True)
+            elif rx_path == 3:
+                self.rx0_rx1.set(True)
+            elif rx_path == 12:
+                self.rx2_rx3.set(True)
+            elif rx_path == 15:
+                self.rx_all_path.set(True)
+
+        for mcs in ui_init.mcs_lte:
+            if mcs == 'QPSK':
+                self.qpsk_lte.set(True)
+            elif mcs == 'Q16':
+                self.q16_lte.set(True)
+            elif mcs == 'Q64':
+                self.q64_lte.set(True)
+            elif mcs == 'Q256':
+                self.q256_lte.set(True)
+
+        for mcs in ui_init.mcs_fr1:
+            if mcs == 'QPSK':
+                self.qpsk_fr1.set(True)
+            elif mcs == 'Q16':
+                self.q16_fr1.set(True)
+            elif mcs == 'Q64':
+                self.q64_fr1.set(True)
+            elif mcs == 'Q256':
+                self.q256_fr1.set(True)
+
     def export_ui_setting(self):
         logger.info('Export ui setting')
+        # thses are list like
         tech = self.wanted_tech()
-        bw = self.wanted_bw()
+        bw_lte = self.wanted_bw()
+        bw_fr1 = self.wanted_bw_fr1()
         ue_power = self.wanted_ue_pwr()
+        bands_fr1 = self.wanted_band_FR1()
         bands_lte = self.wanted_band_LTE()
         bands_wcdma = self.wanted_band_WCDMA()
         bands_hsupa = self.wanted_band_HSUPA()
         bands_hsdpa = self.wanted_band_HSDPA()
         bands_gsm = self.wanted_band_GSM()
+        scripts = self.wanted_scripts()
+        type_fr1 = self.wanted_type()
+        mcs_lte = self.wanted_mcs_lte()
+        mcs_fr1 = self.wanted_mcs_fr1()
+        rb_ftm_lte = self.wanted_ftm_rb_lte()
+        rb_ftm_fr1 = self.wanted_ftm_rb_fr1()
+        tx_paths = self.wanted_tx_path()
+        rx_paths = self.wanted_rx_path()
 
+
+
+        # these are not list-like
         instrument = self.instrument.get()
+        port_tx_lte = self.tx_port_lte.get()
+        port_tx_fr1 = self.tx_port_fr1.get()
+        asw_path = self.asw_path.get()
+        srs_path = self.srs_path.get()
+        sync_path = self.sync_path.get()
         band_segment = self.band_segment.get()
+        band_segment_fr1 = self.band_segment_fr1.get()
         chan = self.wanted_chan()
-        tx, rx, rx_sweep = self.wanted_tx_rx_sweep()
+        tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
 
         new_data = []
         with open('ui_init.py', 'r') as f:
@@ -449,16 +864,76 @@ class MainApp:
                     logger.debug('replace band GSM')
                     line = '='.join(temp_list)
 
+                elif 'bands_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_fr1) + '\n'
+                    logger.debug('replace band FR1')
+                    line = '='.join(temp_list)
+
+                elif 'scripts' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(scripts) + '\n'
+                    logger.debug('replace band Scripts')
+                    line = '='.join(temp_list)
+
+                elif 'type_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(type_fr1) + '\n'
+                    logger.debug('replace band Type')
+                    line = '='.join(temp_list)
+
+                elif 'mcs_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(mcs_lte) + '\n'
+                    logger.debug('replace band MCS for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'mcs_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(mcs_fr1) + '\n'
+                    logger.debug('replace band MCS for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'rb_ftm_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rb_ftm_lte) + '\n'
+                    logger.debug('replace band RB_FTM for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'rb_ftm_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rb_ftm_fr1) + '\n'
+                    logger.debug('replace band RB_FTM for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'tx_paths' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_paths) + '\n'
+                    logger.debug('replace tx_paths')
+                    line = '='.join(temp_list)
+
+                elif 'rx_paths' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rx_paths) + '\n'
+                    logger.debug('replace rx_paths')
+                    line = '='.join(temp_list)
+
                 elif 'tech' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(tech) + '\n'
                     logger.debug('replace tech setting')
                     line = '='.join(temp_list)
 
-                elif 'bw' in line:
+                elif 'bw_lte' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bw) + '\n'
-                    logger.debug('replace bw setting')
+                    temp_list[1] = ' ' + str(bw_lte) + '\n'
+                    logger.debug('replace bw setting for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'bw_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bw_fr1) + '\n'
+                    logger.debug('replace bw setting for FR1')
                     line = '='.join(temp_list)
 
                 elif 'ue_power' in line:
@@ -473,16 +948,76 @@ class MainApp:
                     logger.debug('replace instrument setting')
                     line = '='.join(temp_list)
 
-                elif 'band_segment' in line:
+                elif 'tx_port_lte' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(band_segment) + '"' + '\n'
-                    logger.debug('replace instrument setting')
+                    temp_list[1] = ' ' + '"' + str(tx_port_lte) + '"' + '\n'
+                    logger.debug('replace tx_port_lte setting')
                     line = '='.join(temp_list)
 
-                elif 'tx' in line:
+                elif 'tx_port_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(tx_port_fr1) + '"' + '\n'
+                    logger.debug('replace tx_port_fr1 setting')
+                    line = '='.join(temp_list)
+
+                elif 'sync_path' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(sync_path) + '\n'
+                    logger.debug('replace sync_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'asw_path' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(asw_path) + '\n'
+                    logger.debug('replace asw_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'srs_path' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(srs_path) + '\n'
+                    logger.debug('replace srs_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'band_segment ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(band_segment) + '"' + '\n'
+                    logger.debug('replace band segment setting for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'band_segment_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] =' ' + '"' + str(band_segment_fr1) + '"' + '\n'
+                    logger.debug('replace band segment setting for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'port_tx_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(port_tx_lte) + '\n'
+                    logger.debug('replace port_tx_lte for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'port_tx_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(port_tx_fr1) + '\n'
+                    logger.debug('replace port_tx_frq for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'tx ' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(tx) + '\n'
                     logger.debug('replace tx setting')
+                    line = '='.join(temp_list)
+
+                elif 'tx_level_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_level_sweep) + '\n'
+                    logger.debug('replace tx level sweep setting')
+                    line = '='.join(temp_list)
+
+                elif 'tx_freq_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_freq_sweep) + '\n'
+                    logger.debug('replace tx freq sweep setting')
                     line = '='.join(temp_list)
 
                 elif 'rx ' in line:
@@ -526,15 +1061,21 @@ class MainApp:
 
     def off_all_reset_LB(self):
         self.LB_all.set(False)
+        self.LB_all_fr1.set(False)
         self.LB_all_state()
+        self.LB_all_state_fr1()
 
     def off_all_reset_MHB(self):
         self.MHB_all.set(False)
+        self.MHB_all_fr1.set(False)
         self.MHB_all_state()
+        self.MHB_all_state_fr1()
 
     def off_all_reset_UHB(self):
         self.UHB_all.set(False)
+        self.UHB_all_fr1.set(False)
         self.UHB_all_state()
+        self.UHB_all_state_fr1()
 
     def thermal_dis(self):
         from thermal_disable import thd
@@ -549,8 +1090,110 @@ class MainApp:
         self.chan_L.set(True)
         self.chan_M.set(True)
         self.chan_H.set(True)
+        self.sa_nsa.set(0)
+
 
         logger.info(f'default instrument: {self.instrument.get()}')
+
+    def wanted_band_FR1(self):
+        self.band_fr1 = []
+
+        if self.N1.get() == 1:
+            logger.debug(self.N1.get())
+            self.band_fr1.append(self.N1.get())
+        if self.N2.get() == 2:
+            logger.debug(self.N2.get())
+            self.band_fr1.append(self.N2.get())
+        if self.N3.get() == 3:
+            logger.debug(self.N3.get())
+            self.band_fr1.append(self.N3.get())
+        if self.N4.get() == 4:
+            logger.debug(self.N4.get())
+            self.band_fr1.append(self.N4.get())
+        if self.N7.get() == 7:
+            logger.debug(self.N7.get())
+            self.band_fr1.append(self.N7.get())
+        if self.N25.get() == 25:
+            logger.debug(self.N25.get())
+            self.band_fr1.append(self.N25.get())
+        if self.N66.get() == 66:
+            logger.debug(self.N66.get())
+            self.band_fr1.append(self.N66.get())
+        if self.N30.get() == 30:
+            logger.debug(self.N30.get())
+            self.band_fr1.append(self.N30.get())
+        if self.N39.get() == 39:
+            logger.debug(self.N39.get())
+            self.band_fr1.append(self.N39.get())
+        if self.N40.get() == 40:
+            logger.debug(self.N40.get())
+            self.band_fr1.append(self.N40.get())
+        if self.N38.get() == 38:
+            logger.debug(self.N38.get())
+            self.band_fr1.append(self.N38.get())
+        if self.N41.get() == 41:
+            logger.debug(self.N41.get())
+            self.band_fr1.append(self.N41.get())
+        if self.N34.get() == 34:
+            logger.debug(self.N34.get())
+            self.band_fr1.append(self.N34.get())
+        if self.N5.get() == 5:
+            logger.debug(self.N5.get())
+            self.band_fr1.append(self.N5.get())
+        if self.N8.get() == 8:
+            logger.debug(self.N8.get())
+            self.band_fr1.append(self.N8.get())
+        if self.N12.get() == 12:
+            logger.debug(self.N12.get())
+            self.band_fr1.append(self.N12.get())
+        if self.N13.get() == 13:
+            logger.debug(self.N13.get())
+            self.band_fr1.append(self.N13.get())
+        if self.N14.get() == 14:
+            logger.debug(self.N14.get())
+            self.band_fr1.append(self.N14.get())
+        if self.N18.get() == 18:
+            logger.debug(self.N18.get())
+            self.band_fr1.append(self.N18.get())
+        if self.N20.get() == 20:
+            logger.debug(self.N20.get())
+            self.band_fr1.append(self.N20.get())
+        if self.N24.get() == 24:
+            logger.debug(self.N24.get())
+            self.band_fr1.append(self.N24.get())
+        if self.N26.get() == 26:
+            logger.debug(self.N26.get())
+            self.band_fr1.append(self.N26.get())
+        if self.N28.get() == 28:
+            logger.debug(self.N28.get())
+            self.band_fr1.append(self.N28.get())
+        if self.N29.get() == 29:
+            logger.debug(self.N29.get())
+            self.band_fr1.append(self.N29.get())
+        if self.N32.get() == 32:
+            logger.debug(self.N32.get())
+            self.band_fr1.append(self.N32.get())
+        if self.N71.get() == 71:
+            logger.debug(self.N71.get())
+            self.band_fr1.append(self.N71.get())
+        if self.N48.get() == 48:
+            logger.debug(self.N48.get())
+            self.band_fr1.append(self.N48.get())
+        if self.N77.get() == 77:
+            logger.debug(self.N77.get())
+            self.band_fr1.append(self.N77.get())
+        if self.N78.get() == 78:
+            logger.debug(self.N78.get())
+            self.band_fr1.append(self.N78.get())
+        if self.N79.get() == 79:
+            logger.debug(self.N79.get())
+            self.band_fr1.append(self.N79.get())
+
+        if self.band_fr1 == []:
+            logger.debug('Nothing to select for FR1')
+
+        logger.info(f'select FR1 band: {self.band_fr1}')
+        return self.band_fr1
 
     def wanted_band_LTE(self):
         self.band_lte = []
@@ -745,18 +1388,32 @@ class MainApp:
     def inst_select(self):
         logger.info(self.instrument.get())
         # return self.instrument.get()
+
     def segment_select(self):
         logger.info(f'segment: {self.band_segment.get()}')
+
+    def segment_select_fr1(self):
+        logger.info(f'segment: {self.band_segment_fr1.get()}')
 
     def wanted_tx_rx_sweep(self):
         self.wanted_test = {}
         self.wanted_test.setdefault('tx', False)
         self.wanted_test.setdefault('rx', False)
         self.wanted_test.setdefault('rx_sweep', False)
+        self.wanted_test.setdefault('tx_level_sweep', False)
+        self.wanted_test.setdefault('tx_freq_sweep', False)
 
         if self.tx.get():
             logger.debug(self.tx.get())
             self.wanted_test['tx'] = self.tx.get()
+
+        if self.tx_level_sweep.get():
+            logger.debug(self.tx_level_sweep.get())
+            self.wanted_test['tx_level_sweep'] = self.tx_level_sweep.get()
+
+        if self.tx_freq_sweep.get():
+            logger.debug(self.tx_freq_sweep.get())
+            self.wanted_test['tx_freq_sweep'] = self.tx_freq_sweep.get()
 
         if self.rx.get():
             logger.debug(self.rx.get())
@@ -770,7 +1427,7 @@ class MainApp:
             logger.debug('Nothing to select for test items')
 
         logger.info(self.wanted_test)
-        return self.tx.get(), self.rx.get(), self.rx_sweep.get()
+        return self.tx.get(), self.rx.get(), self.rx_sweep.get(), self.tx_level_sweep.get(), self.tx_freq_sweep.get()
 
     def wanted_ue_pwr(self):
         self.ue_power = []
@@ -830,7 +1487,7 @@ class MainApp:
             logger.debug('Bw_15')
             self.bw.append(15)
 
-        if self.bw15.get():
+        if self.bw20.get():
             logger.debug('Bw_20')
             self.bw.append(20)
 
@@ -863,6 +1520,10 @@ class MainApp:
             logger.debug(self.tech_GSM.get())
             self.tech.append('GSM')
 
+        if self.tech_FR1.get():
+            logger.debug(self.tech_FR1.get())
+            self.tech.append('FR1')
+
         if self.tech == []:
             logger.debug('Nothing to select for tech')
 
@@ -875,6 +1536,19 @@ class MainApp:
         self.bw5.set(False)
         self.bw10.set(False)
         self.bw20.set(False)
+        self.bw5_fr1.set(False)
+        self.bw10_fr1.set(False)
+        self.bw15_fr1.set(False)
+        self.bw20_fr1.set(False)
+        self.bw25_fr1.set(False)
+        self.bw30_fr1.set(False)
+        self.bw40_fr1.set(False)
+        self.bw50_fr1.set(False)
+        self.bw60_fr1.set(False)
+        self.bw70_fr1.set(False)
+        self.bw80_fr1.set(False)
+        self.bw90_fr1.set(False)
+        self.bw100_fr1.set(False)
 
     def off_all_reset_tech(self):
         self.tech_LTE.set(False)
@@ -882,6 +1556,7 @@ class MainApp:
         self.tech_HSDPA.set(False)
         self.tech_HSUPA.set(False)
         self.tech_GSM.set(False)
+        self.tech_FR1.set(False)
 
     def off_all_reset_ue_power(self):
         self.TxMax.set(False)
@@ -892,8 +1567,8 @@ class MainApp:
         self.chan_M.set(False)
         self.chan_H.set(False)
 
-    def off_all_none_LB(self, event=None):
-        self.LB_all.set(False)
+    # def off_all_none_LB(self, event=None):
+    #     self.LB_all.set(False)
 
     def LB_all_state(self):
         logger.debug(self.LB_all.get())
@@ -935,8 +1610,45 @@ class MainApp:
 
         self.wanted_band_LTE()
 
-    def off_all_none_MHB(self, event=None):
-        self.MHB_all.set(False)
+    def LB_all_state_fr1(self):
+        logger.debug(self.LB_all_fr1.get())
+        if self.LB_all_fr1.get():
+            logger.debug("LB band all is checked for FR1")
+            self.N5.set(5)
+            self.N8.set(8)
+            self.N12.set(12)
+            self.N13.set(13)
+            self.N14.set(14)
+            self.N18.set(18)
+            self.N20.set(20)
+            self.N24.set(24)
+            self.N26.set(26)
+            self.N28.set(28)
+            self.N29.set(29)
+            self.N32.set(32)
+            self.N71.set(71)
+
+        else:
+            logger.debug("LB band all is unchecked for FR1")
+            self.N5.set(0)
+            self.N8.set(0)
+            self.N12.set(0)
+            self.N13.set(0)
+            self.N14.set(0)
+            self.N18.set(0)
+            self.N20.set(0)
+            self.N24.set(0)
+            self.N26.set(0)
+            self.N28.set(0)
+            self.N29.set(0)
+            self.N32.set(0)
+            self.N71.set(0)
+
+        self.wanted_band_FR1()
+
+
+    # def off_all_none_MHB(self, event=None):
+    #     self.MHB_all.set(False)
 
     def MHB_all_state(self):
         if self.MHB_all.get():
@@ -971,8 +1683,44 @@ class MainApp:
 
         self.wanted_band_LTE()
 
-    def off_all_none_UHB(self, event=None):
-        self.UHB_all.set(False)
+    def MHB_all_state_fr1(self):
+        logger.debug(self.MHB_all_fr1.get())
+        if self.MHB_all_fr1.get():
+            logger.debug("MHB band all is checked for FR1")
+            self.N1.set(1)
+            self.N2.set(2)
+            self.N25.set(25)
+            self.N3.set(3)
+            self.N4.set(4)
+            self.N66.set(66)
+            self.N7.set(7)
+            self.N30.set(30)
+            self.N39.set(39)
+            self.N40.set(40)
+            self.N38.set(38)
+            self.N41.set(41)
+            self.N34.set(34)
+
+        else:
+            logger.debug("MHB band all is unchecked for FR1")
+            self.N1.set(0)
+            self.N2.set(0)
+            self.N25.set(0)
+            self.N3.set(0)
+            self.N4.set(0)
+            self.N66.set(0)
+            self.N7.set(0)
+            self.N30.set(0)
+            self.N39.set(0)
+            self.N40.set(0)
+            self.N38.set(0)
+            self.N41.set(0)
+            self.N34.set(0)
+
+        self.wanted_band_FR1()
+
+    # def off_all_none_UHB(self, event=None):
+    #     self.UHB_all.set(False)
 
     def UHB_all_state(self):
         if self.UHB_all.get():
@@ -987,14 +1735,33 @@ class MainApp:
 
         self.wanted_band_LTE()
 
-    def off_all_none_WCDMA(self, event=None):
-        self.WCDMA_all.set(False)
+    def UHB_all_state_fr1(self):
+        logger.debug(self.UHB_all_fr1.get())
+        if self.UHB_all_fr1.get():
+            logger.debug("UHB band all is checked for FR1")
+            self.N48.set(48)
+            self.N77.set(77)
+            self.N78.set(78)
+            self.N79.set(79)
 
-    def off_all_none_HSUPA(self, event=None):
-        self.HSUPA_all.set(False)
+        else:
+            logger.debug("UHB band all is unchecked for FR1")
+            self.N48.set(0)
+            self.N77.set(0)
+            self.N78.set(0)
+            self.N79.set(0)
 
-    def off_all_none_HSDPA(self, event=None):
-        self.HSDPA_all.set(False)
+        self.wanted_band_FR1()
+
+
+    # def off_all_none_WCDMA(self, event=None):
+    #     self.WCDMA_all.set(False)
+    #
+    # def off_all_none_HSUPA(self, event=None):
+    #     self.HSUPA_all.set(False)
+    #
+    # def off_all_none_HSDPA(self, event=None):
+    #     self.HSDPA_all.set(False)
 
     def WCDMA_all_state(self):
         if self.WCDMA_all.get():
@@ -1019,8 +1786,8 @@ class MainApp:
 
         self.wanted_band_WCDMA()
 
-    def off_all_none_GSM(self, event=None):
-        self.GSM_all.set(False)
+    # def off_all_none_GSM(self, event=None):
+    #     self.GSM_all.set(False)
 
     def GSM_all_state(self):
         if self.GSM_all.get():
@@ -1083,6 +1850,301 @@ class MainApp:
 
         self.wanted_band_HSDPA()
 
+    def wanted_bw_fr1(self):
+        self.bw_fr1 = []
+
+        if self.bw5_fr1.get():
+            logger.debug('Bw_5')
+            self.bw_fr1.append(5)
+
+        if self.bw10_fr1.get():
+            logger.debug('Bw_10')
+            self.bw_fr1.append(10)
+
+        if self.bw15_fr1.get():
+            logger.debug('Bw_15')
+            self.bw_fr1.append(15)
+
+        if self.bw20_fr1.get():
+            logger.debug('Bw_20')
+            self.bw_fr1.append(20)
+
+        if self.bw25_fr1.get():
+            logger.debug('Bw_25')
+            self.bw_fr1.append(25)
+
+        if self.bw30_fr1.get():
+            logger.debug('Bw_30')
+            self.bw_fr1.append(30)
+
+        if self.bw40_fr1.get():
+            logger.debug('Bw_40')
+            self.bw_fr1.append(40)
+
+        if self.bw50_fr1.get():
+            logger.debug('Bw_50')
+            self.bw_fr1.append(50)
+
+        if self.bw60_fr1.get():
+            logger.debug('Bw_60')
+            self.bw_fr1.append(60)
+
+        if self.bw70_fr1.get():
+            logger.debug('Bw_70')
+            self.bw_fr1.append(70)
+
+        if self.bw80_fr1.get():
+            logger.debug('Bw_80')
+            self.bw_fr1.append(80)
+
+        if self.bw90_fr1.get():
+            logger.debug('Bw_90')
+            self.bw_fr1.append(90)
+
+        if self.bw100_fr1.get():
+            logger.debug('Bw_100')
+            self.bw_fr1.append(100)
+
+        if self.bw_fr1 == []:
+            logger.debug('Nothing to select for Bw')
+
+        logger.info(f'fr1 select BW: {self.bw_fr1}')
+        return self.bw_fr1
+
+    def wanted_mcs_fr1(self):
+        self.mcs_fr1 = []
+        if self.qpsk_fr1.get():
+            logger.debug('QPSK')
+            self.mcs_fr1.append('QPSK')
+
+        if self.q16_fr1.get():
+            logger.debug('Q16')
+            self.mcs_fr1.append('Q16')
+
+        if self.q64_fr1.get():
+            logger.debug('Q64')
+            self.mcs_fr1.append('Q64')
+
+        if self.q256_fr1.get():
+            logger.debug('Q256')
+            self.mcs_fr1.append('Q256')
+
+        if self.bpsk_fr1.get():
+            logger.debug('BPSK')
+            self.mcs_fr1.append('BPSK')
+
+        if self.mcs_fr1 == []:
+            logger.debug('Nothing to select for mcs_fr1')
+
+        logger.info(f'FR1 select MCS: {self.mcs_fr1}')
+        return self.mcs_fr1
+
+    def wanted_mcs_lte(self):
+        self.mcs_lte = []
+        if self.qpsk_lte.get():
+            logger.debug('QPSK')
+            self.mcs_lte.append('QPSK')
+
+        if self.q16_lte.get():
+            logger.debug('Q16')
+            self.mcs_lte.append('Q16')
+
+        if self.q64_lte.get():
+            logger.debug('Q64')
+            self.mcs_lte.append('Q64')
+
+        if self.q256_lte.get():
+            logger.debug('Q256')
+            self.mcs_lte.append('Q256')
+
+        if self.mcs_lte == []:
+            logger.debug('Nothing to select for mcs_lte')
+
+        logger.info(f'LTE select MCS: {self.mcs_lte}')
+        return self.mcs_lte
+
+    def wanted_type(self):
+        self.type = []
+        if self.dfts.get():
+            logger.debug('DFTS')
+            self.type.append('DFTS')
+
+        if self.cp.get():
+            logger.debug('CP')
+            self.type.append('CP')
+
+        if self.type == []:
+            logger.debug('Nothing to select for type')
+
+        logger.info(f'type select: {self.type}')
+        return self.type
+
+    def fr1_mode_select(self):
+        if self.sa_nsa.get() == 0:
+            logger.info('selct mode: SA')
+        elif self.sa_nsa.get() == 1:
+            logger.info('selct mode: NSA')
+        # return self.instrument.get()
+
+    def wanted_scs(self):
+        pass
+
+    def wanted_scripts(self):
+        self.script = []
+        if self.general.get():
+            logger.debug('GENERAL')
+            self.script.append('GENERAL')
+
+        if self.fcc.get():
+            logger.debug('FCC')
+            self.script.append('FCC')
+
+        if self.ce.get():
+            logger.debug('CE')
+            self.script.append('CE')
+
+        if self.script == []:
+            logger.debug('Nothing to select for script')
+
+        logger.info(f'Script to select : {self.script}')
+        return self.script
+
+    def select_tx_port_lte(self):
+        logger.info(self.tx_port_lte.get())
+        # return self.tx_port_lte.get()
+
+    def select_tx_port_fr1(self):
+        logger.info(self.tx_port_fr1.get())
+        # return self.tx_port_fr1.get()
+
+    def wanted_tx_path(self):
+        self.tx_path = []
+        if self.tx1.get():
+            logger.debug('TX1')
+            self.tx_path.append('TX1')
+
+        if self.tx2.get():
+            logger.debug('TX2')
+            self.tx_path.append('TX2')
+
+        if self.tx_path == []:
+            logger.debug('Nothing to select for tx path')
+
+        logger.info(f'script select BW: {self.tx_path}')
+        return self.tx_path
+
+    def wanted_rx_path(self):
+        self.rx_path = []
+        self.rx_path_show = []
+        if self.rx0.get():
+            logger.debug('RX0')
+            self.rx_path_show.append('RX0')
+            self.rx_path.append(2)
+
+        if self.rx1.get():
+            logger.debug('RX1')
+            self.rx_path_show.append('RX1')
+            self.rx_path.append(1)
+
+        if self.rx2.get():
+            logger.debug('RX2')
+            self.rx_path_show.append('RX2')
+            self.rx_path.append(4)
+
+        if self.rx3.get():
+            logger.debug('RX3')
+            self.rx_path_show.append('RX3')
+            self.rx_path.append(8)
+
+        if self.rx0_rx1.get():
+            logger.debug('RX0+RX1')
+            self.rx_path_show.append('RX0+RX1')
+            self.rx_path.append(3)
+
+        if self.rx2_rx3.get():
+            logger.debug('RX2+RX3')
+            self.rx_path_show.append('RX2+RX3')
+            self.rx_path.append(12)
+
+        if self.rx_all_path.get():
+            logger.debug('all path')
+            self.rx_path_show.append('ALL PATH')
+            self.rx_path.append(15)
+
+        if self.rx_path == []:
+            logger.debug('Nothing to select for rx path')
+
+
+        logger.info(f'RX path select: {self.rx_path_show}')
+        logger.debug(f'RX path select: {self.rx_path}')
+
+        return self.rx_path
+
+    def select_asw_path(self):
+        logger.info(f'select AS path {self.asw_path.get()}')
+
+    def select_sync_path(self):
+        logger.info(f'select syn(CA) path {self.sync_path.get()}')
+
+    def select_srs_path(self):
+        logger.info(f'select SRS path {self.srs_path.get()}')
+
+    def wanted_ftm_rb_lte(self):
+        self.ftm_rb_lte = []
+        if self.prb_lte.get():
+            logger.debug('PRB')
+            self.ftm_rb_lte.append('PRB')
+
+        if self.frb_lte.get():
+            logger.debug('FRB')
+            self.ftm_rb_lte.append('FRB')
+
+        if self.ftm_rb_lte == []:
+            logger.debug('Nothing to select on RB setting for LTE')
+
+        logger.info(f'RB setting for LTE to select: {self.ftm_rb_lte}')
+        return self.ftm_rb_lte
+
+    def wanted_ftm_rb_fr1(self):
+        self.ftm_rb_fr1 = []
+        if self.inner_full_fr1.get():
+            logger.debug('INNER_FULL')
+            self.ftm_rb_fr1.append('INNER_FULL')
+
+        if self.outer_full_fr1.get():
+            logger.debug('OUTER_FULL')
+            self.ftm_rb_fr1.append('OUTER_FULL')
+
+        if self.inner_1rb_left_fr1.get():
+            logger.debug('INNER_1RB_LEFT')
+            self.ftm_rb_fr1.append('INNER_1RB_LEFT')
+
+        if self.inner_1rb_right_fr1.get():
+            logger.debug('INNER_1RB_RIGHT')
+            self.ftm_rb_fr1.append('INNER_1RB_RIGHT')
+
+        if self.edge_1rb_left_fr1.get():
+            logger.debug('EDGE_1RB_LEFT')
+            self.ftm_rb_fr1.append('EDGE_1RB_LEFT')
+
+        if self.edge_1rb_right_fr1.get():
+            logger.debug('EDGE_1RB_RIGHT')
+            self.ftm_rb_fr1.append('EDGE_1RB_RIGHT')
+
+        if self.edge_full_left_fr1.get():
+            logger.debug('EDGE_FULL_LEFT')
+            self.ftm_rb_fr1.append('EDGE_FULL_LEFT')
+
+        if self.edge_full_right_fr1.get():
+            logger.debug('EDGE_FULL_RIGHT')
+            self.ftm_rb_fr1.append('EDGE_FULL_RIGHT')
+
+        if self.ftm_rb_fr1 == []:
+            logger.debug('Nothing to select on RB setting for FR1')
+
+        logger.info(f'RB setting for FR1 to select: {self.ftm_rb_fr1}')
+        return self.ftm_rb_fr1
+
     def rx_auto_check_ue_pwr(self, event=None):
         self.TxMax.set(True)
         self.TxLow.set(True)
@@ -1095,61 +2157,134 @@ class MainApp:
         self.rx.set(False)
         self.wanted_ue_pwr()
 
+    def test_pipeline(self, inst_class):
+        inst = inst_class()
+        if inst.__class__.__name__ == 'Cmw100':
+            if self.wanted_test['tx']:
+                inst.run_tx()
+
+            if self.wanted_test['rx']:
+                inst.run_rx()
+
+            if self.wanted_test['tx_level_sweep']:
+                inst.run_tx_level_sweep()
+
+            if self.wanted_test['tx_freq_sweep']:
+                inst.run_tx_freq_sweep()
+
+        elif inst.__class__.__name__ == 'Anritsu8820':
+            if self.wanted_test['tx']:
+                inst.run_tx()
+
+            if self.wanted_test['rx']:
+                inst.run_rx()
+
+            if self.wanted_test['rx_sweep']:
+                inst.run_rx_sweep_ch()
+
+        elif inst.__class__.__name__ == 'Anritsu8821':
+            if self.wanted_test['tx']:
+                inst.run_tx()
+
+            if self.wanted_test['rx']:
+                inst.run_rx()
+
+            if self.wanted_test['rx_sweep']:
+                inst.run_rx_sweep_ch()
+
+
     def measure(self):
+        import want_test_band as wt
         self.button_run['state'] = tkinter.DISABLED
         start = datetime.datetime.now()
         self.export_ui_setting()
+        # list-like
+        wt.tech = self.wanted_tech()
+        wt.fr1_bands = self.wanted_band_FR1()
+        wt.lte_bands = self.wanted_band_LTE()
+        wt.wcdma_bands = self.wanted_band_WCDMA()
+        wt.gsm_bands = self.wanted_band_GSM()
+        wt.hsupa_bands = self.wanted_band_HSUPA()
+        wt.hsdpa_bands = self.wanted_band_HSDPA()
+        wt.lte_bandwidths = self.wanted_bw()
+        wt.fr1_bandwidths = self.wanted_bw_fr1()
+        wt.channel = self.wanted_chan()
+        wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
+        wt.rb_ftm_lte = self.wanted_ftm_rb_lte()
+        wt.rb_ftm_fr1 = self.wanted_ftm_rb_fr1()
+        wt.tx_paths = self.wanted_tx_path()
+        wt.rx_paths = self.wanted_rx_path()
+        wt.mcs_lte = self.wanted_mcs_lte()
+        wt.mcs_fr1 = self.wanted_mcs_fr1()
+        wt.type_fr1 = self.wanted_type()
+        wt.scripts = self.wanted_scripts()
+        # non list-lke
+        wt.port_tx_lte = self.tx_port_lte.get()
+        wt.port_tx_fr1 = self.tx_port_fr1.get()
+        wt.band_segment = self.band_segment.get()
+        wt.band_segment_fr1 = self.band_segment_fr1.get()
+        wt.asw_path = self.asw_path.get()
+        wt.srs_path = self.srs_path.get()
+        wt.sync_path = self.sync_path.get()
+        wt.sa_nas = self.sa_nsa.get()
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820
-            import want_test_band as wt
-
-            wt.tech = self.wanted_tech()
-            wt.lte_bands = self.wanted_band_LTE()
-            wt.wcdma_bands = self.wanted_band_WCDMA()
-            wt.gsm_bands = self.wanted_band_GSM()
-            wt.hsupa_bands = self.wanted_band_HSUPA()
-            wt.hsdpa_bands = self.wanted_band_HSDPA()
-            wt.lte_bandwidths = self.wanted_bw()
-            wt.channel = self.wanted_chan()
-            wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
-            wt.band_segmment = self.band_segment.get()
-
-            anritsu = Anritsu8820()
-
-            if self.wanted_test['tx']:
-                anritsu.run_tx()
-
-            if self.wanted_test['rx']:
-                anritsu.run_rx()
-
-            if self.wanted_test['rx_sweep']:
-                anritsu.run_rx_sweep_ch()
+            # import want_test_band as wt
+            #
+            # wt.tech = self.wanted_tech()
+            # wt.fr1_bands =self.wanted_band_FR1()
+            # wt.lte_bands = self.wanted_band_LTE()
+            # wt.wcdma_bands = self.wanted_band_WCDMA()
+            # wt.gsm_bands = self.wanted_band_GSM()
+            # wt.hsupa_bands = self.wanted_band_HSUPA()
+            # wt.hsdpa_bands = self.wanted_band_HSDPA()
+            # wt.lte_bandwidths = self.wanted_bw()
+            # wt.channel = self.wanted_chan()
+            # wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
+            # wt.band_segmment = self.band_segment.get()
+            # wt.band_segment_fr1 = self.band_segment_fr1.get()
+            self.test_pipeline(Anritsu8820)
+            # anritsu = Anritsu8820()
+            #
+            # if self.wanted_test['tx']:
+            #     anritsu.run_tx()
+            #
+            # if self.wanted_test['rx']:
+            #     anritsu.run_rx()
+            #
+            # if self.wanted_test['rx_sweep']:
+            #     anritsu.run_rx_sweep_ch()
 
         elif self.instrument.get() == 'Anritsu8821':
             from anritsu8820 import Anritsu8821
-            import want_test_band as wt
-
-            wt.tech = self.wanted_tech()
-            wt.lte_bands = self.wanted_band_LTE()
-            wt.lte_bandwidths = self.wanted_bw()
-            wt.channel = self.wanted_chan()
-            wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
-            wt.band_segmment = self.band_segment.get()
-
-            anritsu = Anritsu8821()
-
-            if self.wanted_test['tx']:
-                anritsu.run_tx()
-
-            if self.wanted_test['rx']:
-                anritsu.run_rx()
-
-            if self.wanted_test['rx_sweep']:
-                anritsu.run_rx_sweep_ch()
+            # import want_test_band as wt
+            #
+            # wt.tech = self.wanted_tech()
+            # wt.lte_bands = self.wanted_band_LTE()
+            # wt.lte_bandwidths = self.wanted_bw()
+            # wt.channel = self.wanted_chan()
+            # wt.tx_max_pwr_sensitivity = self.wanted_ue_pwr()
+            # wt.band_segmment = self.band_segment.get()
+            self.test_pipeline(Anritsu8821)
+            # anritsu = Anritsu8821()
+            #
+            # if self.wanted_test['tx']:
+            #     anritsu.run_tx()
+            #
+            # if self.wanted_test['rx']:
+            #     anritsu.run_rx()
+            #
+            # if self.wanted_test['rx_sweep']:
+            #     anritsu.run_rx_sweep_ch()
 
         elif self.instrument.get() == 'Agilent8960':
             pass
+
+        elif self.instrument.get() == 'Cmw100':
+            from cmw100 import Cmw100
+            self.test_pipeline(Cmw100)
+
 
         stop = datetime.datetime.now()
 

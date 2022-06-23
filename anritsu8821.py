@@ -327,7 +327,7 @@ class Anritsu8821(Anritsu8820):
                     for band in wt.lte_bands:
                         if bw in cm_pmt.bandwidths_selected(band):
                             if band == 28:
-                                self.band_segment = wt.band_segmment
+                                self.band_segment = wt.band_segment
                             self.set_test_parameter_normal()
                             ch_list = []
                             for wt_ch in wt.channel:

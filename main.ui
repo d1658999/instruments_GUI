@@ -69,58 +69,18 @@
                 </layout>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Frame" id="frame6">
-            <property name="height">200</property>
-            <property name="width">200</property>
-            <layout manager="grid">
-              <property name="column">0</property>
-              <property name="row">1</property>
-              <property name="sticky">nsew</property>
-            </layout>
             <child>
-              <object class="ttk.Button" id="button_run">
-                <property name="command" type="command" cbtype="simple">t_measure</property>
-                <property name="text" translatable="yes">Run</property>
-                <layout manager="grid">
-                  <property name="column">0</property>
-                  <property name="ipadx">10</property>
-                  <property name="ipady">60</property>
-                  <property name="padx">5</property>
-                  <property name="pady">5</property>
-                  <property name="row">1</property>
-                  <property name="sticky">nsew</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Button" id="button_thd">
-                <property name="command" type="command" cbtype="simple">thermal_dis</property>
-                <property name="text" translatable="yes">Thermal
-Disable</property>
-                <layout manager="grid">
-                  <property name="column">0</property>
-                  <property name="ipadx">10</property>
-                  <property name="ipady">10</property>
-                  <property name="padx">5</property>
-                  <property name="pady">5</property>
-                  <property name="row">0</property>
-                  <property name="sticky">nsew</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="ttk.Button" id="button_stop">
-                <property name="command" type="command" cbtype="simple">t_stop</property>
-                <property name="text" translatable="yes">stop</property>
+              <object class="ttk.Radiobutton" id="cmw100">
+                <property name="command" type="command" cbtype="simple">inst_select</property>
+                <property name="text" translatable="yes">Cmw100</property>
+                <property name="value">Cmw100</property>
+                <property name="variable">string:instrument</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">2</property>
-                  <property name="sticky">nsew</property>
+                  <property name="row">3</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -134,9 +94,9 @@ Disable</property>
         <property name="text" translatable="yes">LTE_LB</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">2</property>
+          <property name="column">3</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B5">
@@ -430,9 +390,9 @@ Disable</property>
         <property name="text" translatable="yes">LTE_MHB</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">3</property>
+          <property name="column">4</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B1">
@@ -648,9 +608,9 @@ Disable</property>
         <property name="text" translatable="yes">LTE_UHB</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">4</property>
+          <property name="column">5</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_B42">
@@ -706,9 +666,9 @@ Disable</property>
         <property name="text" translatable="yes">WCDMA</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">5</property>
+          <property name="column">6</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_W1">
@@ -844,10 +804,9 @@ Disable</property>
         <property name="text" translatable="yes">GSM</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">8</property>
-          <property name="ipadx">5</property>
+          <property name="column">9</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_GSM850">
@@ -940,9 +899,9 @@ Disable</property>
         <property name="text" translatable="yes">HSUPA</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">6</property>
+          <property name="column">7</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_U1">
@@ -1078,9 +1037,9 @@ Disable</property>
         <property name="text" translatable="yes">HSDPA</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">7</property>
+          <property name="column">8</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton_D1">
@@ -1211,14 +1170,14 @@ Disable</property>
       </object>
     </child>
     <child>
-      <object class="ttk.Labelframe" id="labelframe_tech_bw">
+      <object class="ttk.Labelframe" id="labelframe_com_sig_nonsig">
         <property name="height">200</property>
-        <property name="text" translatable="yes">Tech &amp; Bw &amp; Item &amp; Channel</property>
+        <property name="text" translatable="yes">Sig &amp; Nonsig for FR1/LTE/WCDMA</property>
         <property name="width">200</property>
         <layout manager="grid">
-          <property name="column">1</property>
+          <property name="column">2</property>
           <property name="row">0</property>
-          <property name="sticky">nw</property>
+          <property name="sticky">nsew</property>
         </layout>
         <child>
           <object class="ttk.Frame" id="frame1">
@@ -1237,7 +1196,7 @@ Disable</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">nw</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -1314,13 +1273,14 @@ Disable</property>
             </child>
             <child>
               <object class="ttk.Label" id="label_bw">
-                <property name="text" translatable="yes">Bw</property>
+                <property name="text" translatable="yes">Bw
+(LTE)</property>
                 <layout manager="grid">
                   <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">nw</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -1417,7 +1377,7 @@ Disable</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">nw</property>
+                  <property name="sticky">w</property>
                 </layout>
               </object>
             </child>
@@ -1449,6 +1409,128 @@ Disable</property>
                 </layout>
               </object>
             </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_FR1">
+                <property name="command" type="command" cbtype="simple">wanted_tech</property>
+                <property name="text" translatable="yes">FR1</property>
+                <property name="variable">boolean:tech_FR1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">6</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label12">
+                <property name="text" translatable="yes">FTM_MCS(LTE)</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton92">
+                <property name="command" type="command" cbtype="simple">wanted_mcs_lte</property>
+                <property name="text" translatable="yes">QPSK</property>
+                <property name="variable">boolean:qpsk_lte</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton93">
+                <property name="command" type="command" cbtype="simple">wanted_mcs_lte</property>
+                <property name="text" translatable="yes">Q16</property>
+                <property name="variable">boolean:q16_lte</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton94">
+                <property name="command" type="command" cbtype="simple">wanted_mcs_lte</property>
+                <property name="text" translatable="yes">Q64</property>
+                <property name="variable">boolean:q64_lte</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton95">
+                <property name="command" type="command" cbtype="simple">wanted_mcs_lte</property>
+                <property name="text" translatable="yes">Q256</property>
+                <property name="variable">boolean:q256_lte</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label1_rb_ftm_lte">
+                <property name="text" translatable="yes">FTM_RB(LTE)</property>
+                <layout manager="grid">
+                  <property name="column">4</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_prb">
+                <property name="command" type="command" cbtype="simple">wanted_ftm_rb_lte</property>
+                <property name="text" translatable="yes">PRB</property>
+                <property name="variable">boolean:prb_lte</property>
+                <layout manager="grid">
+                  <property name="column">4</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_frb">
+                <property name="command" type="command" cbtype="simple">wanted_ftm_rb_lte</property>
+                <property name="text" translatable="yes">FRB</property>
+                <property name="variable">boolean:frb_lte</property>
+                <layout manager="grid">
+                  <property name="column">4</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -1462,27 +1544,29 @@ Disable</property>
             </layout>
             <child>
               <object class="ttk.Label" id="label3">
+                <property name="anchor">n</property>
                 <property name="text" translatable="yes">Test Item</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">w</property>
+                  <property name="rowspan">2</property>
+                  <property name="sticky">new</property>
                 </layout>
               </object>
             </child>
             <child>
-              <object class="ttk.Checkbutton" id="checkbutton_tx">
+              <object class="ttk.Checkbutton" id="checkbutton_tx_lmh">
                 <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
-                <property name="text" translatable="yes">Tx</property>
+                <property name="text" translatable="yes">Tx_LMH</property>
                 <property name="variable">boolean:tx</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">3</property>
-                  <property name="sticky">w</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -1493,26 +1577,26 @@ Disable</property>
                 <property name="variable">boolean:rx</property>
                 <bind sequence="&lt;1&gt;" handler="rx_auto_check_ue_pwr" add="" />
                 <layout manager="grid">
-                  <property name="column">0</property>
+                  <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">4</property>
-                  <property name="sticky">w</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Checkbutton" id="checkbutton_rx_sweep">
                 <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
-                <property name="text" translatable="yes">Rx_Sweep</property>
+                <property name="text" translatable="yes">RxS_freq(sig)  </property>
                 <property name="variable">boolean:rx_sweep</property>
                 <bind sequence="&lt;1&gt;" handler="sweep_auto_check_ue_pwr" add="" />
                 <layout manager="grid">
-                  <property name="column">0</property>
+                  <property name="column">1</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">5</property>
-                  <property name="sticky">w</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -1520,11 +1604,11 @@ Disable</property>
               <object class="ttk.Label" id="label4">
                 <property name="text" translatable="yes">Channel</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">0</property>
-                  <property name="sticky">w</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -1534,25 +1618,25 @@ Disable</property>
                 <property name="text" translatable="yes">L chan</property>
                 <property name="variable">boolean:chan_L</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">3</property>
-                  <property name="sticky">w</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="ttk.Checkbutton" id="checkbutton_Mch">
                 <property name="command" type="command" cbtype="simple">wanted_chan</property>
-                <property name="text" translatable="yes">M chan</property>
+                <property name="text" translatable="yes">M chan </property>
                 <property name="variable">boolean:chan_M</property>
                 <layout manager="grid">
-                  <property name="column">1</property>
+                  <property name="column">2</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
-                  <property name="row">4</property>
-                  <property name="sticky">w</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nw</property>
                 </layout>
               </object>
             </child>
@@ -1562,10 +1646,2076 @@ Disable</property>
                 <property name="text" translatable="yes">H chan</property>
                 <property name="variable">boolean:chan_H</property>
                 <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_tx_level_sweep">
+                <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
+                <property name="text" translatable="yes">Tx_level_sweep(FTM)</property>
+                <property name="variable">boolean:tx_level_sweep</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_tx_freq_sweep">
+                <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
+                <property name="text" translatable="yes">Tx_freq_sweep(FTM)</property>
+                <property name="variable">boolean:tx_freq_sweep</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">nw</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe2">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">FR1_LB</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">3</property>
+          <property name="row">1</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton1">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">5</property>
+            <property name="text" translatable="yes">N5</property>
+            <property name="variable">int:N5</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton2">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">8</property>
+            <property name="text" translatable="yes">N8</property>
+            <property name="variable">int:N8</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton3">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">12</property>
+            <property name="text" translatable="yes">N12</property>
+            <property name="variable">int:N12</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton4">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">13</property>
+            <property name="text" translatable="yes">N13</property>
+            <property name="variable">int:N13</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton6">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">14</property>
+            <property name="text" translatable="yes">N14</property>
+            <property name="variable">int:N14</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton8">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">18</property>
+            <property name="text" translatable="yes">N18</property>
+            <property name="variable">int:N18</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">5</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton10">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">20</property>
+            <property name="text" translatable="yes">N20</property>
+            <property name="variable">int:N20</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">6</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton11">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">26</property>
+            <property name="text" translatable="yes">N26</property>
+            <property name="variable">int:N26</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton12">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">28</property>
+            <property name="text" translatable="yes">N28</property>
+            <property name="variable">int:N28</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton13">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">29</property>
+            <property name="text" translatable="yes">N29</property>
+            <property name="variable">int:N29</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton14">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">32</property>
+            <property name="text" translatable="yes">N32</property>
+            <property name="variable">int:N32</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton15">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">71</property>
+            <property name="text" translatable="yes">N71</property>
+            <property name="variable">int:N71</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">5</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton16">
+            <property name="command" type="command" cbtype="simple">LB_all_state_fr1</property>
+            <property name="text" translatable="yes">all</property>
+            <property name="variable">boolean:LB_all_fr1</property>
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">6</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="radiobutton3">
+            <property name="command" type="command" cbtype="simple">segment_select_fr1</property>
+            <property name="text" translatable="yes">A</property>
+            <property name="value">A</property>
+            <property name="variable">string:band_segment_fr1</property>
+            <layout manager="grid">
+              <property name="column">2</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="radiobutton4">
+            <property name="command" type="command" cbtype="simple">segment_select_fr1</property>
+            <property name="text" translatable="yes">B</property>
+            <property name="value">B</property>
+            <property name="variable">string:band_segment_fr1</property>
+            <layout manager="grid">
+              <property name="column">2</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">2</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton36">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">24</property>
+            <property name="text" translatable="yes">N24</property>
+            <property name="variable">int:N24</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">7</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe3">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">FR1_MB</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">4</property>
+          <property name="row">1</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton18">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">1</property>
+            <property name="text" translatable="yes">N1</property>
+            <property name="variable">int:N1</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton19">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">2</property>
+            <property name="text" translatable="yes">N2</property>
+            <property name="variable">int:N2</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton20">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">3</property>
+            <property name="text" translatable="yes">N3</property>
+            <property name="variable">int:N3</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton21">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">4</property>
+            <property name="text" translatable="yes">N4</property>
+            <property name="variable">int:N4</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton22">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">7</property>
+            <property name="text" translatable="yes">N7</property>
+            <property name="variable">int:N7</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">6</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton23">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">30</property>
+            <property name="text" translatable="yes">N30</property>
+            <property name="variable">int:N30</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">7</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton24">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">25</property>
+            <property name="text" translatable="yes">N25</property>
+            <property name="variable">int:N25</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton25">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">66</property>
+            <property name="text" translatable="yes">N66</property>
+            <property name="variable">int:N66</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">5</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton26">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">39</property>
+            <property name="text" translatable="yes">N39</property>
+            <property name="variable">int:N39</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton27">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">40</property>
+            <property name="text" translatable="yes">N40</property>
+            <property name="variable">int:N40</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton28">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">38</property>
+            <property name="text" translatable="yes">N38</property>
+            <property name="variable">int:N38</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton29">
+            <property name="command" type="command" cbtype="simple">wanted_band_LTE</property>
+            <property name="onvalue">41</property>
+            <property name="text" translatable="yes">N41</property>
+            <property name="variable">string:N41</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton30">
+            <property name="command" type="command" cbtype="simple">MHB_all_state_fr1</property>
+            <property name="text" translatable="yes">all</property>
+            <property name="variable">boolean:MHB_all_fr1</property>
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton35">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">34</property>
+            <property name="text" translatable="yes">N34</property>
+            <property name="variable">int:N34</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe4">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">FR1_UHB</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">5</property>
+          <property name="row">1</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton31">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">77</property>
+            <property name="text" translatable="yes">N77</property>
+            <property name="variable">int:N77</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton32">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">78</property>
+            <property name="text" translatable="yes">N78</property>
+            <property name="variable">int:N78</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton33">
+            <property name="command" type="command" cbtype="simple">UHB_all_state_fr1</property>
+            <property name="text" translatable="yes">all</property>
+            <property name="variable">boolean:UHB_all_fr1</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">5</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton34">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">48</property>
+            <property name="text" translatable="yes">N48</property>
+            <property name="variable">int:N48</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton43">
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
+            <property name="onvalue">79</property>
+            <property name="text" translatable="yes">N79</property>
+            <property name="variable">int:N79</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe5">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">Button</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">0</property>
+          <property name="row">1</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="frame6">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="sticky">nsew</property>
+            </layout>
+            <child>
+              <object class="ttk.Button" id="button_run">
+                <property name="command" type="command" cbtype="simple">t_measure</property>
+                <property name="text" translatable="yes">Run</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="ipadx">10</property>
+                  <property name="ipady">80</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="button_thd">
+                <property name="command" type="command" cbtype="simple">thermal_dis</property>
+                <property name="text" translatable="yes">Thermal
+Disable</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="ipadx">10</property>
+                  <property name="ipady">20</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="button_stop">
+                <property name="command" type="command" cbtype="simple">t_stop</property>
+                <property name="text" translatable="yes">stop</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="ipady">10</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe_nonsignaling">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">Nonsignaling for FR1</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">2</property>
+          <property name="row">1</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="frame8">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="sticky">nsew</property>
+            </layout>
+            <child>
+              <object class="ttk.Frame" id="frame18">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
                   <property name="column">1</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="rowspan">4</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+                <child>
+                  <object class="ttk.Label" id="label7">
+                    <property name="anchor">n</property>
+                    <property name="text" translatable="yes">Bw(FR1)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="columnspan">2</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">0</property>
+                      <property name="sticky">new</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton59">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">5MHz</property>
+                    <property name="variable">boolean:bw5_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">1</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton60">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">10MHz</property>
+                    <property name="variable">boolean:bw10_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">2</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton61">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">15MHz</property>
+                    <property name="variable">boolean:bw15_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">3</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton62">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">20MHz</property>
+                    <property name="variable">boolean:bw20_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">4</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton72">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">25MHz</property>
+                    <property name="variable">boolean:bw25_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">5</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton73">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">30MHz</property>
+                    <property name="variable">boolean:bw30_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">6</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton74">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">40MHz</property>
+                    <property name="variable">boolean:bw40_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">7</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton75">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">50MHz</property>
+                    <property name="variable">boolean:bw50_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">8</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton76">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">60MHz</property>
+                    <property name="variable">boolean:bw60_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">1</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton77">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">80MHz</property>
+                    <property name="variable">boolean:bw80_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">2</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton78">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">90MHz</property>
+                    <property name="variable">boolean:bw90_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">3</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton79">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">100MHz</property>
+                    <property name="variable">boolean:bw100_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">4</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton80">
+                    <property name="command" type="command" cbtype="simple">wanted_bw_fr1</property>
+                    <property name="text" translatable="yes">70MHz</property>
+                    <property name="variable">boolean:bw70_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">1</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">5</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame19">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">2</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_qpsk">
+                    <property name="command" type="command" cbtype="simple">wanted_mcs_fr1</property>
+                    <property name="text" translatable="yes">QPSK</property>
+                    <property name="variable">boolean:qpsk_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">1</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_q16">
+                    <property name="command" type="command" cbtype="simple">wanted_mcs_fr1</property>
+                    <property name="text" translatable="yes">Q16</property>
+                    <property name="variable">boolean:q16_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">2</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_q64">
+                    <property name="command" type="command" cbtype="simple">wanted_mcs_fr1</property>
+                    <property name="text" translatable="yes">Q64</property>
+                    <property name="variable">boolean:q64_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">3</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbuttonq256">
+                    <property name="command" type="command" cbtype="simple">wanted_mcs_fr1</property>
+                    <property name="text" translatable="yes">Q256</property>
+                    <property name="variable">boolean:q256_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">4</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label_ftm_rb_fr1">
+                    <property name="text" translatable="yes">FTM_MCS(FR1)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">0</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label1_type">
+                    <property name="text" translatable="yes">TYPE</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">11</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_dfts">
+                    <property name="command" type="command" cbtype="simple">wanted_type</property>
+                    <property name="text" translatable="yes">DFTS</property>
+                    <property name="variable">boolean:dfts</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">12</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_cp">
+                    <property name="command" type="command" cbtype="simple">wanted_type</property>
+                    <property name="text" translatable="yes">CP</property>
+                    <property name="variable">boolean:cp</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">13</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_bpsk">
+                    <property name="command" type="command" cbtype="simple">wanted_mcs_fr1</property>
+                    <property name="text" translatable="yes">BPSK</property>
+                    <property name="variable">boolean:bpsk_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">5</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame20">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">3</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+                <child>
+                  <object class="ttk.Label" id="label26">
+                    <property name="text" translatable="yes">FTM_RB(FR1)</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">0</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_inner_full">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">INNER_FULL</property>
+                    <property name="variable">boolean:inner_full_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">1</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_outer_full">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">OUTER_FULL</property>
+                    <property name="variable">boolean:outer_full_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">2</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_inner_1rb_left">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">INNER_1RB_LEFT</property>
+                    <property name="variable">boolean:inner_1rb_left_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">3</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_inner_1rb_right">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">INNER_1RB_RIGHT</property>
+                    <property name="variable">boolean:inner_1rb_right_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">4</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_edge_1rb_left">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">EDGE_1RB_LEFT</property>
+                    <property name="variable">boolean:edge_1rb_left_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">5</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_edge_1rb_right">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">EDGE_1RB_RIGHT</property>
+                    <property name="variable">boolean:edge_1rb_right_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">6</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_edge_full_left">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">EDGE_FULL_LEFT</property>
+                    <property name="variable">boolean:edge_full_left_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">7</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_edge_full_right">
+                    <property name="command" type="command" cbtype="simple">wanted_ftm_rb_fr1</property>
+                    <property name="text" translatable="yes">EDGE_FULL_RIGHT</property>
+                    <property name="variable">boolean:edge_full_right_fr1</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">8</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame23">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nw</property>
+                </layout>
+                <child>
+                  <object class="ttk.Label" id="label_mode">
+                    <property name="text" translatable="yes">Mode</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">0</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Radiobutton" id="radiobutton_nsa">
+                    <property name="command" type="command" cbtype="simple">fr1_mode_select</property>
+                    <property name="text" translatable="yes">NSA</property>
+                    <property name="value">1</property>
+                    <property name="variable">int:sa_nsa</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">1</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Radiobutton" id="radiobutton45">
+                    <property name="command" type="command" cbtype="simple">fr1_mode_select</property>
+                    <property name="text" translatable="yes">SA</property>
+                    <property name="value">0</property>
+                    <property name="variable">int:sa_nsa</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">2</property>
+                      <property name="sticky">w</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label_scs">
+                    <property name="text" translatable="yes">SCS</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">6</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton_scs">
+                    <property name="command" type="command" cbtype="simple">wanted_scs</property>
+                    <property name="state">disabled</property>
+                    <property name="text" translatable="yes">15kHz</property>
+                    <property name="variable">boolean:scs15</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">7</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton82">
+                    <property name="command" type="command" cbtype="simple">wanted_scs</property>
+                    <property name="state">disabled</property>
+                    <property name="text" translatable="yes">30kHz</property>
+                    <property name="variable">boolean:scs30</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">8</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Checkbutton" id="checkbutton83">
+                    <property name="command" type="command" cbtype="simple">wanted_scs</property>
+                    <property name="state">disabled</property>
+                    <property name="text" translatable="yes">60kHz</property>
+                    <property name="variable">boolean:scs60</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="padx">5</property>
+                      <property name="pady">5</property>
+                      <property name="row">9</property>
+                      <property name="sticky">nw</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Frame" id="frame24">
+                    <property name="height">200</property>
+                    <property name="width">200</property>
+                    <layout manager="grid">
+                      <property name="column">0</property>
+                      <property name="row">3</property>
+                      <property name="sticky">nsew</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Label" id="label_script">
+                        <property name="text" translatable="yes">Script</property>
+                        <layout manager="grid">
+                          <property name="column">0</property>
+                          <property name="padx">5</property>
+                          <property name="pady">5</property>
+                          <property name="row">0</property>
+                          <property name="sticky">nw</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Checkbutton" id="checkbutton_general">
+                        <property name="command" type="command" cbtype="simple">wanted_scripts</property>
+                        <property name="text" translatable="yes">General</property>
+                        <property name="variable">boolean:general</property>
+                        <layout manager="grid">
+                          <property name="column">0</property>
+                          <property name="padx">5</property>
+                          <property name="pady">5</property>
+                          <property name="row">3</property>
+                          <property name="sticky">nw</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Checkbutton" id="checkbutton_fcc">
+                        <property name="command" type="command" cbtype="simple">wanted_scripts</property>
+                        <property name="state">disabled</property>
+                        <property name="text" translatable="yes">FCC</property>
+                        <property name="variable">boolean:fcc</property>
+                        <layout manager="grid">
+                          <property name="column">0</property>
+                          <property name="padx">5</property>
+                          <property name="pady">5</property>
+                          <property name="row">4</property>
+                          <property name="sticky">nw</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Checkbutton" id="checkbutton_ce">
+                        <property name="command" type="command" cbtype="simple">wanted_scripts</property>
+                        <property name="state">disabled</property>
+                        <property name="text" translatable="yes">CE</property>
+                        <property name="variable">boolean:ce</property>
+                        <layout manager="grid">
+                          <property name="column">0</property>
+                          <property name="padx">5</property>
+                          <property name="pady">5</property>
+                          <property name="row">5</property>
+                          <property name="sticky">nw</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe8">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">Common(Nonsig use)</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">1</property>
+          <property name="row">0</property>
+          <property name="rowspan">2</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="frame10">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="label_port_tx_lte">
+                <property name="text" translatable="yes">Tx_Port
+(LTE or pre-tech)</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port1">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 1</property>
+                <property name="value">1</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port2">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 2</property>
+                <property name="value">2</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port3">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 3</property>
+                <property name="value">3</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port4">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 4</property>
+                <property name="value">4</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port5">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 5</property>
+                <property name="value">5</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">5</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port6">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 6</property>
+                <property name="value">6</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">6</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port7">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 7</property>
+                <property name="value">7</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">7</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_port8">
+                <property name="command" type="command" cbtype="simple">select_tx_port_lte</property>
+                <property name="text" translatable="yes">Port 8</property>
+                <property name="value">8</property>
+                <property name="variable">int:tx_port_lte</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">8</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame11">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="port_tx_lfr1">
+                <property name="text" translatable="yes">Tx_Port
+(FR1)</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">20</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton22">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 1</property>
+                <property name="value">1</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton23">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 2</property>
+                <property name="value">2</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton24">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 3</property>
+                <property name="value">3</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton25">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 4</property>
+                <property name="value">4</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton26">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 5</property>
+                <property name="value">5</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">5</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton27">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 6</property>
+                <property name="value">6</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">6</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton28">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 7</property>
+                <property name="value">7</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">7</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton29">
+                <property name="command" type="command" cbtype="simple">select_tx_port_fr1</property>
+                <property name="text" translatable="yes">Port 8</property>
+                <property name="value">8</property>
+                <property name="variable">int:tx_port_fr1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">8</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame12">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="label_tx_path">
+                <property name="text" translatable="yes">Tx_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_tx1">
+                <property name="command" type="command" cbtype="simple">wanted_tx_path</property>
+                <property name="text" translatable="yes">TX1(Main path)</property>
+                <property name="variable">boolean:tx1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_tx2">
+                <property name="command" type="command" cbtype="simple">wanted_tx_path</property>
+                <property name="text" translatable="yes">TX2(Sub path)</property>
+                <property name="variable">boolean:tx2</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label1">
+                <property name="text" translatable="yes">Sync path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">4</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton5">
+                <property name="command" type="command" cbtype="simple">select_sync_path</property>
+                <property name="text" translatable="yes">Main</property>
+                <property name="value">0</property>
+                <property name="variable">int:sync_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">5</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton6">
+                <property name="command" type="command" cbtype="simple">select_sync_path</property>
+                <property name="text" translatable="yes">CA#1</property>
+                <property name="value">1</property>
+                <property name="variable">int:sync_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">6</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label2">
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton7">
+                <property name="command" type="command" cbtype="simple">select_sync_path</property>
+                <property name="text" translatable="yes">CA#2</property>
+                <property name="value">2</property>
+                <property name="variable">int:sync_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">7</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton8">
+                <property name="command" type="command" cbtype="simple">select_sync_path</property>
+                <property name="text" translatable="yes">CA#3</property>
+                <property name="value">3</property>
+                <property name="variable">int:sync_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">8</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame13">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="label_rx_path">
+                <property name="text" translatable="yes">Rx_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_rx0">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">RX0</property>
+                <property name="variable">boolean:rx0</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">11</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_rx1">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">RX1</property>
+                <property name="variable">boolean:rx1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">12</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_rx2">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">RX2</property>
+                <property name="variable">boolean:rx2</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">13</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton_rx3">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">RX3</property>
+                <property name="variable">boolean:rx3</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">14</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton117">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">RX0+RX1</property>
+                <property name="variable">boolean:rx0_rx1</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">15</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton118">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">RX2+RX3</property>
+                <property name="variable">boolean:rx2_rx3</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">16</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton119">
+                <property name="command" type="command" cbtype="simple">wanted_rx_path</property>
+                <property name="text" translatable="yes">ALL PATH</property>
+                <property name="variable">boolean:rx_all_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">17</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame21">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="label_asw_as">
+                <property name="text" translatable="yes">AS path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_asw_path0">
+                <property name="command" type="command" cbtype="simple">select_asw_path</property>
+                <property name="text" translatable="yes">path 0</property>
+                <property name="value">0</property>
+                <property name="variable">int:asw_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_asw_path1">
+                <property name="command" type="command" cbtype="simple">select_asw_path</property>
+                <property name="text" translatable="yes">path 1</property>
+                <property name="value">1</property>
+                <property name="variable">int:asw_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame22">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="label_srs_path">
+                <property name="text" translatable="yes">SRS path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">0</property>
+                  <property name="sticky">nsew</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_srs_path0">
+                <property name="command" type="command" cbtype="simple">select_srs_path</property>
+                <property name="text" translatable="yes">path 0</property>
+                <property name="value">0</property>
+                <property name="variable">int:srs_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_srs_path1">
+                <property name="command" type="command" cbtype="simple">select_srs_path</property>
+                <property name="text" translatable="yes">path 1</property>
+                <property name="value">1</property>
+                <property name="variable">int:srs_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">2</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobuttonsrs_path2">
+                <property name="command" type="command" cbtype="simple">select_srs_path</property>
+                <property name="text" translatable="yes">path 2</property>
+                <property name="value">2</property>
+                <property name="variable">int:srs_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_srs_path3">
+                <property name="command" type="command" cbtype="simple">select_srs_path</property>
+                <property name="text" translatable="yes">path 3</property>
+                <property name="value">3</property>
+                <property name="variable">int:srs_path</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">4</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>
