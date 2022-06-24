@@ -662,7 +662,7 @@ class MainApp:
             elif bw == 20:
                 self.bw20_fr1.set(True)
             elif bw == 25:
-                self.bw15_fr1.set(True)
+                self.bw25_fr1.set(True)
             elif bw == 30:
                 self.bw30_fr1.set(True)
             elif bw == 40:
