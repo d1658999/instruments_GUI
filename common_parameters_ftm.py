@@ -531,6 +531,19 @@ def special_uplink_config_sensitivity_fr1(band, scs, bw):
         elif scs == 30:
             if bw == 10:
                 return 10, 14
+    elif int(band) == 18:
+        if scs == 15:
+            if bw == 5:
+                return 20, 5
+            elif bw == 10:
+                return 20, 32
+            elif bw == 15:
+                return 20, 59
+        elif scs == 30:
+            if bw == 10:
+                return 10, 14
+            elif bw == 15:
+                return 10, 28
     elif int(band) == 20:
         if scs == 15:
             if bw == 5:

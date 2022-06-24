@@ -1780,6 +1780,7 @@
           <object class="ttk.Checkbutton" id="checkbutton8">
             <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
             <property name="onvalue">18</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">N18</property>
             <property name="variable">int:N18</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_LB" add="" />

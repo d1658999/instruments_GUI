@@ -26,6 +26,9 @@ class MainApp:
         builder.add_from_file(PROJECT_UI)
         self.mainwindow = builder.get_object("toplevel2", master)
         self.button_run = builder.get_object("button_run", master)
+        self.checkbox_hsupa = builder.get_object("checkbutton_WCDMA", master)
+        self.checkbox_hsdpa = builder.get_object("checkbutton_HSUPA", master)
+        self.checkbox_wcdma = builder.get_object("checkbutton_HSDPA", master)
 
         self.instrument = None
         self.B5 = None
@@ -385,6 +388,7 @@ class MainApp:
         builder.connect_callbacks(self)
         # self.init_select()
         self.import_ui_setting()
+        self.inst_to_tech()
 
     def run(self):
         self.mainwindow.mainloop()
@@ -752,7 +756,7 @@ class MainApp:
                 elif mcs == 'Q256':
                     self.q256_fr1.set(True)
                 elif mcs == 'BPSK':
-                    self.qpsk_fr1.set(True)
+                    self.bpsk_fr1.set(True)
 
         for tx_path in ui_init.tx_paths:
             if tx_path == 'TX1':
@@ -1387,9 +1391,27 @@ class MainApp:
     def wanted_band_GSM(self):
         pass
 
+    def inst_to_tech(self):
+        if self.instrument.get() == 'Cmw100':
+            self.checkbox_hsupa['state'] = tkinter.DISABLED
+            self.checkbox_hsdpa['state'] = tkinter.DISABLED
+            self.checkbox_wcdma['state'] = tkinter.DISABLED
+        else:
+            self.checkbox_hsupa['state'] = tkinter.NORMAL
+            self.checkbox_hsdpa['state'] = tkinter.NORMAL
+            self.checkbox_wcdma['state'] = tkinter.NORMAL
+
     def inst_select(self):
         logger.info(self.instrument.get())
         # return self.instrument.get()
+        if self.instrument.get() == 'Cmw100':
+            self.checkbox_hsupa['state'] = tkinter.DISABLED
+            self.checkbox_hsdpa['state'] = tkinter.DISABLED
+            self.checkbox_wcdma['state'] = tkinter.DISABLED
+        else:
+            self.checkbox_hsupa['state'] = tkinter.NORMAL
+            self.checkbox_hsdpa['state'] = tkinter.NORMAL
+            self.checkbox_wcdma['state'] = tkinter.NORMAL
 
     def segment_select(self):
         logger.info(f'segment: {self.band_segment.get()}')
@@ -1621,7 +1643,7 @@ class MainApp:
             self.N12.set(12)
             self.N13.set(13)
             self.N14.set(14)
-            self.N18.set(18)
+            # self.N18.set(18)
             self.N20.set(20)
             self.N24.set(24)
             self.N26.set(26)
