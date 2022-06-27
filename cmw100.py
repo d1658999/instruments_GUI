@@ -273,10 +273,10 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:TRIG:SLOP REDG')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:SLEN 5.0e-3')
         # self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 8.0e-4')
-        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 5.0e-3')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 4.0e-3')
         # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 2.1E-3')
-        # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 5E-4')
-        self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 0')
+        self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 5E-4')
+        # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 0')
         self.command_cmw100_write(f'TRIG:GPRF:MEAS:POW:MODE ONCE')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:ENP {self.tx_level}')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:UMAR 10.000000')
@@ -2342,7 +2342,7 @@ class Cmw100:
                             # ready to export to excel
                             self.filename = self.tx_power_fcc_ce_export_excel(data)
                     except KeyError as err:
-                        logger.debug(f'show error: {error}')
+                        logger.debug(f'show error: {err}')
                         logger.info(f"Band {self.band_fr1}, BW: {self.bw_fr1} don't need to test this MCS: {self.mcs_fr1} for FCC")
 
 
@@ -2393,7 +2393,7 @@ class Cmw100:
                             # ready to export to excel
                             self.filename = self.tx_power_fcc_ce_export_excel(data)
                     except KeyError as err:
-                        logger.debug(f'show error: {error}')
+                        logger.debug(f'show error: {err}')
                         logger.info(f"Band {self.band_fr1}, BW: {self.bw_fr1} don't need to test this MCS: {self.mcs_fr1} for CE")
 
 

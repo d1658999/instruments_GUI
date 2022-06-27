@@ -31,7 +31,7 @@ sync_path = 0
 tx_paths = ['TX1']
 rx_paths = []
 
-scripts = ['CE']
+scripts = ['FCC']
 type_fr1 = ['DFTS']
 mcs_lte = ['QPSK', 'Q16', 'Q64', 'Q256']
 mcs_fr1 = ['BPSK', 'QPSK', 'Q16', 'Q64', 'Q256']
