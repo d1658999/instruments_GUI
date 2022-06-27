@@ -8,6 +8,8 @@ from logging.config import fileConfig
 import openpyxl
 from openpyxl.chart import LineChart, Reference, BarChart, Series
 import pathlib
+
+import fcc
 import scripts
 from varname import nameof
 import math
@@ -71,9 +73,15 @@ class Cmw100:
         self.rb_start_fr1 = None
         self.loss_tx = None
         self.loss_rx = None
+        self.uldl_period = None
+        self.dl_slot = None
+        self.dl_symbol = None
+        self.ul_slot = None
+        self.ul_symbol = None
         self.tx_path_dict = {
             'TX1': 0,
             'TX2': 1,
+            'MIMO': 20,
         }
         self.bw_lte_dict = {
             1.4: 0,
@@ -151,6 +159,10 @@ class Cmw100:
             3: 'RX0+RX1',
             12: 'RX2+RX3',
             15: 'ALL PATH'
+        }
+        self.duty_cycle_dict = {
+            100: (6, 0, 0, 10, 0),
+            50: (6, 5, 0, 5, 0),
         }
 
     def begin_serial(self):
@@ -247,6 +259,42 @@ class Cmw100:
         logger.info('----------Set End----------')
         self.command(f'AT+NRFFINALFINISH')
         # self.command_cmw100_query('*OPC?')
+
+    def set_gprf_measurement(self):
+        logger.info('----------set GPRF Measurement----------')
+        self.command_cmw100_write('CONF:GPRF:MEAS:POW:FILT:TYPE BAND')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:FILT:BAND:BWID {self.bw_fr1}MHz')
+        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:SCO 2')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:REP SING')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:LIST OFF')
+        self.command_cmw100_write(f"TRIGger:GPRF:MEAS:POWer:SOURce 'Free Run'")
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:TRIG:SLOP REDG')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:SLEN 5.0e-3')
+        # self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 8.0e-4')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 4.0e-3')
+        # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 2.1E-3')
+        self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 5E-4')
+        self.command_cmw100_write(f'TRIG:GPRF:MEAS:POW:MODE ONCE')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:ENP {self.tx_level}')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:UMAR 10.000000')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:EATT {self.loss_tx}')
+
+    def set_gprf_tx_freq(self):
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:FREQ {self.tx_freq_fr1}KHz')
+
+    def get_gprf_power(self):
+        self.command_cmw100_write('INIT:GPRF:MEAS:POW')
+        self.command_cmw100_query('*OPC?')
+        f_state = self.command_cmw100_query('FETC:GPRF:MEAS:POW:STAT?')
+        while f_state != 'RDY':
+            f_state = self.command_cmw100_query('FETC:GPRF:MEAS:POW:STAT?')
+            self.command_cmw100_query('*OPC?')
+        power_average = round(eval(self.command_cmw100_query('FETC:GPRF:MEAS:POWer:AVER?'))[1],2)
+        logger.info(f'Get the GPRF power: {power_average}')
+        return power_average
+
+
 
     def sig_gen_lte(self):
         logger.info('----------Sig Gen----------')
@@ -358,6 +406,33 @@ class Cmw100:
         logger.info(
             f'TX_PATH: {self.tx_path}, BW: {self.bw_fr1}, TX_FREQ: {self.tx_freq_fr1}, RB_SIZE: {self.rb_size_fr1}, RB_OFFSET: {self.rb_start_fr1}, MCS: {self.mcs_fr1}, TX_LEVEL: {self.tx_level}')
         # self.command_cmw100_query('*OPC?')
+
+    def set_duty_cycle(self):
+        logger.info(f'----------Set duty cycle: {wt.duty_cycle}----------')
+        if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79]:
+            self.uldl_period = self.duty_cycle_dict[wt.duty_cycle][0]
+            self.dl_slot = self.duty_cycle_dict[wt.duty_cycle][1]
+            self.dl_symbol = self.duty_cycle_dict[wt.duty_cycle][2]
+            self.ul_slot = self.duty_cycle_dict[wt.duty_cycle][3]
+            self.ul_symbol = self.duty_cycle_dict[wt.duty_cycle][4]
+            logger.info('---TDD, so need to set the duty cycle')
+            logger.debug(f'Duty Cycle setting: {self.uldl_period}, {self.dl_slot}, {self.dl_symbol}, {self.ul_slot}, {self.ul_symbol}')
+        else:
+            self.uldl_period = 0
+            self.dl_slot = 0
+            self.dl_symbol = 0
+            self.ul_slot = 0
+            self.ul_symbol = 0
+            logger.info("---FDD, so don't need to set the duty cyvle")
+            logger.debug(f'Duty Cycle setting: {self.uldl_period}, {self.dl_slot}, {self.dl_symbol}, {self.ul_slot}, {self.ul_symbol}')
+
+    def tx_set_no_sync_fr1(self):
+        logger.info('---------Tx No Set----------')
+        self.scs = 30 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 15
+        self.command(
+            f'AT+NRFACTREQ={self.tx_path_dict[self.tx_path]},{self.tx_freq_fr1},{self.bw_fr1_dict[self.bw_fr1]},{self.scs_dict[self.scs]},{self.rb_size_fr1},{self.rb_start_fr1},{self.mcs_fr1_dict[self.mcs_fr1]},{self.type_dict[self.type_fr1]},{self.tx_level},{self.uldl_period},{self.dl_slot},{self.dl_symbol},{self.ul_slot},{self.ul_symbol}')
+        logger.info(f'TX_PATH: {self.tx_path}, BW: {self.bw_fr1}, TX_FREQ: {self.tx_freq_fr1}, RB_SIZE: {self.rb_size_fr1}, RB_OFFSET: {self.rb_start_fr1}, MCS: {self.mcs_fr1}, TX_LEVEL: {self.tx_level}, Duty cycle: {wt.duty_cycle} %')
+
 
     def antenna_switch(self):  # 1: AS ON, 0: AS OFF
         logger.info('---------Antenna Switch----------')
@@ -871,7 +946,7 @@ class Cmw100:
                 logger.info('----------Test LMH progress---------')
                 self.preset_instrument()
                 self.set_test_end_fr1()
-                self.srs_switch()
+                self.antenna_switch_v2()
                 self.set_test_mode_fr1()
                 # self.command_cmw100_query('*OPC?')
                 self.sig_gen_fr1()
@@ -1316,6 +1391,70 @@ class Cmw100:
             ws_desens.cell(row, 4).value = ws_txmax.cell(row, 7).value - ws_txmin.cell(row, 7).value
 
         wb.save(self.filename)
+        wb.close()
+
+    def tx_power_fcc_export_excel(self, data):
+        logger.info('----------save to excel----------')
+        filename = f'Power_{self.script}_{self.tech}.xlsx'
+        if pathlib.Path(filename).exists() is False:
+            logger.info('----------file does not exist----------')
+            wb = openpyxl.Workbook()
+            wb.remove(wb['Sheet'])
+            # to create sheet
+            sheetname = self.script
+            ws = wb.create_sheet(sheetname)
+            ws['A1'] = 'Band'
+            ws['B1'] = 'BW'
+            ws['C1'] = 'MCS'
+            ws['D1'] = 'RB_size'
+            ws['E1'] = 'RB_start'
+            ws['F1'] = 'Tx_path'
+            ws['G1'] = 'Chan'
+            ws['H1'] = 'Tx_Freq'
+            ws['I1'] = 'Tx_level'
+            ws['J1'] = 'Power_measured'
+
+            wb.save(filename)
+            wb.close()
+
+        logger.info('----------file exist----------')
+        wb = openpyxl.load_workbook(filename)
+        ws = wb[self.script]
+        band = None
+        bw = None
+        mcs = None
+        rb_size = None
+        rb_start = None
+
+        if self.tech == 'LTE':
+            band = self.band_lte
+            bw = self.bw_lte
+            mcs = self.mcs_lte
+            rb_size = self.rb_size_lte
+            rb_start = self.rb_start_lte
+
+        elif self.tech == 'FR1':
+            band = self.band_fr1
+            bw = self.bw_fr1
+            mcs = self.mcs_fr1
+            rb_size = self.rb_size_fr1
+            rb_start = self.rb_start_fr1
+
+        for tx_freq, measured_data in data.items():
+            max_row = ws.max_row
+            row = max_row + 1
+            ws.cell(row, 1).value = band
+            ws.cell(row, 2).value = bw
+            ws.cell(row, 3).value = mcs
+            ws.cell(row, 4).value = rb_size
+            ws.cell(row, 5).value = rb_start
+            ws.cell(row, 6).value = self.tx_path
+            ws.cell(row, 7).value = measured_data[0]
+            ws.cell(row, 8).value = tx_freq
+            ws.cell(row, 9).value = self.tx_level
+            ws.cell(row, 10).value = measured_data[1]
+
+        wb.save(filename)
         wb.close()
 
     def tx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level, mode=0):  # mode general: 0,  mode LMH: 1
@@ -1863,6 +2002,30 @@ class Cmw100:
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
+    def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
+        self.tx_level = wt.tx_level
+        self.port_tx = wt.port_tx_fr1
+        self.sa_nsa_mode = wt.sa_nas
+        for tech in wt.tech:
+            if tech == 'FR1' and wt.fr1_bands != []:
+                self.tech = 'FR1'
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    try:
+                        for band in wt.fr1_bands:
+                            self.band_fr1 = band
+                            for bw in wt.fr1_bandwidths:
+                                self.bw_fr1 = bw
+                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                                    for type in wt.type_fr1:
+                                        self.type_fr1 = type
+                                        self.tx_power_fcc_fr1()
+                                else:
+                                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+                        # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+                    except TypeError:
+                        logger.info(f'there is no data to plot because the band does not have this BW ')
+
     def tx_freq_sweep_pipline_lte(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx_lte
@@ -2069,7 +2232,8 @@ class Cmw100:
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.srs_switch()
+        self.antenna_switch_v2()
+        # self.srs_switch()
         self.set_test_mode_fr1()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
@@ -2110,6 +2274,53 @@ class Cmw100:
             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         else:
             pass
+
+    def tx_power_fcc_fr1(self):
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1,
+                                                   self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
+        self.rx_freq_fr1 = rx_freq_list[1]
+        self.loss_rx = self.get_loss(rx_freq_list[1])
+        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
+        logger.info('----------Test FCC LMH progress---------')
+        self.preset_instrument()
+        self.set_gprf_measurement()
+        self.set_test_end_fr1()
+        self.set_test_mode_fr1()
+        self.antenna_switch_v2()
+        self.command_cmw100_query('*OPC?')
+
+
+        tx_freq_select_list = [int(freq*1000) for freq in fcc.tx_freq_list_fr1[self.band_fr1][self.bw_fr1]]  # band > bw > tx_fre1_list
+
+        for mcs in wt.mcs_fr1:
+            self.mcs_fr1 = mcs
+            for script in wt.scripts:
+                if script == 'FCC':
+                    self.script = script
+                    self.rb_state = 'FCC'
+                    try:
+                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.FCC_FR1[self.band_fr1][self.bw_fr1][self.mcs_fr1]:
+                            data = {}
+                            for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
+                                chan_mark = f'chan{num}'
+                                self.tx_freq_fr1 = tx_freq_fr1
+                                self.set_gprf_tx_freq()
+                                self.set_duty_cycle()
+                                self.tx_set_no_sync_fr1()
+                                power_results = self.get_gprf_power()
+                                data[self.tx_freq_fr1] = (chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
+                            logger.debug(data)
+                            # ready to export to excel
+                            self.filename = self.tx_power_fcc_export_excel(data)
+                    except KeyError as err:
+                        logger.info(f"this BW: {self.bw_fr1} don't need to test this MCS: {err}")
+
+
+        self.set_test_end_fr1()
+        # if plot == True:
+        #     self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+        # else:
+        #     pass
 
     def tx_freq_sweep_progress_lte(self, plot=True):
         """
@@ -2198,7 +2409,7 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.srs_switch()
+        self.antenna_switch_v2()
         self.set_test_mode_fr1()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
@@ -2388,7 +2599,7 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.srs_switch()
+        self.antenna_switch_v2()
         self.set_test_mode_fr1()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
@@ -3125,7 +3336,11 @@ class Cmw100:
             if tech == 'LTE':
                 self.tx_power_aclr_evm_lmh_pipeline_lte()
             elif tech == 'FR1':
-                self.tx_power_aclr_evm_lmh_pipeline_fr1()
+                for script in wt.scripts:
+                    if script == 'GENERAL':
+                        self.tx_power_aclr_evm_lmh_pipeline_fr1()
+                    elif script == 'FCC':
+                        self.tx_power_pipline_fcc_fr1()
 
     def run_rx(self):
         for tech in wt.tech:
@@ -3214,6 +3429,14 @@ def main():
     # cmw100.search_sensitivity_pipline_lte()
     # cmw100.search_sensitivity_pipline_fr1()
     # cmw100.search_sensitivity_pipline_v2_fr1()
+    cmw100.tx_freq_fr1 = 3750000
+    cmw100.port_tx = 1
+    cmw100.bw_fr1 = 100
+    cmw100.tx_level = 26
+    cmw100.loss_tx = 1
+    cmw100.set_gprf_measurement()
+    cmw100.set_gprf_tx_freq()
+    cmw100.get_gprf_power()
 
     stop = datetime.datetime.now()
 

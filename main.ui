@@ -2988,7 +2988,6 @@ Disable</property>
                     <child>
                       <object class="ttk.Checkbutton" id="checkbutton_fcc">
                         <property name="command" type="command" cbtype="simple">wanted_scripts</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">FCC</property>
                         <property name="variable">boolean:fcc</property>
                         <layout manager="grid">
@@ -3454,6 +3453,20 @@ Disable</property>
                   <property name="padx">5</property>
                   <property name="pady">5</property>
                   <property name="row">8</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Checkbutton" id="checkbutton45">
+                <property name="command" type="command" cbtype="simple">wanted_tx_path</property>
+                <property name="text" translatable="yes">MIMO</property>
+                <property name="variable">boolean:ulmimo</property>
+                <layout manager="grid">
+                  <property name="column">0</property>
+                  <property name="padx">5</property>
+                  <property name="pady">5</property>
+                  <property name="row">3</property>
                   <property name="sticky">w</property>
                 </layout>
               </object>

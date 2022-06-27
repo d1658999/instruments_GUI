@@ -19,6 +19,7 @@ tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 
 tx_level = 26
 sa_nas = 0
+duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2
 
 port_tx_lte = 1  # 1 ~ 8 default is  1
 port_rx_lte = 1  # 1 ~ 8 default is  1
@@ -28,14 +29,14 @@ port_rx_fr1 = 1  # 1 ~ 8 default is  1
 asw_path = 0
 srs_path = 0
 sync_path = 0
-tx_paths = ['TX1']   # 'TX1' | 'TX2'
+tx_paths = ['TX1']   # 'TX1' | 'TX2' | 'MIMO
 rx_paths = [2,4]  #  0: default(free run) | 1: DRX_ONLY | 2: PRX ONLY | 3: PRX+DRX | 4: 4RX_PRX(RX2) ONLY | 8: 4RX_DRX(RX3) ONLY | 12: 4RX_PRX(RX2) + 4RX_DRX(RX3) | 15: ALL PATH
 
 scripts = ['GENERAL']  # 'GENERAL' | 'FCC' | 'CE' | 'FACTORY'
 
 type_fr1 = ['DFTS']  # 'DFTS' | 'CP'
 mcs_lte = ['QPSK']   # 'QPSK' | 'Q16' | 'Q64' | 'Q256'
-mcs_fr1 = ['QPSK', 'Q256']   # 'BPSK' | 'QPSK' | 'Q16' | 'Q64' | 'Q256'
+mcs_fr1 = ['QPSK', 'Q16', 'Q64', 'Q256']   # 'BPSK' | 'QPSK' | 'Q16' | 'Q64' | 'Q256'
 rb_ftm_lte = ['FRB']  # 'PRB' | 'FRB'
 rb_ftm_fr1 = ['OUTER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'EDGE_FULL_LEFT' | 'EDGE_FULL_RIGHT'
 scs = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz

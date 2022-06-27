@@ -192,6 +192,7 @@ class MainApp:
         self.tx_port_fr1 = None
         self.tx1 = None
         self.tx2 = None
+        self.ulmimo = None
         self.rx0 = None
         self.rx1 = None
         self.rx2 = None
@@ -371,6 +372,7 @@ class MainApp:
                 "tx_port_fr1",
                 "tx1",
                 "tx2",
+                "ulmimo",
                 "rx0",
                 "rx1",
                 "rx2",
@@ -763,6 +765,8 @@ class MainApp:
                 self.tx1.set(True)
             elif tx_path == 'TX2':
                 self.tx2.set(True)
+            elif tx_path == 'MIMO':
+                self.ulmimo.set(True)
 
         for rx_path in ui_init.rx_paths:
             if rx_path == 2:
@@ -1937,6 +1941,10 @@ class MainApp:
 
     def wanted_mcs_fr1(self):
         self.mcs_fr1 = []
+        if self.bpsk_fr1.get():
+            logger.debug('BPSK')
+            self.mcs_fr1.append('BPSK')
+
         if self.qpsk_fr1.get():
             logger.debug('QPSK')
             self.mcs_fr1.append('QPSK')
@@ -1952,10 +1960,6 @@ class MainApp:
         if self.q256_fr1.get():
             logger.debug('Q256')
             self.mcs_fr1.append('Q256')
-
-        if self.bpsk_fr1.get():
-            logger.debug('BPSK')
-            self.mcs_fr1.append('BPSK')
 
         if self.mcs_fr1 == []:
             logger.debug('Nothing to select for mcs_fr1')
@@ -2050,6 +2054,10 @@ class MainApp:
         if self.tx2.get():
             logger.debug('TX2')
             self.tx_path.append('TX2')
+
+        if self.ulmimo.get():
+            logger.debug('MIMO')
+            self.tx_path.append('MIMO')
 
         if self.tx_path == []:
             logger.debug('Nothing to select for tx path')
