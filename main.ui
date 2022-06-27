@@ -2010,22 +2010,6 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Checkbutton" id="checkbutton21">
-            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
-            <property name="onvalue">4</property>
-            <property name="text" translatable="yes">N4</property>
-            <property name="variable">int:N4</property>
-            <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
-            <layout manager="grid">
-              <property name="column">0</property>
-              <property name="padx">5</property>
-              <property name="pady">5</property>
-              <property name="row">4</property>
-              <property name="sticky">nw</property>
-            </layout>
-          </object>
-        </child>
-        <child>
           <object class="ttk.Checkbutton" id="checkbutton22">
             <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
             <property name="onvalue">7</property>
@@ -2036,7 +2020,7 @@
               <property name="column">0</property>
               <property name="padx">5</property>
               <property name="pady">5</property>
-              <property name="row">6</property>
+              <property name="row">5</property>
               <property name="sticky">nw</property>
             </layout>
           </object>
@@ -2052,7 +2036,7 @@
               <property name="column">0</property>
               <property name="padx">5</property>
               <property name="pady">5</property>
-              <property name="row">7</property>
+              <property name="row">6</property>
               <property name="sticky">nw</property>
             </layout>
           </object>
@@ -2084,7 +2068,7 @@
               <property name="column">0</property>
               <property name="padx">5</property>
               <property name="pady">5</property>
-              <property name="row">5</property>
+              <property name="row">4</property>
               <property name="sticky">nw</property>
             </layout>
           </object>
@@ -2093,6 +2077,7 @@
           <object class="ttk.Checkbutton" id="checkbutton26">
             <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
             <property name="onvalue">39</property>
+            <property name="state">disabled</property>
             <property name="text" translatable="yes">N39</property>
             <property name="variable">int:N39</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
@@ -2139,10 +2124,10 @@
         </child>
         <child>
           <object class="ttk.Checkbutton" id="checkbutton29">
-            <property name="command" type="command" cbtype="simple">wanted_band_LTE</property>
+            <property name="command" type="command" cbtype="simple">wanted_band_FR1</property>
             <property name="onvalue">41</property>
             <property name="text" translatable="yes">N41</property>
-            <property name="variable">string:N41</property>
+            <property name="variable">int:N41</property>
             <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
             <layout manager="grid">
               <property name="column">1</property>
@@ -2162,7 +2147,7 @@
               <property name="column">1</property>
               <property name="padx">5</property>
               <property name="pady">5</property>
-              <property name="row">4</property>
+              <property name="row">5</property>
               <property name="sticky">nw</property>
             </layout>
           </object>
@@ -2178,7 +2163,7 @@
               <property name="column">1</property>
               <property name="padx">5</property>
               <property name="pady">5</property>
-              <property name="row">3</property>
+              <property name="row">4</property>
               <property name="sticky">nw</property>
             </layout>
           </object>
@@ -3002,7 +2987,6 @@ Disable</property>
                     <child>
                       <object class="ttk.Checkbutton" id="checkbutton_ce">
                         <property name="command" type="command" cbtype="simple">wanted_scripts</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">CE</property>
                         <property name="variable">boolean:ce</property>
                         <layout manager="grid">

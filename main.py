@@ -137,12 +137,12 @@ class MainApp:
         self.N1 = None
         self.N2 = None
         self.N3 = None
-        self.N4 = None
+        # self.N4 = None
         self.N7 = None
         self.N30 = None
         self.N25 = None
         self.N66 = None
-        self.N39 = None
+        # self.N39 = None
         self.N40 = None
         self.N38 = None
         self.N41 = None
@@ -317,12 +317,12 @@ class MainApp:
                 "N1",
                 "N2",
                 "N3",
-                "N4",
+                # "N4",
                 "N7",
                 "N30",
                 "N25",
                 "N66",
-                "N39",
+                # "N39",
                 "N40",
                 "N38",
                 "N41",
@@ -450,8 +450,8 @@ class MainApp:
                 self.N2.set(band_fr1)
             elif band_fr1 == 3:
                 self.N3.set(band_fr1)
-            elif band_fr1 == 4:
-                self.N4.set(band_fr1)
+            # elif band_fr1 == 4:
+            #     self.N4.set(band_fr1)
             elif band_fr1 == 5:
                 self.N5.set(band_fr1)
             elif band_fr1 == 7:
@@ -492,8 +492,8 @@ class MainApp:
                 self.N34.set(band_fr1)
             elif band_fr1 == 38:
                 self.N38.set(band_fr1)
-            elif band_fr1 == 39:
-                self.N39.set(band_fr1)
+            # elif band_fr1 == 39:
+                # self.N39.set(band_fr1)
             elif band_fr1 == 40:
                 self.N40.set(band_fr1)
             elif band_fr1 == 41:
@@ -1117,9 +1117,9 @@ class MainApp:
         if self.N3.get() == 3:
             logger.debug(self.N3.get())
             self.band_fr1.append(self.N3.get())
-        if self.N4.get() == 4:
-            logger.debug(self.N4.get())
-            self.band_fr1.append(self.N4.get())
+        # if self.N4.get() == 4:
+        #     logger.debug(self.N4.get())
+        #     self.band_fr1.append(self.N4.get())
         if self.N7.get() == 7:
             logger.debug(self.N7.get())
             self.band_fr1.append(self.N7.get())
@@ -1132,9 +1132,9 @@ class MainApp:
         if self.N30.get() == 30:
             logger.debug(self.N30.get())
             self.band_fr1.append(self.N30.get())
-        if self.N39.get() == 39:
-            logger.debug(self.N39.get())
-            self.band_fr1.append(self.N39.get())
+        # if self.N39.get() == 39:
+        #     logger.debug(self.N39.get())
+        #     self.band_fr1.append(self.N39.get())
         if self.N40.get() == 40:
             logger.debug(self.N40.get())
             self.band_fr1.append(self.N40.get())
@@ -1719,11 +1719,11 @@ class MainApp:
             self.N2.set(2)
             self.N25.set(25)
             self.N3.set(3)
-            self.N4.set(4)
+            # self.N4.set(4)
             self.N66.set(66)
             self.N7.set(7)
             self.N30.set(30)
-            self.N39.set(39)
+            # self.N39.set(39)
             self.N40.set(40)
             self.N38.set(38)
             self.N41.set(41)
@@ -1735,11 +1735,11 @@ class MainApp:
             self.N2.set(0)
             self.N25.set(0)
             self.N3.set(0)
-            self.N4.set(0)
+            # self.N4.set(0)
             self.N66.set(0)
             self.N7.set(0)
             self.N30.set(0)
-            self.N39.set(0)
+            # self.N39.set(0)
             self.N40.set(0)
             self.N38.set(0)
             self.N41.set(0)
