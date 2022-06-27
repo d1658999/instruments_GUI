@@ -11,7 +11,7 @@ import pathlib
 
 import fcc
 import scripts
-from varname import nameof
+# from varname import nameof
 import math
 
 import common_parameters_ftm as cm_pmt_ftm
