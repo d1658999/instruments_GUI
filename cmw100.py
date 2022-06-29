@@ -11,6 +11,7 @@ import pathlib
 
 import fcc
 import ce
+import endc
 import scripts
 # from varname import nameof
 import math
@@ -191,7 +192,7 @@ class Cmw100:
 
     def preset_instrument(self):
         logger.info('----------Preset CMW100----------')
-        self.command_cmw100_write('CONFigure:FDCorrection:DEACtivate RFAC')
+        self.command_cmw100_write('CONFigure:FDCorrection:DEACtivate ALL')
         self.command_cmw100_write('CONFigure:BASE:FDCorrection:CTABle:DELete:ALL')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write('*RST')
@@ -251,14 +252,14 @@ class Cmw100:
         self.command(f'AT+NRFFINALSTART={self.band_fr1},{self.sa_nsa_mode}')
         # self.command_cmw100_query('*OPC?')
 
-    def set_test_end_lte(self):
+    def set_test_end_lte(self, delay=0.2):
         logger.info('----------Set End----------')
-        self.command(f'AT+LRFFINALFINISH')
+        self.command(f'AT+LRFFINALFINISH', delay)
         # self.command_cmw100_query('*OPC?')
 
-    def set_test_end_fr1(self):
+    def set_test_end_fr1(self, delay=0.2):
         logger.info('----------Set End----------')
-        self.command(f'AT+NRFFINALFINISH')
+        self.command(f'AT+NRFFINALFINISH', delay)
         # self.command_cmw100_query('*OPC?')
 
     def set_gprf_measurement(self):
@@ -303,7 +304,7 @@ class Cmw100:
         self.command_cmw100_query('SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
         self.command_cmw100_write('ROUT:GPRF:GEN:SCEN:SAL R118, TX1')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_write('CONFigure:GPRF:GEN:CMWS:USAGe:TX:ALL R118, ON,ON,ON,ON,ON,ON,ON,ON')
+        self.command_cmw100_write('CONFigure:GPRF:GEN:CMWS:USAGe:TX:ALL R118, ON, ON, ON, ON, ON, ON, ON, ON')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write('SOUR:GPRF:GEN1:LIST OFF')
         self.command_cmw100_query('*OPC?')
@@ -311,6 +312,7 @@ class Cmw100:
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write('SOUR:GPRF:GEN1:BBM ARB')
         self.command_cmw100_query('*OPC?')
+        self.band_lte = int(self.band_lte)
         if self.band_lte in [34, 38, 39, 40, 41, 42, 48]:
             self.command_cmw100_write(
                 f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_Channel_CC0_RxAnt0_RF_Verification_10M_SIMO_01.wv'")
@@ -330,6 +332,7 @@ class Cmw100:
         scs: FDD is forced to 15KHz and TDD is to be 30KHz
         """
         logger.info('----------Sig Gen----------')
+        self.band_fr1 = int(self.band_fr1)
         scs = 1 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 77, 78,
                                      79] else 0  # for now FDD is forced to 15KHz and TDD is to be 30KHz
         scs = 15 * (2 ** scs)
@@ -338,7 +341,7 @@ class Cmw100:
         self.command_cmw100_query('SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
         self.command_cmw100_write('ROUT:GPRF:GEN:SCEN:SAL R118, TX1')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_write('CONFigure:GPRF:GEN:CMWS:USAGe:TX:ALL R118, ON,ON,ON,ON,ON,ON,ON,ON')
+        self.command_cmw100_write('CONFigure:GPRF:GEN:CMWS:USAGe:TX:ALL R118, ON, ON, ON, ON, ON, ON, ON, ON')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write('SOUR:GPRF:GEN1:LIST OFF')
         self.command_cmw100_query('*OPC?')
@@ -494,15 +497,16 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:DSSP 0')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:AUTO OFF')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOEX ON')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN100 ON,0MHz,1MHz,-18,K030')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN100 ON,1MHz,2.5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN100 ON,2.5MHz,2.8MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN100 ON,2.8MHz,5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN100 ON,5MHz,6MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN100 ON,6MHz,10MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN100 ON,10MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN100 OFF,15MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN100 OFF,15MHz,15MHz,-25,M1')
+        lim1 = -10 if self.bw_lte == 1.4 else -13 if self.bw_lte == 3 else -15 if self.bw_lte == 5 else -18 if self.bw_lte == 10 else -20 if self.bw_lte == 15 else -21
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{self.bw_lte*10} ON,0MHz,1MHz,{lim1},K030')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{self.bw_lte*10} ON,1MHz,2.5MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte*10} ON,2.5MHz,2.8MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte*10} ON,2.8MHz,5MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} ON,5MHz,6MHz,-13,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} ON,6MHz,10MHz,-13,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} ON,10MHz,15MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} ON,15MHz,15MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte*10} ON,20MHz,25MHz,-25,M1')
         self.command_cmw100_query('SYST:ERR:ALL?')
         self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
@@ -1861,15 +1865,15 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:DSSP 0')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:AUTO OFF')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOEX ON')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN100 ON,0MHz,1MHz,-18,K030')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN100 ON,1MHz,2.5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN100 ON,2.5MHz,2.8MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN100 ON,2.8MHz,5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN100 ON,5MHz,6MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN100 ON,6MHz,10MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN100 ON,10MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN100 OFF,15MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN100 OFF,15MHz,15MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{int(self.bw_lte)*10} ON,0MHz,1MHz,-18,K030')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{int(self.bw_lte)*10} ON,1MHz,2.5MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{int(self.bw_lte)*10} ON,2.5MHz,2.8MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{int(self.bw_lte)*10} ON,2.8MHz,5MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{int(self.bw_lte)*10} ON,5MHz,6MHz,-13,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{int(self.bw_lte)*10} ON,6MHz,10MHz,-13,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{int(self.bw_lte)*10} ON,10MHz,15MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{int(self.bw_lte)*10} ON,15MHz,15MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{int(self.bw_lte)*10} ON,20MHz,25MHz,-25,M1')
         self.command_cmw100_query(f'SYST:ERR:ALL?')
         self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
@@ -2003,6 +2007,81 @@ class Cmw100:
                             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def sensitivity_pipline_endc(self):
+        self.tx_level_endc_lte = wt.tx_level_endc_lte
+        self.tx_level_endc_fr1 = wt.tx_level_endc_fr1
+        self.port_tx_lte = wt.port_tx_lte
+        self.port_tx_fr1 = wt.port_tx_fr1
+        # self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = 1
+        self.type_fr1 = 'DFTS'
+        self.mcs_lte = self.mcs_fr1 = 'QPSK'
+        self.tx_path = 'TX1'
+        self.rx_path_lte = 15
+        self.rx_path_fr1 = 15
+        for tech in wt.tech:
+            if tech == 'ENDC' and wt.fr1_bands != []:
+                self.tech = 'ENDC'
+                for band_combo, bwcombo_rblte_rbfr1 in scripts.ENDC.items():
+                    [self.band_lte, self.band_fr1] = band_combo.split('_')
+                    (self.bw_lte, self.bw_fr1) = bwcombo_rblte_rbfr1[0]
+                    (self.rb_size_lte, self.rb_start_lte) = bwcombo_rblte_rbfr1[1]
+                    (self.rb_size_fr1, self.rb_start_fr1) = bwcombo_rblte_rbfr1[2]
+                    for self.tx_freq_lte, self.tx_freq_fr1 in endc.tx_freq_list_fr1[band_combo]:
+                        self.tx_freq_lte = int(self.tx_freq_lte * 1000)
+                        self.tx_freq_fr1 = int(self.tx_freq_fr1 * 1000)
+                        loss_tx_lte = self.get_loss(self.tx_freq_lte)
+                        loss_tx_fr1 = self.get_loss(self.tx_freq_fr1)
+                        self.rx_freq_fr1 = cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, self.tx_freq_fr1)
+                        self.rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, self.tx_freq_lte)
+                        self.loss_rx = self.get_loss(self.rx_freq_fr1)
+                        self.preset_instrument()
+                        self.set_test_end_lte(delay=0.5)
+                        self.set_test_end_fr1(delay=0.5)
+                        self.set_test_mode_lte()
+                        self.sig_gen_lte()
+                        self.sync_lte()
+                        self.set_test_mode_fr1()
+                        self.sig_gen_fr1()
+                        self.sync_fr1()
+                        self.tx_level = self.tx_level_endc_lte
+                        self.tx_set_lte()
+                        self.rx_path_setting_lte()
+                        self.loss_tx = loss_tx_lte
+                        self.port_tx = self.port_tx_lte
+                        aclr_mod_results = self.tx_measure_lte()
+                        logger.debug(aclr_mod_results)
+                        logger.info(f'LTE Power: {aclr_mod_results[3]}')
+                        self.tx_level = self.tx_level_endc_fr1
+                        self.tx_set_fr1()
+                        self.rx_path_setting_fr1()
+                        self.loss_tx = loss_tx_fr1
+                        self.port_tx = self.port_tx_fr1
+                        aclr_mod_results = self.tx_measure_fr1()
+                        logger.debug(aclr_mod_results)
+                        logger.info(f'FR1 Power: {aclr_mod_results[3]}')
+
+
+                        # self.command_cmw100_write(f'INIT:LTE:MEAS:MEV')
+                        # self.command_cmw100_query('*OPC?')
+                        # f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
+                        # while f_state != 'RDY':
+                        #     f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
+                        #     self.command_cmw100_query('*OPC?')
+                        # power_results = self.command_cmw100_query('FETCh:LTE:MEAS:MEV:TXP:AVER?')
+                        # print(power_results)
+
+                        self.search_sensitivity_fr1()
+                        self.set_test_end_fr1(delay=0.5)
+                        self.set_test_end_lte(delay=0.5)
+
+
+
+
+
+
+
 
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
@@ -3510,14 +3589,15 @@ def main():
     # cmw100.search_sensitivity_pipline_lte()
     # cmw100.search_sensitivity_pipline_fr1()
     # cmw100.search_sensitivity_pipline_v2_fr1()
-    cmw100.tx_freq_fr1 = 3750000
-    cmw100.port_tx = 1
-    cmw100.bw_fr1 = 100
-    cmw100.tx_level = 26
-    cmw100.loss_tx = 1
-    cmw100.set_gprf_measurement()
-    cmw100.set_gprf_tx_freq()
-    cmw100.get_gprf_power()
+    # cmw100.tx_freq_fr1 = 3750000
+    # cmw100.port_tx = 1
+    # cmw100.bw_fr1 = 100
+    # cmw100.tx_level = 26
+    # cmw100.loss_tx = 1
+    # cmw100.set_gprf_measurement()
+    # cmw100.set_gprf_tx_freq()
+    # cmw100.get_gprf_power()
+    cmw100.sensitivity_pipline_endc()
 
     stop = datetime.datetime.now()
 

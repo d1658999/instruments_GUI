@@ -819,6 +819,14 @@ CE_FR1 = {
     },
 }  # P22 CE, band > bandwidth > mcs > rb
 
+ENDC = {
+    # '3_78': [(10, 20), (50, 0), (50, 0)],  # DTAG
+    # '2_77': [(20, 40), (100, 0), (100, 0)],  # AT&T/VZW
+    # '12_78': [(10, 50), (50, 0), (128, 0)],  # CA
+    '5_78': [(10, 50), (50, 0), (128, 0)],  # CA/AU
+    # '28_78': [(10, 20), (50, 0), (50, 0)],  # EU/AU/JPN
+}  # band > [(bw_lte, bw_fr1), (rb_size_lte, rb_start_lte), (rb_start_size, rb_start_fr1)]
+
 
 def main():
     for rb in FCC_FR1[2][10]['BPSK']:

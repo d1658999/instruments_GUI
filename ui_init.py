@@ -1,12 +1,12 @@
-tech = ['FR1']
-bw_fr1 = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100]
-bw_lte = [1.4, 3, 5, 10, 15, 20]
+tech = ['LTE']
+bw_fr1 = [10]
+bw_lte = [10]
 ue_power = [1, 0]
 
 chan = "LMH"
 
-bands_fr1 = [1, 2, 3, 7, 25, 66, 30, 40, 38, 41]
-bands_lte = [5, 8, 12, 13, 14, 17, 18, 19, 20, 26, 28]
+bands_fr1 = [1]
+bands_lte = [3]
 bands_wcdma = []
 bands_hsupa = []
 bands_hsdpa = []
@@ -28,12 +28,12 @@ asw_path = 0
 srs_path = 0
 sync_path = 0
 
-tx_paths = ['TX1']
+tx_paths = ['TX2']
 rx_paths = []
 
-scripts = ['FCC']
+scripts = ['GENERAL']
 type_fr1 = ['DFTS']
-mcs_lte = ['QPSK', 'Q16', 'Q64', 'Q256']
-mcs_fr1 = ['BPSK', 'QPSK', 'Q16', 'Q64', 'Q256']
-rb_ftm_lte = ['PRB', 'FRB']
-rb_ftm_fr1 = ['INNER_FULL', 'OUTER_FULL', 'INNER_1RB_LEFT', 'INNER_1RB_RIGHT', 'EDGE_1RB_LEFT', 'EDGE_1RB_RIGHT', 'EDGE_FULL_LEFT', 'EDGE_FULL_RIGHT']
+mcs_lte = ['QPSK']
+mcs_fr1 = ['QPSK']
+rb_ftm_lte = ['FRB']
+rb_ftm_fr1 = ['INNER_FULL']

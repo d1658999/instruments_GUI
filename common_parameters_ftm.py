@@ -1,5 +1,6 @@
 # bandwidth index
 def bandwidths_selected_fr1(band):
+    band = int(band)
     bandwidths = {
         'N1': [5, 10, 15, 20, 25, 40, 50, ],  # remove 30
         'N2': [5, 10, 15, 20, ],
@@ -36,6 +37,7 @@ def bandwidths_selected_fr1(band):
     return bandwidths[f'N{band}']
 
 def bandwidths_selected_lte(band):
+    band = int(band)
     bandwidths = {
         'B1': [5, 10, 15, 20],
         'B2': [1.4, 3, 5, 10 , 15, 20],
@@ -75,6 +77,7 @@ def bandwidths_selected_lte(band):
 
 # DL Freq
 def dl_freq_selected(standard, band, bw=5):
+    band = int(band)
     band_dl_freq_fr1 = {
         'N1': [2110 + bw / 2, 2140, 2170 - bw / 2],
         'N2': [1930 + bw / 2, 1960, 1990 - bw / 2],
@@ -179,6 +182,7 @@ def dl_freq_selected(standard, band, bw=5):
         pass
 
 def transfer_freq_rx2tx_lte(band_lte, freq):
+    band_lte = int(band_lte)
     if band_lte not in [38, 39, 40, 41, 42, 48]:
         spacing_lte = {
             1: -190000,
@@ -210,6 +214,7 @@ def transfer_freq_rx2tx_lte(band_lte, freq):
         return freq
 
 def transfer_freq_tx2rx_lte(band_lte, freq):
+    band_lte = int(band_lte)
     if band_lte not in [38, 39, 40, 41, 42, 48]:
         spacing_lte = {
             1: 190000,
@@ -241,6 +246,7 @@ def transfer_freq_tx2rx_lte(band_lte, freq):
         return freq
 
 def transfer_freq_rx2tx_fr1(band_fr1, freq):
+    band_fr1 = int(band_fr1)
     if band_fr1 not in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79]:
         spacing_fr1 = {
             1: -190000,
@@ -269,6 +275,7 @@ def transfer_freq_rx2tx_fr1(band_fr1, freq):
         return freq
 
 def transfer_freq_tx2rx_fr1(band_fr1, freq):
+    band_fr1 = int(band_fr1)
     if band_fr1 not in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79]:
         spacing_fr1 = {
             1: 190000,
