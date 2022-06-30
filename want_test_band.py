@@ -1,4 +1,4 @@
-lte_bands = []       # 1,2,3,4,7,25,66,38,39,40,41,5,8,12,13,14,17,18,19,20,28,71,42,48
+lte_bands = [2]       # 1,2,3,4,7,25,66,38,39,40,41,5,8,12,13,14,17,18,19,20,28,71,42,48
 wcdma_bands = [1]
 gsm_bands = []
 hsupa_bands = [1]
@@ -17,8 +17,8 @@ fdd_tdd_cross_test = 0     # this is only for 8821,  0: only measure one of FDD 
 
 tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 
-tx_level = 26
-tx_level_endc_lte = 0
+tx_level = 0
+tx_level_endc_lte = 18
 tx_level_endc_fr1 = 0
 sa_nas = 0
 duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2

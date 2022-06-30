@@ -1,6 +1,6 @@
 tech = ['LTE']
 bw_fr1 = [10]
-bw_lte = [10]
+bw_lte = [20]
 ue_power = [1, 0]
 
 chan = "LMH"
@@ -28,12 +28,12 @@ asw_path = 0
 srs_path = 0
 sync_path = 0
 
-tx_paths = ['TX2']
+tx_paths = ['TX1']
 rx_paths = []
 
 scripts = ['GENERAL']
 type_fr1 = ['DFTS']
-mcs_lte = ['QPSK']
+mcs_lte = ['QPSK', 'Q16', 'Q64', 'Q256']
 mcs_fr1 = ['QPSK']
-rb_ftm_lte = ['FRB']
+rb_ftm_lte = ['PRB', 'FRB']
 rb_ftm_fr1 = ['INNER_FULL']

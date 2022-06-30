@@ -192,9 +192,11 @@ class Cmw100:
 
     def preset_instrument(self):
         logger.info('----------Preset CMW100----------')
-        self.command_cmw100_write('CONFigure:FDCorrection:DEACtivate ALL')
+        self.command_cmw100_query('SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
+        self.command_cmw100_write('CONFigure:FDCorrection:DEACtivate:ALL')
         self.command_cmw100_write('CONFigure:BASE:FDCorrection:CTABle:DELete:ALL')
         self.command_cmw100_query('*OPC?')
+        self.command_cmw100_query('SYST:ERR:ALL?')
         self.command_cmw100_write('*RST')
         self.command_cmw100_query('*OPC?')
 
@@ -500,13 +502,13 @@ class Cmw100:
         lim1 = -10 if self.bw_lte == 1.4 else -13 if self.bw_lte == 3 else -15 if self.bw_lte == 5 else -18 if self.bw_lte == 10 else -20 if self.bw_lte == 15 else -21
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{self.bw_lte*10} ON,0MHz,1MHz,{lim1},K030')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{self.bw_lte*10} ON,1MHz,2.5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte*10} ON,2.5MHz,2.8MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte*10} ON,2.8MHz,5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} ON,5MHz,6MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} ON,6MHz,10MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} ON,10MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} ON,15MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte*10} ON,20MHz,25MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte*10} ON,2.5MHz,2.8MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte*10} ON,2.5MHz,2.8MHz,-10,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte*10} ON,2.8MHz,5MHz,-10,M1') if self.bw_lte >= 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte*10} OFF,2.8MHz,5MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} ON,5MHz,6MHz,-13,M1') if self.bw_lte > 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} OFF,5MHz,6MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} ON,5MHz,6MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} ON,6MHz,10MHz,-13,M1') if self.bw_lte > 5 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} OFF,6MHz,10MHz,-25,M1') if self.bw_lte < 5 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} ON,6MHz,10MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} ON,10MHz,15MHz,-13,M1') if self.bw_lte > 10 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} OFF,10MHz,15MHz,-25,M1') if self.bw_lte < 10 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} ON,10MHz,15MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} ON,15MHz,20MHz,-13,M1') if self.bw_lte > 15 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} OFF,15MHz,20MHz,-25,M1') if self.bw_lte < 15 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} ON,15MHz,20MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte*10} ON,20MHz,25MHz,-25,M1') if self.bw_lte == 20 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte*10} OFF,20MHz,25MHz,-25,M1')
         self.command_cmw100_query('SYST:ERR:ALL?')
         self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
@@ -1865,15 +1867,35 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:DSSP 0')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:AUTO OFF')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOEX ON')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{int(self.bw_lte)*10} ON,0MHz,1MHz,-18,K030')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{int(self.bw_lte)*10} ON,1MHz,2.5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{int(self.bw_lte)*10} ON,2.5MHz,2.8MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{int(self.bw_lte)*10} ON,2.8MHz,5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{int(self.bw_lte)*10} ON,5MHz,6MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{int(self.bw_lte)*10} ON,6MHz,10MHz,-13,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{int(self.bw_lte)*10} ON,10MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{int(self.bw_lte)*10} ON,15MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{int(self.bw_lte)*10} ON,20MHz,25MHz,-25,M1')
+        lim1 = -10 if self.bw_lte == 1.4 else -13 if self.bw_lte == 3 else -15 if self.bw_lte == 5 else -18 if self.bw_lte == 10 else -20 if self.bw_lte == 15 else -21
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{self.bw_lte * 10} ON,0MHz,1MHz,{lim1},K030')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{self.bw_lte * 10} ON,1MHz,2.5MHz,-10,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte * 10} ON,2.5MHz,2.8MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte * 10} ON,2.5MHz,2.8MHz,-10,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte * 10} ON,2.8MHz,5MHz,-10,M1') if self.bw_lte >= 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte * 10} OFF,2.8MHz,5MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte * 10} ON,5MHz,6MHz,-13,M1') if self.bw_lte > 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte * 10} OFF,5MHz,6MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte * 10} ON,5MHz,6MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte * 10} ON,6MHz,10MHz,-13,M1') if self.bw_lte > 5 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte * 10} OFF,6MHz,10MHz,-25,M1') if self.bw_lte < 5 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte * 10} ON,6MHz,10MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte * 10} ON,10MHz,15MHz,-13,M1') if self.bw_lte > 10 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte * 10} OFF,10MHz,15MHz,-25,M1') if self.bw_lte < 10 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte * 10} ON,10MHz,15MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte * 10} ON,15MHz,20MHz,-13,M1') if self.bw_lte > 15 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte * 10} OFF,15MHz,20MHz,-25,M1') if self.bw_lte < 15 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte * 10} ON,15MHz,20MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte * 10} ON,20MHz,25MHz,-25,M1') if self.bw_lte == 20 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte * 10} OFF,20MHz,25MHz,-25,M1')
+
         self.command_cmw100_query(f'SYST:ERR:ALL?')
         self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
@@ -2061,17 +2083,6 @@ class Cmw100:
                         aclr_mod_results = self.tx_measure_fr1()
                         logger.debug(aclr_mod_results)
                         logger.info(f'FR1 Power: {aclr_mod_results[3]}')
-
-
-                        # self.command_cmw100_write(f'INIT:LTE:MEAS:MEV')
-                        # self.command_cmw100_query('*OPC?')
-                        # f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
-                        # while f_state != 'RDY':
-                        #     f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
-                        #     self.command_cmw100_query('*OPC?')
-                        # power_results = self.command_cmw100_query('FETCh:LTE:MEAS:MEV:TXP:AVER?')
-                        # print(power_results)
-
                         self.search_sensitivity_fr1()
                         self.set_test_end_fr1(delay=0.5)
                         self.set_test_end_lte(delay=0.5)
@@ -3598,6 +3609,7 @@ def main():
     # cmw100.set_gprf_tx_freq()
     # cmw100.get_gprf_power()
     cmw100.sensitivity_pipline_endc()
+    cmw100.preset_instrument()
 
     stop = datetime.datetime.now()
 
