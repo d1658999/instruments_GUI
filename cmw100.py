@@ -481,6 +481,47 @@ class Cmw100:
         logger.info('----------Rx path setting----------')
         self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
         # self.command_cmw100_query('*OPC?')
+    def tx_monitor_lte(self):
+        logger.info('---------Tx Monitor----------')
+        # self.sig_gen_lte()
+        self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEV:RES:PMONitor ON')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f"TRIG:LTE:MEAS:MEV:SOUR 'GPRF Gen1: Restart Marker'")
+        self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
+        self.command_cmw100_write(f'TRIG:LTE:MEAS:MEV:THR -20.0')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:REP SING')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOEX ON')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:CPR NORM')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MSUB 2, 10, 0')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:AUTO ON')
+        mode = 'TDD' if self.band_lte in [38, 39, 40, 41, 42, 48] else 'FDD'
+        self.command_cmw100_write(f'CONF:LTE:MEAS:DMODe {mode}')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:BAND OB{self.band_lte}')
+        rb = f'0{self.bw_lte * 10}' if self.bw_lte < 10 else f'{self.bw_lte * 10}'
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:CBAN B{rb}')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOD:MSCH {self.mcs_lte}')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:FREQ {self.tx_freq_lte}KHz')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:EATT {self.loss_tx}')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'ROUT:GPRF:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'ROUT:LTE:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:ENP {self.tx_level}.00')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'INIT:LTE:MEAS:MEV')
+        f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
+        while f_state != 'RDY':
+            f_state = self.command_cmw100_query('FETC:LTE:MEAS:MEV:STAT?')
+            self.command_cmw100_query('*OPC?')
+        self.command_cmw100_query('*OPC?')
+        power_results = self.command_cmw100_query(f'FETCh:LTE:MEAS:MEV:PMON:AVER?')
+        power = power_results.strip().split(',')[2]
+        logger.info(f'LTE power by Tx monitor: {round(eval(power), 2)}')
+        return round(eval(power), 2)
+
 
     def tx_measure_lte(self):
         logger.info('---------Tx Measure----------')
@@ -865,6 +906,73 @@ class Cmw100:
                 self.rx_desense_progress()
                 self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
 
+    def sensitivity_pipline_endc(self):
+        self.tx_level_endc_lte = wt.tx_level_endc_lte
+        self.tx_level_endc_fr1 = wt.tx_level_endc_fr1
+        self.port_tx_lte = wt.port_tx_lte
+        self.port_tx_fr1 = wt.port_tx_fr1
+        self.sa_nsa_mode = 1
+        self.type_fr1 = 'DFTS'
+        self.mcs_lte = self.mcs_fr1 = 'QPSK'
+        self.tx_path = 'TX1'
+        self.rx_path_lte = 15
+        self.rx_path_fr1 = 15
+
+        for tech in wt.tech:
+            if tech == 'ENDC' and wt.endc_bands != []:
+                self.tech = 'ENDC'
+                for band_combo in wt.endc_bands:
+                    data = []
+                    [self.band_lte, self.band_fr1] = band_combo.split('_')
+                    (self.bw_lte, self.bw_fr1) = scripts.ENDC[band_combo][0]
+                    (self.rb_size_lte, self.rb_start_lte) = scripts.ENDC[band_combo][1]
+                    (self.rb_size_fr1, self.rb_start_fr1) = scripts.ENDC[band_combo][2]
+                    for self.tx_freq_lte, self.tx_freq_fr1 in endc.tx_freq_list_fr1[band_combo]:
+                        self.tx_freq_lte = int(self.tx_freq_lte * 1000)
+                        self.tx_freq_fr1 = int(self.tx_freq_fr1 * 1000)
+                        loss_tx_lte = self.get_loss(self.tx_freq_lte)
+                        loss_tx_fr1 = self.get_loss(self.tx_freq_fr1)
+                        self.rx_freq_fr1 = cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, self.tx_freq_fr1)
+                        self.rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, self.tx_freq_lte)
+                        self.loss_rx = self.get_loss(self.rx_freq_fr1)
+                        self.preset_instrument()
+                        self.set_test_end_lte(delay=0.5)
+                        self.set_test_end_fr1(delay=0.5)
+                        self.set_test_mode_lte()
+                        self.sig_gen_lte()
+                        self.sync_lte()
+                        self.set_test_mode_fr1()
+                        self.sig_gen_fr1()
+                        self.sync_fr1()
+                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                            # set LTE power
+                            self.tx_level = wt.tx_level_endc_lte if ue_power_bool == 1 else -10
+                            self.loss_tx = loss_tx_lte
+                            self.port_tx = self.port_tx_lte
+                            self.tx_set_lte()
+                            self.rx_path_setting_lte()
+                            # set FR1 power
+                            self.tx_level = self.tx_level_endc_fr1
+                            self.loss_tx = loss_tx_fr1
+                            self.port_tx = self.port_tx_fr1
+                            self.tx_set_fr1()
+                            self.rx_path_setting_fr1()
+                            aclr_mod_results_fr1 = self.tx_measure_fr1()
+                            logger.debug(aclr_mod_results_fr1)
+                            logger.info(f'FR1 Power: {aclr_mod_results_fr1[3]}')
+                            self.power_endc_fr1 = round(aclr_mod_results_fr1[3], 2)
+                            self.search_sensitivity_fr1()
+                            # set LTE power and get ENDC power for LTE
+                            self.tx_level = wt.tx_level_endc_lte
+                            self.loss_tx = loss_tx_lte
+                            self.port_tx = self.port_tx_lte
+                            self.power_monitor_endc_lte = self.tx_monitor_lte()
+                            data.append([int(self.band_lte), int(self.band_fr1), self.power_monitor_endc_lte, self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1, self.tx_freq_lte, self.tx_freq_fr1, self.tx_level, self.tx_level_endc_fr1, self.rb_size_lte, self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1])
+                    self.set_test_end_fr1(delay=0.5)
+                    self.set_test_end_lte(delay=0.5)
+                    self.endc_relative_power_senstivity_export_excel(data)
+                self.rx_desense_endc_progress()
+
     def search_sensitivity_pipline_fast_lte(self):  # this is for that RSRP and  CINR without issue because this is calculated method
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx_lte
@@ -1011,6 +1119,69 @@ class Cmw100:
             rx_level = self.esens_list[rsrp_max_index]
             self.filename = self.rx_power_relative_test_export_excel(data_freq, self.band_lte, self.bw_lte, rx_level,
                                                                      mode=1)  # mode=1: LMH mode
+
+    def endc_relative_power_senstivity_export_excel(self, data):
+        """
+        :param data:  data = [int(self.band_lte), int(self.band_fr1), self.power_monitor_endc_lte, self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1, self.tx_freq_lte, self.tx_freq_fr1, self.tx_level_endc_lte, self.tx_level_endc_fr1, self.rb_size_lte, self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1]
+        :return:
+        """
+        logger.info('----------save to excel----------')
+
+        filename = f'Sensitivty_ENDC.xlsx'
+
+        if pathlib.Path(filename).exists() is False:
+            logger.info('----------file does not exist----------')
+            wb = openpyxl.Workbook()
+            wb.remove(wb['Sheet'])
+            # to create sheet
+            wb.create_sheet(f'Raw_Data_ENDC_FR1_TxMax')
+            wb.create_sheet(f'Raw_Data_ENDC_FR1_-10dBm')
+            for sheetname in wb.sheetnames:
+                ws = wb[sheetname]
+                ws['A1'] = 'Band_LTE'
+                ws['B1'] = 'Band_FR1'
+                ws['C1'] = 'Power_LTE_measured'
+                ws['D1'] = 'Power_FR1_measured'
+                ws['E1'] = 'Sensitivity_FR1'
+                ws['F1'] = 'BW_LTE'
+                ws['G1'] = 'BW_FR1'
+                ws['H1'] = 'Freq_tx_LTE'
+                ws['I1'] = 'Freq_tx_FR1'
+                ws['J1'] = 'Tx_level_LTE'
+                ws['K1'] = 'Tx_level_FR1'
+                ws['L1'] = 'rb_size_LTE'
+                ws['M1'] = 'rb_start_LTE'
+                ws['N1'] = 'rb_size_FR1'
+                ws['O1'] = 'rb_start_FR1'
+
+            wb.create_sheet(f'Desens_ENDC')
+            ws = wb[f'Desens_ENDC']
+            ws['A1'] = 'Band_LTE'
+            ws['B1'] = 'Band_FR1'
+            ws['C1'] = 'BW_LTE'
+            ws['D1'] = 'BW_FR1'
+            ws['E1'] = 'Freq_tx_LTE'
+            ws['F1'] = 'Freq_tx_FR1'
+            ws['G1'] = 'Diff'
+
+            wb.save(filename)
+            wb.close()
+
+        logger.info('----------file exist----------')
+        wb = openpyxl.load_workbook(filename)
+
+        for d in data:
+            sheetname = f'Raw_Data_ENDC_FR1_TxMax' if d[2] > 0 else f'Raw_Data_ENDC_FR1_-10dBm'
+            ws = wb[sheetname]
+            max_row = ws.max_row
+            max_col = ws.max_column
+            row = max_row + 1
+            for col in range(max_col):
+                ws.cell(row, col+1).value = d[col]
+
+        wb.save(filename)
+        wb.close()
+
 
     def rx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level, mode=0):  # mode general: 0,  mode LMH: 1
         """
@@ -1400,6 +1571,24 @@ class Cmw100:
 
         wb.save(self.filename)
         wb.close()
+
+    def rx_desense_endc_progress(self):
+        wb = openpyxl.load_workbook('Sensitivty_ENDC.xlsx')
+        ws_txmax = wb[f'Raw_Data_ENDC_FR1_TxMax']
+        ws_txmin = wb[f'Raw_Data_ENDC_FR1_-10dBm']
+        ws_desens = wb[f'Desens_ENDC']
+        for row in range(2, ws_txmax.max_row + 1):
+            ws_desens.cell(row, 1).value = ws_txmax.cell(row, 1).value
+            ws_desens.cell(row, 2).value = ws_txmax.cell(row, 2).value
+            ws_desens.cell(row, 3).value = ws_txmax.cell(row, 6).value
+            ws_desens.cell(row, 4).value = ws_txmax.cell(row, 7).value
+            ws_desens.cell(row, 5).value = ws_txmax.cell(row, 8).value
+            ws_desens.cell(row, 6).value = ws_txmax.cell(row, 9).value
+            ws_desens.cell(row, 7).value = ws_txmax.cell(row, 5).value - ws_txmin.cell(row, 5).value
+
+        wb.save('Sensitivty_ENDC.xlsx')
+        wb.close()
+
 
     def tx_power_fcc_ce_export_excel(self, data):
         logger.info('----------save to excel----------')
@@ -2029,70 +2218,6 @@ class Cmw100:
                             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
-
-    def sensitivity_pipline_endc(self):
-        self.tx_level_endc_lte = wt.tx_level_endc_lte
-        self.tx_level_endc_fr1 = wt.tx_level_endc_fr1
-        self.port_tx_lte = wt.port_tx_lte
-        self.port_tx_fr1 = wt.port_tx_fr1
-        # self.sa_nsa_mode = wt.sa_nas
-        self.sa_nsa_mode = 1
-        self.type_fr1 = 'DFTS'
-        self.mcs_lte = self.mcs_fr1 = 'QPSK'
-        self.tx_path = 'TX1'
-        self.rx_path_lte = 15
-        self.rx_path_fr1 = 15
-        for tech in wt.tech:
-            if tech == 'ENDC' and wt.fr1_bands != []:
-                self.tech = 'ENDC'
-                for band_combo, bwcombo_rblte_rbfr1 in scripts.ENDC.items():
-                    [self.band_lte, self.band_fr1] = band_combo.split('_')
-                    (self.bw_lte, self.bw_fr1) = bwcombo_rblte_rbfr1[0]
-                    (self.rb_size_lte, self.rb_start_lte) = bwcombo_rblte_rbfr1[1]
-                    (self.rb_size_fr1, self.rb_start_fr1) = bwcombo_rblte_rbfr1[2]
-                    for self.tx_freq_lte, self.tx_freq_fr1 in endc.tx_freq_list_fr1[band_combo]:
-                        self.tx_freq_lte = int(self.tx_freq_lte * 1000)
-                        self.tx_freq_fr1 = int(self.tx_freq_fr1 * 1000)
-                        loss_tx_lte = self.get_loss(self.tx_freq_lte)
-                        loss_tx_fr1 = self.get_loss(self.tx_freq_fr1)
-                        self.rx_freq_fr1 = cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, self.tx_freq_fr1)
-                        self.rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, self.tx_freq_lte)
-                        self.loss_rx = self.get_loss(self.rx_freq_fr1)
-                        self.preset_instrument()
-                        self.set_test_end_lte(delay=0.5)
-                        self.set_test_end_fr1(delay=0.5)
-                        self.set_test_mode_lte()
-                        self.sig_gen_lte()
-                        self.sync_lte()
-                        self.set_test_mode_fr1()
-                        self.sig_gen_fr1()
-                        self.sync_fr1()
-                        self.tx_level = self.tx_level_endc_lte
-                        self.tx_set_lte()
-                        self.rx_path_setting_lte()
-                        self.loss_tx = loss_tx_lte
-                        self.port_tx = self.port_tx_lte
-                        aclr_mod_results = self.tx_measure_lte()
-                        logger.debug(aclr_mod_results)
-                        logger.info(f'LTE Power: {aclr_mod_results[3]}')
-                        self.tx_level = self.tx_level_endc_fr1
-                        self.tx_set_fr1()
-                        self.rx_path_setting_fr1()
-                        self.loss_tx = loss_tx_fr1
-                        self.port_tx = self.port_tx_fr1
-                        aclr_mod_results = self.tx_measure_fr1()
-                        logger.debug(aclr_mod_results)
-                        logger.info(f'FR1 Power: {aclr_mod_results[3]}')
-                        self.search_sensitivity_fr1()
-                        self.set_test_end_fr1(delay=0.5)
-                        self.set_test_end_lte(delay=0.5)
-
-
-
-
-
-
-
 
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
@@ -3609,8 +3734,8 @@ def main():
     # cmw100.set_gprf_tx_freq()
     # cmw100.get_gprf_power()
     cmw100.sensitivity_pipline_endc()
-    cmw100.preset_instrument()
-
+    # cmw100.preset_instrument()
+    # cmw100.tx_monitor_lte()
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')

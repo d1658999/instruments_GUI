@@ -4,6 +4,7 @@ gsm_bands = []
 hsupa_bands = [1]
 hsdpa_bands = [1]
 fr1_bands = [77, 78]
+endc_bands = ["3_78", "2_77"]
 band_segment = 'A'  # 'A' | 'B' for B28A ,B28B
 band_segment_fr1 = 'B'
 
@@ -17,10 +18,10 @@ fdd_tdd_cross_test = 0     # this is only for 8821,  0: only measure one of FDD 
 
 tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 
-tx_level = 0
-tx_level_endc_lte = 18
-tx_level_endc_fr1 = 0
-sa_nas = 0
+tx_level = 26
+tx_level_endc_lte = 26
+tx_level_endc_fr1 = 24
+sa_nas = 1
 duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2
 
 port_tx_lte = 1  # 1 ~ 8 default is  1
