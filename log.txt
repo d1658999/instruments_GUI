@@ -1,20 +1,33 @@
-[20220702 20:10:45 INFO    ] Modem comport is: COM19
-[20220702 20:10:45 INFO    ] open modem comport
-[20220702 20:10:46 INFO    ] Connect to CMW100
-[20220702 20:10:46 INFO    ] TCPIP0::127.0.0.1::INSTR
-[20220702 20:10:46 INFO    ] B38 does not have BW 5MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 30MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 50MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 60MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 70MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 80MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 90MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 100MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 5MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 30MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 50MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 60MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 70MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 80MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 90MHZ
-[20220702 20:10:46 INFO    ] B38 does not have BW 100MHZ
+[20220702 20:11:57 INFO    ] Import the last setting
+[20220702 20:11:57 DEBUG   ] now is false
+[20220702 20:11:57 DEBUG   ] now is false
+[20220702 20:11:57 DEBUG   ] Nothing to select for HSDPA
+[20220702 20:11:57 INFO    ] select HSUPA band: []
+[20220702 20:11:57 DEBUG   ] now is false
+[20220702 20:11:57 DEBUG   ] Nothing to select for WCDMA
+[20220702 20:11:57 INFO    ] select HSUPA band: []
+[20220702 20:11:57 DEBUG   ] now is false
+[20220702 20:11:57 DEBUG   ] Nothing to select for WCDMA
+[20220702 20:11:57 INFO    ] select WCDMA band: []
+[20220702 20:11:57 DEBUG   ] False
+[20220702 20:11:57 DEBUG   ] LB band all is unchecked
+[20220702 20:11:57 DEBUG   ] Nothing to select for LTE
+[20220702 20:11:57 INFO    ] select LTE band: []
+[20220702 20:11:57 DEBUG   ] False
+[20220702 20:11:57 DEBUG   ] LB band all is unchecked for FR1
+[20220702 20:11:57 DEBUG   ] Nothing to select for FR1
+[20220702 20:11:57 INFO    ] select FR1 band: []
+[20220702 20:11:57 DEBUG   ] MHB band all is unchecked
+[20220702 20:11:57 DEBUG   ] Nothing to select for LTE
+[20220702 20:11:57 INFO    ] select LTE band: []
+[20220702 20:11:57 DEBUG   ] False
+[20220702 20:11:57 DEBUG   ] MHB band all is unchecked for FR1
+[20220702 20:11:57 DEBUG   ] Nothing to select for FR1
+[20220702 20:11:57 INFO    ] select FR1 band: []
+[20220702 20:11:57 DEBUG   ] UHB band all is unchecked
+[20220702 20:11:57 DEBUG   ] Nothing to select for LTE
+[20220702 20:11:57 INFO    ] select LTE band: []
+[20220702 20:11:57 DEBUG   ] False
+[20220702 20:11:57 DEBUG   ] UHB band all is unchecked for FR1
+[20220702 20:11:57 DEBUG   ] Nothing to select for FR1
+[20220702 20:11:57 INFO    ] select FR1 band: []
