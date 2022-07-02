@@ -449,8 +449,7 @@ class MainApp:
         self.srs_path.set(ui_init.srs_path)
         self.sync_path.set(ui_init.sync_path)
 
-
-        #reet all the check button
+        # reet all the check button
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
@@ -536,7 +535,7 @@ class MainApp:
             elif band_fr1 == 38:
                 self.N38.set(band_fr1)
             # elif band_fr1 == 39:
-                # self.N39.set(band_fr1)
+            # self.N39.set(band_fr1)
             elif band_fr1 == 40:
                 self.N40.set(band_fr1)
             elif band_fr1 == 41:
@@ -872,8 +871,6 @@ class MainApp:
         tx_paths = self.wanted_tx_path()
         rx_paths = self.wanted_rx_path()
 
-
-
         # these are not list-like
         instrument = self.instrument.get()
         port_tx_lte = self.tx_port_lte.get()
@@ -1048,7 +1045,7 @@ class MainApp:
 
                 elif 'band_segment_fr1' in line:
                     temp_list = line.split('=')
-                    temp_list[1] =' ' + '"' + str(band_segment_fr1) + '"' + '\n'
+                    temp_list[1] = ' ' + '"' + str(band_segment_fr1) + '"' + '\n'
                     logger.debug('replace band segment setting for FR1')
                     line = '='.join(temp_list)
 
@@ -1153,7 +1150,6 @@ class MainApp:
         self.chan_M.set(True)
         self.chan_H.set(True)
         self.sa_nsa.set(0)
-
 
         logger.info(f'default instrument: {self.instrument.get()}')
 
@@ -1766,7 +1762,6 @@ class MainApp:
 
         self.wanted_band_FR1()
 
-
     # def off_all_none_MHB(self, event=None):
     #     self.MHB_all.set(False)
 
@@ -1872,7 +1867,6 @@ class MainApp:
             self.N79.set(0)
 
         self.wanted_band_FR1()
-
 
     # def off_all_none_WCDMA(self, event=None):
     #     self.WCDMA_all.set(False)
@@ -2202,7 +2196,6 @@ class MainApp:
         if self.rx_path == []:
             logger.debug('Nothing to select for rx path')
 
-
         logger.info(f'RX path select: {self.rx_path_show}')
         logger.debug(f'RX path select: {self.rx_path}')
 
@@ -2320,7 +2313,6 @@ class MainApp:
             if self.wanted_test['rx_sweep']:
                 inst.run_rx_sweep_ch()
 
-
     def measure(self):
         import want_test_band as wt
         self.button_run['state'] = tkinter.DISABLED
@@ -2413,7 +2405,6 @@ class MainApp:
         elif self.instrument.get() == 'Cmw100':
             from cmw100 import Cmw100
             self.test_pipeline(Cmw100)
-
 
         stop = datetime.datetime.now()
 
