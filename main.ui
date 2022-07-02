@@ -2998,6 +2998,20 @@ Disable</property>
                         </layout>
                       </object>
                     </child>
+                    <child>
+                      <object class="ttk.Checkbutton" id="checkbutton_endc">
+                        <property name="command" type="command" cbtype="simple">wanted_scripts</property>
+                        <property name="text" translatable="yes">ENDC</property>
+                        <property name="variable">boolean:endc</property>
+                        <layout manager="grid">
+                          <property name="column">0</property>
+                          <property name="padx">5</property>
+                          <property name="pady">5</property>
+                          <property name="row">6</property>
+                          <property name="sticky">nw</property>
+                        </layout>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -3718,6 +3732,169 @@ Disable</property>
                 </layout>
               </object>
             </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Labelframe" id="labelframe_endc">
+        <property name="height">200</property>
+        <property name="text" translatable="yes">ENDC_desens</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">6</property>
+          <property name="columnspan">2</property>
+          <property name="row">1</property>
+          <property name="sticky">nsew</property>
+        </layout>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_3_78">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B3_N78</property>
+            <property name="variable">boolean:B3_N78</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_2_77">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B2_N77</property>
+            <property name="variable">boolean:B2_N77</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_66_77">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B66_N77</property>
+            <property name="variable">boolean:B66_N77</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_66_2">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B66_N2</property>
+            <property name="variable">boolean:B66_N2</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_66_5">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B66_N5</property>
+            <property name="variable">boolean:B66_N5</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_12_78">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B12_N78</property>
+            <property name="variable">boolean:B12_N78</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">0</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_5_78">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B5_N78</property>
+            <property name="variable">boolean:B5_N78</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">1</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_28_78">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B28_N78</property>
+            <property name="variable">boolean:B28_N78</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">2</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton_5_77">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B5_N77</property>
+            <property name="variable">boolean:B5_N77</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">3</property>
+              <property name="sticky">nw</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Checkbutton" id="checkbutton13_5">
+            <property name="command" type="command" cbtype="simple">wanted_band_ENDC</property>
+            <property name="text" translatable="yes">B13_N5</property>
+            <property name="variable">boolean:B13_N5</property>
+            <bind sequence="&lt;1&gt;" handler="off_all_none_UHB" add="" />
+            <layout manager="grid">
+              <property name="column">1</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
+              <property name="row">4</property>
+              <property name="sticky">nw</property>
+            </layout>
           </object>
         </child>
       </object>

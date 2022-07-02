@@ -11,9 +11,10 @@ bands_wcdma = []
 bands_hsupa = []
 bands_hsdpa = []
 bands_gsm = None
+bands_endc = []
 
-tx = True
-rx = False
+tx = False
+rx = True
 rx_sweep = False
 tx_level_sweep = False
 tx_freq_sweep = False
@@ -23,7 +24,7 @@ band_segment = "A"
 band_segment_fr1 = "A"
 
 port_tx_lte = 1
-port_tx_fr1 = 1
+port_tx_fr1 = 4
 asw_path = 0
 srs_path = 0
 sync_path = 0
@@ -31,7 +32,7 @@ sync_path = 0
 tx_paths = ['TX1']
 rx_paths = []
 
-scripts = ['FCC']
+scripts = ['GENERAL']
 type_fr1 = ['DFTS']
 mcs_lte = ['QPSK', 'Q16', 'Q64', 'Q256']
 mcs_fr1 = ['BPSK', 'QPSK', 'Q16', 'Q64', 'Q256']

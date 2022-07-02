@@ -29,6 +29,9 @@ class MainApp:
         self.checkbox_hsupa = builder.get_object("checkbutton_WCDMA", master)
         self.checkbox_hsdpa = builder.get_object("checkbutton_HSUPA", master)
         self.checkbox_wcdma = builder.get_object("checkbutton_HSDPA", master)
+        self.style = ttk.Style(self.mainwindow)
+        self.style.theme_use('xpnative')
+
 
         self.instrument = None
         self.B5 = None
@@ -48,7 +51,6 @@ class MainApp:
         self.LB_all = None
         self.B21 = None
         self.band_segment = None
-        self.band_segment_fr1 = None
         self.B1 = None
         self.B2 = None
         self.B3 = None
@@ -120,6 +122,8 @@ class MainApp:
         self.chan_L = None
         self.chan_M = None
         self.chan_H = None
+        self.tx_level_sweep = None
+        self.tx_freq_sweep = None
         self.N5 = None
         self.N8 = None
         self.N12 = None
@@ -133,11 +137,11 @@ class MainApp:
         self.N32 = None
         self.N71 = None
         self.LB_all_fr1 = None
+        self.band_segment_fr1 = None
         self.N24 = None
         self.N1 = None
         self.N2 = None
         self.N3 = None
-        # self.N4 = None
         self.N7 = None
         self.N30 = None
         self.N25 = None
@@ -146,13 +150,13 @@ class MainApp:
         self.N40 = None
         self.N38 = None
         self.N41 = None
-        self.N34 = None
         self.MHB_all_fr1 = None
-        self.N48 = None
+        self.N34 = None
         self.N77 = None
         self.N78 = None
-        self.N79 = None
         self.UHB_all_fr1 = None
+        self.N48 = None
+        self.N79 = None
         self.bw5_fr1 = None
         self.bw10_fr1 = None
         self.bw15_fr1 = None
@@ -170,9 +174,9 @@ class MainApp:
         self.q16_fr1 = None
         self.q64_fr1 = None
         self.q256_fr1 = None
-        self.bpsk_fr1 = None
         self.dfts = None
         self.cp = None
+        self.bpsk_fr1 = None
         self.inner_full_fr1 = None
         self.outer_full_fr1 = None
         self.inner_1rb_left_fr1 = None
@@ -188,10 +192,12 @@ class MainApp:
         self.general = None
         self.fcc = None
         self.ce = None
+        self.endc = None
         self.tx_port_lte = None
         self.tx_port_fr1 = None
         self.tx1 = None
         self.tx2 = None
+        self.sync_path = None
         self.ulmimo = None
         self.rx0 = None
         self.rx1 = None
@@ -202,9 +208,16 @@ class MainApp:
         self.rx_all_path = None
         self.asw_path = None
         self.srs_path = None
-        self.sync_path = None
-        self.tx_level_sweep = None
-        self.tx_freq_sweep = None
+        self.B3_N78 = None
+        self.B2_N77 = None
+        self.B66_N77 = None
+        self.B66_N2 = None
+        self.B66_N5 = None
+        self.B12_N78 = None
+        self.B5_N78 = None
+        self.B28_N78 = None
+        self.B5_N77 = None
+        self.B13_N5 = None
         builder.import_variables(
             self,
             [
@@ -226,7 +239,6 @@ class MainApp:
                 "LB_all",
                 "B21",
                 "band_segment",
-                "band_segment_fr1",
                 "B1",
                 "B2",
                 "B3",
@@ -307,17 +319,17 @@ class MainApp:
                 "N14",
                 "N18",
                 "N20",
-                "N24",
                 "N26",
                 "N28",
                 "N29",
                 "N32",
                 "N71",
                 "LB_all_fr1",
+                "band_segment_fr1",
+                "N24",
                 "N1",
                 "N2",
                 "N3",
-                # "N4",
                 "N7",
                 "N30",
                 "N25",
@@ -326,13 +338,13 @@ class MainApp:
                 "N40",
                 "N38",
                 "N41",
-                "N34",
                 "MHB_all_fr1",
-                "N48",
+                "N34",
                 "N77",
                 "N78",
-                "N79",
                 "UHB_all_fr1",
+                "N48",
+                "N79",
                 "bw5_fr1",
                 "bw10_fr1",
                 "bw15_fr1",
@@ -350,9 +362,9 @@ class MainApp:
                 "q16_fr1",
                 "q64_fr1",
                 "q256_fr1",
-                "bpsk_fr1",
                 "dfts",
                 "cp",
+                "bpsk_fr1",
                 "inner_full_fr1",
                 "outer_full_fr1",
                 "inner_1rb_left_fr1",
@@ -368,10 +380,12 @@ class MainApp:
                 "general",
                 "fcc",
                 "ce",
+                "endc",
                 "tx_port_lte",
                 "tx_port_fr1",
                 "tx1",
                 "tx2",
+                "sync_path",
                 "ulmimo",
                 "rx0",
                 "rx1",
@@ -382,8 +396,16 @@ class MainApp:
                 "rx_all_path",
                 "asw_path",
                 "srs_path",
-                "sync_path",
-
+                "B3_N78",
+                "B2_N77",
+                "B66_N77",
+                "B66_N2",
+                "B66_N5",
+                "B12_N78",
+                "B5_N78",
+                "B28_N78",
+                "B5_N77",
+                "B13_N5",
             ],
         )
 
@@ -443,6 +465,28 @@ class MainApp:
         self.off_all_reset_UHB()
 
         # list-like
+        for band_endc in ui_init.bands_endc:
+            if band_endc == '3_78':
+                self.B3_N78.set(True)
+            elif band_endc == '2_77':
+                self.B2_N77.set(True)
+            elif band_endc == '66_77':
+                self.B66_N77.set(True)
+            elif band_endc == '66_2':
+                self.B66_N2.set(True)
+            elif band_endc == '66_5':
+                self.B66_N5.set(True)
+            elif band_endc == '12_78':
+                self.B12_N78.set(True)
+            elif band_endc == '5_78':
+                self.B5_N78.set(True)
+            elif band_endc == '28_78':
+                self.B28_N78.set(True)
+            elif band_endc == '5_77':
+                self.B5_N77.set(True)
+            elif band_endc == '13_5':
+                self.B13_N5.set(True)
+
         for band_fr1 in ui_init.bands_fr1:
             if band_fr1 == 1:
                 self.N1.set(band_fr1)
@@ -707,6 +751,8 @@ class MainApp:
                 self.fcc.set(True)
             elif script == 'CE':
                 self.ce.set(True)
+            elif script == 'ENDC':
+                self.endc.set(True)
 
         for type in ui_init.type_fr1:
             if type == 'DFTS':
@@ -817,6 +863,7 @@ class MainApp:
         bands_hsupa = self.wanted_band_HSUPA()
         bands_hsdpa = self.wanted_band_HSDPA()
         bands_gsm = self.wanted_band_GSM()
+        bands_endc = self.wanted_band_ENDC()
         scripts = self.wanted_scripts()
         type_fr1 = self.wanted_type()
         mcs_lte = self.wanted_mcs_lte()
@@ -878,6 +925,12 @@ class MainApp:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(bands_fr1) + '\n'
                     logger.debug('replace band FR1')
+                    line = '='.join(temp_list)
+
+                elif 'bands_endc' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_endc) + '\n'
+                    logger.debug('replace band ENDC')
                     line = '='.join(temp_list)
 
                 elif 'scripts' in line:
@@ -1104,6 +1157,46 @@ class MainApp:
 
 
         logger.info(f'default instrument: {self.instrument.get()}')
+
+    def wanted_band_ENDC(self):
+        self.band_endc = []
+
+        if self.B3_N78.get():
+            logger.debug(self.B3_N78.get())
+            self.band_endc.append('3_78')
+        if self.B2_N77.get():
+            logger.debug(self.B2_N77.get())
+            self.band_endc.append('2_77')
+        if self.B66_N77.get():
+            logger.debug(self.B66_N77.get())
+            self.band_endc.append('66_77')
+        if self.B66_N2.get():
+            logger.debug(self.B66_N2.get())
+            self.band_endc.append('66_2')
+        if self.B66_N5.get():
+            logger.debug(self.B66_N5.get())
+            self.band_endc.append('66_5')
+        if self.B12_N78.get():
+            logger.debug(self.B12_N78.get())
+            self.band_endc.append('12_78')
+        if self.B5_N78.get():
+            logger.debug(self.B5_N78.get())
+            self.band_endc.append('5_78')
+        if self.B28_N78.get():
+            logger.debug(self.B28_N78.get())
+            self.band_endc.append('28_78')
+        if self.B5_N77.get():
+            logger.debug(self.B5_N77.get())
+            self.band_endc.append('5_77')
+        if self.B13_N5.get():
+            logger.debug(self.B13_N5.get())
+            self.band_endc.append('13_5')
+
+        if self.band_endc == []:
+            logger.debug('Nothing to select for ENDC')
+
+        logger.info(f'select ENDC band: {self.band_endc}')
+        return self.band_endc
 
     def wanted_band_FR1(self):
         self.band_fr1 = []
@@ -2031,6 +2124,10 @@ class MainApp:
             logger.debug('CE')
             self.script.append('CE')
 
+        if self.endc.get():
+            logger.debug('ENDC')
+            self.script.append('ENDC')
+
         if self.script == []:
             logger.debug('Nothing to select for script')
 
@@ -2232,6 +2329,7 @@ class MainApp:
         self.export_ui_setting()
         # list-like
         wt.tech = self.wanted_tech()
+        wt.endc_bands = self.wanted_band_ENDC()
         wt.fr1_bands = self.wanted_band_FR1()
         wt.lte_bands = self.wanted_band_LTE()
         wt.wcdma_bands = self.wanted_band_WCDMA()

@@ -936,8 +936,8 @@ class Cmw100:
         self.rx_path_fr1 = 15
 
         for tech in wt.tech:
-            if tech == 'ENDC' and wt.endc_bands != []:
-                self.tech = 'ENDC'
+            if tech == 'FR1' and wt.endc_bands != []:
+                self.tech = 'FR1'
                 for band_combo in wt.endc_bands:
                     data = []
                     [self.band_lte, self.band_fr1] = band_combo.split('_')
@@ -3720,7 +3720,11 @@ class Cmw100:
             if tech == 'LTE':
                 self.search_sensitivity_pipline_lte()
             elif tech == 'FR1':
-                self.search_sensitivity_pipline_fr1()
+                for script in wt.scripts:
+                    if script == 'GENERAL':
+                        self.search_sensitivity_pipline_fr1()
+                    elif script == 'ENDC':
+                        self.sensitivity_pipline_endc()
 
     def run_tx_level_sweep(self):
         for tech in wt.tech:

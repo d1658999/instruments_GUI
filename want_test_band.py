@@ -11,7 +11,7 @@ band_segment_fr1 = 'B'
 lte_bandwidths = [10]     # 1.4, 3, 5, 10, 15, 20
 fr1_bandwidths = [10]  # 10, 15, 20, 25, 30 , 40, 50, 60, 80, 90, 100, 70
 
-tech = ['ENDC']   # 'LTE' | 'WCDMA' | 'GSM' | 'HSUPA' | 'HSDPA' | 'FR1' | 'ENDC'
+tech = ['FR1']   # 'LTE' | 'WCDMA' | 'GSM' | 'HSUPA' | 'HSDPA' | 'FR1'
 channel = 'LMH'  # 'LMH'
 
 fdd_tdd_cross_test = 0     # this is only for 8821,  0: only measure one of FDD or TDD; 1: measure both FDD and TDD
