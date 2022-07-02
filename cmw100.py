@@ -11,7 +11,6 @@ import pathlib
 
 import fcc
 import ce
-import endc
 import scripts
 # from varname import nameof
 import math
@@ -276,10 +275,10 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:TRIG:SLOP REDG')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:SLEN 5.0e-3')
         # self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 8.0e-4')
-        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 4.0e-3')
+        self.command_cmw100_write(f'CONF:GPRF:MEAS:POW:MLEN 5.0e-3')
         # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 2.1E-3')
-        self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 5E-4')
-        # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 0')
+        # self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 5E-4')
+        self.command_cmw100_write(f'TRIGger:GPRF:MEAS:POWer:OFFSet 0')
         self.command_cmw100_write(f'TRIG:GPRF:MEAS:POW:MODE ONCE')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:ENP {self.tx_level}')
         self.command_cmw100_write(f'CONF:GPRF:MEAS:RFS:UMAR 10.000000')
@@ -295,11 +294,9 @@ class Cmw100:
         while f_state != 'RDY':
             f_state = self.command_cmw100_query('FETC:GPRF:MEAS:POW:STAT?')
             self.command_cmw100_query('*OPC?')
-        power_average = round(eval(self.command_cmw100_query('FETC:GPRF:MEAS:POWer:AVER?'))[1],2)
+        power_average = round(eval(self.command_cmw100_query('FETC:GPRF:MEAS:POWer:AVER?'))[1], 2)
         logger.info(f'Get the GPRF power: {power_average}')
         return power_average
-
-
 
     def sig_gen_lte(self):
         logger.info('----------Sig Gen----------')
@@ -423,7 +420,8 @@ class Cmw100:
             self.ul_slot = self.duty_cycle_dict[wt.duty_cycle][3]
             self.ul_symbol = self.duty_cycle_dict[wt.duty_cycle][4]
             logger.info('---TDD, so need to set the duty cycle')
-            logger.debug(f'Duty Cycle setting: {self.uldl_period}, {self.dl_slot}, {self.dl_symbol}, {self.ul_slot}, {self.ul_symbol}')
+            logger.debug(
+                f'Duty Cycle setting: {self.uldl_period}, {self.dl_slot}, {self.dl_symbol}, {self.ul_slot}, {self.ul_symbol}')
         else:
             self.uldl_period = 0
             self.dl_slot = 0
@@ -431,15 +429,16 @@ class Cmw100:
             self.ul_slot = 0
             self.ul_symbol = 0
             logger.info("---FDD, so don't need to set the duty cycle")
-            logger.debug(f'Duty Cycle setting: {self.uldl_period}, {self.dl_slot}, {self.dl_symbol}, {self.ul_slot}, {self.ul_symbol}')
+            logger.debug(
+                f'Duty Cycle setting: {self.uldl_period}, {self.dl_slot}, {self.dl_symbol}, {self.ul_slot}, {self.ul_symbol}')
 
     def tx_set_no_sync_fr1(self):
         logger.info('---------Tx No Set----------')
         self.scs = 30 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 15
         self.command(
             f'AT+NRFACTREQ={self.tx_path_dict[self.tx_path]},{self.tx_freq_fr1},{self.bw_fr1_dict[self.bw_fr1]},{self.scs_dict[self.scs]},{self.rb_size_fr1},{self.rb_start_fr1},{self.mcs_fr1_dict[self.mcs_fr1]},{self.type_dict[self.type_fr1]},{self.tx_level},{self.uldl_period},{self.dl_slot},{self.dl_symbol},{self.ul_slot},{self.ul_symbol}')
-        logger.info(f'TX_PATH: {self.tx_path}, BW: {self.bw_fr1}, TX_FREQ: {self.tx_freq_fr1}, RB_SIZE: {self.rb_size_fr1}, RB_OFFSET: {self.rb_start_fr1}, MCS: {self.mcs_fr1}, TX_LEVEL: {self.tx_level}, Duty cycle: {wt.duty_cycle} %')
-
+        logger.info(
+            f'TX_PATH: {self.tx_path}, BW: {self.bw_fr1}, TX_FREQ: {self.tx_freq_fr1}, RB_SIZE: {self.rb_size_fr1}, RB_OFFSET: {self.rb_start_fr1}, MCS: {self.mcs_fr1}, TX_LEVEL: {self.tx_level}, Duty cycle: {wt.duty_cycle} %')
 
     def antenna_switch(self):  # 1: AS ON, 0: AS OFF
         logger.info('---------Antenna Switch----------')
@@ -481,6 +480,7 @@ class Cmw100:
         logger.info('----------Rx path setting----------')
         self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
         # self.command_cmw100_query('*OPC?')
+
     def tx_monitor_lte(self):
         logger.info('---------Tx Monitor----------')
         # self.sig_gen_lte()
@@ -522,7 +522,6 @@ class Cmw100:
         logger.info(f'LTE power by Tx monitor: {round(eval(power), 2)}')
         return round(eval(power), 2)
 
-
     def tx_measure_lte(self):
         logger.info('---------Tx Measure----------')
         mode = 'TDD' if self.band_lte in [38, 39, 40, 41, 42, 48] else 'FDD'
@@ -541,15 +540,33 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:AUTO OFF')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOEX ON')
         lim1 = -10 if self.bw_lte == 1.4 else -13 if self.bw_lte == 3 else -15 if self.bw_lte == 5 else -18 if self.bw_lte == 10 else -20 if self.bw_lte == 15 else -21
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{self.bw_lte*10} ON,0MHz,1MHz,{lim1},K030')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{self.bw_lte*10} ON,1MHz,2.5MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte*10} ON,2.5MHz,2.8MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte*10} ON,2.5MHz,2.8MHz,-10,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte*10} ON,2.8MHz,5MHz,-10,M1') if self.bw_lte >= 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte*10} OFF,2.8MHz,5MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} ON,5MHz,6MHz,-13,M1') if self.bw_lte > 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} OFF,5MHz,6MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte*10} ON,5MHz,6MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} ON,6MHz,10MHz,-13,M1') if self.bw_lte > 5 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} OFF,6MHz,10MHz,-25,M1') if self.bw_lte < 5 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte*10} ON,6MHz,10MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} ON,10MHz,15MHz,-13,M1') if self.bw_lte > 10 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} OFF,10MHz,15MHz,-25,M1') if self.bw_lte < 10 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte*10} ON,10MHz,15MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} ON,15MHz,20MHz,-13,M1') if self.bw_lte > 15 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} OFF,15MHz,20MHz,-25,M1') if self.bw_lte < 15 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte*10} ON,15MHz,20MHz,-25,M1')
-        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte*10} ON,20MHz,25MHz,-25,M1') if self.bw_lte == 20 else self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte*10} OFF,20MHz,25MHz,-25,M1')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM1:CBAN{self.bw_lte * 10} ON,0MHz,1MHz,{lim1},K030')
+        self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM2:CBAN{self.bw_lte * 10} ON,1MHz,2.5MHz,-10,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte * 10} ON,2.5MHz,2.8MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM3:CBAN{self.bw_lte * 10} ON,2.5MHz,2.8MHz,-10,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte * 10} ON,2.8MHz,5MHz,-10,M1') if self.bw_lte >= 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM4:CBAN{self.bw_lte * 10} OFF,2.8MHz,5MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte * 10} ON,5MHz,6MHz,-13,M1') if self.bw_lte > 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte * 10} OFF,5MHz,6MHz,-25,M1') if self.bw_lte < 3 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM5:CBAN{self.bw_lte * 10} ON,5MHz,6MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte * 10} ON,6MHz,10MHz,-13,M1') if self.bw_lte > 5 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte * 10} OFF,6MHz,10MHz,-25,M1') if self.bw_lte < 5 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM6:CBAN{self.bw_lte * 10} ON,6MHz,10MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte * 10} ON,10MHz,15MHz,-13,M1') if self.bw_lte > 10 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte * 10} OFF,10MHz,15MHz,-25,M1') if self.bw_lte < 10 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM7:CBAN{self.bw_lte * 10} ON,10MHz,15MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte * 10} ON,15MHz,20MHz,-13,M1') if self.bw_lte > 15 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte * 10} OFF,15MHz,20MHz,-25,M1') if self.bw_lte < 15 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM8:CBAN{self.bw_lte * 10} ON,15MHz,20MHz,-25,M1')
+        self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte * 10} ON,20MHz,25MHz,-25,M1') if self.bw_lte == 20 else self.command_cmw100_write(
+            f'CONF:LTE:MEAS:MEV:LIM:SEM:LIM9:CBAN{self.bw_lte * 10} OFF,20MHz,25MHz,-25,M1')
         self.command_cmw100_query('SYST:ERR:ALL?')
         self.command_cmw100_write(f'CONFigure:LTE:MEAS:MEValuation:MSLot ALL')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:UMAR 10.000000')
@@ -924,56 +941,64 @@ class Cmw100:
                 for band_combo in wt.endc_bands:
                     data = []
                     [self.band_lte, self.band_fr1] = band_combo.split('_')
-                    (self.bw_lte, self.bw_fr1) = scripts.ENDC[band_combo][0]
-                    (self.rb_size_lte, self.rb_start_lte) = scripts.ENDC[band_combo][1]
-                    (self.rb_size_fr1, self.rb_start_fr1) = scripts.ENDC[band_combo][2]
-                    for self.tx_freq_lte, self.tx_freq_fr1 in endc.tx_freq_list_fr1[band_combo]:
-                        self.tx_freq_lte = int(self.tx_freq_lte * 1000)
-                        self.tx_freq_fr1 = int(self.tx_freq_fr1 * 1000)
-                        loss_tx_lte = self.get_loss(self.tx_freq_lte)
-                        loss_tx_fr1 = self.get_loss(self.tx_freq_fr1)
-                        self.rx_freq_fr1 = cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, self.tx_freq_fr1)
-                        self.rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, self.tx_freq_lte)
-                        self.loss_rx = self.get_loss(self.rx_freq_fr1)
-                        self.preset_instrument()
-                        self.set_test_end_lte(delay=0.5)
-                        self.set_test_end_fr1(delay=0.5)
-                        self.set_test_mode_lte()
-                        self.sig_gen_lte()
-                        self.sync_lte()
-                        self.set_test_mode_fr1()
-                        self.sig_gen_fr1()
-                        self.sync_fr1()
-                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                            # set LTE power
-                            self.tx_level = wt.tx_level_endc_lte if ue_power_bool == 1 else -10
-                            self.loss_tx = loss_tx_lte
-                            self.port_tx = self.port_tx_lte
-                            self.tx_set_lte()
-                            self.rx_path_setting_lte()
-                            # set FR1 power
-                            self.tx_level = self.tx_level_endc_fr1
-                            self.loss_tx = loss_tx_fr1
-                            self.port_tx = self.port_tx_fr1
-                            self.tx_set_fr1()
-                            self.rx_path_setting_fr1()
-                            aclr_mod_results_fr1 = self.tx_measure_fr1()
-                            logger.debug(aclr_mod_results_fr1)
-                            logger.info(f'FR1 Power: {aclr_mod_results_fr1[3]}')
-                            self.power_endc_fr1 = round(aclr_mod_results_fr1[3], 2)
-                            self.search_sensitivity_fr1()
-                            # set LTE power and get ENDC power for LTE
-                            self.tx_level = wt.tx_level_endc_lte
-                            self.loss_tx = loss_tx_lte
-                            self.port_tx = self.port_tx_lte
-                            self.power_monitor_endc_lte = self.tx_monitor_lte()
-                            data.append([int(self.band_lte), int(self.band_fr1), self.power_monitor_endc_lte, self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1, self.tx_freq_lte, self.tx_freq_fr1, self.tx_level, self.tx_level_endc_fr1, self.rb_size_lte, self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1])
+                    for bw_lte in scripts.ENDC[band_combo]:
+                        self.bw_lte = bw_lte
+                        for bw_fr1 in scripts.ENDC[band_combo][bw_lte]:
+                            self.bw_fr1 = bw_fr1
+                            for chan_rb in scripts.ENDC[band_combo][bw_lte][bw_fr1]:
+                                (self.tx_freq_lte, self.tx_freq_fr1) = chan_rb[0]
+                                (self.rb_size_lte, self.rb_start_lte) = chan_rb[1]
+                                (self.rb_size_fr1, self.rb_start_fr1) = chan_rb[2]
+                                self.tx_freq_lte = int(self.tx_freq_lte * 1000)
+                                self.tx_freq_fr1 = int(self.tx_freq_fr1 * 1000)
+                                loss_tx_lte = self.get_loss(self.tx_freq_lte)
+                                loss_tx_fr1 = self.get_loss(self.tx_freq_fr1)
+                                self.rx_freq_fr1 = cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, self.tx_freq_fr1)
+                                self.rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, self.tx_freq_lte)
+                                self.loss_rx = self.get_loss(self.rx_freq_fr1)
+                                self.preset_instrument()
+                                self.set_test_end_lte(delay=0.5)
+                                self.set_test_end_fr1(delay=0.5)
+                                self.set_test_mode_lte()
+                                self.sig_gen_lte()
+                                self.sync_lte()
+                                self.set_test_mode_fr1()
+                                self.sig_gen_fr1()
+                                self.sync_fr1()
+                                for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                                    # set LTE power
+                                    self.tx_level = wt.tx_level_endc_lte if ue_power_bool == 1 else -10
+                                    self.loss_tx = loss_tx_lte
+                                    self.port_tx = self.port_tx_lte
+                                    self.tx_set_lte()
+                                    self.rx_path_setting_lte()
+                                    # set FR1 power
+                                    self.tx_level = self.tx_level_endc_fr1
+                                    self.loss_tx = loss_tx_fr1
+                                    self.port_tx = self.port_tx_fr1
+                                    self.tx_set_fr1()
+                                    self.rx_path_setting_fr1()
+                                    aclr_mod_results_fr1 = self.tx_measure_fr1()
+                                    logger.debug(aclr_mod_results_fr1)
+                                    logger.info(f'FR1 Power: {aclr_mod_results_fr1[3]}')
+                                    self.power_endc_fr1 = round(aclr_mod_results_fr1[3], 2)
+                                    self.search_sensitivity_fr1()
+                                    # set LTE power and get ENDC power for LTE
+                                    self.tx_level = wt.tx_level_endc_lte if ue_power_bool == 1 else -10
+                                    self.loss_tx = loss_tx_lte
+                                    self.port_tx = self.port_tx_lte
+                                    self.power_monitor_endc_lte = self.tx_monitor_lte()
+                                    data.append([int(self.band_lte), int(self.band_fr1), self.power_monitor_endc_lte,
+                                                 self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1, self.tx_freq_lte,
+                                                 self.tx_freq_fr1, self.tx_level, self.tx_level_endc_fr1, self.rb_size_lte,
+                                                 self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1])
                     self.set_test_end_fr1(delay=0.5)
                     self.set_test_end_lte(delay=0.5)
                     self.endc_relative_power_senstivity_export_excel(data)
                 self.rx_desense_endc_progress()
-
-    def search_sensitivity_pipline_fast_lte(self):  # this is for that RSRP and  CINR without issue because this is calculated method
+        self.rxs_endc_plot('Sensitivty_ENDC.xlsx')
+    def search_sensitivity_pipline_fast_lte(
+            self):  # this is for that RSRP and  CINR without issue because this is calculated method
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx_lte
         self.chan = wt.channel
@@ -1041,7 +1066,8 @@ class Cmw100:
                                                                      mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_lmh_progress_fr1(self):
-        rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1, self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
+        rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1,
+                                                   self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         rx_freq_select_list = []
         for chan in self.chan:
             if chan == 'L':
@@ -1067,7 +1093,9 @@ class Cmw100:
                 # self.command_cmw100_query('*OPC?')
                 self.sig_gen_fr1()
                 self.sync_fr1()
-                self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1, self.scs, self.bw_fr1)  # for RB set(including special tx setting)
+                self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1,
+                                                                                                       self.scs,
+                                                                                                       self.bw_fr1)  # for RB set(including special tx setting)
                 self.tx_set_fr1()
                 aclr_mod_results = self.tx_measure_fr1()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
                 self.rx_path_setting_fr1()
@@ -1177,13 +1205,13 @@ class Cmw100:
             max_col = ws.max_column
             row = max_row + 1
             for col in range(max_col):
-                ws.cell(row, col+1).value = d[col]
+                ws.cell(row, col + 1).value = d[col]
 
         wb.save(filename)
         wb.close()
 
-
-    def rx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level, mode=0):  # mode general: 0,  mode LMH: 1
+    def rx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level,
+                                            mode=0):  # mode general: 0,  mode LMH: 1
         """
         data is dict like:
         tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET]
@@ -1469,7 +1497,7 @@ class Cmw100:
                             ws.cell(row, 6).value = measured_data[1]  # rx_level
                             ws.cell(row, 7).value = measured_data[2][0]  # RSRP
                             ws.cell(row, 8).value = measured_data[2][1]
-                            ws.cell(row, 9).value =  measured_data[2][2]
+                            ws.cell(row, 9).value = measured_data[2][2]
                             ws.cell(row, 10).value = measured_data[2][3]
                             ws.cell(row, 11).value = measured_data[3][0]  # CINR
                             ws.cell(row, 12).value = measured_data[3][1]
@@ -1589,7 +1617,6 @@ class Cmw100:
         wb.save('Sensitivty_ENDC.xlsx')
         wb.close()
 
-
     def tx_power_fcc_ce_export_excel(self, data):
         logger.info('----------save to excel----------')
         filename = f'Power_{self.script}_{self.tech}.xlsx'
@@ -1654,7 +1681,8 @@ class Cmw100:
         wb.save(filename)
         wb.close()
 
-    def tx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level, mode=0):  # mode general: 0,  mode LMH: 1
+    def tx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level,
+                                            mode=0):  # mode general: 0,  mode LMH: 1
         """
         data is dict like:
         tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET]
@@ -2532,7 +2560,8 @@ class Cmw100:
 
         tx_freq_select_list = []
         try:
-            tx_freq_select_list = [int(freq*1000) for freq in fcc.tx_freq_list_fr1[self.band_fr1][self.bw_fr1]]  # band > bw > tx_fre1_list
+            tx_freq_select_list = [int(freq * 1000) for freq in
+                                   fcc.tx_freq_list_fr1[self.band_fr1][self.bw_fr1]]  # band > bw > tx_fre1_list
         except KeyError as err:
             logger.info(f"this Band: {err} don't have to  test this BW: {self.bw_fr1} for FCC")
 
@@ -2543,7 +2572,8 @@ class Cmw100:
                     self.script = script
                     self.rb_state = 'FCC'
                     try:
-                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.FCC_FR1[self.band_fr1][self.bw_fr1][self.mcs_fr1]:
+                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.FCC_FR1[self.band_fr1][self.bw_fr1][
+                            self.mcs_fr1]:
                             data = {}
                             for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
                                 chan_mark = f'chan{num}'
@@ -2552,14 +2582,15 @@ class Cmw100:
                                 self.set_duty_cycle()
                                 self.tx_set_no_sync_fr1()
                                 power_results = self.get_gprf_power()
-                                data[self.tx_freq_fr1] = (chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
+                                data[self.tx_freq_fr1] = (
+                                chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
                             logger.debug(data)
                             # ready to export to excel
                             self.filename = self.tx_power_fcc_ce_export_excel(data)
                     except KeyError as err:
                         logger.debug(f'show error: {err}')
-                        logger.info(f"Band {self.band_fr1}, BW: {self.bw_fr1} don't need to test this MCS: {self.mcs_fr1} for FCC")
-
+                        logger.info(
+                            f"Band {self.band_fr1}, BW: {self.bw_fr1} don't need to test this MCS: {self.mcs_fr1} for FCC")
 
         self.set_test_end_fr1()
         # if plot == True:
@@ -2583,7 +2614,8 @@ class Cmw100:
 
         tx_freq_select_list = []
         try:
-            tx_freq_select_list = [int(freq*1000) for freq in ce.tx_freq_list_fr1[self.band_fr1][self.bw_fr1]]  # band > bw > tx_fre1_list
+            tx_freq_select_list = [int(freq * 1000) for freq in
+                                   ce.tx_freq_list_fr1[self.band_fr1][self.bw_fr1]]  # band > bw > tx_fre1_list
         except KeyError as err:
             logger.info(f"this Band: {err} don't have to  test this BW: {self.bw_fr1} for CE")
 
@@ -2594,7 +2626,8 @@ class Cmw100:
                     self.script = script
                     self.rb_state = 'CE'
                     try:
-                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.CE_FR1[self.band_fr1][self.bw_fr1][self.mcs_fr1]:
+                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.CE_FR1[self.band_fr1][self.bw_fr1][
+                            self.mcs_fr1]:
                             data = {}
                             for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
                                 chan_mark = f'chan{num}'
@@ -2603,14 +2636,15 @@ class Cmw100:
                                 self.set_duty_cycle()
                                 self.tx_set_no_sync_fr1()
                                 power_results = self.get_gprf_power()
-                                data[self.tx_freq_fr1] = (chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
+                                data[self.tx_freq_fr1] = (
+                                chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
                             logger.debug(data)
                             # ready to export to excel
                             self.filename = self.tx_power_fcc_ce_export_excel(data)
                     except KeyError as err:
                         logger.debug(f'show error: {err}')
-                        logger.info(f"Band {self.band_fr1}, BW: {self.bw_fr1} don't need to test this MCS: {self.mcs_fr1} for CE")
-
+                        logger.info(
+                            f"Band {self.band_fr1}, BW: {self.bw_fr1} don't need to test this MCS: {self.mcs_fr1} for CE")
 
         self.set_test_end_fr1()
         # if plot == True:
@@ -3354,80 +3388,78 @@ class Cmw100:
                     chart2.y_axis.axId = 200
                     chart2.y_axis.title = 'Diff(dB)'
 
-
                     chart1.y_axis.crosses = "max"
                     chart1 += chart2
 
                     ws_desens.add_chart(chart1, "F1")
 
-
-                        # logger.info('----------Power---------')
-                        # chart = LineChart()
-                        # chart.title = 'Power'
-                        # chart.y_axis.title = 'Power(dBm)'
-                        # chart.x_axis.title = 'Band'
-                        # chart.x_axis.tickLblPos = 'low'
-                        #
-                        # chart.height = 20
-                        # chart.width = 32
-                        #
-                        # y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
-                        # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        # chart.add_data(y_data, titles_from_data=True)
-                        # chart.set_categories(x_data)
-                        #
-                        # chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                        # chart.series[0].marker.size = 10
-                        #
-                        # ws.add_chart(chart, "U1")
-                        #
-                        # logger.info('----------ACLR---------')
-                        # chart = LineChart()
-                        # chart.title = 'ACLR'
-                        # chart.y_axis.title = 'ACLR(dB)'
-                        # chart.x_axis.title = 'Band'
-                        # chart.x_axis.tickLblPos = 'low'
-                        # chart.y_axis.scaling.min = -60
-                        # chart.y_axis.scaling.max = -20
-                        #
-                        # chart.height = 20
-                        # chart.width = 32
-                        #
-                        # y_data = Reference(ws, min_col=6, min_row=1, max_col=11, max_row=ws.max_row)
-                        # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        # chart.add_data(y_data, titles_from_data=True)
-                        # chart.set_categories(x_data)
-                        #
-                        # chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
-                        # chart.series[0].marker.size = 10
-                        # chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
-                        # chart.series[1].marker.size = 10
-                        # chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                        # chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                        # chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
-                        # chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
-                        #
-                        # ws.add_chart(chart, "U39")
-                        #
-                        # logger.info('----------EVM---------')
-                        # chart = LineChart()
-                        # chart.title = 'EVM'
-                        # chart.y_axis.title = 'EVM(%)'
-                        # chart.x_axis.title = 'Band'
-                        # chart.x_axis.tickLblPos = 'low'
-                        #
-                        # chart.height = 20
-                        # chart.width = 32
-                        #
-                        # y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
-                        # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        # chart.add_data(y_data, titles_from_data=True)
-                        # chart.set_categories(x_data)
-                        #
-                        # chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                        # chart.series[0].marker.size = 10
-                        #
-                        # ws.add_chart(chart, "U77")
+                    # logger.info('----------Power---------')
+                    # chart = LineChart()
+                    # chart.title = 'Power'
+                    # chart.y_axis.title = 'Power(dBm)'
+                    # chart.x_axis.title = 'Band'
+                    # chart.x_axis.tickLblPos = 'low'
+                    #
+                    # chart.height = 20
+                    # chart.width = 32
+                    #
+                    # y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
+                    # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    # chart.add_data(y_data, titles_from_data=True)
+                    # chart.set_categories(x_data)
+                    #
+                    # chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    # chart.series[0].marker.size = 10
+                    #
+                    # ws.add_chart(chart, "U1")
+                    #
+                    # logger.info('----------ACLR---------')
+                    # chart = LineChart()
+                    # chart.title = 'ACLR'
+                    # chart.y_axis.title = 'ACLR(dB)'
+                    # chart.x_axis.title = 'Band'
+                    # chart.x_axis.tickLblPos = 'low'
+                    # chart.y_axis.scaling.min = -60
+                    # chart.y_axis.scaling.max = -20
+                    #
+                    # chart.height = 20
+                    # chart.width = 32
+                    #
+                    # y_data = Reference(ws, min_col=6, min_row=1, max_col=11, max_row=ws.max_row)
+                    # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    # chart.add_data(y_data, titles_from_data=True)
+                    # chart.set_categories(x_data)
+                    #
+                    # chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                    # chart.series[0].marker.size = 10
+                    # chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                    # chart.series[1].marker.size = 10
+                    # chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                    # chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                    # chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                    # chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+                    #
+                    # ws.add_chart(chart, "U39")
+                    #
+                    # logger.info('----------EVM---------')
+                    # chart = LineChart()
+                    # chart.title = 'EVM'
+                    # chart.y_axis.title = 'EVM(%)'
+                    # chart.x_axis.title = 'Band'
+                    # chart.x_axis.tickLblPos = 'low'
+                    #
+                    # chart.height = 20
+                    # chart.width = 32
+                    #
+                    # y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
+                    # x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    # chart.add_data(y_data, titles_from_data=True)
+                    # chart.set_categories(x_data)
+                    #
+                    # chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    # chart.series[0].marker.size = 10
+                    #
+                    # ws.add_chart(chart, "U77")
 
                     wb.save(filename)
                     wb.close()
@@ -3627,6 +3659,49 @@ class Cmw100:
                     wb.save(filename)
                     wb.close()
 
+    def rxs_endc_plot(self, filename):
+        logger.info('----------Plot Chart---------')
+        wb = openpyxl.load_workbook(filename)
+        ws_desens = wb[f'Desens_ENDC']
+        ws_txmax = wb[f'Raw_Data_ENDC_FR1_TxMax']
+        ws_txmin = wb[f'Raw_Data_ENDC_FR1_-10dBm']
+
+        if ws_desens._charts != []:  # if there is charts, delete it
+            ws_desens._charts.clear()
+
+        chart1 = LineChart()
+        chart1.title = 'Sensitivity'
+        chart1.y_axis.title = 'Rx_Level(dBm)'
+        chart1.x_axis.title = 'Band'
+        chart1.x_axis.tickLblPos = 'low'
+        chart1.height = 20
+        chart1.width = 32
+        y_data_txmax = Reference(ws_txmax, min_col=5, min_row=2, max_col=5, max_row=ws_txmax.max_row)
+        y_data_txmin = Reference(ws_txmin, min_col=5, min_row=2, max_col=5, max_row=ws_txmin.max_row)
+        y_data_desens = Reference(ws_desens, min_col=7, min_row=1, max_col=7, max_row=ws_desens.max_row)
+        x_data = Reference(ws_desens, min_col=1, min_row=2, max_col=6, max_row=ws_desens.max_row)
+
+        series_txmax = Series(y_data_txmax, title="Tx_Max")
+        series_txmin = Series(y_data_txmin, title="Tx_-10dBm")
+
+        chart1.append(series_txmax)
+        chart1.append(series_txmin)
+        chart1.set_categories(x_data)
+        chart1.y_axis.majorGridlines = None
+
+        chart2 = BarChart()
+        chart2.add_data(y_data_desens, titles_from_data=True)
+        chart2.y_axis.axId = 200
+        chart2.y_axis.title = 'Diff(dB)'
+
+        chart1.y_axis.crosses = "max"
+        chart1 += chart2
+
+        ws_desens.add_chart(chart1, "F1")
+
+        wb.save(filename)
+        wb.close()
+
     def run_tx(self):
         for tech in wt.tech:
             if tech == 'LTE':
@@ -3639,7 +3714,6 @@ class Cmw100:
                         self.tx_power_pipline_fcc_fr1()
                     elif script == 'CE':
                         self.tx_power_pipline_ce_fr1()
-
 
     def run_rx(self):
         for tech in wt.tech:
@@ -3706,6 +3780,7 @@ class Cmw100:
                         logger.info(f'MTM: >>{r[0]}')
 
         return response
+
 
 def main():
     start = datetime.datetime.now()
