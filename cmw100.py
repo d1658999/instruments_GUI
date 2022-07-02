@@ -3697,7 +3697,7 @@ class Cmw100:
         chart1.y_axis.crosses = "max"
         chart1 += chart2
 
-        ws_desens.add_chart(chart1, "F1")
+        ws_desens.add_chart(chart1, "I1")
 
         wb.save(filename)
         wb.close()

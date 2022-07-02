@@ -4,14 +4,14 @@ gsm_bands = []
 hsupa_bands = [1]
 hsdpa_bands = [1]
 fr1_bands = [77, 78]
-endc_bands = ["66_77"]  # "3_78", "2_77",
+endc_bands = ["3_78"]  # "3_78", "2_77","66_77"
 band_segment = 'A'  # 'A' | 'B' for B28A ,B28B
 band_segment_fr1 = 'B'
 
 lte_bandwidths = [10]     # 1.4, 3, 5, 10, 15, 20
 fr1_bandwidths = [10]  # 10, 15, 20, 25, 30 , 40, 50, 60, 80, 90, 100, 70
 
-tech = ['FR1']   # 'LTE' | 'WCDMA' | 'GSM' | 'HSUPA' | 'HSDPA' | 'FR1' | 'ENDC'
+tech = ['ENDC']   # 'LTE' | 'WCDMA' | 'GSM' | 'HSUPA' | 'HSDPA' | 'FR1' | 'ENDC'
 channel = 'LMH'  # 'LMH'
 
 fdd_tdd_cross_test = 0     # this is only for 8821,  0: only measure one of FDD or TDD; 1: measure both FDD and TDD
