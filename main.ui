@@ -2,7 +2,7 @@
 <interface version="1.2">
   <object class="tk.Toplevel" id="toplevel2">
     <property name="height">200</property>
-    <property name="title" translatable="yes">SuperTestUI</property>
+    <property name="title" translatable="yes">SuperTestUI(V1.0)</property>
     <property name="width">200</property>
     <child>
       <object class="ttk.Labelframe" id="labelframe_Equipments">

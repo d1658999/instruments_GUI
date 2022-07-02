@@ -32,7 +32,6 @@ class MainApp:
         self.style = ttk.Style(self.mainwindow)
         self.style.theme_use('xpnative')
 
-
         self.instrument = None
         self.B5 = None
         self.B8 = None
