@@ -40,6 +40,7 @@ class Cmw100:
         self.asw_tech = None
         self.asw_path = wt.asw_path
         self.srs_path = wt.srs_path
+        self.srs_path_enable = wt.srs_path_enable
         self.rx_path_lte = None
         self.rx_path_fr1 = None
         self.rx_level = -70
@@ -164,6 +165,12 @@ class Cmw100:
         self.duty_cycle_dict = {
             100: (6, 0, 0, 10, 0),
             50: (6, 5, 0, 5, 0),
+        }
+        self.sync_path_dict = {
+            'Main': 0,
+            'CA#1': 1,
+            'CA#2': 2,
+            'CA#3': 3,
         }
 
     def begin_serial(self):
@@ -366,23 +373,23 @@ class Cmw100:
 
     def sync_lte(self):
         logger.info('---------Sync----------')
-        response = self.command(f'AT+LSYNC={self.sync_path},{self.sync_mode},{self.rx_freq_lte}', delay=1.2)
+        response = self.command(f'AT+LSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{self.rx_freq_lte}', delay=1.2)
         while b'+LSYNC:1\r\n' not in response:
             logger.info('**********Sync repeat**********')
             time.sleep(1)
-            response = self.command(f'AT+LSYNC={self.sync_path},{self.sync_mode},{self.rx_freq_lte}', delay=2)
+            response = self.command(f'AT+LSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{self.rx_freq_lte}', delay=2)
 
     def sync_fr1(self):
         logger.info('---------Sync----------')
         scs = 1 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79] else 0
         response = self.command(
-            f'AT+NRFSYNC={self.sync_path},{self.sync_mode},{scs},{self.bw_fr1_dict[self.bw_fr1]},0,{self.rx_freq_fr1}',
+            f'AT+NRFSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{scs},{self.bw_fr1_dict[self.bw_fr1]},0,{self.rx_freq_fr1}',
             delay=1)
         while b'+NRFSYNC:1\r\n' not in response:
             logger.info('**********Sync repeat**********')
             time.sleep(1)
             response = self.command(
-                f'AT+NRFSYNC={self.sync_path},{self.sync_mode},{scs},{self.bw_fr1_dict[self.bw_fr1]},0,{self.rx_freq_fr1}',
+                f'AT+NRFSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{scs},{self.bw_fr1_dict[self.bw_fr1]},0,{self.rx_freq_fr1}',
                 delay=2)
 
     def tx_set_lte(self):
@@ -876,7 +883,7 @@ class Cmw100:
         logger.info(f'Final Rx Level: {self.rx_level}')
 
     def search_sensitivity_pipline_lte(self):
-        self.port_tx = wt.port_tx_lte
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mcs_lte = 'QPSK'
         self.script = 'GENERAL'
@@ -899,7 +906,7 @@ class Cmw100:
                 self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_pipline_fr1(self):
-        self.port_tx = wt.port_tx_fr1
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.type_fr1 = 'DFTS'
         self.sa_nsa_mode = wt.sa_nas
@@ -928,7 +935,7 @@ class Cmw100:
         self.tx_level_endc_fr1 = wt.tx_level_endc_fr1
         self.port_tx_lte = wt.port_tx_lte
         self.port_tx_fr1 = wt.port_tx_fr1
-        self.sa_nsa_mode = 1
+        self.sa_nsa_mode = wt.sa_nas
         self.type_fr1 = 'DFTS'
         self.mcs_lte = self.mcs_fr1 = 'QPSK'
         self.tx_path = 'TX1'
@@ -1000,7 +1007,7 @@ class Cmw100:
     def search_sensitivity_pipline_fast_lte(
             self):  # this is for that RSRP and  CINR without issue because this is calculated method
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_lte
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mcs_lte = 'QPSK'
         for tech in wt.tech:
@@ -2202,7 +2209,7 @@ class Cmw100:
 
     def tx_power_aclr_evm_lmh_pipeline_lte(self):
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_lte
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
@@ -2224,7 +2231,7 @@ class Cmw100:
 
     def tx_power_aclr_evm_lmh_pipeline_fr1(self):
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_fr1
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
@@ -2249,7 +2256,7 @@ class Cmw100:
 
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_fr1
+        self.port_tx = wt.port_tx
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
@@ -2273,7 +2280,7 @@ class Cmw100:
 
     def tx_power_pipline_ce_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_fr1
+        self.port_tx = wt.port_tx
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
@@ -2297,7 +2304,7 @@ class Cmw100:
 
     def tx_freq_sweep_pipline_lte(self):
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_lte
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
@@ -2319,7 +2326,7 @@ class Cmw100:
 
     def tx_freq_sweep_pipline_fr1(self):
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_fr1
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
@@ -2344,7 +2351,7 @@ class Cmw100:
 
     def tx_level_sweep_pipeline_lte(self):
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_lte
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
@@ -2366,7 +2373,7 @@ class Cmw100:
 
     def tx_level_sweep_pipeline_fr1(self):
         self.tx_level = wt.tx_level
-        self.port_tx = wt.port_tx_fr1
+        self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nas
         for tech in wt.tech:
@@ -2391,7 +2398,7 @@ class Cmw100:
 
     def tx_measure_single(self):  # this is incompleted
         if 'LTE' in wt.tech:
-            self.port_tx = wt.port_tx_lte
+            self.port_tx = wt.port_tx
             self.band_lte = wt.band_lte
             self.bw_lte = wt.bw_lte
             self.chan = wt.channel
@@ -2440,7 +2447,10 @@ class Cmw100:
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_lte()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.set_test_mode_lte()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
@@ -2501,7 +2511,10 @@ class Cmw100:
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         # self.srs_switch()
         self.set_test_mode_fr1()
         self.command_cmw100_query('*OPC?')
@@ -2555,7 +2568,10 @@ class Cmw100:
         self.set_gprf_measurement()
         self.set_test_end_fr1()
         self.set_test_mode_fr1()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.command_cmw100_query('*OPC?')
 
         tx_freq_select_list = []
@@ -2609,7 +2625,10 @@ class Cmw100:
         self.set_gprf_measurement()
         self.set_test_end_fr1()
         self.set_test_mode_fr1()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.command_cmw100_query('*OPC?')
 
         tx_freq_select_list = []
@@ -2674,7 +2693,10 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_lte()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.set_test_mode_lte()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
@@ -2739,7 +2761,10 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.set_test_mode_fr1()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
@@ -2804,7 +2829,10 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_lte()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.set_test_mode_lte()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
@@ -2929,7 +2957,10 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
-        self.antenna_switch_v2()
+        if self.srs_path_enable:
+            self.srs_switch()
+        else:
+            self.antenna_switch_v2()
         self.set_test_mode_fr1()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
@@ -3723,7 +3754,7 @@ class Cmw100:
                 for script in wt.scripts:
                     if script == 'GENERAL':
                         self.search_sensitivity_pipline_fr1()
-                    elif script == 'ENDC':
+                    elif script == 'ENDC' and wt.sa_nas == 1:
                         self.sensitivity_pipline_endc()
 
     def run_tx_level_sweep(self):

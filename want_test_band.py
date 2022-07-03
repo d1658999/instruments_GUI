@@ -21,17 +21,19 @@ tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 tx_level = 26
 tx_level_endc_lte = 26
 tx_level_endc_fr1 = 0
-sa_nas = 1
+sa_nas = 0
 duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2
 
+port_tx = 1
 port_tx_lte = 1  # 1 ~ 8 default is  1
-port_rx_lte = 1  # 1 ~ 8 default is  1
+# port_rx_lte = 1  # 1 ~ 8 default is  1
 port_tx_fr1 = 4  # 1 ~ 8 default is  1
-port_rx_fr1 = 1  # 1 ~ 8 default is  1
+# port_rx_fr1 = 1  # 1 ~ 8 default is  1
 
 asw_path = 0
 srs_path = 0
-sync_path = 0
+srs_path_enable = False
+sync_path = 'Main'  # 'Main', 'CA#1', 'CA#2', 'CA#3'
 tx_paths = ['TX1']   # 'TX1' | 'TX2' | 'MIMO
 rx_paths = [15]  #  0: default(free run) | 1: DRX_ONLY | 2: PRX ONLY | 3: PRX+DRX | 4: 4RX_PRX(RX2) ONLY | 8: 4RX_DRX(RX3) ONLY | 12: 4RX_PRX(RX2) + 4RX_DRX(RX3) | 15: ALL PATH
 

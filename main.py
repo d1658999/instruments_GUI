@@ -16,7 +16,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2.ui"
 
 
 class MainApp:
@@ -24,15 +24,95 @@ class MainApp:
         self.builder = builder = pygubu.Builder()
         builder.add_resource_path(PROJECT_PATH)
         builder.add_from_file(PROJECT_UI)
-        self.mainwindow = builder.get_object("toplevel2", master)
-        self.button_run = builder.get_object("button_run", master)
-        self.checkbox_hsupa = builder.get_object("checkbutton_WCDMA", master)
-        self.checkbox_hsdpa = builder.get_object("checkbutton_HSUPA", master)
-        self.checkbox_wcdma = builder.get_object("checkbutton_HSDPA", master)
+        self.mainwindow = builder.get_object("toplevel1", master)
+        button_run_ftm = builder.get_object("button_run_ftm", master)
+        button_run_ftm_fcc = builder.get_object("button_run_ftm_fcc", master)
+        button_run_ftm_ce = builder.get_object("button_run_ftm_ce", master)
+        button_run_ftm_endc = builder.get_object("button_run_ftm_endc", master)
+        button_run_signaling = builder.get_object("button_run_signaling", master)
+        self.button_run = [button_run_ftm, button_run_ftm_fcc, button_run_ftm_ce, button_run_ftm_endc, button_run_signaling]
+
+        # self.checkbox_hsupa = builder.get_object("checkbutton_WCDMA", master)
+        # self.checkbox_hsdpa = builder.get_object("checkbutton_HSUPA", master)
+        # self.checkbox_wcdma = builder.get_object("checkbutton_HSDPA", master)
         self.style = ttk.Style(self.mainwindow)
         self.style.theme_use('xpnative')
 
         self.instrument = None
+        self.general = None
+        self.sa_nsa = None
+        self.port_tx = None
+        self.port_tx_lte = None
+        self.port_tx_fr1 = None
+        self.sync_path = None
+        self.asw_path = None
+        self.srs_path_enable = None
+        self.srs_path = None
+        self.tx1 = None
+        self.tx2 = None
+        self.ulmimo = None
+        self.rx0 = None
+        self.rx1 = None
+        self.rx2 = None
+        self.rx3 = None
+        self.rx0_rx1 = None
+        self.rx2_rx3 = None
+        self.rx_all_path = None
+        self.tech_FR1 = None
+        self.tech_LTE = None
+        self.tech_WCDMA = None
+        self.tech_HSUPA = None
+        self.tech_HSDPA = None
+        self.tech_GSM = None
+        self.bw1p4 = None
+        self.bw3 = None
+        self.bw5 = None
+        self.bw10 = None
+        self.bw15 = None
+        self.bw20 = None
+        self.TxMax = None
+        self.TxLow = None
+        self.tx = None
+        self.rx = None
+        self.tx_level_sweep = None
+        self.tx_freq_sweep = None
+        self.qpsk_lte = None
+        self.q16_lte = None
+        self.q64_lte = None
+        self.q256_lte = None
+        self.chan_L = None
+        self.chan_M = None
+        self.chan_H = None
+        self.prb_lte = None
+        self.frb_lte = None
+        self.bw5_fr1 = None
+        self.bw10_fr1 = None
+        self.bw15_fr1 = None
+        self.bw20_fr1 = None
+        self.bw25_fr1 = None
+        self.bw30_fr1 = None
+        self.bw40_fr1 = None
+        self.bw50_fr1 = None
+        self.bw60_fr1 = None
+        self.bw80_fr1 = None
+        self.bw90_fr1 = None
+        self.bw100_fr1 = None
+        self.bw70_fr1 = None
+        self.qpsk_fr1 = None
+        self.q16_fr1 = None
+        self.q64_fr1 = None
+        self.q256_fr1 = None
+        self.bpsk_fr1 = None
+        self.dfts = None
+        self.cp = None
+        self.inner_full_fr1 = None
+        self.outer_full_fr1 = None
+        self.inner_1rb_left_fr1 = None
+        self.inner_1rb_right_fr1 = None
+        self.edge_1rb_left_fr1 = None
+        self.edge_1rb_right_fr1 = None
+        self.edge_full_left_fr1 = None
+        self.edge_full_right_fr1 = None
         self.B5 = None
         self.B8 = None
         self.B12 = None
@@ -79,50 +159,6 @@ class MainApp:
         self.GSM_all = None
         self.GSM1800 = None
         self.GSM1900 = None
-        self.U1 = None
-        self.U2 = None
-        self.HSUPA_all = None
-        self.U4 = None
-        self.U5 = None
-        self.U8 = None
-        self.U6 = None
-        self.U19 = None
-        self.D1 = None
-        self.D2 = None
-        self.HSDPA_all = None
-        self.D4 = None
-        self.D5 = None
-        self.D8 = None
-        self.D6 = None
-        self.D19 = None
-        self.tech_LTE = None
-        self.tech_WCDMA = None
-        self.tech_GSM = None
-        self.tech_HSUPA = None
-        self.tech_HSDPA = None
-        self.bw1p4 = None
-        self.bw3 = None
-        self.bw5 = None
-        self.bw10 = None
-        self.bw15 = None
-        self.bw20 = None
-        self.TxMax = None
-        self.TxLow = None
-        self.tech_FR1 = None
-        self.qpsk_lte = None
-        self.q16_lte = None
-        self.q64_lte = None
-        self.q256_lte = None
-        self.prb_lte = None
-        self.frb_lte = None
-        self.tx = None
-        self.rx = None
-        self.rx_sweep = None
-        self.chan_L = None
-        self.chan_M = None
-        self.chan_H = None
-        self.tx_level_sweep = None
-        self.tx_freq_sweep = None
         self.N5 = None
         self.N8 = None
         self.N12 = None
@@ -156,57 +192,9 @@ class MainApp:
         self.UHB_all_fr1 = None
         self.N48 = None
         self.N79 = None
-        self.bw5_fr1 = None
-        self.bw10_fr1 = None
-        self.bw15_fr1 = None
-        self.bw20_fr1 = None
-        self.bw25_fr1 = None
-        self.bw30_fr1 = None
-        self.bw40_fr1 = None
-        self.bw50_fr1 = None
-        self.bw60_fr1 = None
-        self.bw80_fr1 = None
-        self.bw90_fr1 = None
-        self.bw100_fr1 = None
-        self.bw70_fr1 = None
-        self.qpsk_fr1 = None
-        self.q16_fr1 = None
-        self.q64_fr1 = None
-        self.q256_fr1 = None
-        self.dfts = None
-        self.cp = None
-        self.bpsk_fr1 = None
-        self.inner_full_fr1 = None
-        self.outer_full_fr1 = None
-        self.inner_1rb_left_fr1 = None
-        self.inner_1rb_right_fr1 = None
-        self.edge_1rb_left_fr1 = None
-        self.edge_1rb_right_fr1 = None
-        self.edge_full_left_fr1 = None
-        self.edge_full_right_fr1 = None
-        self.sa_nsa = None
-        self.scs15 = None
-        self.scs30 = None
-        self.scs60 = None
-        self.general = None
         self.fcc = None
         self.ce = None
         self.endc = None
-        self.tx_port_lte = None
-        self.tx_port_fr1 = None
-        self.tx1 = None
-        self.tx2 = None
-        self.sync_path = None
-        self.ulmimo = None
-        self.rx0 = None
-        self.rx1 = None
-        self.rx2 = None
-        self.rx3 = None
-        self.rx0_rx1 = None
-        self.rx2_rx3 = None
-        self.rx_all_path = None
-        self.asw_path = None
-        self.srs_path = None
         self.B3_N78 = None
         self.B2_N77 = None
         self.B66_N77 = None
@@ -217,10 +205,101 @@ class MainApp:
         self.B28_N78 = None
         self.B5_N77 = None
         self.B13_N5 = None
+        self.rx_sweep = None
+        self.U1 = None
+        self.U2 = None
+        self.HSUPA_all = None
+        self.U4 = None
+        self.U5 = None
+        self.U8 = None
+        self.U6 = None
+        self.U19 = None
+        self.D1 = None
+        self.D2 = None
+        self.HSDPA_all = None
+        self.D4 = None
+        self.D5 = None
+        self.D8 = None
+        self.D6 = None
+        self.D19 = None
         builder.import_variables(
             self,
             [
                 "instrument",
+                "general",
+                "sa_nsa",
+                "port_tx",
+                "port_tx_lte",
+                "port_tx_fr1",
+                "sync_path",
+                "asw_path",
+                "srs_path_enable",
+                "srs_path",
+                "tx1",
+                "tx2",
+                "ulmimo",
+                "rx0",
+                "rx1",
+                "rx2",
+                "rx3",
+                "rx0_rx1",
+                "rx2_rx3",
+                "rx_all_path",
+                "tech_FR1",
+                "tech_LTE",
+                "tech_WCDMA",
+                "tech_HSDPA",
+                "tech_HSUPA",
+                "tech_GSM",
+                "bw1p4",
+                "bw3",
+                "bw5",
+                "bw10",
+                "bw15",
+                "bw20",
+                "TxMax",
+                "TxLow",
+                "tx",
+                "rx",
+                "tx_level_sweep",
+                "tx_freq_sweep",
+                "qpsk_lte",
+                "q16_lte",
+                "q64_lte",
+                "q256_lte",
+                "chan_L",
+                "chan_M",
+                "chan_H",
+                "prb_lte",
+                "frb_lte",
+                "bw5_fr1",
+                "bw10_fr1",
+                "bw15_fr1",
+                "bw20_fr1",
+                "bw25_fr1",
+                "bw30_fr1",
+                "bw40_fr1",
+                "bw50_fr1",
+                "bw60_fr1",
+                "bw80_fr1",
+                "bw90_fr1",
+                "bw100_fr1",
+                "bw70_fr1",
+                "qpsk_fr1",
+                "q16_fr1",
+                "q64_fr1",
+                "q256_fr1",
+                "bpsk_fr1",
+                "dfts",
+                "cp",
+                "inner_full_fr1",
+                "outer_full_fr1",
+                "inner_1rb_left_fr1",
+                "inner_1rb_right_fr1",
+                "edge_1rb_left_fr1",
+                "edge_1rb_right_fr1",
+                "edge_full_left_fr1",
+                "edge_full_right_fr1",
                 "B5",
                 "B8",
                 "B12",
@@ -267,50 +346,6 @@ class MainApp:
                 "GSM_all",
                 "GSM1800",
                 "GSM1900",
-                "U1",
-                "U2",
-                "HSUPA_all",
-                "U4",
-                "U5",
-                "U8",
-                "U6",
-                "U19",
-                "D1",
-                "D2",
-                "HSDPA_all",
-                "D4",
-                "D5",
-                "D8",
-                "D6",
-                "D19",
-                "tech_LTE",
-                "tech_WCDMA",
-                "tech_GSM",
-                "tech_HSUPA",
-                "tech_HSDPA",
-                "bw1p4",
-                "bw3",
-                "bw5",
-                "bw10",
-                "bw15",
-                "bw20",
-                "TxMax",
-                "TxLow",
-                "tech_FR1",
-                "qpsk_lte",
-                "q16_lte",
-                "q64_lte",
-                "q256_lte",
-                "prb_lte",
-                "frb_lte",
-                "tx",
-                "rx",
-                "rx_sweep",
-                "chan_L",
-                "chan_M",
-                "chan_H",
-                "tx_level_sweep",
-                "tx_freq_sweep",
                 "N5",
                 "N8",
                 "N12",
@@ -344,57 +379,9 @@ class MainApp:
                 "UHB_all_fr1",
                 "N48",
                 "N79",
-                "bw5_fr1",
-                "bw10_fr1",
-                "bw15_fr1",
-                "bw20_fr1",
-                "bw25_fr1",
-                "bw30_fr1",
-                "bw40_fr1",
-                "bw50_fr1",
-                "bw60_fr1",
-                "bw80_fr1",
-                "bw90_fr1",
-                "bw100_fr1",
-                "bw70_fr1",
-                "qpsk_fr1",
-                "q16_fr1",
-                "q64_fr1",
-                "q256_fr1",
-                "dfts",
-                "cp",
-                "bpsk_fr1",
-                "inner_full_fr1",
-                "outer_full_fr1",
-                "inner_1rb_left_fr1",
-                "inner_1rb_right_fr1",
-                "edge_1rb_left_fr1",
-                "edge_1rb_right_fr1",
-                "edge_full_left_fr1",
-                "edge_full_right_fr1",
-                "sa_nsa",
-                "scs15",
-                "scs30",
-                "scs60",
-                "general",
                 "fcc",
                 "ce",
                 "endc",
-                "tx_port_lte",
-                "tx_port_fr1",
-                "tx1",
-                "tx2",
-                "sync_path",
-                "ulmimo",
-                "rx0",
-                "rx1",
-                "rx2",
-                "rx3",
-                "rx0_rx1",
-                "rx2_rx3",
-                "rx_all_path",
-                "asw_path",
-                "srs_path",
                 "B3_N78",
                 "B2_N77",
                 "B66_N77",
@@ -405,13 +392,30 @@ class MainApp:
                 "B28_N78",
                 "B5_N77",
                 "B13_N5",
+                "rx_sweep",
+                "U1",
+                "U2",
+                "HSUPA_all",
+                "U4",
+                "U5",
+                "U8",
+                "U6",
+                "U19",
+                "D1",
+                "D2",
+                "HSDPA_all",
+                "D4",
+                "D5",
+                "D8",
+                "D6",
+                "D19",
             ],
         )
 
         builder.connect_callbacks(self)
         # self.init_select()
         self.import_ui_setting()
-        self.inst_to_tech()
+        # self.inst_to_tech()
 
     def run(self):
         self.mainwindow.mainloop()
@@ -443,12 +447,14 @@ class MainApp:
         self.rx_sweep.set(ui_init.rx_sweep)
         self.tx_level_sweep.set(ui_init.tx_level_sweep)
         self.tx_freq_sweep.set(ui_init.tx_freq_sweep)
-        self.tx_port_lte.set(ui_init.port_tx_lte)
-        self.tx_port_fr1.set(ui_init.port_tx_fr1)
+        self.port_tx.set(ui_init.port_tx)
+        self.port_tx_lte.set(ui_init.port_tx_lte)
+        self.port_tx_fr1.set(ui_init.port_tx_fr1)
         self.asw_path.set(ui_init.asw_path)
         self.srs_path.set(ui_init.srs_path)
+        self.srs_path_enable.set(ui_init.srs_path_enable)
         self.sync_path.set(ui_init.sync_path)
-
+        self.sa_nsa.set(ui_init.sa_nas)
 
         #reet all the check button
         self.off_all_reset_tech()
@@ -876,10 +882,13 @@ class MainApp:
 
         # these are not list-like
         instrument = self.instrument.get()
-        port_tx_lte = self.tx_port_lte.get()
-        port_tx_fr1 = self.tx_port_fr1.get()
+        port_tx = self.port_tx.get()
+        port_tx_lte = self.port_tx_lte.get()
+        port_tx_fr1 = self.port_tx_fr1.get()
+        sa_nsa = self.sa_nsa.get()
         asw_path = self.asw_path.get()
         srs_path = self.srs_path.get()
+        srs_path_enable = self.srs_path_enable.get()
         sync_path = self.sync_path.get()
         band_segment = self.band_segment.get()
         band_segment_fr1 = self.band_segment_fr1.get()
@@ -1010,21 +1019,33 @@ class MainApp:
                     logger.debug('replace instrument setting')
                     line = '='.join(temp_list)
 
-                elif 'tx_port_lte' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(tx_port_lte) + '"' + '\n'
-                    logger.debug('replace tx_port_lte setting')
-                    line = '='.join(temp_list)
+                # elif 'tx_port ' in line:
+                #     temp_list = line.split('=')
+                #     temp_list[1] = ' ' + '"' + str(port_tx) + '"' + '\n'
+                #     logger.debug('replace tx_port setting')
+                #     line = '='.join(temp_list)
+                #
+                # elif 'tx_port_lte' in line:
+                #     temp_list = line.split('=')
+                #     temp_list[1] = ' ' + '"' + str(port_tx_lte) + '"' + '\n'
+                #     logger.debug('replace tx_port_lte setting')
+                #     line = '='.join(temp_list)
+                #
+                # elif 'tx_port_fr1' in line:
+                #     temp_list = line.split('=')
+                #     temp_list[1] = ' ' + '"' + str(port_tx_fr1) + '"' + '\n'
+                #     logger.debug('replace tx_port_fr1 setting')
+                #     line = '='.join(temp_list)
 
-                elif 'tx_port_fr1' in line:
+                elif 'sa_nsa' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(tx_port_fr1) + '"' + '\n'
-                    logger.debug('replace tx_port_fr1 setting')
+                    temp_list[1] = ' ' + '"' + str(sa_nsa) + '"' + '\n'
+                    logger.debug('replace sa_nsa mode setting')
                     line = '='.join(temp_list)
 
                 elif 'sync_path' in line:
                     temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(sync_path) + '\n'
+                    temp_list[1] = ' ' + '"' + str(sync_path) + '"' + '\n'
                     logger.debug('replace sync_path setting')
                     line = '='.join(temp_list)
 
@@ -1034,10 +1055,16 @@ class MainApp:
                     logger.debug('replace asw_path setting')
                     line = '='.join(temp_list)
 
-                elif 'srs_path' in line:
+                elif 'srs_path ' in line:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(srs_path) + '\n'
                     logger.debug('replace srs_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'srs_path_enable' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(srs_path_enable) + '\n'
+                    logger.debug('replace srs path enable setting')
                     line = '='.join(temp_list)
 
                 elif 'band_segment ' in line:
@@ -1050,6 +1077,12 @@ class MainApp:
                     temp_list = line.split('=')
                     temp_list[1] =' ' + '"' + str(band_segment_fr1) + '"' + '\n'
                     logger.debug('replace band segment setting for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'port_tx ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(port_tx) + '\n'
+                    logger.debug('replace port_tx for LTE')
                     line = '='.join(temp_list)
 
                 elif 'port_tx_lte' in line:
@@ -1487,27 +1520,27 @@ class MainApp:
     def wanted_band_GSM(self):
         pass
 
-    def inst_to_tech(self):
-        if self.instrument.get() == 'Cmw100':
-            self.checkbox_hsupa['state'] = tkinter.DISABLED
-            self.checkbox_hsdpa['state'] = tkinter.DISABLED
-            self.checkbox_wcdma['state'] = tkinter.DISABLED
-        else:
-            self.checkbox_hsupa['state'] = tkinter.NORMAL
-            self.checkbox_hsdpa['state'] = tkinter.NORMAL
-            self.checkbox_wcdma['state'] = tkinter.NORMAL
+    # def inst_to_tech(self):
+    #     if self.instrument.get() == 'Cmw100':
+    #         self.checkbox_hsupa['state'] = tkinter.DISABLED
+    #         self.checkbox_hsdpa['state'] = tkinter.DISABLED
+    #         self.checkbox_wcdma['state'] = tkinter.DISABLED
+    #     else:
+    #         self.checkbox_hsupa['state'] = tkinter.NORMAL
+    #         self.checkbox_hsdpa['state'] = tkinter.NORMAL
+    #         self.checkbox_wcdma['state'] = tkinter.NORMAL
 
-    def inst_select(self):
+    def inst_select(self, option):
         logger.info(self.instrument.get())
         # return self.instrument.get()
-        if self.instrument.get() == 'Cmw100':
-            self.checkbox_hsupa['state'] = tkinter.DISABLED
-            self.checkbox_hsdpa['state'] = tkinter.DISABLED
-            self.checkbox_wcdma['state'] = tkinter.DISABLED
-        else:
-            self.checkbox_hsupa['state'] = tkinter.NORMAL
-            self.checkbox_hsdpa['state'] = tkinter.NORMAL
-            self.checkbox_wcdma['state'] = tkinter.NORMAL
+        # if self.instrument.get() == 'Cmw100':
+        #     self.checkbox_hsupa['state'] = tkinter.DISABLED
+        #     self.checkbox_hsdpa['state'] = tkinter.DISABLED
+        #     self.checkbox_wcdma['state'] = tkinter.DISABLED
+        # else:
+        #     self.checkbox_hsupa['state'] = tkinter.NORMAL
+        #     self.checkbox_hsdpa['state'] = tkinter.NORMAL
+        #     self.checkbox_wcdma['state'] = tkinter.NORMAL
 
     def segment_select(self):
         logger.info(f'segment: {self.band_segment.get()}')
@@ -1687,8 +1720,8 @@ class MainApp:
         self.chan_M.set(False)
         self.chan_H.set(False)
 
-    # def off_all_none_LB(self, event=None):
-    #     self.LB_all.set(False)
+    def off_all_none_LB(self, event=None):
+        self.LB_all.set(False)
 
     def LB_all_state(self):
         logger.debug(self.LB_all.get())
@@ -1767,8 +1800,8 @@ class MainApp:
         self.wanted_band_FR1()
 
 
-    # def off_all_none_MHB(self, event=None):
-    #     self.MHB_all.set(False)
+    def off_all_none_MHB(self, event=None):
+        self.MHB_all.set(False)
 
     def MHB_all_state(self):
         if self.MHB_all.get():
@@ -1839,8 +1872,8 @@ class MainApp:
 
         self.wanted_band_FR1()
 
-    # def off_all_none_UHB(self, event=None):
-    #     self.UHB_all.set(False)
+    def off_all_none_UHB(self, event=None):
+        self.UHB_all.set(False)
 
     def UHB_all_state(self):
         if self.UHB_all.get():
@@ -1874,14 +1907,14 @@ class MainApp:
         self.wanted_band_FR1()
 
 
-    # def off_all_none_WCDMA(self, event=None):
-    #     self.WCDMA_all.set(False)
-    #
-    # def off_all_none_HSUPA(self, event=None):
-    #     self.HSUPA_all.set(False)
-    #
-    # def off_all_none_HSDPA(self, event=None):
-    #     self.HSDPA_all.set(False)
+    def off_all_none_WCDMA(self, event=None):
+        self.WCDMA_all.set(False)
+
+    def off_all_none_HSUPA(self, event=None):
+        self.HSUPA_all.set(False)
+
+    def off_all_none_HSDPA(self, event=None):
+        self.HSDPA_all.set(False)
 
     def WCDMA_all_state(self):
         if self.WCDMA_all.get():
@@ -1906,8 +1939,8 @@ class MainApp:
 
         self.wanted_band_WCDMA()
 
-    # def off_all_none_GSM(self, event=None):
-    #     self.GSM_all.set(False)
+    def off_all_none_GSM(self, event=None):
+        self.GSM_all.set(False)
 
     def GSM_all_state(self):
         if self.GSM_all.get():
@@ -2133,12 +2166,16 @@ class MainApp:
         logger.info(f'Script to select : {self.script}')
         return self.script
 
-    def select_tx_port_lte(self):
-        logger.info(self.tx_port_lte.get())
+    def select_tx_port(self, option):
+        logger.info(self.port_tx.get())
+        # return self.tx_port.get()
+
+    def select_tx_port_lte(self, option):
+        logger.info(self.port_tx_lte.get())
         # return self.tx_port_lte.get()
 
-    def select_tx_port_fr1(self):
-        logger.info(self.tx_port_fr1.get())
+    def select_tx_port_fr1(self, option):
+        logger.info(self.port_tx_fr1.get())
         # return self.tx_port_fr1.get()
 
     def wanted_tx_path(self):
@@ -2208,15 +2245,21 @@ class MainApp:
 
         return self.rx_path
 
-    def select_asw_path(self):
+    def select_asw_path(self, option):
         logger.info(f'select AS path {self.asw_path.get()}')
 
-    def select_sync_path(self):
+    def select_sync_path(self, option):
         logger.info(f'select syn(CA) path {self.sync_path.get()}')
 
-    def select_srs_path(self):
+    def select_srs_path(self, option):
         logger.info(f'select SRS path {self.srs_path.get()}')
 
+    def srs_enable(self):
+        # logger.info(f'SRS status: {self.srs_path_enable.get()}')
+        if self.srs_path_enable.get():
+            logger.info('SRS is enabled')
+        else:
+            logger.info('SRS is disabled')
     def wanted_ftm_rb_lte(self):
         self.ftm_rb_lte = []
         if self.prb_lte.get():
@@ -2323,7 +2366,8 @@ class MainApp:
 
     def measure(self):
         import want_test_band as wt
-        self.button_run['state'] = tkinter.DISABLED
+        for button_run in self.button_run:
+            button_run['state'] = tkinter.DISABLED
         start = datetime.datetime.now()
         self.export_ui_setting()
         # list-like
@@ -2348,12 +2392,14 @@ class MainApp:
         wt.type_fr1 = self.wanted_type()
         wt.scripts = self.wanted_scripts()
         # non list-lke
-        wt.port_tx_lte = self.tx_port_lte.get()
-        wt.port_tx_fr1 = self.tx_port_fr1.get()
+        wt.port_tx = self.port_tx.get()
+        wt.port_tx_lte = self.port_tx_lte.get()
+        wt.port_tx_fr1 = self.port_tx_fr1.get()
         wt.band_segment = self.band_segment.get()
         wt.band_segment_fr1 = self.band_segment_fr1.get()
         wt.asw_path = self.asw_path.get()
         wt.srs_path = self.srs_path.get()
+        wt.srs_path_enable = self.srs_path_enable.get()
         wt.sync_path = self.sync_path.get()
         wt.sa_nas = self.sa_nsa.get()
 
@@ -2418,7 +2464,8 @@ class MainApp:
         stop = datetime.datetime.now()
 
         logger.info(f'Timer: {stop - start}')
-        self.button_run['state'] = tkinter.NORMAL
+        for button_run in self.button_run:
+            button_run['state'] = tkinter.NORMAL
 
 
 if __name__ == "__main__":
