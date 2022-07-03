@@ -1844,7 +1844,7 @@ Disable</property>
                         <property name="command" type="command" cbtype="simple">wanted_band_LTE</property>
                         <property name="onvalue">41</property>
                         <property name="text" translatable="yes">B41</property>
-                        <property name="variable">string:B41</property>
+                        <property name="variable">int:B41</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
                         <layout manager="grid">
                           <property name="column">1</property>
@@ -4656,7 +4656,7 @@ Disable</property>
                         <property name="onvalue">41</property>
                         <property name="state">disabled</property>
                         <property name="text" translatable="yes">B41</property>
-                        <property name="variable">string:B41</property>
+                        <property name="variable">int:B41</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
                         <layout manager="grid">
                           <property name="column">1</property>
@@ -7464,7 +7464,7 @@ Disable</property>
                         <property name="onvalue">41</property>
                         <property name="state">disabled</property>
                         <property name="text" translatable="yes">B41</property>
-                        <property name="variable">string:B41</property>
+                        <property name="variable">int:B41</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
                         <layout manager="grid">
                           <property name="column">1</property>
@@ -9881,7 +9881,7 @@ Disable</property>
                         <property name="command" type="command" cbtype="simple">wanted_band_LTE</property>
                         <property name="onvalue">41</property>
                         <property name="text" translatable="yes">B41</property>
-                        <property name="variable">string:B41</property>
+                        <property name="variable">int:B41</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_MHB" add="" />
                         <layout manager="grid">
                           <property name="column">1</property>
