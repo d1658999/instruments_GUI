@@ -1075,7 +1075,7 @@ class MainApp:
 
                 elif 'band_segment_fr1' in line:
                     temp_list = line.split('=')
-                    temp_list[1] =' ' + '"' + str(band_segment_fr1) + '"' + '\n'
+                    temp_list[1] = ' ' + '"' + str(band_segment_fr1) + '"' + '\n'
                     logger.debug('replace band segment setting for FR1')
                     line = '='.join(temp_list)
 
