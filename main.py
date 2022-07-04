@@ -547,7 +547,7 @@ class MainApp:
                 self.N40.set(band_fr1)
             elif band_fr1 == 41:
                 self.N41.set(band_fr1)
-            elif band_fr1 == 42:
+            elif band_fr1 == 48:
                 self.N48.set(band_fr1)
             elif band_fr1 == 66:
                 self.N66.set(band_fr1)

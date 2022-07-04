@@ -890,20 +890,24 @@ class Cmw100:
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 self.tech = 'LTE'
-                for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                    self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                    for tx_path in wt.tx_paths:
-                        self.tx_path = tx_path
-                        for bw in wt.lte_bandwidths:
-                            self.bw_lte = bw
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    for bw in wt.lte_bandwidths:
+                        self.bw_lte = bw
+                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                            self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
                             for band in wt.lte_bands:
                                 self.band_lte = band
                                 if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
                                     self.search_sensitivity_lmh_progress_lte()
                                 else:
                                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-                self.rx_desense_progress()
-                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+                        try:
+                            self.rx_desense_progress()
+                            self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+                        except TypeError as err:
+                            logger.debug(err)
+                            logger.info('It might not have the Bw in this Band, so it cannot to be calculated for desens')
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx
@@ -915,20 +919,24 @@ class Cmw100:
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = 'FR1'
-                for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                    self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                    for tx_path in wt.tx_paths:
-                        self.tx_path = tx_path
-                        for bw in wt.fr1_bandwidths:
-                            self.bw_fr1 = bw
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    for bw in wt.fr1_bandwidths:
+                        self.bw_fr1 = bw
+                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                            self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
                             for band in wt.fr1_bands:
                                 self.band_fr1 = band
                                 if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
                                     self.search_sensitivity_lmh_progress_fr1()
                                 else:
                                     logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-                self.rx_desense_progress()
-                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+                        try:
+                            self.rx_desense_progress()
+                            self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+                        except TypeError as err:
+                            logger.debug(err)
+                            logger.info('It might not have the Bw in this Band, so it cannot to be calculated for desens')
 
     def sensitivity_pipline_endc(self):
         self.tx_level_endc_lte = wt.tx_level_endc_lte

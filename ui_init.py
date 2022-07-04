@@ -1,19 +1,19 @@
-tech = ['LTE', 'FR1']
-bw_fr1 = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100]
+tech = ['FR1']
+bw_fr1 = [25, 40, 50, 60, 80, 100]
 bw_lte = [1.4, 3, 5, 10, 15, 20]
 ue_power = [1, 0]
 
-chan = "LMH"
+chan = "M"
 
-bands_fr1 = [1, 2, 3, 7, 25, 66, 30, 40, 38, 41]
-bands_lte = [1, 2, 3, 4, 7, 25, 66, 30, 39, 40, 38]
+bands_fr1 = [48, 77, 78]
+bands_lte = [42, 48]
 bands_wcdma = []
 bands_hsupa = []
 bands_hsdpa = []
 bands_gsm = None
 bands_endc = ['3_78']
 
-tx = True
+tx = False
 rx = True
 rx_sweep = False
 tx_level_sweep = False
@@ -23,7 +23,7 @@ instrument = "Cmw100"
 band_segment = "A"
 band_segment_fr1 = "A"
 
-port_tx = 1
+port_tx = 4
 port_tx_lte = 1
 port_tx_fr1 = 4
 sa_nas = 0
