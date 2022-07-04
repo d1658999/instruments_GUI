@@ -1,3 +1,5 @@
 # created by virtualenv automatically
 *.xlsx
-outputfile
+/outputfile
+/Python39
+/Python39_v26.01
