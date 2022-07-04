@@ -908,6 +908,11 @@ class Cmw100:
                         except TypeError as err:
                             logger.debug(err)
                             logger.info('It might not have the Bw in this Band, so it cannot to be calculated for desens')
+                        except KeyError as err:
+                            logger.debug(err)
+                            logger.info(
+                                f"{self.band_lte} doesn't have this {self.bw_lte}, so desens progress cannot run")
+
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx
@@ -937,6 +942,10 @@ class Cmw100:
                         except TypeError as err:
                             logger.debug(err)
                             logger.info('It might not have the Bw in this Band, so it cannot to be calculated for desens')
+                        except KeyError as err:
+                            logger.debug(err)
+                            logger.info(
+                                f"{self.band_fr1} doesn't have this {self.bw_fr1}, so desens progress cannot run")
 
     def sensitivity_pipline_endc(self):
         self.tx_level_endc_lte = wt.tx_level_endc_lte
