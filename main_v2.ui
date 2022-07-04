@@ -9314,7 +9314,7 @@ Disable</property>
                         <child>
                           <object class="ttk.Checkbutton" id="checkbutton_rx_sweep">
                             <property name="command" type="command" cbtype="simple">wanted_tx_rx_sweep</property>
-                            <property name="text" translatable="yes">RxS_freq(sig)  </property>
+                            <property name="text" translatable="yes">RxS_freq</property>
                             <property name="variable">boolean:rx_sweep</property>
                             <bind sequence="&lt;1&gt;" handler="sweep_auto_check_ue_pwr" add="" />
                             <layout manager="grid">
