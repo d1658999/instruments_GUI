@@ -1,8 +1,8 @@
-port_tx = 4
+port_tx = 1
 port_tx_lte = 1
 port_tx_fr1 = 4
 
-sa_nsa = 0
+sa_nsa = "0"
 asw_path = 0
 srs_path = 0
 srs_path_enable = False
@@ -18,24 +18,24 @@ rx_sweep = False
 tx_level_sweep = False
 tx_freq_sweep = False
 
-bands_fr1 = [48, 77, 78]
+bands_fr1 = [48]
 bands_lte = [42, 48]
 bands_wcdma = []
 bands_hsupa = []
 bands_hsdpa = []
 bands_gsm = None
-bands_endc = ['3_78']
-band_segment = 'A'
-band_segment_fr1 = 'A'
+bands_endc = []
+band_segment = "A"
+band_segment_fr1 = "A"
 
 bw_fr1 = [5, 10, 15, 20, 25, 40, 50, 60, 80, 100]
 bw_lte = [1.4, 3, 5, 10, 15, 20]
 
-chan = 'LMH'
+chan = "LMH"
 
 ue_power = [1, 0]
 
-instrument = 'Cmw100'
+instrument = "Cmw100"
 
 scripts = ['GENERAL']
 

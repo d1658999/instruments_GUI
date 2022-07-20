@@ -9,6 +9,7 @@ from logging.config import fileConfig
 import threading
 import signal
 import os
+import yaml
 
 import ui_init
 
@@ -415,7 +416,8 @@ class MainApp:
 
         builder.connect_callbacks(self)
         # self.init_select()
-        self.import_ui_setting()
+        # self.import_ui_setting()
+        self.import_ui_setting_yaml()
         # self.inst_to_tech()
 
     def run(self):
@@ -432,6 +434,412 @@ class MainApp:
     def t_measure(self):
         t = threading.Thread(target=self.measure, daemon=True)
         t.start()
+
+    def import_ui_setting_yaml(self):
+        """
+        skip bands_gsm
+
+        """
+        logger.info('Import the last setting')
+        with open('ui_init.yaml', 'r') as s:
+            ui_init = yaml.safe_load(s)
+
+        # non list-like
+        self.instrument.set(ui_init['instrument']['instrument'])
+        self.band_segment.set(ui_init['band']['band_segment'])
+        self.band_segment_fr1.set(ui_init['band']['band_segment_fr1'])
+        self.tx.set(ui_init['test_items']['tx'])
+        self.rx.set(ui_init['test_items']['rx'])
+        self.rx_sweep.set(ui_init['test_items']['rx_sweep'])
+        self.tx_level_sweep.set(ui_init['test_items']['tx_level_sweep'])
+        self.tx_freq_sweep.set(ui_init['test_items']['tx_freq_sweep'])
+        self.port_tx.set(ui_init['port']['port_tx'])
+        self.port_tx_lte.set(ui_init['port']['port_tx_lte'])
+        self.port_tx_fr1.set(ui_init['port']['port_tx_fr1'])
+        self.asw_path.set(ui_init['path']['asw_path'])
+        self.srs_path.set(ui_init['path']['srs_path'])
+        self.srs_path_enable.set(ui_init['path']['srs_path_enable'])
+        self.sync_path.set(ui_init['path']['sync_path'])
+        self.sa_nsa.set(ui_init['path']['sa_nsa'])
+
+        #reet all the check button
+        self.off_all_reset_tech()
+        self.off_all_reset_bw()
+        self.off_all_reset_ue_power()
+        self.off_all_reset_ch()
+        self.off_all_reset_GSM()
+        self.off_all_reset_HSDPA()
+        self.off_all_reset_HSUPA()
+        self.off_all_reset_WCDMA()
+        self.off_all_reset_LB()
+        self.off_all_reset_MHB()
+        self.off_all_reset_UHB()
+
+        # list-like
+        for band_endc in ui_init['band']['bands_endc']:
+            if band_endc == '3_78':
+                self.B3_N78.set(True)
+            elif band_endc == '2_77':
+                self.B2_N77.set(True)
+            elif band_endc == '66_77':
+                self.B66_N77.set(True)
+            elif band_endc == '66_2':
+                self.B66_N2.set(True)
+            elif band_endc == '66_5':
+                self.B66_N5.set(True)
+            elif band_endc == '12_78':
+                self.B12_N78.set(True)
+            elif band_endc == '5_78':
+                self.B5_N78.set(True)
+            elif band_endc == '28_78':
+                self.B28_N78.set(True)
+            elif band_endc == '5_77':
+                self.B5_N77.set(True)
+            elif band_endc == '13_5':
+                self.B13_N5.set(True)
+
+        for band_fr1 in ui_init['band']['bands_fr1']:
+            if band_fr1 == 1:
+                self.N1.set(band_fr1)
+            elif band_fr1 == 2:
+                self.N2.set(band_fr1)
+            elif band_fr1 == 3:
+                self.N3.set(band_fr1)
+            # elif band_fr1 == 4:
+            #     self.N4.set(band_fr1)
+            elif band_fr1 == 5:
+                self.N5.set(band_fr1)
+            elif band_fr1 == 7:
+                self.N7.set(band_fr1)
+            elif band_fr1 == 8:
+                self.N8.set(band_fr1)
+            elif band_fr1 == 12:
+                self.N12.set(band_fr1)
+            elif band_fr1 == 13:
+                self.N13.set(band_fr1)
+            elif band_fr1 == 14:
+                self.N14.set(band_fr1)
+            elif band_fr1 == 17:
+                self.N17.set(band_fr1)
+            elif band_fr1 == 18:
+                self.N18.set(band_fr1)
+            elif band_fr1 == 19:
+                self.N19.set(band_fr1)
+            elif band_fr1 == 20:
+                self.N20.set(band_fr1)
+            elif band_fr1 == 21:
+                self.N21.set(band_fr1)
+            elif band_fr1 == 24:
+                self.N24.set(band_fr1)
+            elif band_fr1 == 25:
+                self.N25.set(band_fr1)
+            elif band_fr1 == 26:
+                self.N26.set(band_fr1)
+            elif band_fr1 == 28:
+                self.N28.set(band_fr1)
+            elif band_fr1 == 29:
+                self.N29.set(band_fr1)
+            elif band_fr1 == 30:
+                self.N30.set(band_fr1)
+            elif band_fr1 == 32:
+                self.N32.set(band_fr1)
+            elif band_fr1 == 34:
+                self.N34.set(band_fr1)
+            elif band_fr1 == 38:
+                self.N38.set(band_fr1)
+            # elif band_fr1 == 39:
+                # self.N39.set(band_fr1)
+            elif band_fr1 == 40:
+                self.N40.set(band_fr1)
+            elif band_fr1 == 41:
+                self.N41.set(band_fr1)
+            elif band_fr1 == 48:
+                self.N48.set(band_fr1)
+            elif band_fr1 == 66:
+                self.N66.set(band_fr1)
+            elif band_fr1 == 71:
+                self.N71.set(band_fr1)
+            elif band_fr1 == 77:
+                self.N77.set(band_fr1)
+            elif band_fr1 == 78:
+                self.N78.set(band_fr1)
+            elif band_fr1 == 79:
+                self.N79.set(band_fr1)
+
+        for band_lte in ui_init['band']['bands_lte']:
+            if band_lte == 1:
+                self.B1.set(band_lte)
+            elif band_lte == 2:
+                self.B2.set(band_lte)
+            elif band_lte == 3:
+                self.B3.set(band_lte)
+            elif band_lte == 4:
+                self.B4.set(band_lte)
+            elif band_lte == 5:
+                self.B5.set(band_lte)
+            elif band_lte == 7:
+                self.B7.set(band_lte)
+            elif band_lte == 8:
+                self.B8.set(band_lte)
+            elif band_lte == 12:
+                self.B12.set(band_lte)
+            elif band_lte == 13:
+                self.B13.set(band_lte)
+            elif band_lte == 14:
+                self.B14.set(band_lte)
+            elif band_lte == 17:
+                self.B17.set(band_lte)
+            elif band_lte == 18:
+                self.B18.set(band_lte)
+            elif band_lte == 19:
+                self.B19.set(band_lte)
+            elif band_lte == 20:
+                self.B20.set(band_lte)
+            elif band_lte == 21:
+                self.B21.set(band_lte)
+            elif band_lte == 25:
+                self.B25.set(band_lte)
+            elif band_lte == 26:
+                self.B26.set(band_lte)
+            elif band_lte == 28:
+                self.B28.set(band_lte)
+            elif band_lte == 29:
+                self.B29.set(band_lte)
+            elif band_lte == 30:
+                self.B30.set(band_lte)
+            elif band_lte == 32:
+                self.B32.set(band_lte)
+            elif band_lte == 38:
+                self.B38.set(band_lte)
+            elif band_lte == 39:
+                self.B39.set(band_lte)
+            elif band_lte == 40:
+                self.B40.set(band_lte)
+            elif band_lte == 41:
+                self.B41.set(band_lte)
+            elif band_lte == 42:
+                self.B42.set(band_lte)
+            elif band_lte == 48:
+                self.B48.set(band_lte)
+            elif band_lte == 66:
+                self.B66.set(band_lte)
+            elif band_lte == 71:
+                self.B71.set(band_lte)
+
+        for band_wcdma in ui_init['band']['bands_wcdma']:
+            if band_wcdma == 1:
+                self.W1.set(band_wcdma)
+            elif band_wcdma == 2:
+                self.W2.set(band_wcdma)
+            elif band_wcdma == 4:
+                self.W4.set(band_wcdma)
+            elif band_wcdma == 5:
+                self.W5.set(band_wcdma)
+            elif band_wcdma == 8:
+                self.W8.set(band_wcdma)
+            elif band_wcdma == 6:
+                self.W6.set(band_wcdma)
+            elif band_wcdma == 19:
+                self.W19.set(band_wcdma)
+
+        for band_hsupa in ui_init['band']['bands_hsupa']:
+            if band_hsupa == 1:
+                self.U1.set(band_hsupa)
+            elif band_hsupa == 2:
+                self.U2.set(band_hsupa)
+            elif band_hsupa == 4:
+                self.U4.set(band_hsupa)
+            elif band_hsupa == 5:
+                self.U5.set(band_hsupa)
+            elif band_hsupa == 8:
+                self.U8.set(band_hsupa)
+            elif band_hsupa == 6:
+                self.U6.set(band_hsupa)
+            elif band_hsupa == 19:
+                self.U19.set(band_hsupa)
+
+        for band_hsdpa in ui_init['band']['bands_hsdpa']:
+            if band_hsdpa == 1:
+                self.D1.set(band_hsdpa)
+            elif band_hsdpa == 2:
+                self.D2.set(band_hsdpa)
+            elif band_hsdpa == 4:
+                self.D4.set(band_hsdpa)
+            elif band_hsdpa == 5:
+                self.D5.set(band_hsdpa)
+            elif band_hsdpa == 8:
+                self.D8.set(band_hsdpa)
+            elif band_hsdpa == 6:
+                self.D6.set(band_hsdpa)
+            elif band_hsdpa == 19:
+                self.D19.set(band_hsdpa)
+
+        # skip
+        # for band_gsm in ui_init.bands_gsm:
+        #     if band_gsm == 850:
+        #         self.GSM850.set(band_gsm)
+        #     elif band_gsm == 900:
+        #         self.GSM900.set(band_gsm)
+        #     elif band_gsm == 1800:
+        #         self.GSM1800.set(band_gsm)
+        #     elif band_gsm == 1900:
+        #         self.GSM1900.set(band_gsm)
+
+        for tech in ui_init['tech']['tech']:
+            if tech == 'LTE':
+                self.tech_LTE.set(True)
+            elif tech == 'WCDMA':
+                self.tech_WCDMA.set(True)
+            elif tech == 'HSUPA':
+                self.tech_HSUPA.set(True)
+            elif tech == 'HSDPA':
+                self.tech_HSDPA.set(True)
+            elif tech == 'FR1':
+                self.tech_FR1.set(True)
+            # elif tech == 'GSM':
+            #     self.tech_GSM.set(True)
+
+        for bw in ui_init['bw']['bw_lte']:
+            if bw == 1.4:
+                self.bw1p4.set(True)
+            elif bw == 3:
+                self.bw3.set(True)
+            elif bw == 5:
+                self.bw5.set(True)
+            elif bw == 10:
+                self.bw10.set(True)
+            elif bw == 15:
+                self.bw15.set(True)
+            elif bw == 20:
+                self.bw20.set(True)
+
+        for bw in ui_init['bw']['bw_fr1']:
+            if bw == 5:
+                self.bw5_fr1.set(True)
+            elif bw == 10:
+                self.bw10_fr1.set(True)
+            elif bw == 15:
+                self.bw15_fr1.set(True)
+            elif bw == 20:
+                self.bw20_fr1.set(True)
+            elif bw == 25:
+                self.bw25_fr1.set(True)
+            elif bw == 30:
+                self.bw30_fr1.set(True)
+            elif bw == 40:
+                self.bw40_fr1.set(True)
+            elif bw == 50:
+                self.bw50_fr1.set(True)
+            elif bw == 60:
+                self.bw60_fr1.set(True)
+            elif bw == 70:
+                self.bw70_fr1.set(True)
+            elif bw == 80:
+                self.bw80_fr1.set(True)
+            elif bw == 90:
+                self.bw90_fr1.set(True)
+            elif bw == 100:
+                self.bw100_fr1.set(True)
+
+        for ue_pwr in ui_init['rx_set']['ue_power']:
+            if ue_pwr == 1:
+                self.TxMax.set(True)
+            elif ue_pwr == 0:
+                self.TxLow.set(True)
+
+        for ch in ui_init['channel']['chan']:
+            if ch == 'L':
+                self.chan_L.set(True)
+            elif ch == 'M':
+                self.chan_M.set(True)
+            elif ch == 'H':
+                self.chan_H.set(True)
+
+        for script in ui_init['scripts']['scripts']:
+            if script == 'GENERAL':
+                self.general.set(True)
+            elif script == 'FCC':
+                self.fcc.set(True)
+            elif script == 'CE':
+                self.ce.set(True)
+            elif script == 'ENDC':
+                self.endc.set(True)
+
+        for type in ui_init['type']['type_fr1']:
+            if type == 'DFTS':
+                self.dfts.set(True)
+            elif type == 'CP':
+                self.cp.set(True)
+
+        for rb_ftm in ui_init['rb_set']['rb_ftm_lte']:
+            if rb_ftm == 'PRB':
+                self.prb_lte.set(True)
+            elif rb_ftm == 'FRB':
+                self.frb_lte.set(True)
+
+        for rb_ftm in ui_init['rb_set']['rb_ftm_fr1']:
+            if rb_ftm == 'INNER_FULL':
+                self.inner_full_fr1.set(True)
+            elif rb_ftm == 'OUTER_FULL':
+                self.outer_full_fr1.set(True)
+            elif rb_ftm == 'EDGE_1RB_LEFT':
+                self.edge_1rb_left_fr1.set(True)
+            elif rb_ftm == 'EDGE_1RB_RIGHT':
+                self.edge_1rb_right_fr1.set(True)
+            elif rb_ftm == 'EDGE_FULL_LEFT':
+                self.edge_full_left_fr1.set(True)
+            elif rb_ftm == 'EDGE_FULL_RIGHT':
+                self.edge_full_right_fr1.set(True)
+            elif rb_ftm == 'INNER_1RB_LEFT':
+                self.inner_1rb_left_fr1.set(True)
+            elif rb_ftm == 'INNER_1RB_RIGHT':
+                self.inner_1rb_right_fr1.set(True)
+
+        for tx_path in ui_init['path']['tx_paths']:
+            if tx_path == 'TX1':
+                self.tx1.set(True)
+            elif tx_path == 'TX2':
+                self.tx2.set(True)
+            elif tx_path == 'MIMO':
+                self.ulmimo.set(True)
+
+        for rx_path in ui_init['path']['rx_paths']:
+            if rx_path == 2:
+                self.rx0.set(True)
+            elif rx_path == 1:
+                self.rx1.set(True)
+            elif rx_path == 4:
+                self.rx2.set(True)
+            elif rx_path == 8:
+                self.rx3.set(True)
+            elif rx_path == 3:
+                self.rx0_rx1.set(True)
+            elif rx_path == 12:
+                self.rx2_rx3.set(True)
+            elif rx_path == 15:
+                self.rx_all_path.set(True)
+
+        for mcs in ui_init['mcs']['mcs_lte']:
+            if mcs == 'QPSK':
+                self.qpsk_lte.set(True)
+            elif mcs == 'Q16':
+                self.q16_lte.set(True)
+            elif mcs == 'Q64':
+                self.q64_lte.set(True)
+            elif mcs == 'Q256':
+                self.q256_lte.set(True)
+
+        for mcs in ui_init['mcs']['mcs_fr1']:
+            if mcs == 'QPSK':
+                self.qpsk_fr1.set(True)
+            elif mcs == 'Q16':
+                self.q16_fr1.set(True)
+            elif mcs == 'Q64':
+                self.q64_fr1.set(True)
+            elif mcs == 'Q256':
+                self.q256_fr1.set(True)
+            elif mcs == 'BPSK':
+                self.bpsk_fr1.set(True)
 
     def import_ui_setting(self):
         """
@@ -858,8 +1266,9 @@ class MainApp:
             elif mcs == 'BPSK':
                 self.bpsk_fr1.set(True)
 
-    def export_ui_setting_parser(self):
+    def export_ui_setting_yaml(self):
         logger.info('Export ui setting')
+        yaml_file ='ui_init.yaml'
         # thses are list like
         tech = self.wanted_tech()
         bw_lte = self.wanted_bw()
@@ -896,248 +1305,74 @@ class MainApp:
         chan = self.wanted_chan()
         tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
 
-        new_data = []
-        with open('ui_init.py', 'r') as f:
-            lines = f.readlines()
-            for line in lines:
-                if 'bands_lte' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_lte) + '\n'
-                    logger.debug('replace band LTE')
-                    line = '='.join(temp_list)
+        content = {
+            'port': {
+                'port_tx': port_tx,
+                'port_tx_lte': port_tx_lte,
+                'port_tx_fr1': port_tx_fr1,
+            },
+            'path': {
+                'sa_nsa': sa_nsa,
+                'asw_path': asw_path,
+                'srs_path': srs_path,
+                'srs_path_enable': srs_path_enable,
+                'sync_path': sync_path,
+                'tx_paths': tx_paths,
+                'rx_paths': rx_paths,
+            },
+            'tech': {
+                'tech': tech
+            },
+            'test_items': {
+                'tx': tx,
+                'rx': rx,
+                'rx_sweep': rx_sweep,
+                'tx_level_sweep': tx_level_sweep,
+                'tx_freq_sweep': tx_freq_sweep,
+            },
+            'band': {
+                'bands_fr1': bands_fr1,
+                'bands_lte': bands_lte,
+                'bands_wcdma': bands_wcdma,
+                'bands_hsupa': bands_hsupa,
+                'bands_hsdpa': bands_hsdpa,
+                'bands_gsm': None,
+                'bands_endc': bands_endc,
+                'band_segment': band_segment,
+                'band_segment_fr1': band_segment_fr1,
+            },
+            'bw': {
+                'bw_fr1': bw_fr1,
+                'bw_lte': bw_lte,
+            },
+            'channel': {
+                'chan': chan,
+            },
+            'rx_set':{
+                'ue_power': ue_power,
+            },
+            'instrument': {
+                'instrument': instrument,
+            },
+            'scripts':{
+                'scripts': scripts,
+            },
+            'type': {
+                'type_fr1': type_fr1,
+            },
+            'mcs': {
+                'mcs_lte': mcs_lte,
+                'mcs_fr1': mcs_fr1,
+            },
+            'rb_set': {
+                'rb_ftm_lte': rb_ftm_lte,
+                'rb_ftm_fr1': rb_ftm_fr1,
+            },
 
-                elif 'bands_wcdma' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_wcdma) + '\n'
-                    logger.debug('replace band WCDMA')
-                    line = '='.join(temp_list)
+        }
 
-                elif 'bands_hsupa' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_hsupa) + '\n'
-                    logger.debug('replace band HSUPA')
-                    line = '='.join(temp_list)
-
-                elif 'bands_hsdpa' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_hsdpa) + '\n'
-                    logger.debug('replace band HSDPA')
-                    line = '='.join(temp_list)
-
-                elif 'bands_gsm' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_gsm) + '\n'
-                    logger.debug('replace band GSM')
-                    line = '='.join(temp_list)
-
-                elif 'bands_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_fr1) + '\n'
-                    logger.debug('replace band FR1')
-                    line = '='.join(temp_list)
-
-                elif 'bands_endc' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bands_endc) + '\n'
-                    logger.debug('replace band ENDC')
-                    line = '='.join(temp_list)
-
-                elif 'scripts' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(scripts) + '\n'
-                    logger.debug('replace band Scripts')
-                    line = '='.join(temp_list)
-
-                elif 'type_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(type_fr1) + '\n'
-                    logger.debug('replace band Type')
-                    line = '='.join(temp_list)
-
-                elif 'mcs_lte' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(mcs_lte) + '\n'
-                    logger.debug('replace band MCS for LTE')
-                    line = '='.join(temp_list)
-
-                elif 'mcs_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(mcs_fr1) + '\n'
-                    logger.debug('replace band MCS for FR1')
-                    line = '='.join(temp_list)
-
-                elif 'rb_ftm_lte' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rb_ftm_lte) + '\n'
-                    logger.debug('replace band RB_FTM for LTE')
-                    line = '='.join(temp_list)
-
-                elif 'rb_ftm_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rb_ftm_fr1) + '\n'
-                    logger.debug('replace band RB_FTM for FR1')
-                    line = '='.join(temp_list)
-
-                elif 'tx_paths' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tx_paths) + '\n'
-                    logger.debug('replace tx_paths')
-                    line = '='.join(temp_list)
-
-                elif 'rx_paths' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rx_paths) + '\n'
-                    logger.debug('replace rx_paths')
-                    line = '='.join(temp_list)
-
-                elif 'tech' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tech) + '\n'
-                    logger.debug('replace tech setting')
-                    line = '='.join(temp_list)
-
-                elif 'bw_lte' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bw_lte) + '\n'
-                    logger.debug('replace bw setting for LTE')
-                    line = '='.join(temp_list)
-
-                elif 'bw_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(bw_fr1) + '\n'
-                    logger.debug('replace bw setting for FR1')
-                    line = '='.join(temp_list)
-
-                elif 'ue_power' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(ue_power) + '\n'
-                    logger.debug('replace ue power setting')
-                    line = '='.join(temp_list)
-
-                elif 'instrument' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(instrument) + '"' + '\n'
-                    logger.debug('replace instrument setting')
-                    line = '='.join(temp_list)
-
-                # elif 'tx_port ' in line:
-                #     temp_list = line.split('=')
-                #     temp_list[1] = ' ' + '"' + str(port_tx) + '"' + '\n'
-                #     logger.debug('replace tx_port setting')
-                #     line = '='.join(temp_list)
-                #
-                # elif 'tx_port_lte' in line:
-                #     temp_list = line.split('=')
-                #     temp_list[1] = ' ' + '"' + str(port_tx_lte) + '"' + '\n'
-                #     logger.debug('replace tx_port_lte setting')
-                #     line = '='.join(temp_list)
-                #
-                # elif 'tx_port_fr1' in line:
-                #     temp_list = line.split('=')
-                #     temp_list[1] = ' ' + '"' + str(port_tx_fr1) + '"' + '\n'
-                #     logger.debug('replace tx_port_fr1 setting')
-                #     line = '='.join(temp_list)
-
-                elif 'sa_nsa' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(sa_nsa) + '"' + '\n'
-                    logger.debug('replace sa_nsa mode setting')
-                    line = '='.join(temp_list)
-
-                elif 'sync_path' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(sync_path) + '"' + '\n'
-                    logger.debug('replace sync_path setting')
-                    line = '='.join(temp_list)
-
-                elif 'asw_path' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(asw_path) + '\n'
-                    logger.debug('replace asw_path setting')
-                    line = '='.join(temp_list)
-
-                elif 'srs_path ' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(srs_path) + '\n'
-                    logger.debug('replace srs_path setting')
-                    line = '='.join(temp_list)
-
-                elif 'srs_path_enable' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(srs_path_enable) + '\n'
-                    logger.debug('replace srs path enable setting')
-                    line = '='.join(temp_list)
-
-                elif 'band_segment ' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(band_segment) + '"' + '\n'
-                    logger.debug('replace band segment setting for LTE')
-                    line = '='.join(temp_list)
-
-                elif 'band_segment_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(band_segment_fr1) + '"' + '\n'
-                    logger.debug('replace band segment setting for FR1')
-                    line = '='.join(temp_list)
-
-                elif 'port_tx ' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(port_tx) + '\n'
-                    logger.debug('replace port_tx for LTE')
-                    line = '='.join(temp_list)
-
-                elif 'port_tx_lte' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(port_tx_lte) + '\n'
-                    logger.debug('replace port_tx_lte for LTE')
-                    line = '='.join(temp_list)
-
-                elif 'port_tx_fr1' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(port_tx_fr1) + '\n'
-                    logger.debug('replace port_tx_frq for FR1')
-                    line = '='.join(temp_list)
-
-                elif 'tx ' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tx) + '\n'
-                    logger.debug('replace tx setting')
-                    line = '='.join(temp_list)
-
-                elif 'tx_level_sweep' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tx_level_sweep) + '\n'
-                    logger.debug('replace tx level sweep setting')
-                    line = '='.join(temp_list)
-
-                elif 'tx_freq_sweep' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(tx_freq_sweep) + '\n'
-                    logger.debug('replace tx freq sweep setting')
-                    line = '='.join(temp_list)
-
-                elif 'rx ' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rx) + '\n'
-                    logger.debug('replace rx setting')
-                    line = '='.join(temp_list)
-
-                elif 'rx_sweep' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + str(rx_sweep) + '\n'
-                    logger.debug('replace rx_sweep setting')
-                    line = '='.join(temp_list)
-
-                elif 'chan' in line:
-                    temp_list = line.split('=')
-                    temp_list[1] = ' ' + '"' + str(chan) + '"' + '\n'
-                    logger.debug('replace chan setting')
-                    line = '='.join(temp_list)
-
-                new_data.append(line)
-
-        with open('ui_init.py', 'w') as f:
-            f.writelines(new_data)
+        with open(yaml_file, 'w', encoding='utf-8') as outfile:
+            yaml.dump(content, outfile, default_flow_style=False, encoding='utf-8', allow_unicode=True)
 
     def export_ui_setting(self):
         logger.info('Export ui setting')
@@ -2647,13 +2882,12 @@ class MainApp:
             if self.wanted_test['rx_sweep']:
                 inst.run_rx_sweep_ch()
 
-
     def measure(self):
         import want_test_band as wt
         for button_run in self.button_run:
             button_run['state'] = tkinter.DISABLED
         start = datetime.datetime.now()
-        self.export_ui_setting()
+        self.export_ui_setting_yaml()
         # list-like
         wt.tech = self.wanted_tech()
         wt.endc_bands = self.wanted_band_ENDC()
