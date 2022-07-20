@@ -918,7 +918,7 @@ class Cmw100:
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.type_fr1 = 'DFTS'
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         self.script = 'GENERAL'
         self.mcs_fr1 = 'QPSK'
         for tech in wt.tech:
@@ -952,7 +952,7 @@ class Cmw100:
         self.tx_level_endc_fr1 = wt.tx_level_endc_fr1
         self.port_tx_lte = wt.port_tx_lte
         self.port_tx_fr1 = wt.port_tx_fr1
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         self.type_fr1 = 'DFTS'
         self.mcs_lte = self.mcs_fr1 = 'QPSK'
         self.tx_path = 'TX1'
@@ -2250,7 +2250,7 @@ class Cmw100:
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = 'FR1'
@@ -2274,7 +2274,7 @@ class Cmw100:
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = 'FR1'
@@ -2298,7 +2298,7 @@ class Cmw100:
     def tx_power_pipline_ce_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = 'FR1'
@@ -2345,7 +2345,7 @@ class Cmw100:
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = tech
@@ -2392,7 +2392,7 @@ class Cmw100:
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
-        self.sa_nsa_mode = wt.sa_nas
+        self.sa_nsa_mode = wt.sa_nsa
         for tech in wt.tech:
             if tech == 'FR1' and wt.fr1_bands != []:
                 self.tech = tech
@@ -3771,7 +3771,7 @@ class Cmw100:
                 for script in wt.scripts:
                     if script == 'GENERAL':
                         self.search_sensitivity_pipline_fr1()
-                    elif script == 'ENDC' and wt.sa_nas == 1:
+                    elif script == 'ENDC' and wt.sa_nsa == 1:
                         self.sensitivity_pipline_endc()
 
     def run_tx_level_sweep(self):

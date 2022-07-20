@@ -15,6 +15,7 @@ import ui_init
 fileConfig('logging.ini')
 logger = logging.getLogger()
 
+
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "main_v2.ui"
 
@@ -454,7 +455,7 @@ class MainApp:
         self.srs_path.set(ui_init.srs_path)
         self.srs_path_enable.set(ui_init.srs_path_enable)
         self.sync_path.set(ui_init.sync_path)
-        self.sa_nsa.set(ui_init.sa_nas)
+        self.sa_nsa.set(ui_init.sa_nsa)
 
         #reet all the check button
         self.off_all_reset_tech()
@@ -789,27 +790,27 @@ class MainApp:
             elif rb_ftm == 'INNER_1RB_RIGHT':
                 self.inner_1rb_right_fr1.set(True)
 
-            for mcs in ui_init.mcs_lte:
-                if mcs == 'QPSK':
-                    self.qpsk_lte.set(True)
-                elif mcs == 'Q16':
-                    self.q16_lte.set(True)
-                elif mcs == 'Q64':
-                    self.q64_lte.set(True)
-                elif mcs == 'Q256':
-                    self.q256_lte.set(True)
-
-            for mcs in ui_init.mcs_fr1:
-                if mcs == 'QPSK':
-                    self.qpsk_fr1.set(True)
-                elif mcs == 'Q16':
-                    self.q16_fr1.set(True)
-                elif mcs == 'Q64':
-                    self.q64_fr1.set(True)
-                elif mcs == 'Q256':
-                    self.q256_fr1.set(True)
-                elif mcs == 'BPSK':
-                    self.bpsk_fr1.set(True)
+            # for mcs in ui_init.mcs_lte:
+            #     if mcs == 'QPSK':
+            #         self.qpsk_lte.set(True)
+            #     elif mcs == 'Q16':
+            #         self.q16_lte.set(True)
+            #     elif mcs == 'Q64':
+            #         self.q64_lte.set(True)
+            #     elif mcs == 'Q256':
+            #         self.q256_lte.set(True)
+            #
+            # for mcs in ui_init.mcs_fr1:
+            #     if mcs == 'QPSK':
+            #         self.qpsk_fr1.set(True)
+            #     elif mcs == 'Q16':
+            #         self.q16_fr1.set(True)
+            #     elif mcs == 'Q64':
+            #         self.q64_fr1.set(True)
+            #     elif mcs == 'Q256':
+            #         self.q256_fr1.set(True)
+            #     elif mcs == 'BPSK':
+            #         self.bpsk_fr1.set(True)
 
         for tx_path in ui_init.tx_paths:
             if tx_path == 'TX1':
@@ -854,6 +855,289 @@ class MainApp:
                 self.q64_fr1.set(True)
             elif mcs == 'Q256':
                 self.q256_fr1.set(True)
+            elif mcs == 'BPSK':
+                self.bpsk_fr1.set(True)
+
+    def export_ui_setting_parser(self):
+        logger.info('Export ui setting')
+        # thses are list like
+        tech = self.wanted_tech()
+        bw_lte = self.wanted_bw()
+        bw_fr1 = self.wanted_bw_fr1()
+        ue_power = self.wanted_ue_pwr()
+        bands_fr1 = self.wanted_band_FR1()
+        bands_lte = self.wanted_band_LTE()
+        bands_wcdma = self.wanted_band_WCDMA()
+        bands_hsupa = self.wanted_band_HSUPA()
+        bands_hsdpa = self.wanted_band_HSDPA()
+        bands_gsm = self.wanted_band_GSM()
+        bands_endc = self.wanted_band_ENDC()
+        scripts = self.wanted_scripts()
+        type_fr1 = self.wanted_type()
+        mcs_lte = self.wanted_mcs_lte()
+        mcs_fr1 = self.wanted_mcs_fr1()
+        rb_ftm_lte = self.wanted_ftm_rb_lte()
+        rb_ftm_fr1 = self.wanted_ftm_rb_fr1()
+        tx_paths = self.wanted_tx_path()
+        rx_paths = self.wanted_rx_path()
+
+        # these are not list-like
+        instrument = self.instrument.get()
+        port_tx = self.port_tx.get()
+        port_tx_lte = self.port_tx_lte.get()
+        port_tx_fr1 = self.port_tx_fr1.get()
+        sa_nsa = self.sa_nsa.get()
+        asw_path = self.asw_path.get()
+        srs_path = self.srs_path.get()
+        srs_path_enable = self.srs_path_enable.get()
+        sync_path = self.sync_path.get()
+        band_segment = self.band_segment.get()
+        band_segment_fr1 = self.band_segment_fr1.get()
+        chan = self.wanted_chan()
+        tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
+
+        new_data = []
+        with open('ui_init.py', 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if 'bands_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_lte) + '\n'
+                    logger.debug('replace band LTE')
+                    line = '='.join(temp_list)
+
+                elif 'bands_wcdma' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_wcdma) + '\n'
+                    logger.debug('replace band WCDMA')
+                    line = '='.join(temp_list)
+
+                elif 'bands_hsupa' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_hsupa) + '\n'
+                    logger.debug('replace band HSUPA')
+                    line = '='.join(temp_list)
+
+                elif 'bands_hsdpa' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_hsdpa) + '\n'
+                    logger.debug('replace band HSDPA')
+                    line = '='.join(temp_list)
+
+                elif 'bands_gsm' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_gsm) + '\n'
+                    logger.debug('replace band GSM')
+                    line = '='.join(temp_list)
+
+                elif 'bands_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_fr1) + '\n'
+                    logger.debug('replace band FR1')
+                    line = '='.join(temp_list)
+
+                elif 'bands_endc' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bands_endc) + '\n'
+                    logger.debug('replace band ENDC')
+                    line = '='.join(temp_list)
+
+                elif 'scripts' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(scripts) + '\n'
+                    logger.debug('replace band Scripts')
+                    line = '='.join(temp_list)
+
+                elif 'type_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(type_fr1) + '\n'
+                    logger.debug('replace band Type')
+                    line = '='.join(temp_list)
+
+                elif 'mcs_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(mcs_lte) + '\n'
+                    logger.debug('replace band MCS for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'mcs_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(mcs_fr1) + '\n'
+                    logger.debug('replace band MCS for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'rb_ftm_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rb_ftm_lte) + '\n'
+                    logger.debug('replace band RB_FTM for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'rb_ftm_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rb_ftm_fr1) + '\n'
+                    logger.debug('replace band RB_FTM for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'tx_paths' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_paths) + '\n'
+                    logger.debug('replace tx_paths')
+                    line = '='.join(temp_list)
+
+                elif 'rx_paths' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rx_paths) + '\n'
+                    logger.debug('replace rx_paths')
+                    line = '='.join(temp_list)
+
+                elif 'tech' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tech) + '\n'
+                    logger.debug('replace tech setting')
+                    line = '='.join(temp_list)
+
+                elif 'bw_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bw_lte) + '\n'
+                    logger.debug('replace bw setting for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'bw_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(bw_fr1) + '\n'
+                    logger.debug('replace bw setting for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'ue_power' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(ue_power) + '\n'
+                    logger.debug('replace ue power setting')
+                    line = '='.join(temp_list)
+
+                elif 'instrument' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(instrument) + '"' + '\n'
+                    logger.debug('replace instrument setting')
+                    line = '='.join(temp_list)
+
+                # elif 'tx_port ' in line:
+                #     temp_list = line.split('=')
+                #     temp_list[1] = ' ' + '"' + str(port_tx) + '"' + '\n'
+                #     logger.debug('replace tx_port setting')
+                #     line = '='.join(temp_list)
+                #
+                # elif 'tx_port_lte' in line:
+                #     temp_list = line.split('=')
+                #     temp_list[1] = ' ' + '"' + str(port_tx_lte) + '"' + '\n'
+                #     logger.debug('replace tx_port_lte setting')
+                #     line = '='.join(temp_list)
+                #
+                # elif 'tx_port_fr1' in line:
+                #     temp_list = line.split('=')
+                #     temp_list[1] = ' ' + '"' + str(port_tx_fr1) + '"' + '\n'
+                #     logger.debug('replace tx_port_fr1 setting')
+                #     line = '='.join(temp_list)
+
+                elif 'sa_nsa' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(sa_nsa) + '"' + '\n'
+                    logger.debug('replace sa_nsa mode setting')
+                    line = '='.join(temp_list)
+
+                elif 'sync_path' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(sync_path) + '"' + '\n'
+                    logger.debug('replace sync_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'asw_path' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(asw_path) + '\n'
+                    logger.debug('replace asw_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'srs_path ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(srs_path) + '\n'
+                    logger.debug('replace srs_path setting')
+                    line = '='.join(temp_list)
+
+                elif 'srs_path_enable' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(srs_path_enable) + '\n'
+                    logger.debug('replace srs path enable setting')
+                    line = '='.join(temp_list)
+
+                elif 'band_segment ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(band_segment) + '"' + '\n'
+                    logger.debug('replace band segment setting for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'band_segment_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(band_segment_fr1) + '"' + '\n'
+                    logger.debug('replace band segment setting for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'port_tx ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(port_tx) + '\n'
+                    logger.debug('replace port_tx for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'port_tx_lte' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(port_tx_lte) + '\n'
+                    logger.debug('replace port_tx_lte for LTE')
+                    line = '='.join(temp_list)
+
+                elif 'port_tx_fr1' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(port_tx_fr1) + '\n'
+                    logger.debug('replace port_tx_frq for FR1')
+                    line = '='.join(temp_list)
+
+                elif 'tx ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx) + '\n'
+                    logger.debug('replace tx setting')
+                    line = '='.join(temp_list)
+
+                elif 'tx_level_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_level_sweep) + '\n'
+                    logger.debug('replace tx level sweep setting')
+                    line = '='.join(temp_list)
+
+                elif 'tx_freq_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_freq_sweep) + '\n'
+                    logger.debug('replace tx freq sweep setting')
+                    line = '='.join(temp_list)
+
+                elif 'rx ' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rx) + '\n'
+                    logger.debug('replace rx setting')
+                    line = '='.join(temp_list)
+
+                elif 'rx_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(rx_sweep) + '\n'
+                    logger.debug('replace rx_sweep setting')
+                    line = '='.join(temp_list)
+
+                elif 'chan' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + '"' + str(chan) + '"' + '\n'
+                    logger.debug('replace chan setting')
+                    line = '='.join(temp_list)
+
+                new_data.append(line)
+
+        with open('ui_init.py', 'w') as f:
+            f.writelines(new_data)
 
     def export_ui_setting(self):
         logger.info('Export ui setting')
@@ -2401,7 +2685,7 @@ class MainApp:
         wt.srs_path = self.srs_path.get()
         wt.srs_path_enable = self.srs_path_enable.get()
         wt.sync_path = self.sync_path.get()
-        wt.sa_nas = self.sa_nsa.get()
+        wt.sa_nsa = self.sa_nsa.get()
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820

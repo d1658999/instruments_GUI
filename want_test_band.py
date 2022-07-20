@@ -21,7 +21,7 @@ tx_max_pwr_sensitivity = [1, 0]  # 1: Txmax power, 0: -10dBm
 tx_level = 26
 tx_level_endc_lte = 26
 tx_level_endc_fr1 = 0
-sa_nas = 0
+sa_nsa = 0
 duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2
 
 port_tx = 1
