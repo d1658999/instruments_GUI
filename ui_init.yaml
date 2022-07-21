@@ -1,0 +1,67 @@
+band:
+  band_segment: A
+  band_segment_fr1: A
+  bands_endc: []
+  bands_fr1:
+  - 77
+  bands_gsm: null
+  bands_hsdpa: []
+  bands_hsupa: []
+  bands_lte:
+  - 42
+  - 48
+  bands_wcdma: []
+bw:
+  bw_fr1:
+  - 100
+  bw_lte:
+  - 10
+channel:
+  chan: M
+instrument:
+  instrument: Cmw100
+mcs:
+  mcs_fr1:
+  - QPSK
+  mcs_lte:
+  - QPSK
+path:
+  asw_path: 0
+  rx_paths:
+  - 2
+  sa_nsa: 0
+  srs_path: 0
+  srs_path_enable: false
+  sync_path: Main
+  tx_paths:
+  - TX1
+port:
+  port_tx: 1
+  port_tx_fr1: 4
+  port_tx_lte: 1
+rb_set:
+  rb_ftm_fr1:
+  - INNER_FULL
+  rb_ftm_lte:
+  - PRB
+  - FRB
+rx_set:
+  ue_power:
+  - 1
+  - 0
+scripts:
+  scripts:
+  - GENERAL
+tech:
+  tech:
+  - LTE
+  - FR1
+test_items:
+  rx: false
+  rx_sweep: false
+  tx: true
+  tx_freq_sweep: false
+  tx_level_sweep: false
+type:
+  type_fr1:
+  - DFTS
