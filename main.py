@@ -2950,7 +2950,7 @@ class MainApp:
             #     anritsu.run_rx_sweep_ch()
 
         elif self.instrument.get() == 'Anritsu8821':
-            from anritsu8820 import Anritsu8821
+            from anritsu8821 import Anritsu8821
             # import want_test_band as wt
             #
             # wt.tech = self.wanted_tech()
