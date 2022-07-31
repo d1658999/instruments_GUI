@@ -155,12 +155,12 @@ def dl_freq_selected(standard, band, bw=5):
     band_dl_freq_wcdma = {
         'B1': [2110, 2140, 2170],
         'B2': [1930, 1960, 1990],
-        'B4': [2110, 2132.5, 2155],
-        'B5': [860, 881.5, 894],
-        'B8': [925, 942.5, 960],
+        'B4': [2110, 2132.6, 2155],
+        'B5': [860, 880, 891.6],
+        'B8': [925, 942.6, 960],
         'B6': [875, 880, 885],
         'B9': [1845, 1862.4, 1879.8],
-        'B19': [875, 882.5, 890],
+        'B19': [875, 882.6, 890],
 
     }
 
@@ -180,6 +180,119 @@ def dl_freq_selected(standard, band, bw=5):
             return [int(freq * 1000) for freq in band_dl_freq_fr1[f'N{band}']]
     elif 'GSM':
         pass
+
+def dl_chan_select_wcdma(band):
+    band_dl_ch_wcdma = {
+        'B1': [10562, 10700, 10838],
+        'B2': [9662, 9800, 9938],
+        'B4': [1537, 1638, 1738],
+        'B5': [4357, 4400, 4458],
+        'B8': [2937, 3013, 3088],
+        'B6': [4387, 4400, 4413],
+        'B9': [9237, 9312, 9387],
+        'B19': [712, 738, 763],
+    }
+
+    return [int(ch) for ch in band_dl_ch_wcdma[f'B{band}']]
+
+def transfer_chan_tx2rx_wcdma(band_wcdma, chan):
+    band_wcdma = int(band_wcdma)
+    spacing_wcdma = {
+        1: 950,
+        2: 400,
+        4: 225,
+        5: 225,
+        8: 225,
+        6: 225,
+        9: 475,
+        19: 400,
+
+    }
+
+    return chan + spacing_wcdma[band_wcdma]
+
+
+def transfer_chan_rx2tx_wcdma(band_wcdma, chan):
+    band_wcdma = int(band_wcdma)
+    band_wcdma = int(band_wcdma)
+    spacing_wcdma = {
+        1: -950,
+        2: -400,
+        4: -225,
+        5: -225,
+        8: -225,
+        6: -225,
+        9: -475,
+        19: -400,
+
+    }
+
+    return chan + spacing_wcdma[band_wcdma]
+
+def transfer_chan2freq_wcdma(band, chan, tx_rx='tx'):
+    band = int(band)
+    chan = int(chan)
+
+    if band == 4:
+        if tx_rx == 'tx':
+            return (1450 + 0.2 * chan) * 1000
+        elif tx_rx == 'rx':
+            return (1805 + 0.2 * chan) * 1000
+    elif band == 8:
+        return (340 + 0.2 * chan) * 1000
+    elif band == 19:
+        if tx_rx == 'tx':
+            return (770 + 0.2 * chan) * 1000
+        elif tx_rx == 'rx':
+            return (735 + 0.2 * chan) * 1000
+    else:
+        return 0.2 * chan * 1000
+
+def trandfer_freq2chan_wcdma(band, freq, tx_rx='tx'):
+    if band == 4:
+        if tx_rx == 'tx':
+            return 5 * (freq / 1000 - 1450)
+        elif tx_rx == 'rx':
+            return 5 * (freq / 1000 - 1805)
+    elif band == 8:
+        return 5 * (freq / 1000 - 340)
+    elif band == 19:
+        if tx_rx == 'tx':
+            return 5 * (freq / 1000 - 770)
+        elif tx_rx == 'rx':
+            return 5 * (freq / 1000 - 735)
+    else:
+        return 5 * freq / 1000
+
+def transfer_freq_rx2tx_wcdma(band_wcdma, freq):
+    band_wcdma = int(band_wcdma)
+    spacing_wdcma = {
+        1: -190000,
+        2: -80000,
+        4: -400000,
+        5: -45000,
+        8: -45000,
+        6: -45000,
+        9: -95000,
+        19: -45000,
+    }
+
+    return freq + spacing_wdcma[band_wcdma]
+
+def transfer_freq_tx2rx_wcdma(band_wcdma, freq):
+    band_wcdma = int(band_wcdma)
+    spacing_wdcma = {
+        1: 190000,
+        2: 80000,
+        4: 400000,
+        5: 45000,
+        8: 45000,
+        6: 45000,
+        9: 95000,
+        19: 45000,
+    }
+
+    return freq + spacing_wdcma[band_wcdma]
 
 def transfer_freq_rx2tx_lte(band_lte, freq):
     band_lte = int(band_lte)

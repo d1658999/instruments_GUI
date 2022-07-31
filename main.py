@@ -16,7 +16,6 @@ import ui_init
 fileConfig('logging.ini')
 logger = logging.getLogger()
 
-
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "main_v2.ui"
 
@@ -32,7 +31,8 @@ class MainApp:
         button_run_ftm_ce = builder.get_object("button_run_ftm_ce", master)
         button_run_ftm_endc = builder.get_object("button_run_ftm_endc", master)
         button_run_signaling = builder.get_object("button_run_signaling", master)
-        self.button_run = [button_run_ftm, button_run_ftm_fcc, button_run_ftm_ce, button_run_ftm_endc, button_run_signaling]
+        self.button_run = [button_run_ftm, button_run_ftm_fcc, button_run_ftm_ce, button_run_ftm_endc,
+                           button_run_signaling]
 
         # self.checkbox_hsupa = builder.get_object("checkbutton_WCDMA", master)
         # self.checkbox_hsdpa = builder.get_object("checkbutton_HSUPA", master)
@@ -462,7 +462,7 @@ class MainApp:
         self.sync_path.set(ui_init['path']['sync_path'])
         self.sa_nsa.set(ui_init['path']['sa_nsa'])
 
-        #reet all the check button
+        # reet all the check button
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
@@ -548,7 +548,7 @@ class MainApp:
             elif band_fr1 == 38:
                 self.N38.set(band_fr1)
             # elif band_fr1 == 39:
-                # self.N39.set(band_fr1)
+            # self.N39.set(band_fr1)
             elif band_fr1 == 40:
                 self.N40.set(band_fr1)
             elif band_fr1 == 41:
@@ -865,7 +865,7 @@ class MainApp:
         self.sync_path.set(ui_init.sync_path)
         self.sa_nsa.set(ui_init.sa_nsa)
 
-        #reet all the check button
+        # reet all the check button
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
@@ -951,7 +951,7 @@ class MainApp:
             elif band_fr1 == 38:
                 self.N38.set(band_fr1)
             # elif band_fr1 == 39:
-                # self.N39.set(band_fr1)
+            # self.N39.set(band_fr1)
             elif band_fr1 == 40:
                 self.N40.set(band_fr1)
             elif band_fr1 == 41:
@@ -1268,7 +1268,7 @@ class MainApp:
 
     def export_ui_setting_yaml(self):
         logger.info('Export ui setting')
-        yaml_file ='ui_init.yaml'
+        yaml_file = 'ui_init.yaml'
         # thses are list like
         tech = self.wanted_tech()
         bw_lte = self.wanted_bw()
@@ -1348,13 +1348,13 @@ class MainApp:
             'channel': {
                 'chan': chan,
             },
-            'rx_set':{
+            'rx_set': {
                 'ue_power': ue_power,
             },
             'instrument': {
                 'instrument': instrument,
             },
-            'scripts':{
+            'scripts': {
                 'scripts': scripts,
             },
             'type': {
@@ -1396,8 +1396,6 @@ class MainApp:
         rb_ftm_fr1 = self.wanted_ftm_rb_fr1()
         tx_paths = self.wanted_tx_path()
         rx_paths = self.wanted_rx_path()
-
-
 
         # these are not list-like
         instrument = self.instrument.get()
@@ -1705,7 +1703,6 @@ class MainApp:
         self.chan_M.set(True)
         self.chan_H.set(True)
         self.sa_nsa.set(0)
-
 
         logger.info(f'default instrument: {self.instrument.get()}')
 
@@ -2318,7 +2315,6 @@ class MainApp:
 
         self.wanted_band_FR1()
 
-
     def off_all_none_MHB(self, event=None):
         self.MHB_all.set(False)
 
@@ -2424,7 +2420,6 @@ class MainApp:
             self.N79.set(0)
 
         self.wanted_band_FR1()
-
 
     def off_all_none_WCDMA(self, event=None):
         self.WCDMA_all.set(False)
@@ -2758,7 +2753,6 @@ class MainApp:
         if self.rx_path == []:
             logger.debug('Nothing to select for rx path')
 
-
         logger.info(f'RX path select: {self.rx_path_show}')
         logger.debug(f'RX path select: {self.rx_path}')
 
@@ -2768,7 +2762,7 @@ class MainApp:
         logger.info(f'select AS path {self.asw_path.get()}')
 
     def select_sync_path(self, option):
-        logger.info(f'select syn(CA) path {self.sync_path.get()}')
+        logger.info(f'select sync path {self.sync_path.get()}')
 
     def select_srs_path(self, option):
         logger.info(f'select SRS path {self.srs_path.get()}')
@@ -2779,6 +2773,7 @@ class MainApp:
             logger.info('SRS is enabled')
         else:
             logger.info('SRS is disabled')
+
     def wanted_ftm_rb_lte(self):
         self.ftm_rb_lte = []
         if self.prb_lte.get():
@@ -2977,7 +2972,6 @@ class MainApp:
         elif self.instrument.get() == 'Cmw100':
             from cmw100 import Cmw100
             self.test_pipeline(Cmw100)
-
 
         stop = datetime.datetime.now()
 

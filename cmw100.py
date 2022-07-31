@@ -144,6 +144,17 @@ class Cmw100:
             30: 1,
             60: 2,
         }
+        self.rx_path_gsm_dict = {
+            0: 'RX0',
+            1: 'RX1',
+            2: 'RX0+RX1',
+        }
+        self.rx_path_wcdma_dict = {
+            2: 'RX0',
+            1: 'RX1',
+            3: 'RX0+RX1',
+            15: 'ALL PATH'
+        }
         self.rx_path_lte_dict = {
             2: 'RX0',
             1: 'RX1',
@@ -227,6 +238,16 @@ class Cmw100:
         return want_loss
 
     @staticmethod
+    def chan_judge_wcdma(band_wcdma, tx_freq_wcdma):
+        rx_freq_wcdma = cm_pmt_ftm.transfer_freq_tx2rx_wcdma(band_wcdma, tx_freq_wcdma)
+        if rx_freq_wcdma < cm_pmt_ftm.dl_freq_selected('WCDMA', band_wcdma, 5)[1]:
+            return 'L'
+        elif rx_freq_wcdma == cm_pmt_ftm.dl_freq_selected('WCDMA', band_wcdma, 5)[1]:
+            return 'M'
+        elif rx_freq_wcdma > cm_pmt_ftm.dl_freq_selected('WCDMA', band_wcdma, 5)[1]:
+            return 'H'
+
+    @staticmethod
     def chan_judge_lte(band_lte, bw_lte, tx_freq_lte):
         rx_freq_lte = cm_pmt_ftm.transfer_freq_tx2rx_lte(band_lte, tx_freq_lte)
         if rx_freq_lte < cm_pmt_ftm.dl_freq_selected('LTE', band_lte, bw_lte)[1]:
@@ -246,6 +267,10 @@ class Cmw100:
         elif rx_freq_fr1 > cm_pmt_ftm.dl_freq_selected('FR1', band_fr1, bw_fr1)[1]:
             return 'H'
 
+    def set_test_mode_wcdma(self):
+        logger.info('----------Set Test Mode----------')
+        self.command(f'AT+HSPATMSTART')
+
     def set_test_mode_lte(self):
         logger.info('----------Set Test Mode----------')
         self.command(f'AT+LRFFINALSTART=1,{self.band_lte}')
@@ -258,6 +283,11 @@ class Cmw100:
         """
         logger.info('----------Set Test Mode----------')
         self.command(f'AT+NRFFINALSTART={self.band_fr1},{self.sa_nsa_mode}')
+        # self.command_cmw100_query('*OPC?')
+
+    def set_test_end_wcdma(self, delay=0.2):
+        logger.info('----------Set End----------')
+        self.command(f'AT+HSPATMEND', delay)
         # self.command_cmw100_query('*OPC?')
 
     def set_test_end_lte(self, delay=0.2):
@@ -304,6 +334,28 @@ class Cmw100:
         power_average = round(eval(self.command_cmw100_query('FETC:GPRF:MEAS:POWer:AVER?'))[1], 2)
         logger.info(f'Get the GPRF power: {power_average}')
         return power_average
+
+    def sig_gen_wcdma(self):
+        logger.info('----------Sig Gen----------')
+        self.command_cmw100_query('SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
+        self.command_cmw100_write('ROUT:GPRF:GEN:SCEN:SAL R118, TX1')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write('CONFigure:GPRF:GEN:CMWS:USAGe:TX:ALL R118, ON, ON, ON, ON, ON, ON, ON, ON')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write('SOUR:GPRF:GEN1:LIST OFF')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:EATT {self.loss_rx}')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_write(f'SOUR:GPRF:GEN1:BBM ARB')
+        waveform_3g = '3G_CAL_FINAL.wv'
+        self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\{waveform_3g}'")
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
+        self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_wcdma}KHz')
+        self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}.000000')
+        self.command_cmw100_write(f'SOUR:GPRF:GEN1:STAT ON')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
 
     def sig_gen_lte(self):
         logger.info('----------Sig Gen----------')
@@ -371,13 +423,19 @@ class Cmw100:
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
 
+    def sync_wcdma(self):
+        logger.info('---------Sync----------')
+        response = self.command(f'AT+HDLSYNC={self.rx_chan_wcdma}', delay=0.5)
+
     def sync_lte(self):
         logger.info('---------Sync----------')
-        response = self.command(f'AT+LSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{self.rx_freq_lte}', delay=1.2)
+        response = self.command(f'AT+LSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{self.rx_freq_lte}',
+                                delay=1.2)
         while b'+LSYNC:1\r\n' not in response:
             logger.info('**********Sync repeat**********')
             time.sleep(1)
-            response = self.command(f'AT+LSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{self.rx_freq_lte}', delay=2)
+            response = self.command(
+                f'AT+LSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{self.rx_freq_lte}', delay=2)
 
     def sync_fr1(self):
         logger.info('---------Sync----------')
@@ -391,6 +449,11 @@ class Cmw100:
             response = self.command(
                 f'AT+NRFSYNC={self.sync_path_dict[self.sync_path]},{self.sync_mode},{scs},{self.bw_fr1_dict[self.bw_fr1]},0,{self.rx_freq_fr1}',
                 delay=2)
+
+    def tx_set_wcdma(self):
+        self.command(f'AT+HDELULCHAN')
+        self.command(f'AT+HTXPERSTART={self.tx_chan_wcdma}')
+        self.command(f'AT+HSETMAXPOWER={self.tx_level * 10}')
 
     def tx_set_lte(self):
         """
@@ -478,12 +541,38 @@ class Cmw100:
         self.command(f'AT+NTXSRSSWPATHSET={self.srs_path}')
         logger.info(f'SRS_PATH: {self.srs_path}')
 
+    def rx_path_setting_gsm(self):
+        """
+        0: PRX, 1: DRX, 2: PRX+DRX
+        :return:
+        """
+        logger.info('----------Rx path setting----------')
+        self.command(f'AT+ERXMODESET={self.rx_path_gsm}')
+        # self.command_cmw100_query('*OPC?')
+
+    def rx_path_setting_wcdma(self):
+        """
+        2: PRX, 1: DRX, 3: PRX+DRX
+        :return:
+        """
+        logger.info('----------Rx path setting----------')
+        self.command(f'AT+HRXMODESET={self.rx_path_wcdma}')
+        # self.command_cmw100_query('*OPC?')
+
     def rx_path_setting_lte(self):
+        """
+        2: PRX, 1: DRX, 4: RX2, 8:RX3, 3: PRX+DRX, 12: RX2+RX3, 15: ALL PATH
+        :return:
+        """
         logger.info('----------Rx path setting----------')
         self.command(f'AT+LRXMODESET={self.rx_path_lte}')
         # self.command_cmw100_query('*OPC?')
 
     def rx_path_setting_fr1(self):
+        """
+        2: PRX, 1: DRX, 4: RX2, 8:RX3, 3: PRX+DRX, 12: RX2+RX3, 15: ALL PATH
+        :return:
+        """
         logger.info('----------Rx path setting----------')
         self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
         # self.command_cmw100_query('*OPC?')
@@ -528,6 +617,60 @@ class Cmw100:
         power = power_results.strip().split(',')[2]
         logger.info(f'LTE power by Tx monitor: {round(eval(power), 2)}')
         return round(eval(power), 2)
+
+    def tx_measure_wcdma(self):
+        logger.info('---------Tx Measure----------')
+        self.command_cmw100_write(f'*CLS')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:SCO:MOD 5')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:SCO:SPEC 5')
+        self.command_cmw100_write(f'ROUT:WCDMA:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
+        self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:EATT {self.loss_tx}')
+        self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:UMAR 10.00')
+        self.command_cmw100_write(f"TRIG:WCDM:MEAS:MEV:SOUR 'Free Run (Fast sync)'")
+        self.command_cmw100_write(f'TRIG:WCDM:MEAS:MEV:THR -30')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:REP SING')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:RES:ALL ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON')
+        self.command_cmw100_query('*OPC?')
+        self.command_cmw100_query('SYST:ERR:ALL?')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:BAND OB{self.band_wcdma}')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:RFS:FREQ {self.tx_chan_wcdma} CH')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:DPDC ON')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:SFOR 0')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:SCOD 13496235')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:ULC WCDM')
+        self.command_cmw100_query('SYST:ERR:ALL?')
+        self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:UMAR 10.00')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:RFS:ENP {self.tx_level + 5}')
+        mod_results = self.command_cmw100_query(
+            f'READ:WCDM:MEAS:MEV:MOD:AVER?')  # P1 is EVM, P4 is Ferr, P8 is IQ Offset
+        mod_results = mod_results.split(',')
+        mod_results = [mod_results[1], mod_results[4], mod_results[8]]
+        mod_results = [eval(m) for m in mod_results]
+        logger.info(f'EVM: {mod_results[0]:.2f}, FREQ_ERR: {mod_results[1]:.2f}, IQ_OFFSET: {mod_results[2]:.2f}')
+        self.command_cmw100_write(f'INIT:WCDM:MEAS:MEV')
+        self.command_cmw100_write(f'*OPC?')
+        f_state = self.command_cmw100_query(f'FETC:WCDM:MEAS:MEV:STAT?')
+        while f_state != 'RDY':
+            time.sleep(0.2)
+            f_state = self.command_cmw100_query('FETC:WCDM:MEAS:MEV:STAT?')
+            self.command_cmw100_query('*OPC?')
+        spectrum_results = self.command_cmw100_query(
+            f'FETC:WCDM:MEAS:MEV:SPEC:AVER?')  # P1: Power, P2: ACLR_-2, P3: ACLR_-1, P4:ACLR_+1, P5:ACLR_+2, P6:OBW
+        spectrum_results = spectrum_results.split(',')
+        spectrum_results = [
+            round(eval(spectrum_results[1]), 2),
+            round(eval(spectrum_results[3]) - eval(spectrum_results[1]), 2),
+            round(eval(spectrum_results[4]) - eval(spectrum_results[1]), 2),
+            round(eval(spectrum_results[2]) - eval(spectrum_results[1]), 2),
+            round(eval(spectrum_results[5]) - eval(spectrum_results[1]), 2),
+            round(eval(spectrum_results[6]) / 1000000, 2)
+        ]
+        logger.info(
+            f'Power: {spectrum_results[0]:.2f}, ACLR_-1: {spectrum_results[2]:.2f}, ACLR_1: {spectrum_results[3]:.2f}, ACLR_-2: {spectrum_results[1]:.2f}, ACLR_+2: {spectrum_results[4]:.2f}, OBW: {spectrum_results[5]:.2f}MHz')
+        self.command_cmw100_write(f'STOP:WCDM:MEAS:MEV')
+        self.command_cmw100_query('*OPC?')
+
+        return spectrum_results + mod_results
 
     def tx_measure_lte(self):
         logger.info('---------Tx Measure----------')
@@ -748,6 +891,17 @@ class Cmw100:
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
         # self.command_cmw100_query('*OPC?')
 
+    def query_rsrp_cinr_wcdma(self):
+        res = self.command(f'AT+LRXMEAS={self.rx_path_lte},20')
+        for line in res:
+            if '+LRXMEAS:' in line.decode():
+                self.rsrp_list = line.decode().split(':')[1].strip().split(',')[:4]
+                self.cinr_list = line.decode().split(':')[1].strip().split(',')[4:]
+                self.rsrp_list = [eval(rsrp) / 100 for rsrp in self.rsrp_list]
+                self.cinr_list = [eval(cinr) / 100 for cinr in self.cinr_list]
+                logger.info(f'**** RSRP: {self.rsrp_list} ****')
+                logger.info(f'**** CINR: {self.cinr_list} ****')
+
     def query_rsrp_cinr_lte(self):
         res = self.command(f'AT+LRXMEAS={self.rx_path_lte},20')
         for line in res:
@@ -770,6 +924,14 @@ class Cmw100:
                 logger.info(f'**** RSRP: {self.rsrp_list} ****')
                 logger.info(f'**** CINR: {self.cinr_list} ****')
 
+    def query_agc_wcdma(self):
+        res = self.command(f'AT+LRX1RX2AGCIDXRD')
+        for line in res:
+            if '+LRX1RX2AGCIDXRD:' in line.decode():
+                self.agc_list = line.decode().split(':')[1].strip().split(',')
+                self.agc_list = [eval(agc) for agc in self.agc_list]
+                logger.info(f'**** AGC: {self.agc_list} ****')
+
     def query_agc_lte(self):
         res = self.command(f'AT+LRX1RX2AGCIDXRD')
         for line in res:
@@ -786,6 +948,10 @@ class Cmw100:
                 self.agc_list = [eval(agc) for agc in self.agc_list]
                 logger.info(f'**** AGC: {self.agc_list} ****')
 
+    def get_esens_wcdma(self):
+        self.esens_list = [round(self.rx_level - c - 1, 2) for c in self.cinr_list]
+        logger.info(f'**** ESENS: {self.esens_list} ****')
+
     def get_esens_lte(self):
         self.esens_list = [round(self.rx_level - c - 1, 2) for c in self.cinr_list]
         logger.info(f'**** ESENS: {self.esens_list} ****')
@@ -793,6 +959,11 @@ class Cmw100:
     def get_esens_fr1(self):
         self.esens_list = [round(self.rx_level - c - 1, 2) for c in self.cinr_list]
         logger.info(f'**** ESENS: {self.esens_list} ****')
+
+    def query_rx_measure_wcdma(self):
+        self.query_rsrp_cinr_wcdma()
+        self.query_agc_wcdma()
+        self.get_esens_wcdma()
 
     def query_rx_measure_lte(self):
         self.query_rsrp_cinr_lte()
@@ -803,6 +974,13 @@ class Cmw100:
         self.query_rsrp_cinr_fr1()
         self.query_agc_fr1()
         self.get_esens_fr1()
+
+    def query_fer_measure_wcdma(self):
+        res = self.command('AT+HGETSENSE=100', delay=2)
+        for line in res:
+            if '+GETSENSE:' in line.decode():
+                self.fer = eval(line.decode().split(':')[1])
+                logger.info(f'****FER: {self.fer / 1000} %****')
 
     def query_fer_measure_lte(self):
         res = self.command('AT+LFERMEASURE=500', delay=0.5)
@@ -818,10 +996,18 @@ class Cmw100:
                 self.fer = eval(line.decode().split(':')[1])
                 logger.info(f'****FER: {self.fer / 100} %****')
 
+    def search_window_wcdma(self):
+        self.query_fer_measure_wcdma()
+        while self.fer < 100:
+            self.rx_level = round(self.rx_level - self.window, 1)  # to reduce a unit
+            self.set_rx_level()
+            self.query_fer_measure_wcdma()
+            # self.command_cmw100_query('*OPC?')
+
     def search_window_lte(self):
         self.query_fer_measure_lte()
         while self.fer < 500:
-            self.rx_level = round(self.rx_level - self.window, 1)
+            self.rx_level = round(self.rx_level - self.window, 1)  # to reduce a unit
             self.set_rx_level()
             self.query_fer_measure_lte()
             # self.command_cmw100_query('*OPC?')
@@ -829,10 +1015,34 @@ class Cmw100:
     def search_window_fr1(self):
         self.query_fer_measure_fr1()
         while self.fer < 500:
-            self.rx_level = round(self.rx_level - self.window, 1)
+            self.rx_level = round(self.rx_level - self.window, 1)  # to reduce a unit
             self.set_rx_level()
             self.query_fer_measure_fr1()
             # self.command_cmw100_query('*OPC?')
+
+    def search_sensitivity_wcdma(self):
+        reset_rx_level = -80
+        self.rx_level = reset_rx_level
+        coarse_1 = 2
+        coarse_2 = 1
+        fine = 0.2
+        logger.info('----------Search RX Level----------')
+        self.window = coarse_1
+        self.search_window_wcdma()  # first time by coarse_1
+        logger.info('Second time to search')
+        self.rx_level += coarse_1 * 2
+        logger.info(f'==========Back to Search: {self.rx_level} dBm==========')
+        self.set_rx_level()
+        self.window = coarse_2
+        self.search_window_wcdma()  # second time by coarse_2
+        logger.info('Third time to search')
+        self.rx_level += coarse_2 * 2
+        logger.info(f'==========Back to Search: {self.rx_level} dBm==========')
+        self.set_rx_level()
+        self.window = fine
+        self.search_window_wcdma()  # second time by fine
+        self.rx_level = round(self.rx_level + fine, 1)
+        logger.info(f'Final Rx Level: {self.rx_level}')
 
     def search_sensitivity_lte(self):
         reset_rx_level = -80
@@ -882,6 +1092,24 @@ class Cmw100:
         self.rx_level = round(self.rx_level + fine, 1)
         logger.info(f'Final Rx Level: {self.rx_level}')
 
+    def search_sensitivity_pipline_wcdma(self):
+        self.port_tx = wt.port_tx
+        self.chan = wt.channel
+        self.mcs_wcdma = 'QPSK'
+        self.script = 'GENERAL'
+        for tech in wt.tech:
+            if tech == 'WCDMA' and wt.wcdma_bands != []:
+                self.tech = 'WCDMA'
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    # for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                    # self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
+                    for band in wt.wcdma_bands:
+                        self.band_wcdma = band
+                        self.search_sensitivity_lmh_progress_wcdma()
+                    # self.rx_desense_progress()
+                    self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+
     def search_sensitivity_pipline_lte(self):
         self.port_tx = wt.port_tx
         self.chan = wt.channel
@@ -907,12 +1135,12 @@ class Cmw100:
                             self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
                         except TypeError as err:
                             logger.debug(err)
-                            logger.info('It might not have the Bw in this Band, so it cannot to be calculated for desens')
+                            logger.info(
+                                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
                         except KeyError as err:
                             logger.debug(err)
                             logger.info(
                                 f"{self.band_lte} doesn't have this {self.bw_lte}, so desens progress cannot run")
-
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx
@@ -941,7 +1169,8 @@ class Cmw100:
                             self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
                         except TypeError as err:
                             logger.debug(err)
-                            logger.info('It might not have the Bw in this Band, so it cannot to be calculated for desens')
+                            logger.info(
+                                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
                         except KeyError as err:
                             logger.debug(err)
                             logger.info(
@@ -1013,14 +1242,17 @@ class Cmw100:
                                     self.port_tx = self.port_tx_lte
                                     self.power_monitor_endc_lte = self.tx_monitor_lte()
                                     data.append([int(self.band_lte), int(self.band_fr1), self.power_monitor_endc_lte,
-                                                 self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1, self.tx_freq_lte,
-                                                 self.tx_freq_fr1, self.tx_level, self.tx_level_endc_fr1, self.rb_size_lte,
+                                                 self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1,
+                                                 self.tx_freq_lte,
+                                                 self.tx_freq_fr1, self.tx_level, self.tx_level_endc_fr1,
+                                                 self.rb_size_lte,
                                                  self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1])
                     self.set_test_end_fr1(delay=0.5)
                     self.set_test_end_lte(delay=0.5)
                     self.endc_relative_power_senstivity_export_excel(data)
                 self.rx_desense_endc_progress()
         self.rxs_endc_plot('Sensitivty_ENDC.xlsx')
+
     def search_sensitivity_pipline_fast_lte(
             self):  # this is for that RSRP and  CINR without issue because this is calculated method
         self.tx_level = wt.tx_level
@@ -1045,6 +1277,55 @@ class Cmw100:
                         except TypeError as err:
                             logger.debug(err)
                             logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def search_sensitivity_lmh_progress_wcdma(self):
+        rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
+        tx_chan_list = [cm_pmt_ftm.transfer_chan_rx2tx_wcdma(self.band_wcdma, rx_chan) for rx_chan in rx_chan_list]
+        tx_rx_chan_list = list(zip(tx_chan_list, rx_chan_list))  # [(tx_chan, rx_chan),...]
+
+        tx_rx_chan_select_list = []
+        for chan in self.chan:
+            if chan == 'L':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[0])
+            elif chan == 'M':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[1])
+            elif chan == 'H':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[2])
+
+        self.preset_instrument()
+        for rx_path in wt.rx_paths:
+            self.rx_path_wcdma = rx_path
+            data = {}
+            for tx_rx_chan_wcdma in tx_rx_chan_select_list:
+                self.rx_level = -70
+                logger.info('----------Test LMH progress---------')
+                self.rx_chan_wcdma = tx_rx_chan_wcdma[1]
+                self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                self.rx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.rx_chan_wcdma, 'rx')
+                self.tx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma, 'tx')
+                self.loss_rx = self.get_loss(self.rx_freq_wcdma)
+                self.loss_tx = self.get_loss(self.tx_freq_wcdma)
+                self.set_test_end_wcdma()
+                self.set_test_mode_wcdma()
+                self.command_cmw100_query('*OPC?')
+                self.sig_gen_wcdma()
+                self.sync_wcdma()
+                # self.antenna_switch_v2()
+                self.rx_path_setting_wcdma()
+                # self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                # self.tx_set_wcdma()
+                # aclr_mod_results = self.tx_measure_wcdma()
+                # logger.debug(aclr_mod_results)
+                # data[self.tx_chan_wcdma] = aclr_mod_results
+                self.search_sensitivity_wcdma()
+                data[self.tx_chan_wcdma] = self.rx_level
+                # self.query_rx_measure_wcdma()
+                # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
+                # data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
+                #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+            self.set_test_end_wcdma()
+            self.filename = self.rx_power_relative_test_export_excel(data, self.band_wcdma, 5, -30,
+                                                                     mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_lmh_progress_lte(self):
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte,
@@ -1318,6 +1599,17 @@ class Cmw100:
                         ws['C1'] = 'Chan'
                         ws['D1'] = 'Diff'
 
+                    elif self.tech == 'WCDMA':
+                        wb.create_sheet(f'Raw_Data')
+                        for sheetname in wb.sheetnames:
+                            ws = wb[sheetname]
+                            ws['A1'] = 'Band'
+                            ws['B1'] = 'RX_Path'
+                            ws['C1'] = 'Chan'
+                            ws['D1'] = 'Channel'
+                            ws['E1'] = 'Tx_Freq'
+                            ws['F1'] = 'Rx_Level'
+
                     wb.save(filename)
                     wb.close()
 
@@ -1330,6 +1622,9 @@ class Cmw100:
                     ws = wb[sheetname]
                 elif self.tech == 'FR1':
                     sheetname = f'Raw_Data_{self.mcs_fr1}_TxMax' if self.tx_level > 0 else f'Raw_Data_{self.mcs_fr1}_-10dBm'
+                    ws = wb[sheetname]
+                elif self.tech == 'WCDMA':
+                    sheetname = 'Raw_Data'
                     ws = wb[sheetname]
 
                 if self.tech == 'LTE':
@@ -1433,7 +1728,29 @@ class Cmw100:
                             ws.cell(row, 18).value = measured_data[4][2]
                             ws.cell(row, 19).value = measured_data[4][3]
                             row += 1
+                elif self.tech == 'WCDMA':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100: # this is not used for wcdma
+                        for tx_level, measured_data in data.items():
+                            chan = self.chan_judge_wddma(band, bw, tx_freq_level)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = chan  # LMH
+                            ws.cell(row, 3).value = tx_freq_level  # this tx_freq_lte
+                            ws.cell(row, 4).value = tx_level
+                            ws.cell(row, 5).value = measured_data[3]
+                            row += 1
 
+                    elif tx_freq_level <= 100:
+                        for tx_chan, rx_level in data.items():
+                            chan = self.chan_judge_wcdma(band, cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, tx_chan))
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = self.rx_path_wcdma_dict[self.rx_path_wcdma]
+                            ws.cell(row, 3).value = chan  # LMH
+                            ws.cell(row, 4).value = tx_chan  # channel
+                            ws.cell(row, 5).value = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, tx_chan, 'tx')
+                            ws.cell(row, 6).value = rx_level
+                            row += 1
                 wb.save(filename)
                 wb.close()
 
@@ -1750,8 +2067,8 @@ class Cmw100:
                                 ws['P1'] = 'RB_start'
                                 ws['Q1'] = 'MCS'
                                 ws['R1'] = 'Tx_Path'
-                                ws['S1'] = 'AS_Path'
-
+                                ws['S1'] = 'Sync_Path'
+                                ws['T1'] = 'AS_Path'
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -1782,6 +2099,29 @@ class Cmw100:
                                 ws['U1'] = 'Sync_Path'
                                 ws['V1'] = 'SRS_Path'
 
+                    elif self.tech == 'WCDMA':
+
+                            wb.create_sheet(f'Raw_Data')
+
+                            for sheetname in wb.sheetnames:
+                                ws = wb[sheetname]
+                                ws['A1'] = 'Band'
+                                ws['B1'] = 'Chan'
+                                ws['C1'] = 'Channel'
+                                ws['D1'] = 'Tx_Freq'
+                                ws['E1'] = 'Tx_level'
+                                ws['F1'] = 'Measured_Power'
+                                ws['G1'] = 'U_-1'
+                                ws['H1'] = 'U_+1'
+                                ws['I1'] = 'U_-2'
+                                ws['J1'] = 'U_+2'
+                                ws['K1'] = 'OBW'
+                                ws['L1'] = 'EVM'
+                                ws['M1'] = 'Freq_Err'
+                                ws['N1'] = 'IQ_OFFSET'
+                                ws['O1'] = 'Tx_Path'
+                                ws['P1'] = 'AS_Path'
+
                     wb.save(filename)
                     wb.close()
 
@@ -1792,6 +2132,8 @@ class Cmw100:
                     ws = wb[f'Raw_Data_{self.mcs_lte}_{self.rb_state}']
                 elif self.tech == 'FR1':
                     ws = wb[f'Raw_Data_{self.mcs_fr1}']
+                elif self.tech == 'WCDMA':
+                    ws = wb[f'Raw_Data']
 
                 if self.tech == 'LTE':
                     max_row = ws.max_row
@@ -1817,7 +2159,8 @@ class Cmw100:
                             ws.cell(row, 16).value = self.rb_start_lte
                             ws.cell(row, 17).value = self.mcs_lte
                             ws.cell(row, 18).value = self.tx_path
-                            ws.cell(row, 19).value = self.asw_path
+                            ws.cell(row, 19).value = self.sync_path
+                            ws.cell(row, 20).value = self.asw_path
                             row += 1
 
                     elif tx_freq_level <= 100:
@@ -1841,7 +2184,8 @@ class Cmw100:
                             ws.cell(row, 16).value = self.rb_start_lte
                             ws.cell(row, 17).value = self.mcs_lte
                             ws.cell(row, 18).value = self.tx_path
-                            ws.cell(row, 19).value = self.asw_path
+                            ws.cell(row, 19).value = self.sync_path
+                            ws.cell(row, 20).value = self.asw_path
                             row += 1
 
                 elif self.tech == 'FR1':
@@ -1901,6 +2245,51 @@ class Cmw100:
                             ws.cell(row, 21).value = self.sync_path
                             ws.cell(row, 22).value = self.srs_path
 
+                            row += 1
+
+                elif self.tech == 'WCDMA':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100:
+                        for tx_level, measured_data in data.items():
+                            chan = self.chan_judge_wcdma(band, tx_freq_level)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = chan  # LMH
+                            ws.cell(row, 3).value = cm_pmt_ftm.trandfer_freq2chan_wcdma(self.band_wcdma, tx_freq_level, 'tx')  # this channel
+                            ws.cell(row, 4).value = tx_freq_level  # this tx_freq_wcdma
+                            ws.cell(row, 5).value = tx_level
+                            ws.cell(row, 6).value = measured_data[0]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[2]
+                            ws.cell(row, 9).value = measured_data[3]
+                            ws.cell(row, 10).value = measured_data[4]
+                            ws.cell(row, 11).value = measured_data[5]
+                            ws.cell(row, 12).value = measured_data[6]
+                            ws.cell(row, 13).value = measured_data[7]
+                            ws.cell(row, 14).value = measured_data[8]
+                            ws.cell(row, 15).value = self.tx_path
+                            ws.cell(row, 16).value = self.asw_path
+                            row += 1
+
+                    elif tx_freq_level <= 100:
+                        for tx_freq, measured_data in data.items():
+                            chan = self.chan_judge_wcdma(band, tx_freq)
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = chan  # # LMH
+                            ws.cell(row, 3).value = cm_pmt_ftm.trandfer_freq2chan_wcdma(self.band_wcdma, tx_freq, 'tx')  # this channel
+                            ws.cell(row, 4).value = tx_freq
+                            ws.cell(row, 5).value = tx_freq_level  # this tx_level
+                            ws.cell(row, 6).value = measured_data[0]
+                            ws.cell(row, 7).value = measured_data[1]
+                            ws.cell(row, 8).value = measured_data[2]
+                            ws.cell(row, 9).value = measured_data[3]
+                            ws.cell(row, 10).value = measured_data[4]
+                            ws.cell(row, 11).value = measured_data[5]
+                            ws.cell(row, 12).value = measured_data[6]
+                            ws.cell(row, 13).value = measured_data[7]
+                            ws.cell(row, 14).value = measured_data[8]
+                            ws.cell(row, 15).value = self.tx_path
+                            ws.cell(row, 16).value = self.asw_path
                             row += 1
 
                 wb.save(filename)
@@ -1973,6 +2362,26 @@ class Cmw100:
                                 ws['T1'] = 'Sync_Path'
                                 ws['U1'] = 'SRS_Path'
 
+                    elif self.tech == 'WCDMA':
+                        wb.create_sheet(f'Raw_Data')
+                        for sheetname in wb.sheetnames:
+                            ws = wb[sheetname]
+                            ws['A1'] = 'Band'
+                            ws['B1'] = 'Channel'
+                            ws['C1'] = 'Tx_Freq'
+                            ws['D1'] = 'Tx_level'
+                            ws['E1'] = 'Measured_Power'
+                            ws['F1'] = 'U_-1'
+                            ws['G1'] = 'U_+1'
+                            ws['H1'] = 'U_-2'
+                            ws['I1'] = 'U_+2'
+                            ws['J1'] = 'OBW'
+                            ws['K1'] = 'EVM'
+                            ws['L1'] = 'Freq_Err'
+                            ws['M1'] = 'IQ_OFFSET'
+                            ws['N1'] = 'Tx_Path'
+                            ws['O1'] = 'AS_Path'
+
                     wb.save(filename)
                     wb.close()
 
@@ -1983,6 +2392,8 @@ class Cmw100:
                     ws = wb[f'Raw_Data_{self.mcs_lte}_{self.rb_state}']
                 elif self.tech == 'FR1':
                     ws = wb[f'Raw_Data_{self.mcs_fr1}']
+                elif self.tech == 'WCDMA':
+                    ws = wb[f'Raw_Data']
 
                 if self.tech == 'LTE':
                     max_row = ws.max_row
@@ -2086,10 +2497,73 @@ class Cmw100:
                             s.cell(row, 21).value = self.srs_path
                             row += 1
 
+                elif self.tech == 'WCDMA':
+                    max_row = ws.max_row
+                    row = max_row + 1
+                    if tx_freq_level >= 100:
+                        for tx_level, measured_data in data.items():
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = cm_pmt_ftm.trandfer_freq2chan_wcdma(self.band_wcdma, tx_freq_level, 'tx')  # this channel
+                            ws.cell(row, 3).value = tx_freq_level  # this tx_freq_wcdma
+                            ws.cell(row, 4).value = tx_level
+                            ws.cell(row, 5).value = measured_data[0]
+                            ws.cell(row, 6).value = measured_data[1]
+                            ws.cell(row, 7).value = measured_data[2]
+                            ws.cell(row, 8).value = measured_data[3]
+                            ws.cell(row, 9).value = measured_data[4]
+                            ws.cell(row, 10).value = measured_data[5]
+                            ws.cell(row, 11).value = measured_data[6]
+                            ws.cell(row, 12).value = measured_data[7]
+                            ws.cell(row, 13).value = measured_data[8]
+                            ws.cell(row, 14).value = self.tx_path
+                            ws.cell(row, 15).value = self.asw_path
+                            row += 1
+
+                    elif tx_freq_level <= 100:
+                        for tx_freq, measured_data in data.items():
+                            ws.cell(row, 1).value = band
+                            ws.cell(row, 2).value = tx_freq  # this channel
+                            ws.cell(row, 3).value = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, tx_freq, 'tx')
+                            ws.cell(row, 4).value = tx_freq_level  # this tx_level
+                            ws.cell(row, 5).value = measured_data[0]
+                            ws.cell(row, 6).value = measured_data[1]
+                            ws.cell(row, 7).value = measured_data[2]
+                            ws.cell(row, 8).value = measured_data[3]
+                            ws.cell(row, 9).value = measured_data[4]
+                            ws.cell(row, 10).value = measured_data[5]
+                            ws.cell(row, 11).value = measured_data[6]
+                            ws.cell(row, 12).value = measured_data[7]
+                            ws.cell(row, 13).value = measured_data[8]
+                            ws.cell(row, 14).value = self.tx_path
+                            ws.cell(row, 15).value = self.asw_path
+                            row += 1
+
                 wb.save(filename)
                 wb.close()
 
                 return filename
+
+    def tx_power_relative_test_initial_wcdma(self):
+        logger.info('----------Relatvie test initial----------')
+        self.command_cmw100_write(f'*CLS')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:SCO:MOD 5')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:SCO:SPEC 5')
+        self.command_cmw100_write(f'ROUT:WCDMA:MEAS:SCEN:SAL R1{self.port_tx}, RX1')
+        self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:EATT {self.loss_tx}')
+        self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:UMAR 10.00')
+        self.command_cmw100_write(f"TRIG:WCDM:MEAS:MEV:SOUR 'Free Run (Fast sync)'")
+        self.command_cmw100_write(f'TRIG:WCDM:MEAS:MEV:THR -30')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:REP SING')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:MEV:RES:ALL ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON')
+        self.command_cmw100_query(f'*OPC?')
+        self.command_cmw100_query(f'SYST:ERR:ALL?')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:BAND OB{self.band_wcdma}')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:RFS:FREQ {self.tx_chan_wcdma} CH')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:DPDC ON')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:SFOR 0')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:SCOD 13496235')
+        self.command_cmw100_write(f'CONF:WCDM:MEAS:UES:ULC WCDM')
+        self.command_cmw100_query(f'SYST:ERR:ALL?')
 
     def tx_power_relative_test_initial_lte(self):
         logger.info('----------Relatvie test initial----------')
@@ -2224,6 +2698,20 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:NRS:MEAS:RFS:EATT {self.loss_tx}')
         self.command_cmw100_query(f'*OPC?')
 
+    def tx_power_aclr_evm_lmh_pipeline_wcdma(self):
+        self.tx_level = wt.tx_level
+        self.port_tx = wt.port_tx
+        self.chan = wt.channel
+        for tech in wt.tech:
+            if tech == 'WCDMA' and wt.lte_bands != []:
+                self.tech = 'WCDMA'
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    for band in wt.wcdma_bands:
+                        self.band_wcdma = band
+                        self.tx_power_aclr_evm_lmh_wcdma(plot=False)
+                    self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+
     def tx_power_aclr_evm_lmh_pipeline_lte(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
@@ -2319,6 +2807,20 @@ class Cmw100:
                     except TypeError:
                         logger.info(f'there is no data to plot because the band does not have this BW ')
 
+    def tx_freq_sweep_pipline_wcdma(self):
+        self.tx_level = wt.tx_level
+        self.port_tx = wt.port_tx
+        self.chan = wt.channel
+        for tech in wt.tech:
+            if tech == 'WCDMA' and wt.wcdma_bands != []:
+                self.tech = tech
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    for band in wt.wcdma_bands:
+                        self.band_wcdma = band
+                        self.tx_freq_sweep_progress_wcdma(plot=False)
+                    self.txp_aclr_evm_plot(self.filename, mode=0)
+
     def tx_freq_sweep_pipline_lte(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
@@ -2365,6 +2867,20 @@ class Cmw100:
                             self.txp_aclr_evm_plot(self.filename, mode=0)
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
+
+    def tx_level_sweep_pipeline_wcdma(self):
+        self.tx_level = wt.tx_level
+        self.port_tx = wt.port_tx
+        self.chan = wt.channel
+        for tech in wt.tech:
+            if tech == 'WCDMA' and wt.wcdma_bands != []:
+                self.tech = tech
+                for tx_path in wt.tx_paths:
+                    self.tx_path = tx_path
+                    for band in wt.wcdma_bands:
+                        self.band_wcdma = band
+                        self.tx_level_sweep_progress_wcdma(plot=False)
+                    self.txp_aclr_evm_plot(self.filename, mode=0)
 
     def tx_level_sweep_pipeline_lte(self):
         self.tx_level = wt.tx_level
@@ -2444,6 +2960,65 @@ class Cmw100:
             self.sync_lte()
             self.tx_set_lte()
             self.tx_measure_lte()
+
+    def tx_power_aclr_evm_lmh_wcdma(self, plot=True):
+        """
+                order: tx_path > bw > band > mcs > rb > chan
+                :param band_wcdma:
+                :param tx_level:
+                :param rf_port:
+                :param freq_select: 'LMH'
+                :param tx_path:
+                data: {tx_level: [Pwr, U_-1, U_+1, U_-2, U_+2, OBW, EVM, Freq_Err, IQ_OFFSET], ...}
+        """
+        rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
+        tx_chan_list = [cm_pmt_ftm.transfer_chan_rx2tx_wcdma(self.band_wcdma, rx_chan) for rx_chan in rx_chan_list]
+        tx_rx_chan_list = list(zip(tx_chan_list, rx_chan_list))  # [(tx_chan, rx_chan),...]
+
+        tx_rx_chan_select_list = []
+        for chan in self.chan:
+            if chan == 'L':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[0])
+            elif chan == 'M':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[1])
+            elif chan == 'H':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[2])
+
+        self.preset_instrument()
+
+        for script in wt.scripts:
+            if script == 'GENERAL':
+                self.script = script
+                data_chan = {}
+                for tx_rx_chan_wcdma in tx_rx_chan_select_list:
+                    logger.info('----------Test LMH progress---------')
+                    self.rx_chan_wcdma = tx_rx_chan_wcdma[1]
+                    self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                    self.rx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.rx_chan_wcdma, 'rx')
+                    self.tx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma, 'tx')
+                    self.loss_rx = self.get_loss(self.rx_freq_wcdma)
+                    self.loss_tx = self.get_loss(self.tx_freq_wcdma)
+                    self.set_test_end_wcdma()
+                    self.set_test_mode_wcdma()
+                    self.command_cmw100_query('*OPC?')
+                    self.sig_gen_wcdma()
+                    self.sync_wcdma()
+                    self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                    self.tx_set_wcdma()
+                    # self.antenna_switch_v2()
+                    aclr_mod_results = self.tx_measure_wcdma()
+                    logger.debug(aclr_mod_results)
+                    data_chan[cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma,self.tx_chan_wcdma)] = aclr_mod_results
+                logger.debug(data_chan)
+                # ready to export to excel
+                self.filename = self.tx_power_relative_test_export_excel(data_chan, self.band_wcdma, 5,
+                                                                         self.tx_level,
+                                                                         mode=1)  # mode=1: LMH mode
+        self.set_test_end_wcdma()
+        if plot == True:
+            self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+        else:
+            pass
 
     def tx_power_aclr_evm_lmh_lte(self, plot=True):
         """
@@ -2616,7 +3191,7 @@ class Cmw100:
                                 self.tx_set_no_sync_fr1()
                                 power_results = self.get_gprf_power()
                                 data[self.tx_freq_fr1] = (
-                                chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
+                                    chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
                             logger.debug(data)
                             # ready to export to excel
                             self.filename = self.tx_power_fcc_ce_export_excel(data)
@@ -2673,7 +3248,7 @@ class Cmw100:
                                 self.tx_set_no_sync_fr1()
                                 power_results = self.get_gprf_power()
                                 data[self.tx_freq_fr1] = (
-                                chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
+                                    chan_mark, power_results)  # data = {tx_freq:(chan_mark, power)}
                             logger.debug(data)
                             # ready to export to excel
                             self.filename = self.tx_power_fcc_ce_export_excel(data)
@@ -2687,6 +3262,59 @@ class Cmw100:
         #     self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         # else:
         #     pass
+
+    def tx_freq_sweep_progress_wcdma(self, plot=True):
+        """
+        :param band_lte:
+        :param bw_lte:
+        :param tx_freq_lte:
+        :param rb_num:
+        :param rb_start:
+        :param mcs:
+        :param tx_level:
+        :param rf_port:
+        :param freq_range_list: [freq_level_1, freq_level_2, freq_step]
+        :param tx_path:
+        data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
+        """
+        logger.info('----------Freq Sweep progress ---------')
+        rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
+        tx_chan_list = [cm_pmt_ftm.transfer_chan_rx2tx_wcdma(self.band_wcdma, rx_chan) for rx_chan in rx_chan_list]
+
+        self.preset_instrument()
+
+        tx_chan_range_list = [tx_chan_list[0], tx_chan_list[2], 1]
+        step = tx_chan_range_list[2]
+
+        for script in wt.scripts:
+            if script == 'GENERAL':
+                self.script = script
+                data = {}
+                for tx_chan_wcdma in range(tx_chan_range_list[0], tx_chan_range_list[1] + step, step):
+                    self.tx_chan_wcdma = tx_chan_wcdma
+                    self.rx_chan_wcdma = cm_pmt_ftm.transfer_chan_tx2rx_wcdma(self.band_wcdma, tx_chan_wcdma)
+                    self.tx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma, 'tx')
+                    self.rx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.rx_chan_wcdma, 'rx')
+                    self.loss_rx = self.get_loss(self.rx_freq_wcdma)
+                    self.loss_tx = self.get_loss(self.tx_freq_wcdma)
+                    self.set_test_end_wcdma()
+                    self.set_test_mode_wcdma()
+                    self.command_cmw100_query('*OPC?')
+                    self.sig_gen_wcdma()
+                    self.sync_wcdma()
+                    # self.antenna_switch_v2()
+                    self.tx_set_wcdma()
+                    aclr_mod_results = self.tx_measure_wcdma()
+                    logger.debug(aclr_mod_results)
+                    data[self.tx_chan_wcdma] = aclr_mod_results
+                logger.debug(data)
+                self.filename = self.tx_power_relative_test_export_excel(data, self.band_wcdma, 5,
+                                                                         self.tx_level, mode=0)
+        self.set_test_end_wcdma()
+        if plot == True:
+            self.txp_aclr_evm_plot(self.filename, mode=0)
+        else:
+            pass
 
     def tx_freq_sweep_progress_lte(self, plot=True):
         """
@@ -2819,6 +3447,114 @@ class Cmw100:
                         self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
                                                                                  self.tx_level, mode=0)
         self.set_test_end_fr1()
+        if plot == True:
+            self.txp_aclr_evm_plot(self.filename, mode=0)
+        else:
+            pass
+
+    def tx_level_sweep_progress_wcdma(self, plot=True):
+        """
+        :param band_wcdma:
+        :param bw_wcdma:
+        :param tx_freq_wcdma:
+        :param rb_num:
+        :param rb_start:
+        :param mcs:
+        :param pwr:
+        :param rf_port:
+        :param loss:
+        :param tx_path:
+        data {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
+        """
+        rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
+        tx_chan_list = [cm_pmt_ftm.transfer_chan_rx2tx_wcdma(self.band_wcdma, rx_chan) for rx_chan in rx_chan_list]
+        tx_rx_chan_list = list(zip(tx_chan_list, rx_chan_list))  # [(tx_chan, rx_chan),...]
+
+        tx_rx_chan_select_list = []
+        for chan in self.chan:
+            if chan == 'L':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[0])
+            elif chan == 'M':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[1])
+            elif chan == 'H':
+                tx_rx_chan_select_list.append(tx_rx_chan_list[2])
+
+        self.preset_instrument()
+
+        for script in wt.scripts:
+            if script == 'GENERAL':
+                self.script = script
+                #  initial all before tx level prgress
+                for tx_rx_chan_wcdma in tx_rx_chan_select_list:
+                    self.rx_chan_wcdma = tx_rx_chan_wcdma[1]
+                    self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                    self.rx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.rx_chan_wcdma, 'rx')
+                    self.tx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma, 'tx')
+                    self.loss_rx = self.get_loss(self.rx_freq_wcdma)
+                    self.loss_tx = self.get_loss(self.tx_freq_wcdma)
+                    self.set_test_end_wcdma()
+                    self.set_test_mode_wcdma()
+                    self.command_cmw100_query('*OPC?')
+                    self.sig_gen_wcdma()
+                    self.sync_wcdma()
+
+                    self.tx_power_relative_test_initial_wcdma()
+
+                    tx_range_list = wt.tx_level_range_list  # [tx_level_1, tx_level_2]
+
+                    logger.info('----------TX Level Sweep progress---------')
+                    logger.info(f'----------from {tx_range_list[0]} dBm to {tx_range_list[1]} dBm----------')
+
+                    step = -1 if tx_range_list[0] > tx_range_list[1] else 1
+
+                    #  following is real change tx level prgress
+
+                    data = {}
+                    for tx_level in range(tx_range_list[0], tx_range_list[1] + step, step):
+                        self.tx_level = tx_level
+                        logger.info(f'========Now Tx level = {self.tx_level} dBm========')
+                        # self.tx_set_wcdma()
+                        self.command(f'AT+HTXPERSTART={self.tx_chan_wcdma}')
+                        self.command(f'AT+HSETMAXPOWER={self.tx_level * 10}')
+                        # self.antenna_switch_v2()
+                        self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:UMAR 10.00')
+                        self.command_cmw100_write(f'CONF:WCDM:MEAS:RFS:ENP {self.tx_level + 5}')
+                        mod_results = self.command_cmw100_query(
+                            f'READ:WCDM:MEAS:MEV:MOD:AVER?')  # P1 is EVM, P4 is Ferr, P8 is IQ Offset
+                        mod_results = mod_results.split(',')
+                        mod_results = [mod_results[1], mod_results[4], mod_results[8]]
+                        mod_results = [eval(m) for m in mod_results]
+                        logger.info(
+                            f'EVM: {mod_results[0]:.2f}, FREQ_ERR: {mod_results[1]:.2f}, IQ_OFFSET: {mod_results[2]:.2f}')
+                        self.command_cmw100_write(f'INIT:WCDM:MEAS:MEV')
+                        self.command_cmw100_query(f'*OPC?')
+                        f_state = self.command_cmw100_query(f'FETC:WCDM:MEAS:MEV:STAT?')
+                        while f_state != 'RDY':
+                            time.sleep(0.2)
+                            f_state = self.command_cmw100_query('FETC:WCDM:MEAS:MEV:STAT?')
+                            self.command_cmw100_query('*OPC?')
+                        spectrum_results = self.command_cmw100_query(
+                            f'FETC:WCDM:MEAS:MEV:SPEC:AVER?')  # P1: Power, P2: ACLR_-2, P3: ACLR_-1, P4:ACLR_+1, P5:ACLR_+2, P6:OBW
+                        spectrum_results = spectrum_results.split(',')
+                        spectrum_results = [
+                            round(eval(spectrum_results[1]), 2),
+                            round(eval(spectrum_results[3]) - eval(spectrum_results[1]), 2),
+                            round(eval(spectrum_results[4]) - eval(spectrum_results[1]), 2),
+                            round(eval(spectrum_results[2]) - eval(spectrum_results[1]), 2),
+                            round(eval(spectrum_results[5]) - eval(spectrum_results[1]), 2),
+                            round(eval(spectrum_results[6]) / 1000000, 2)
+                        ]
+                        logger.info(
+                            f'Power: {spectrum_results[0]:.2f}, ACLR_-1: {spectrum_results[2]:.2f}, ACLR_1: {spectrum_results[3]:.2f}, ACLR_-2: {spectrum_results[1]:.2f}, ACLR_+2: {spectrum_results[4]:.2f}, OBW: {spectrum_results[5]:.2f}MHz')
+                        self.command_cmw100_write(f'STOP:WCDM:MEAS:MEV')
+                        self.command_cmw100_query(f'*OPC?')
+
+                        logger.debug(spectrum_results + mod_results)
+                        data[tx_level] = spectrum_results + mod_results
+                    logger.debug(data)
+                    self.filename = self.tx_power_relative_test_export_excel(data, self.band_wcdma, 5,
+                                                                             self.tx_freq_wcdma)
+        self.set_test_end_wcdma()
         if plot == True:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
@@ -3395,6 +4131,159 @@ class Cmw100:
 
                     wb.save(filename)
                     wb.close()
+            elif self.tech == 'WCDMA':
+                if mode == 1:  # for LMH use
+                    for ws_name in wb.sheetnames:
+                        ws = wb[ws_name]
+
+                        if ws._charts != []:  # if there is charts, delete it
+                            ws._charts.clear()
+
+                        logger.info('----------Power---------')
+                        chart = LineChart()
+                        chart.title = 'Power'
+                        chart.y_axis.title = 'Power(dBm)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=6, min_row=1, max_col=6, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "R1")
+
+                        logger.info('----------ACLR---------')
+                        chart = LineChart()
+                        chart.title = 'ACLR'
+                        chart.y_axis.title = 'ACLR(dB)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+                        chart.y_axis.scaling.min = -60
+                        chart.y_axis.scaling.max = -20
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=7, min_row=1, max_col=10, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'triangle'  # for UTRA_-1
+                        chart.series[0].marker.size = 10
+                        chart.series[1].marker.symbol = 'circle'  # for UTRA_+1
+                        chart.series[1].marker.size = 10
+                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-2
+                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+2
+
+                        ws.add_chart(chart, "R39")
+
+                        logger.info('----------EVM---------')
+                        chart = LineChart()
+                        chart.title = 'EVM'
+                        chart.y_axis.title = 'EVM(%)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "R77")
+
+                    wb.save(filename)
+                    wb.close()
+                else:  # for non LMH such as sweep
+                    for ws_name in wb.sheetnames:
+                        ws = wb[ws_name]
+
+                        if ws._charts != []:  # if there is charts, delete it
+                            ws._charts.clear()
+
+                        logger.info('----------Power---------')
+                        chart = LineChart()
+                        chart.title = 'Power'
+                        chart.y_axis.title = 'Power(dBm)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "S1")
+
+                        logger.info('----------ACLR---------')
+                        chart = LineChart()
+                        chart.title = 'ACLR'
+                        chart.y_axis.title = 'ACLR(dB)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+                        chart.y_axis.scaling.min = -60
+                        chart.y_axis.scaling.max = -20
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=6, min_row=1, max_col=9, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'triangle'  # for UTRA_-1
+                        chart.series[0].marker.size = 10
+                        chart.series[1].marker.symbol = 'circle'  # for UTRA_+1
+                        chart.series[1].marker.size = 10
+                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-2
+                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+2
+
+
+                        ws.add_chart(chart, "S39")
+
+                        logger.info('----------EVM---------')
+                        chart = LineChart()
+                        chart.title = 'EVM'
+                        chart.y_axis.title = 'EVM(%)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=11, min_row=1, max_col=11, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "S77")
+
+                    wb.save(filename)
+                    wb.close()
+
 
     def rxs_relative_plot(self, filename, mode=0):
         logger.info('----------Plot Chart---------')
@@ -3706,6 +4595,111 @@ class Cmw100:
 
                     wb.save(filename)
                     wb.close()
+            elif self.tech == 'WCDMA':
+                if mode == 1:
+                    ws = wb[f'Raw_Data']
+
+                    if ws._charts != []:  # if there is charts, delete it
+                        ws._charts.clear()
+
+                    chart1 = LineChart()
+                    chart1.title = 'Sensitivity'
+                    chart1.y_axis.title = 'Rx_Level(dBm)'
+                    chart1.x_axis.title = 'Band'
+                    chart1.x_axis.tickLblPos = 'low'
+                    chart1.height = 20
+                    chart1.width = 32
+                    y_data = Reference(ws, min_col=6, min_row=2, max_col=6, max_row=ws.max_row)
+                    x_data = Reference(ws, min_col=1, min_row=2, max_col=3, max_row=ws.max_row)
+
+                    series_pure_sens = Series(y_data, title="Pure_Sensititvity_FTM")
+
+                    chart1.append(series_pure_sens)
+                    chart1.set_categories(x_data)
+
+                    ws.add_chart(chart1, "H1")
+
+                    wb.save(filename)
+                    wb.close()
+                else:
+                    pass
+                    # for ws_name in wb.sheetnames:
+                    #     ws = wb[ws_name]
+                    #
+                    #     if ws._charts != []:  # if there is charts, delete it
+                    #         ws._charts.clear()
+                    #
+                    #     logger.info('----------Power---------')
+                    #     chart = LineChart()
+                    #     chart.title = 'Power'
+                    #     chart.y_axis.title = 'Power(dBm)'
+                    #     chart.x_axis.title = 'Band'
+                    #     chart.x_axis.tickLblPos = 'low'
+                    #
+                    #     chart.height = 20
+                    #     chart.width = 32
+                    #
+                    #     y_data = Reference(ws, min_col=4, min_row=1, max_col=4, max_row=ws.max_row)
+                    #     x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    #     chart.add_data(y_data, titles_from_data=True)
+                    #     chart.set_categories(x_data)
+                    #
+                    #     chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    #     chart.series[0].marker.size = 10
+                    #
+                    #     ws.add_chart(chart, "R1")
+                    #
+                    #     logger.info('----------ACLR---------')
+                    #     chart = LineChart()
+                    #     chart.title = 'ACLR'
+                    #     chart.y_axis.title = 'ACLR(dB)'
+                    #     chart.x_axis.title = 'Band'
+                    #     chart.x_axis.tickLblPos = 'low'
+                    #     chart.y_axis.scaling.min = -60
+                    #     chart.y_axis.scaling.max = -20
+                    #
+                    #     chart.height = 20
+                    #     chart.width = 32
+                    #
+                    #     y_data = Reference(ws, min_col=5, min_row=1, max_col=10, max_row=ws.max_row)
+                    #     x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    #     chart.add_data(y_data, titles_from_data=True)
+                    #     chart.set_categories(x_data)
+                    #
+                    #     chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                    #     chart.series[0].marker.size = 10
+                    #     chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                    #     chart.series[1].marker.size = 10
+                    #     chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                    #     chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                    #     chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                    #     chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+                    #
+                    #     ws.add_chart(chart, "R39")
+                    #
+                    #     logger.info('----------EVM---------')
+                    #     chart = LineChart()
+                    #     chart.title = 'EVM'
+                    #     chart.y_axis.title = 'EVM(%)'
+                    #     chart.x_axis.title = 'Band'
+                    #     chart.x_axis.tickLblPos = 'low'
+                    #
+                    #     chart.height = 20
+                    #     chart.width = 32
+                    #
+                    #     y_data = Reference(ws, min_col=11, min_row=1, max_col=11, max_row=ws.max_row)
+                    #     x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                    #     chart.add_data(y_data, titles_from_data=True)
+                    #     chart.set_categories(x_data)
+                    #
+                    #     chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                    #     chart.series[0].marker.size = 10
+                    #
+                    #     ws.add_chart(chart, "R77")
+                    #
+                    # wb.save(filename)
+                    # wb.close()
+
 
     def rxs_endc_plot(self, filename):
         logger.info('----------Plot Chart---------')
@@ -3762,6 +4756,8 @@ class Cmw100:
                         self.tx_power_pipline_fcc_fr1()
                     elif script == 'CE':
                         self.tx_power_pipline_ce_fr1()
+                    elif tech == 'WCDMA':
+                        self.tx_power_aclr_evm_lmh_pipeline_wcdma()
 
     def run_rx(self):
         for tech in wt.tech:
@@ -3773,6 +4769,8 @@ class Cmw100:
                         self.search_sensitivity_pipline_fr1()
                     elif script == 'ENDC' and wt.sa_nsa == 1:
                         self.sensitivity_pipline_endc()
+            elif tech == 'WCDMA':
+                self.search_sensitivity_pipline_wcdma()
 
     def run_tx_level_sweep(self):
         for tech in wt.tech:
@@ -3780,6 +4778,8 @@ class Cmw100:
                 self.tx_level_sweep_pipeline_lte()
             elif tech == 'FR1':
                 self.tx_level_sweep_pipeline_fr1()
+            elif tech == 'WCDMA':
+                self.tx_level_sweep_pipeline_wcdma()
 
     def run_tx_freq_sweep(self):
         for tech in wt.tech:
@@ -3860,9 +4860,14 @@ def main():
     # cmw100.set_gprf_measurement()
     # cmw100.set_gprf_tx_freq()
     # cmw100.get_gprf_power()
-    cmw100.sensitivity_pipline_endc()
+    # cmw100.sensitivity_pipline_endc()
     # cmw100.preset_instrument()
     # cmw100.tx_monitor_lte()
+    # cmw100.set_test_mode_wcdma()
+    # cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
+    # cmw100.tx_level_sweep_pipeline_wcdma()
+    # cmw100.tx_freq_sweep_pipline_wcdma()
+    cmw100.search_sensitivity_pipline_wcdma()
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')
