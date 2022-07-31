@@ -457,7 +457,6 @@ Disable</property>
                         <child>
                           <object class="ttk.Checkbutton" id="checkbutton_wcdma">
                             <property name="command" type="command" cbtype="simple">wanted_tech</property>
-                            <property name="state">disabled</property>
                             <property name="text" translatable="yes">WCDMA  </property>
                             <property name="variable">boolean:tech_WCDMA</property>
                             <layout manager="grid">
@@ -1945,7 +1944,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W1">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">1</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B1</property>
                         <property name="variable">int:W1</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -1962,7 +1960,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W2">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">2</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B2</property>
                         <property name="variable">int:W2</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -1978,7 +1975,6 @@ Disable</property>
                     <child>
                       <object class="ttk.Checkbutton" id="checkbutton_WCDMA_all">
                         <property name="command" type="command" cbtype="simple">WCDMA_all_state</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">all</property>
                         <property name="variable">boolean:WCDMA_all</property>
                         <layout manager="grid">
@@ -1994,7 +1990,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W4">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">4</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B4</property>
                         <property name="variable">int:W4</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -2011,7 +2006,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W5">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">5</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B5</property>
                         <property name="variable">int:W5</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -2028,7 +2022,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W8">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">8</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B8</property>
                         <property name="variable">int:W8</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -2045,7 +2038,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W6">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">6</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B6</property>
                         <property name="variable">int:W6</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -2062,7 +2054,6 @@ Disable</property>
                       <object class="ttk.Checkbutton" id="checkbutton_W19">
                         <property name="command" type="command" cbtype="simple">wanted_band_WCDMA</property>
                         <property name="onvalue">19</property>
-                        <property name="state">disabled</property>
                         <property name="text" translatable="yes">B19</property>
                         <property name="variable">int:W19</property>
                         <bind sequence="&lt;1&gt;" handler="off_all_none_WCDMA" add="" />
@@ -9166,6 +9157,7 @@ Disable</property>
                         <child>
                           <object class="ttk.Checkbutton" id="checkbutton504">
                             <property name="command" type="command" cbtype="simple">wanted_tech</property>
+                            <property name="state">disabled</property>
                             <property name="text" translatable="yes">GSM</property>
                             <property name="variable">boolean:tech_GSM</property>
                             <layout manager="grid">

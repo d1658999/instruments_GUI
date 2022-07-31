@@ -4758,6 +4758,8 @@ class Cmw100:
                         self.tx_power_pipline_ce_fr1()
                     elif tech == 'WCDMA':
                         self.tx_power_aclr_evm_lmh_pipeline_wcdma()
+            elif tech == 'WCDMA':
+                self.tx_power_aclr_evm_lmh_pipeline_wcdma()
 
     def run_rx(self):
         for tech in wt.tech:
@@ -4787,6 +4789,8 @@ class Cmw100:
                 self.tx_freq_sweep_pipline_lte()
             elif tech == 'FR1':
                 self.tx_freq_sweep_pipline_fr1()
+            elif tech == 'WCDMA':
+                self.tx_freq_sweep_pipline_wcdma()
 
     def command_cmw100_query(self, tcpip_command):
         tcpip_response = self.cmw100.query(tcpip_command).strip()
@@ -4864,10 +4868,10 @@ def main():
     # cmw100.preset_instrument()
     # cmw100.tx_monitor_lte()
     # cmw100.set_test_mode_wcdma()
-    # cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
+    cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
     # cmw100.tx_level_sweep_pipeline_wcdma()
     # cmw100.tx_freq_sweep_pipline_wcdma()
-    cmw100.search_sensitivity_pipline_wcdma()
+    # cmw100.search_sensitivity_pipline_wcdma()
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')
