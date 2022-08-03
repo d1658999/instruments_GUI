@@ -36,15 +36,16 @@ def bandwidths_selected_fr1(band):
 
     return bandwidths[f'N{band}']
 
+
 def bandwidths_selected_lte(band):
     band = int(band)
     bandwidths = {
         'B1': [5, 10, 15, 20],
-        'B2': [1.4, 3, 5, 10 , 15, 20],
-        'B3': [1.4, 3, 5, 10 , 15, 20],
-        'B4': [1.4, 3, 5, 10 , 15, 20],
+        'B2': [1.4, 3, 5, 10, 15, 20],
+        'B3': [1.4, 3, 5, 10, 15, 20],
+        'B4': [1.4, 3, 5, 10, 15, 20],
         'B5': [1.4, 3, 5, 10],
-        'B7': [5, 10 , 15, 20],
+        'B7': [5, 10, 15, 20],
         'B8': [1.4, 3, 5, 10],
         'B12': [1.4, 3, 5, 10],
         'B13': [5, 10],
@@ -52,10 +53,10 @@ def bandwidths_selected_lte(band):
         'B17': [5, 10],
         'B18': [5, 10, 15],
         'B19': [5, 10, 15],
-        'B20': [5, 10 , 15, 20],
+        'B20': [5, 10, 15, 20],
         'B21': [5, 10, 15],
-        'B25': [1.4, 3, 5, 10 , 15, 20],
-        'B26': [1.4, 3, 5, 10 , 15],
+        'B25': [1.4, 3, 5, 10, 15, 20],
+        'B26': [1.4, 3, 5, 10, 15],
         'B28': [3, 5, 10, 15],
         'B29': [3, 5, 10],
         'B30': [5, 10],
@@ -67,13 +68,14 @@ def bandwidths_selected_lte(band):
         'B42': [5, 10, 15, 20],
         'B46': [10, 20],
         'B48': [5, 10, 15, 20],
-        'B66': [1.4, 3, 5, 10 , 15, 20],
+        'B66': [1.4, 3, 5, 10, 15, 20],
         'B70': [5, 10, 15, 20],
         'B71': [5, 10, 15, 20],
         'B75': [5, 10, 15, 20],
     }
 
     return bandwidths[f'B{band}']
+
 
 # DL Freq
 def dl_freq_selected(standard, band, bw=5):
@@ -94,7 +96,7 @@ def dl_freq_selected(standard, band, bw=5):
         'N26': [859 + bw / 2, 876.5, 894 - bw / 2],
         'N28': [758 + bw / 2, 780.5, 803 - bw / 2],
         'N28A': [758 + bw / 2, 773, 788 - bw / 2],
-        'N28B': [773 + bw / 2, 788,  803 - bw / 2],
+        'N28B': [773 + bw / 2, 788, 803 - bw / 2],
         'N30': [2350 + bw / 2, 2355, 2360 - bw / 2],
         'N34': [2010 + bw / 2, 2017.5, 2025 - bw / 2],
         'N38': [2570 + bw / 2, 2595, 2620 - bw / 2],
@@ -133,7 +135,8 @@ def dl_freq_selected(standard, band, bw=5):
         'B21': [1495.9 + bw / 2, 1503.5, 1510.9 - bw / 2],
         'B25': [1930 + bw / 2, 1962.5, 1995 - bw / 2],
         'B26': [859 + bw / 2, 876.5, 894 - bw / 2],
-        'B28': [758 + bw / 2, 780.5, 803 - bw / 2],  # [758 + bw / 2, 780.5, 803 - bw / 2] for 28, [758 + bw / 2, 773, 788 - bw / 2] for 28A, [773 + bw / 2, 788,  - 803/ 2] for 28B
+        'B28': [758 + bw / 2, 780.5, 803 - bw / 2],
+        # [758 + bw / 2, 780.5, 803 - bw / 2] for 28, [758 + bw / 2, 773, 788 - bw / 2] for 28A, [773 + bw / 2, 788,  - 803/ 2] for 28B
         'B28A': [758 + bw / 2, 773, 788 - bw / 2],
         'B28B': [773 + bw / 2, 788, 803 - bw / 2],
         'B29': [717 + bw / 2, 722.5, 728 - bw / 2],
@@ -141,7 +144,7 @@ def dl_freq_selected(standard, band, bw=5):
         'B32': [1452 + bw / 2, 1474, 1496 - bw / 2],
         'B38': [2570 + bw / 2, 2595, 2620 - bw / 2],
         'B39': [1880 + bw / 2, 1900, 1920 - bw / 2],
-        'B40': [2300 + bw / 2, 2350, 2400- bw / 2],
+        'B40': [2300 + bw / 2, 2350, 2400 - bw / 2],
         'B41': [2496 + bw / 2, 2593, 2690 - bw / 2],
         'B42': [3400 + bw / 2, 3500, 3600 - bw / 2],
         'B46': [5150 + bw / 2, 5537.5, 5925 - bw / 2],
@@ -164,6 +167,14 @@ def dl_freq_selected(standard, band, bw=5):
 
     }
 
+    band_dl_freq_gsm = {
+        850: [869.2, 881.4, 893.8],
+        900: [925.2, 942.4, 959.8],
+        1800: [1805.2, 1842.4, 1879.8],
+        1900: [1930.2, 1960, 1989.8],
+
+    }
+
     if standard == 'LTE':
         if band == 28:
             from want_test_band import band_segment
@@ -172,6 +183,8 @@ def dl_freq_selected(standard, band, bw=5):
             return [int(freq * 1000) for freq in band_dl_freq_lte[f'B{band}']]
     elif standard == 'WCDMA':
         return [int(freq * 1000) for freq in band_dl_freq_wcdma[f'B{band}']]
+    elif standard == 'GSM':
+        return [int(freq * 1000) for freq in band_dl_freq_gsm[band]]
     elif standard == 'FR1':
         if band == 28:
             from want_test_band import band_segment_fr1
@@ -180,6 +193,17 @@ def dl_freq_selected(standard, band, bw=5):
             return [int(freq * 1000) for freq in band_dl_freq_fr1[f'N{band}']]
     elif 'GSM':
         pass
+
+
+def dl_chan_select_gsm(band):
+    band_dl_ch_gsm = {
+        850: [128, 189, 251],
+        900: [975, 37, 124],
+        1800: [512, 698, 885],
+        1900: [512, 661, 810],
+    }
+    return [int(ch) for ch in band_dl_ch_gsm[band]]
+
 
 def dl_chan_select_wcdma(band):
     band_dl_ch_wcdma = {
@@ -194,6 +218,7 @@ def dl_chan_select_wcdma(band):
     }
 
     return [int(ch) for ch in band_dl_ch_wcdma[f'B{band}']]
+
 
 def transfer_chan_tx2rx_wcdma(band_wcdma, chan):
     band_wcdma = int(band_wcdma)
@@ -229,6 +254,7 @@ def transfer_chan_rx2tx_wcdma(band_wcdma, chan):
 
     return chan + spacing_wcdma[band_wcdma]
 
+
 def transfer_chan2freq_wcdma(band, chan, tx_rx='tx'):
     band = int(band)
     chan = int(chan)
@@ -248,6 +274,7 @@ def transfer_chan2freq_wcdma(band, chan, tx_rx='tx'):
     else:
         return 0.2 * chan * 1000
 
+
 def trandfer_freq2chan_wcdma(band, freq, tx_rx='tx'):
     if band == 4:
         if tx_rx == 'tx':
@@ -264,6 +291,7 @@ def trandfer_freq2chan_wcdma(band, freq, tx_rx='tx'):
     else:
         return 5 * freq / 1000
 
+
 def transfer_freq_rx2tx_wcdma(band_wcdma, freq):
     band_wcdma = int(band_wcdma)
     spacing_wdcma = {
@@ -279,6 +307,7 @@ def transfer_freq_rx2tx_wcdma(band_wcdma, freq):
 
     return freq + spacing_wdcma[band_wcdma]
 
+
 def transfer_freq_tx2rx_wcdma(band_wcdma, freq):
     band_wcdma = int(band_wcdma)
     spacing_wdcma = {
@@ -293,6 +322,68 @@ def transfer_freq_tx2rx_wcdma(band_wcdma, freq):
     }
 
     return freq + spacing_wdcma[band_wcdma]
+
+
+def transfer_chan2freq_gsm(band_gsm, chan, tx_rx='rx'):
+    if tx_rx == 'rx':
+        chan = 1024 + chan if chan < 125 else chan
+        return int(dl_freq_selected('GSM', band_gsm, 0)[0] + 1000 * 0.2 * (chan - dl_chan_select_gsm(band_gsm)[0]))
+    else:
+        chan = 1024 + chan if chan < 125 else chan
+        if band_gsm == 850 or band_gsm == 900:
+            return int(
+                dl_freq_selected('GSM', band_gsm, 0)[0] + 1000 * 0.2 * (chan - dl_chan_select_gsm(band_gsm)[0])) - 45000
+        elif band_gsm == 1800:
+            return int(
+                dl_freq_selected('GSM', band_gsm, 0)[0] + 1000 * 0.2 * (chan - dl_chan_select_gsm(band_gsm)[0])) - 95000
+        elif band_gsm == 1900:
+            return int(
+                dl_freq_selected('GSM', band_gsm, 0)[0] + 1000 * 0.2 * (chan - dl_chan_select_gsm(band_gsm)[0])) - 80000
+
+def transfer_freq2chan_gsm(band_gsm, freq, tx_rx='rx'):
+    if tx_rx == 'rx':
+        if 935000 <= freq <= 959800:
+            return int((freq - dl_freq_selected('GSM', band_gsm, 0)[0]) / 1000 * 5 + dl_chan_select_gsm(band_gsm)[0] - 1024)
+        else:
+            return int((freq - dl_freq_selected('GSM', band_gsm, 0)[0]) / 1000 * 5 + dl_chan_select_gsm(band_gsm)[0])
+    else:
+        if band_gsm == 850 or band_gsm == 900:
+            freq = freq + 45000
+            if 935000 <= freq <= 959800:
+                return int((freq - dl_freq_selected('GSM', band_gsm, 0)[0]) / 1000 * 5 + dl_chan_select_gsm(band_gsm)[
+                    0] - 1024)
+            else:
+                return int((freq - dl_freq_selected('GSM', band_gsm, 0)[0]) / 1000 * 5 + dl_chan_select_gsm(band_gsm)[0])
+        elif band_gsm == 1800:
+            freq = freq + 95000
+            return int((freq - dl_freq_selected('GSM', band_gsm, 0)[0]) / 1000 * 5 + dl_chan_select_gsm(band_gsm)[0])
+        elif band_gsm == 1900:
+            freq = freq + 80000
+            return int((freq - dl_freq_selected('GSM', band_gsm, 0)[0]) / 1000 * 5 + dl_chan_select_gsm(band_gsm)[0])
+
+def transfer_freq_rx2tx_gsm(band_gsm, freq):
+    band_gsm = int(band_gsm)
+    spacing_gsm = {
+        850: -45000,
+        900: -45000,
+        1800: -95000,
+        1900: -80000,
+    }
+
+    return freq + spacing_gsm[band_gsm]
+
+
+def transfer_freq_tx2rx_gsm(band_gsm, freq):
+    band_gsm = int(band_gsm)
+    spacing_gsm = {
+        850: 45000,
+        900: 45000,
+        1800: 95000,
+        1900: 80000,
+    }
+
+    return freq + spacing_gsm[band_gsm]
+
 
 def transfer_freq_rx2tx_lte(band_lte, freq):
     band_lte = int(band_lte)
@@ -326,6 +417,7 @@ def transfer_freq_rx2tx_lte(band_lte, freq):
     else:
         return freq
 
+
 def transfer_freq_tx2rx_lte(band_lte, freq):
     band_lte = int(band_lte)
     if band_lte not in [38, 39, 40, 41, 42, 48]:
@@ -358,6 +450,7 @@ def transfer_freq_tx2rx_lte(band_lte, freq):
     else:
         return freq
 
+
 def transfer_freq_rx2tx_fr1(band_fr1, freq):
     band_fr1 = int(band_fr1)
     if band_fr1 not in [34, 38, 39, 40, 41, 42, 48, 75, 76, 77, 78, 79]:
@@ -386,6 +479,7 @@ def transfer_freq_rx2tx_fr1(band_fr1, freq):
         return freq + spacing_fr1[band_fr1]
     else:
         return freq
+
 
 def transfer_freq_tx2rx_fr1(band_fr1, freq):
     band_fr1 = int(band_fr1)
@@ -417,27 +511,27 @@ def transfer_freq_tx2rx_fr1(band_fr1, freq):
 
 
 def special_uplink_config_sensitivity_lte(band, bw):
-    if (int(band) in [2,3,25]) and int(bw) == 15:
+    if (int(band) in [2, 3, 25]) and int(bw) == 15:
         return 50, 25
-    elif (int(band) in [2,3,25]) and int(bw) == 20:
+    elif (int(band) in [2, 3, 25]) and int(bw) == 20:
         return 50, 50
-    elif int(band) in [5,8,18,19,21,26,28,30]  and int(bw) == 10:
+    elif int(band) in [5, 8, 18, 19, 21, 26, 28, 30] and int(bw) == 10:
         return 25, 25
     elif int(band) == 7 and int(bw) == 20:
         return 75, 25
     elif int(band) == 7 and int(bw) == 20:
         return 75, 25
-    elif int(band) in [12,17] and int(bw) == 5:
+    elif int(band) in [12, 17] and int(bw) == 5:
         return 20, 5
     elif int(band) == 12 and int(bw) == 10:
         return 20, 30
-    elif int(band) == 13 and (int(bw) in [5,10]):
+    elif int(band) == 13 and (int(bw) in [5, 10]):
         return 20, 0
-    elif int(band) == 14 and (int(bw) in [5,10]):
+    elif int(band) == 14 and (int(bw) in [5, 10]):
         return 15, 0
     elif int(band) == 17 and int(bw) == 10:
         return 20, 30
-    elif (int(band) == 18 in [18,19,21,26,28]) and int(bw) == 15:
+    elif (int(band) == 18 in [18, 19, 21, 26, 28]) and int(bw) == 15:
         return 25, 50
     elif int(band) == 20 and int(bw) == 10:
         return 20, 0
@@ -452,6 +546,7 @@ def special_uplink_config_sensitivity_lte(band, bw):
             return 6, 0
         else:
             return int(bw) * 5, 0
+
 
 def special_uplink_config_sensitivity_fr1(band, scs, bw):
     if int(band) == 1:
@@ -821,7 +916,7 @@ def special_uplink_config_sensitivity_fr1(band, scs, bw):
             elif bw == 20:
                 return 24, 0
             elif bw == 25:
-                return 30,0
+                return 30, 0
             elif bw == 40:
                 return 50, 0
     elif int(band) == 39:
@@ -1370,16 +1465,14 @@ def special_uplink_config_sensitivity_fr1(band, scs, bw):
             elif bw == 100:
                 return 135, 0
 
+
 def main():
     """
     this main() function is used for testing some function
     """
 
-    if CHAN_LIST:
-        print(CHAN_LIST)
-    else:
-        print('others')
+    print(transfer_freq2chan_gsm(1800, 1747500, 'tx'))
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     main()
