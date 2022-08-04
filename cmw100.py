@@ -523,7 +523,7 @@ class Cmw100:
     def tx_set_gsm(self):
         logger.info('---------Tx Set----------')
         self.command(
-            f'AT+TESTTX={self.band_tx_set_dict_gsm[self.band_gsm]},{self.mod_dict_gsm[self.mod_gsm]},{self.rx_chan_gsm},1,3')
+            f'AT+TESTTX={self.band_tx_set_dict_gsm[self.band_gsm]},{self.mod_dict_gsm[self.mod_gsm]},{self.rx_chan_gsm},1,1')
         self.command(f'AT+TESTPWR=0,{self.pcl},{self.pcl},{self.pcl},{self.pcl}')
         logger.info(f'Band: {self.band_gsm}, Modulation: {self.mod_gsm}, Chan: {self.rx_chan_gsm}, PCL: {self.pcl}')
 
@@ -1316,12 +1316,12 @@ class Cmw100:
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mod_gsm = wt.mod_gsm
-        self.pcl = wt.tx_pcl
         self.script = 'GENERAL'
         for tech in wt.tech:
             if tech == 'GSM' and wt.gsm_bands != []:
                 self.tech = 'GSM'
                 for band in wt.gsm_bands:
+                    self.pcl = wt.tx_pcl_lb if band in [850, 900] else wt.tx_pcl_mb
                     self.band_gsm = band
                     self.search_sensitivity_lmh_progress_gsm()
                 self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
@@ -3222,12 +3222,12 @@ class Cmw100:
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mod_gsm = wt.mod_gsm
-        self.pcl = wt.tx_pcl
         self.tsc = 0 if self.mod_gsm == 'GMSK' else 5
         for tech in wt.tech:
             if tech == 'GSM' and wt.gsm_bands != []:
                 self.tech = 'GSM'
                 for band in wt.gsm_bands:
+                    self.pcl = wt.tx_pcl_lb if band in [850, 900] else wt.tx_pcl_mb
                     self.band_gsm = band
                     self.tx_power_aclr_evm_lmh_gsm(plot=False)
                 self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
@@ -3344,12 +3344,12 @@ class Cmw100:
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mod_gsm = wt.mod_gsm
-        self.pcl = wt.tx_pcl
         self.tsc = 0 if self.mod_gsm == 'GMSK' else 5
         for tech in wt.tech:
             if tech == 'GSM' and wt.gsm_bands != []:
                 self.tech = tech
                 for band in wt.gsm_bands:
+                    self.pcl = wt.tx_pcl_lb if band in [850, 900] else wt.tx_pcl_mb
                     self.band_gsm = band
                     self.tx_freq_sweep_progress_gsm(plot=False)
                 self.txp_aclr_evm_plot(self.filename, mode=0)
@@ -3418,12 +3418,12 @@ class Cmw100:
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mod_gsm = wt.mod_gsm
-        self.pcl = wt.tx_pcl
         self.tsc = 0 if self.mod_gsm == 'GMSK' else 5
         for tech in wt.tech:
             if tech == 'GSM' and wt.gsm_bands != []:
                 self.tech = tech
                 for band in wt.gsm_bands:
+                    self.pcl = wt.tx_pcl_lb if band in [850, 900] else wt.tx_pcl_mb
                     self.band_gsm = band
                     self.tx_level_sweep_progress_gsm(plot=False)
                 self.txp_aclr_evm_plot(self.filename, mode=0)
@@ -4173,7 +4173,7 @@ class Cmw100:
 
                     # self.tx_power_relative_test_initial_gsm()
 
-                    tx_range_list = wt.tx_pcl_range_list  # [tx_level_1, tx_level_2]
+                    tx_range_list = wt.tx_pcl_range_list_lb if self.band_gsm in [850, 900] else wt.tx_pcl_range_list_mb  # [tx_pcl_1, tx_pcl_2]
 
                     logger.info('----------TX Level Sweep progress---------')
                     logger.info(f'----------from PCL{tx_range_list[0]} to PCL{tx_range_list[1]}----------')
@@ -5797,6 +5797,8 @@ class Cmw100:
                         self.tx_power_aclr_evm_lmh_pipeline_wcdma()
             elif tech == 'WCDMA':
                 self.tx_power_aclr_evm_lmh_pipeline_wcdma()
+            elif tech == 'GSM':
+                self.tx_power_aclr_evm_lmh_pipeline_gsm()
 
     def run_rx(self):
         for tech in wt.tech:
@@ -5810,6 +5812,8 @@ class Cmw100:
                         self.sensitivity_pipline_endc()
             elif tech == 'WCDMA':
                 self.search_sensitivity_pipline_wcdma()
+            elif tech == 'GSM':
+                self.search_sensitivity_pipline_gsm()
 
     def run_tx_level_sweep(self):
         for tech in wt.tech:
@@ -5819,6 +5823,8 @@ class Cmw100:
                 self.tx_level_sweep_pipeline_fr1()
             elif tech == 'WCDMA':
                 self.tx_level_sweep_pipeline_wcdma()
+            elif tech == 'GSM':
+                self.tx_level_sweep_pipeline_gsm()
 
     def run_tx_freq_sweep(self):
         for tech in wt.tech:
@@ -5828,6 +5834,8 @@ class Cmw100:
                 self.tx_freq_sweep_pipline_fr1()
             elif tech == 'WCDMA':
                 self.tx_freq_sweep_pipline_wcdma()
+            elif tech == 'GSM':
+                self.tx_freq_sweep_pipline_gsm()
 
     def command_cmw100_query(self, tcpip_command):
         tcpip_response = self.cmw100.query(tcpip_command).strip()

@@ -17,7 +17,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main_v2.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2_1.ui"
 
 
 class MainApp:
@@ -161,6 +161,9 @@ class MainApp:
         self.GSM_all = None
         self.GSM1800 = None
         self.GSM1900 = None
+        self.pcl_lb = None
+        self.mod_gsm = None
+        self.pcl_mb = None
         self.N5 = None
         self.N8 = None
         self.N12 = None
@@ -348,6 +351,9 @@ class MainApp:
                 "GSM_all",
                 "GSM1800",
                 "GSM1900",
+                "pcl_lb",
+                "mod_gsm",
+                "pcl_mb",
                 "N5",
                 "N8",
                 "N12",
@@ -461,8 +467,11 @@ class MainApp:
         self.srs_path_enable.set(ui_init['path']['srs_path_enable'])
         self.sync_path.set(ui_init['path']['sync_path'])
         self.sa_nsa.set(ui_init['path']['sa_nsa'])
+        self.pcl_lb.set(ui_init['power']['lb_gsm_pcl'])
+        self.pcl_mb.set(ui_init['power']['mb_gsm_pcl'])
+        self.mod_gsm.set(ui_init['mcs']['modulaiton_gsm'])
 
-        # reet all the check button
+        # reset all the check button
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
@@ -674,16 +683,15 @@ class MainApp:
             elif band_hsdpa == 19:
                 self.D19.set(band_hsdpa)
 
-        # skip
-        # for band_gsm in ui_init.bands_gsm:
-        #     if band_gsm == 850:
-        #         self.GSM850.set(band_gsm)
-        #     elif band_gsm == 900:
-        #         self.GSM900.set(band_gsm)
-        #     elif band_gsm == 1800:
-        #         self.GSM1800.set(band_gsm)
-        #     elif band_gsm == 1900:
-        #         self.GSM1900.set(band_gsm)
+        for band_gsm in ui_init['band']['bands_gsm']:
+            if band_gsm == 850:
+                self.GSM850.set(band_gsm)
+            elif band_gsm == 900:
+                self.GSM900.set(band_gsm)
+            elif band_gsm == 1800:
+                self.GSM1800.set(band_gsm)
+            elif band_gsm == 1900:
+                self.GSM1900.set(band_gsm)
 
         for tech in ui_init['tech']['tech']:
             if tech == 'LTE':
@@ -696,8 +704,8 @@ class MainApp:
                 self.tech_HSDPA.set(True)
             elif tech == 'FR1':
                 self.tech_FR1.set(True)
-            # elif tech == 'GSM':
-            #     self.tech_GSM.set(True)
+            elif tech == 'GSM':
+                self.tech_GSM.set(True)
 
         for bw in ui_init['bw']['bw_lte']:
             if bw == 1.4:
@@ -1292,6 +1300,9 @@ class MainApp:
 
         # these are not list-like
         instrument = self.instrument.get()
+        pcl_lb_gsm = self.pcl_lb.get()
+        pcl_mb_gsm = self.pcl_mb.get()
+        mod_gsm = self.mod_gsm.get()
         port_tx = self.port_tx.get()
         port_tx_lte = self.port_tx_lte.get()
         port_tx_fr1 = self.port_tx_fr1.get()
@@ -1336,7 +1347,7 @@ class MainApp:
                 'bands_wcdma': bands_wcdma,
                 'bands_hsupa': bands_hsupa,
                 'bands_hsdpa': bands_hsdpa,
-                'bands_gsm': None,
+                'bands_gsm': bands_gsm,
                 'bands_endc': bands_endc,
                 'band_segment': band_segment,
                 'band_segment_fr1': band_segment_fr1,
@@ -1344,6 +1355,10 @@ class MainApp:
             'bw': {
                 'bw_fr1': bw_fr1,
                 'bw_lte': bw_lte,
+            },
+            'power': {
+                'lb_gsm_pcl': pcl_lb_gsm,
+                'mb_gsm_pcl': pcl_mb_gsm,
             },
             'channel': {
                 'chan': chan,
@@ -1363,6 +1378,7 @@ class MainApp:
             'mcs': {
                 'mcs_lte': mcs_lte,
                 'mcs_fr1': mcs_fr1,
+                'modulaiton_gsm': mod_gsm,
             },
             'rb_set': {
                 'rb_ftm_lte': rb_ftm_lte,
@@ -2034,7 +2050,25 @@ class MainApp:
         return self.band_hsdpa
 
     def wanted_band_GSM(self):
-        pass
+        self.band_gsm = []
+
+        if self.GSM850.get() == 850:
+            logger.debug(self.GSM850.get())
+            self.band_gsm.append(self.GSM850.get())
+        if self.GSM900.get() == 900:
+            logger.debug(self.GSM900.get())
+            self.band_gsm.append(self.GSM900.get())
+        if self.GSM1800.get() == 1800:
+            logger.debug(self.GSM1800.get())
+            self.band_gsm.append(self.GSM1800.get())
+        if self.GSM1900.get() == 1900:
+            logger.debug(self.GSM1900.get())
+            self.band_gsm.append(self.GSM1900.get())
+        if self.band_gsm == []:
+            logger.debug('Nothing to select for GSM')
+
+        logger.info(f'select GSM band: {self.band_gsm}')
+        return self.band_gsm
 
     # def inst_to_tech(self):
     #     if self.instrument.get() == 'Cmw100':
@@ -2063,6 +2097,9 @@ class MainApp:
 
     def segment_select_fr1(self):
         logger.info(f'segment: {self.band_segment_fr1.get()}')
+
+    def mod_gsm_select(self):
+        logger.info(f'GSM Modulation: {self.mod_gsm.get()}')
 
     def wanted_tx_rx_sweep(self):
         self.wanted_test = {}
@@ -2471,6 +2508,8 @@ class MainApp:
             self.GSM1800.set(0)
             self.GSM1900.set(0)
 
+        self.wanted_band_GSM()
+
     def HSUPA_all_state(self):
         if self.HSUPA_all.get():
             logger.debug("now is true")
@@ -2691,6 +2730,9 @@ class MainApp:
     def select_tx_port_fr1(self, option):
         logger.info(self.port_tx_fr1.get())
         # return self.tx_port_fr1.get()
+
+    def select_pcl_gsm(self, option):
+        logger.info(f'LB: PCL{self.pcl_lb.get()}, MB: PCL{self.pcl_mb.get()}')
 
     def wanted_tx_path(self):
         self.tx_path = []
@@ -2915,6 +2957,9 @@ class MainApp:
         wt.srs_path_enable = self.srs_path_enable.get()
         wt.sync_path = self.sync_path.get()
         wt.sa_nsa = self.sa_nsa.get()
+        wt.mod_gsm = self.mod_gsm.get()
+        wt.tx_pcl_lb = self.pcl_lb.get()
+        wt.tx_pcl_mb = self.pcl_mb.get()
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820
