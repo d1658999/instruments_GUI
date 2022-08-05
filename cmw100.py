@@ -148,13 +148,19 @@ class Cmw100:
         self.rx_path_gsm_dict = {
             2: 'RX0',
             1: 'RX1',
+            4: 'RX2',
+            8: 'RX3',
             3: 'RX0+RX1',
+            12: 'RX2+RX3',
             15: 'ALL PATH',
         }
         self.rx_path_wcdma_dict = {
             2: 'RX0',
             1: 'RX1',
+            4: 'RX2',
+            8: 'RX3',
             3: 'RX0+RX1',
+            12: 'RX2+RX3',
             15: 'ALL PATH',
         }
         self.rx_path_lte_dict = {
@@ -622,26 +628,28 @@ class Cmw100:
 
     def rx_path_setting_gsm(self):
         """
-        0: PRX, 1: DRX, 2: PRX+DRX
+        0: PRX, 1: DRX
         :return:
         """
         logger.info('----------Rx path setting----------')
+        logger.info(f'---------Now is {self.rx_path_gsm_dict[self.rx_path_gsm]}---------')
+        rx_path_gsm = None
         if self.rx_path_gsm == 2:
-            rx_path_gsm = self.rx_path_gsm - 2
-        elif self.rx_chan_gsm == 3:
-            rx_path_gsm = self.rx_path_gsm - 1
-        else:
-            rx_path_gsm = self.rx_path_gsm
-        self.command(f'AT+ERXPATHSET={rx_path_gsm}')
+            rx_path_gsm = 0
+        elif self.rx_path_gsm == 1:
+            rx_path_gsm = 1
+        self.command(f'AT+ERXSEL={rx_path_gsm}')
         # self.command_cmw100_query('*OPC?')
 
     def rx_path_setting_wcdma(self):
         """
-        2: PRX, 1: DRX, 3: PRX+DRX
+        2: PRX, 1: DRX, 3: PRX+DRX 15: ALL PATH
         :return:
         """
         logger.info('----------Rx path setting----------')
+        logger.info(f'----------Now is {self.rx_path_wcdma_dict[self.rx_path_wcdma]}---------')
         self.command(f'AT+HRXMODESET={self.rx_path_wcdma}')
+
         # self.command_cmw100_query('*OPC?')
 
     def rx_path_setting_lte(self):
@@ -650,6 +658,7 @@ class Cmw100:
         :return:
         """
         logger.info('----------Rx path setting----------')
+        logger.info(f'----------Now is {self.rx_path_lte_dict[self.rx_path_lte]}---------')
         self.command(f'AT+LRXMODESET={self.rx_path_lte}')
         # self.command_cmw100_query('*OPC?')
 
@@ -659,6 +668,7 @@ class Cmw100:
         :return:
         """
         logger.info('----------Rx path setting----------')
+        logger.info(f'----------Now is {self.rx_path_fr1_dict[self.rx_path_fr1]}---------')
         self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
         # self.command_cmw100_query('*OPC?')
 
@@ -1239,6 +1249,7 @@ class Cmw100:
         self.rssi = rssi
         logger.info(f'Final Rx Level: {self.rx_level}')
         logger.info(f'Final RSSI: {self.rssi}')
+        self.command('AT+TESTRESET')
 
     def search_sensitivity_wcdma(self):
         reset_rx_level = -106
@@ -1530,28 +1541,32 @@ class Cmw100:
 
         for rx_path in wt.rx_paths:
             self.rx_path_gsm = rx_path
-            data = {}
-            for rx_chan_gsm in rx_chan_select_list:
-                self.rx_level = -70
-                logger.info('----------Test LMH progress---------')
-                self.rx_chan_gsm = rx_chan_gsm
-                self.rx_freq_gsm = cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, self.rx_chan_gsm, 'rx')
-                self.tx_freq_gsm = cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, self.rx_chan_gsm, 'tx')
-                self.loss_rx = self.get_loss(self.rx_freq_gsm)
-                self.loss_tx = self.get_loss(self.tx_freq_gsm)
-                self.set_test_mode_gsm()
-                self.sig_gen_gsm()
-                self.sync_gsm()
-                # self.antenna_switch_v2()
-                self.rx_path_setting_gsm()
-                self.search_sensitivity_gsm()
-                data[self.rx_chan_gsm] = [self.rx_level, self.rssi]
-                # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
-                # data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
-                #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
-            self.set_test_end_gsm()
-            self.filename = self.rx_power_relative_test_export_excel(data, self.band_gsm, 0, -30,
-                                                                     mode=1)  # mode=1: LMH mode
+            if self.rx_path_gsm in [1, 2]:
+                data = {}
+                for rx_chan_gsm in rx_chan_select_list:
+                    self.rx_level = -70
+                    logger.info('----------Test LMH progress---------')
+                    self.rx_chan_gsm = rx_chan_gsm
+                    self.rx_freq_gsm = cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, self.rx_chan_gsm, 'rx')
+                    self.tx_freq_gsm = cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, self.rx_chan_gsm, 'tx')
+                    self.loss_rx = self.get_loss(self.rx_freq_gsm)
+                    self.loss_tx = self.get_loss(self.tx_freq_gsm)
+                    self.set_test_mode_gsm()
+                    self.rx_path_setting_gsm()
+                    self.sig_gen_gsm()
+                    self.sync_gsm()
+                    # self.antenna_switch_v2()
+                    self.search_sensitivity_gsm()
+                    data[self.rx_chan_gsm] = [self.rx_level, self.rssi]
+                    # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
+                    # data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
+                    #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+                    self.set_test_end_gsm()
+                self.filename = self.rx_power_relative_test_export_excel(data, self.band_gsm, 0, -30,
+                                                                         mode=1)  # mode=1: LMH mode
+            else:
+                logger.info(f"GSM doesn't have this RX path {self.rx_path_gsm_dict[self.rx_path_gsm]}")
+
 
 
     def search_sensitivity_lmh_progress_wcdma(self):
@@ -1571,37 +1586,41 @@ class Cmw100:
         self.preset_instrument()
         for rx_path in wt.rx_paths:
             self.rx_path_wcdma = rx_path
-            data = {}
-            for tx_rx_chan_wcdma in tx_rx_chan_select_list:
-                self.rx_level = -70
-                logger.info('----------Test LMH progress---------')
-                self.rx_chan_wcdma = tx_rx_chan_wcdma[1]
-                self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
-                self.rx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.rx_chan_wcdma, 'rx')
-                self.tx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma, 'tx')
-                self.loss_rx = self.get_loss(self.rx_freq_wcdma)
-                self.loss_tx = self.get_loss(self.tx_freq_wcdma)
-                self.set_test_end_wcdma()
-                self.set_test_mode_wcdma()
-                self.command_cmw100_query('*OPC?')
-                self.sig_gen_wcdma()
-                self.sync_wcdma()
-                # self.antenna_switch_v2()
-                self.rx_path_setting_wcdma()
-                # self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
-                # self.tx_set_wcdma()
-                # aclr_mod_results = self.tx_measure_wcdma()
-                # logger.debug(aclr_mod_results)
-                # data[self.tx_chan_wcdma] = aclr_mod_results
-                self.search_sensitivity_wcdma()
-                data[self.tx_chan_wcdma] = self.rx_level
-                # self.query_rx_measure_wcdma()
-                # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
-                # data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
-                #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
-            self.set_test_end_wcdma()
-            self.filename = self.rx_power_relative_test_export_excel(data, self.band_wcdma, 5, -30,
-                                                                     mode=1)  # mode=1: LMH mode
+            if self.rx_path_wcdma in [1, 2, 3, 15]:
+                data = {}
+                for tx_rx_chan_wcdma in tx_rx_chan_select_list:
+                    self.rx_level = -70
+                    logger.info('----------Test LMH progress---------')
+                    self.rx_chan_wcdma = tx_rx_chan_wcdma[1]
+                    self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                    self.rx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.rx_chan_wcdma, 'rx')
+                    self.tx_freq_wcdma = cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma, 'tx')
+                    self.loss_rx = self.get_loss(self.rx_freq_wcdma)
+                    self.loss_tx = self.get_loss(self.tx_freq_wcdma)
+                    self.set_test_end_wcdma()
+                    self.set_test_mode_wcdma()
+                    self.command_cmw100_query('*OPC?')
+                    self.rx_path_setting_wcdma()
+                    self.sig_gen_wcdma()
+                    self.sync_wcdma()
+                    # self.antenna_switch_v2()
+                    # self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
+                    # self.tx_set_wcdma()
+                    # aclr_mod_results = self.tx_measure_wcdma()
+                    # logger.debug(aclr_mod_results)
+                    # data[self.tx_chan_wcdma] = aclr_mod_results
+                    self.search_sensitivity_wcdma()
+                    data[self.tx_chan_wcdma] = self.rx_level
+                    # self.query_rx_measure_wcdma()
+                    # logger.info(f'Power: {aclr_mod_results[3]:.1f}, Sensitivity: {self.rx_level}')
+                    # data[self.tx_freq_lte] = [aclr_mod_results[3], self.rx_level, self.rsrp_list, self.cinr_list,
+                    #                           self.agc_list]  # measured_power, measured_rx_level, rsrp_list, cinr_list, agc_list
+                    self.set_test_end_wcdma()
+                self.filename = self.rx_power_relative_test_export_excel(data, self.band_wcdma, 5, -30,
+                                                                         mode=1)  # mode=1: LMH mode
+            else:
+                logger.info(f"WCDMA doesn't have this RX path {self.rx_path_wcdma_dict[self.rx_path_wcdma]}")
+                continue
 
     def search_sensitivity_lmh_progress_lte(self):
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte,
@@ -5913,14 +5932,14 @@ def main():
     # cmw100.preset_instrument()
     # cmw100.tx_monitor_lte()
     # cmw100.set_test_mode_wcdma()
-    # cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
-    # cmw100.tx_level_sweep_pipeline_wcdma()
-    # cmw100.tx_freq_sweep_pipline_wcdma()
+    cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
+    cmw100.tx_level_sweep_pipeline_wcdma()
+    cmw100.tx_freq_sweep_pipline_wcdma()
     cmw100.search_sensitivity_pipline_wcdma()
     # cmw100.tx_power_aclr_evm_lmh_pipeline_gsm()
     # cmw100.tx_level_sweep_pipeline_gsm()
     # cmw100.tx_freq_sweep_pipline_gsm()
-    # cmw100.search_sensitivity_pipline_gsm()
+    cmw100.search_sensitivity_pipline_gsm()
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')
