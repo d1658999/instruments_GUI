@@ -25,6 +25,7 @@ tx_pcl_lb = 5  # GMSK_MB: 0 ~ 15, EPSK_MB 2~15:
 tx_pcl_mb = 0  # GMSK_MB: 0 ~ 15, EPSK_MB 2~15:
 sa_nsa = 0
 duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2
+init_rx_sync_level = -50
 
 port_tx = 1
 port_tx_lte = 1  # 1 ~ 8 default is  1

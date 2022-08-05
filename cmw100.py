@@ -43,7 +43,7 @@ class Cmw100:
         self.srs_path_enable = wt.srs_path_enable
         self.rx_path_lte = None
         self.rx_path_fr1 = None
-        self.rx_level = -70
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = None
         self.port_tx = None
         self.port_rx = None
@@ -621,7 +621,6 @@ class Cmw100:
         # self.command_cmw100_query('*OPC?')
 
     def srs_switch(self):
-        self.srs_path = wt.srs_path
         logger.info('---------SRS Switch----------')
         self.command(f'AT+NTXSRSSWPATHSET={self.srs_path}')
         logger.info(f'SRS_PATH: {self.srs_path}')
@@ -3680,12 +3679,8 @@ class Cmw100:
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_lte()
-        if self.srs_path_enable:
-            self.srs_switch()
-        else:
-            self.antenna_switch_v2()
         self.set_test_mode_lte()
-        self.command_cmw100_query('*OPC?')
+        self.antenna_switch_v2()
         self.sig_gen_lte()
         self.sync_lte()
 
@@ -3744,13 +3739,11 @@ class Cmw100:
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_fr1()
+        self.set_test_mode_fr1()
         if self.srs_path_enable:
             self.srs_switch()
         else:
             self.antenna_switch_v2()
-        # self.srs_switch()
-        self.set_test_mode_fr1()
-        self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
         self.sync_fr1()
 
@@ -4037,12 +4030,8 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_lte()
-        if self.srs_path_enable:
-            self.srs_switch()
-        else:
-            self.antenna_switch_v2()
         self.set_test_mode_lte()
-        self.command_cmw100_query('*OPC?')
+        self.antenna_switch_v2()
         self.sig_gen_lte()
         self.sync_lte()
 
@@ -4105,12 +4094,11 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
+        self.set_test_mode_fr1()
         if self.srs_path_enable:
             self.srs_switch()
         else:
             self.antenna_switch_v2()
-        self.set_test_mode_fr1()
-        self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
         self.sync_fr1()
 
@@ -4351,11 +4339,8 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_lte()
-        if self.srs_path_enable:
-            self.srs_switch()
-        else:
-            self.antenna_switch_v2()
         self.set_test_mode_lte()
+        self.antenna_switch_v2()
         self.command_cmw100_query('*OPC?')
         self.sig_gen_lte()
         self.sync_lte()
@@ -4479,12 +4464,11 @@ class Cmw100:
         self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
+        self.set_test_mode_fr1()
         if self.srs_path_enable:
             self.srs_switch()
         else:
             self.antenna_switch_v2()
-        self.set_test_mode_fr1()
-        self.command_cmw100_query('*OPC?')
         self.sig_gen_fr1()
         self.sync_fr1()
 
@@ -5911,7 +5895,7 @@ def main():
 
     # cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
     # cmw100.tx_freq_sweep_pipline_fr1()
-    # cmw100.tx_level_sweep_pipeline_fr1()
+    cmw100.tx_level_sweep_pipeline_fr1()
 
     # cmw100.search_sensitivity_pipline_lte()
     # cmw100.rx_desense_progress()
@@ -5932,10 +5916,10 @@ def main():
     # cmw100.preset_instrument()
     # cmw100.tx_monitor_lte()
     # cmw100.set_test_mode_wcdma()
-    cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
-    cmw100.tx_level_sweep_pipeline_wcdma()
-    cmw100.tx_freq_sweep_pipline_wcdma()
-    cmw100.search_sensitivity_pipline_wcdma()
+    # cmw100.tx_power_aclr_evm_lmh_pipeline_wcdma()
+    # cmw100.tx_level_sweep_pipeline_wcdma()
+    # cmw100.tx_freq_sweep_pipline_wcdma()
+    # cmw100.search_sensitivity_pipline_wcdma()
     # cmw100.tx_power_aclr_evm_lmh_pipeline_gsm()
     # cmw100.tx_level_sweep_pipeline_gsm()
     # cmw100.tx_freq_sweep_pipline_gsm()
