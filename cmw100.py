@@ -3582,9 +3582,9 @@ class Cmw100:
                     self.loss_rx = self.get_loss(self.rx_freq_gsm)
                     self.loss_tx = self.get_loss(self.tx_freq_gsm)
                     self.set_test_mode_gsm()
+                    self.antenna_switch_v2()
                     self.sig_gen_gsm()
                     self.sync_gsm()
-                    self.antenna_switch_v2()
                     self.tx_set_gsm()
                     aclr_mod_results = self.tx_measure_gsm()
                     logger.debug(aclr_mod_results)
@@ -3938,9 +3938,9 @@ class Cmw100:
                     self.loss_rx = self.get_loss(self.rx_freq_gsm)
                     self.loss_tx = self.get_loss(self.tx_freq_gsm)
                     self.set_test_mode_gsm()
+                    self.antenna_switch_v2()
                     self.sig_gen_gsm()
                     self.sync_gsm()
-                    self.antenna_switch_v2()
                     self.tx_set_gsm()
                     aclr_mod_results = self.tx_measure_gsm()
                     logger.debug(aclr_mod_results)
@@ -4175,6 +4175,7 @@ class Cmw100:
                     self.loss_rx = self.get_loss(self.rx_freq_gsm)
                     self.loss_tx = self.get_loss(self.tx_freq_gsm)
                     self.set_test_mode_gsm()
+                    self.antenna_switch_v2()
                     self.sig_gen_gsm()
                     self.sync_gsm()
 
@@ -4193,7 +4194,6 @@ class Cmw100:
                     for tx_pcl in range(tx_range_list[0], tx_range_list[1] + step, step):
                         self.pcl = tx_pcl
                         logger.info(f'========Now Tx PCL = PCL{self.pcl} ========')
-                        self.antenna_switch_v2()
                         self.tx_set_gsm()
                         mod_orfs_results = self.tx_measure_gsm()
                         logger.debug(mod_orfs_results)
@@ -5895,7 +5895,7 @@ def main():
 
     # cmw100.tx_power_aclr_evm_lmh_pipeline_fr1()
     # cmw100.tx_freq_sweep_pipline_fr1()
-    cmw100.tx_level_sweep_pipeline_fr1()
+    # cmw100.tx_level_sweep_pipeline_fr1()
 
     # cmw100.search_sensitivity_pipline_lte()
     # cmw100.rx_desense_progress()
@@ -5920,10 +5920,10 @@ def main():
     # cmw100.tx_level_sweep_pipeline_wcdma()
     # cmw100.tx_freq_sweep_pipline_wcdma()
     # cmw100.search_sensitivity_pipline_wcdma()
-    # cmw100.tx_power_aclr_evm_lmh_pipeline_gsm()
-    # cmw100.tx_level_sweep_pipeline_gsm()
-    # cmw100.tx_freq_sweep_pipline_gsm()
-    cmw100.search_sensitivity_pipline_gsm()
+    cmw100.tx_power_aclr_evm_lmh_pipeline_gsm()
+    cmw100.tx_level_sweep_pipeline_gsm()
+    cmw100.tx_freq_sweep_pipline_gsm()
+    # cmw100.search_sensitivity_pipline_gsm()
     stop = datetime.datetime.now()
 
     logger.info(f'Timer: {stop - start}')
