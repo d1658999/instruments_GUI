@@ -17,7 +17,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main_v2_1.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2_2.ui"
 
 
 class MainApp:
@@ -50,6 +50,7 @@ class MainApp:
         self.asw_path = None
         self.srs_path_enable = None
         self.srs_path = None
+        self.tx_level = None
         self.tx1 = None
         self.tx2 = None
         self.ulmimo = None
@@ -237,6 +238,7 @@ class MainApp:
                 "port_tx_lte",
                 "port_tx_fr1",
                 "sync_path",
+                "tx_level",
                 "asw_path",
                 "srs_path_enable",
                 "srs_path",
@@ -470,6 +472,7 @@ class MainApp:
         self.pcl_lb.set(ui_init['power']['lb_gsm_pcl'])
         self.pcl_mb.set(ui_init['power']['mb_gsm_pcl'])
         self.mod_gsm.set(ui_init['mcs']['modulaiton_gsm'])
+        self.tx_level.set(ui_init['power']['tx_level'])
 
         # reset all the check button
         self.off_all_reset_tech()
@@ -873,7 +876,7 @@ class MainApp:
         self.sync_path.set(ui_init.sync_path)
         self.sa_nsa.set(ui_init.sa_nsa)
 
-        # reet all the check button
+        # reset all the check button
         self.off_all_reset_tech()
         self.off_all_reset_bw()
         self.off_all_reset_ue_power()
@@ -1302,6 +1305,7 @@ class MainApp:
         instrument = self.instrument.get()
         pcl_lb_gsm = self.pcl_lb.get()
         pcl_mb_gsm = self.pcl_mb.get()
+        tx_level = self.tx_level.get()
         mod_gsm = self.mod_gsm.get()
         port_tx = self.port_tx.get()
         port_tx_lte = self.port_tx_lte.get()
@@ -1359,6 +1363,7 @@ class MainApp:
             'power': {
                 'lb_gsm_pcl': pcl_lb_gsm,
                 'mb_gsm_pcl': pcl_mb_gsm,
+                'tx_level': tx_level,
             },
             'channel': {
                 'chan': chan,
@@ -2809,6 +2814,9 @@ class MainApp:
     def select_srs_path(self, option):
         logger.info(f'select SRS path {self.srs_path.get()}')
 
+    def select_tx_level(self, option):
+        logger.info(f'select TX Level {self.tx_level.get()}')
+
     def srs_enable(self):
         # logger.info(f'SRS status: {self.srs_path_enable.get()}')
         if self.srs_path_enable.get():
@@ -2960,6 +2968,7 @@ class MainApp:
         wt.mod_gsm = self.mod_gsm.get()
         wt.tx_pcl_lb = self.pcl_lb.get()
         wt.tx_pcl_mb = self.pcl_mb.get()
+        wt.tx_level = self.tx_level.get()
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820

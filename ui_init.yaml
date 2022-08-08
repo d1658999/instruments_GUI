@@ -3,18 +3,20 @@ band:
   band_segment_fr1: A
   bands_endc: []
   bands_fr1:
+  - 5
   - 77
   bands_gsm:
   - 850
+  - 900
   bands_hsdpa: []
   bands_hsupa: []
   bands_lte:
-  - 42
-  - 48
-  bands_wcdma: []
+  - 5
+  bands_wcdma:
+  - 5
 bw:
   bw_fr1:
-  - 100
+  - 10
   bw_lte:
   - 10
 channel:
@@ -30,20 +32,21 @@ mcs:
 path:
   asw_path: 0
   rx_paths:
-  - 2
+  - 3
   sa_nsa: 0
-  srs_path: 0
+  srs_path: 3
   srs_path_enable: false
   sync_path: Main
   tx_paths:
   - TX1
 port:
-  port_tx: 1
+  port_tx: 4
   port_tx_fr1: 4
   port_tx_lte: 1
 power:
   lb_gsm_pcl: 5
   mb_gsm_pcl: 0
+  tx_level: 10
 rb_set:
   rb_ftm_fr1:
   - INNER_FULL
@@ -59,7 +62,7 @@ scripts:
   - GENERAL
 tech:
   tech:
-  - GSM
+  - LTE
 test_items:
   rx: false
   rx_sweep: false
