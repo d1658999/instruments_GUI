@@ -35,6 +35,9 @@ port_tx_fr1 = 4  # 1 ~ 8 default is  1
 
 asw_path = 0
 srs_path = 0
+psu_enable = False
+psu_voltage = 3.7
+psu_current = 5.0
 srs_path_enable = False
 sync_path = 'Main'  # 'Main', 'CA#1', 'CA#2', 'CA#3'
 tx_paths = ['TX1']   # 'TX1' | 'TX2' | 'MIMO

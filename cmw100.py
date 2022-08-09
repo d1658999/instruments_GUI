@@ -18,6 +18,7 @@ import math
 import common_parameters_ftm as cm_pmt_ftm
 import want_test_band as wt
 from loss_table import loss_table
+from power_supply import Psu
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -28,6 +29,7 @@ class Cmw100:
         self.begin_serial()
         self.get_resource()
         self.parameters_init()
+        self.psu = Psu(wt.psu_enable)
 
     def parameters_init(self):
         self.asw_on_off = 0  # 1: AS ON, 0: AS OFF
@@ -231,6 +233,12 @@ class Cmw100:
         self.cmw100.timeout = 5000
         logger.info('Connect to CMW100')
         logger.info('TCPIP0::127.0.0.1::INSTR')
+
+    def measure_current(self):
+        if wt.psu_enable:
+            self.psu.current_average()
+        else:
+            pass
 
     def preset_instrument(self):
         logger.info('----------Preset CMW100----------')
@@ -3709,6 +3717,7 @@ class Cmw100:
                             aclr_mod_results = self.tx_measure_lte()
                             logger.debug(aclr_mod_results)
                             data_freq[self.tx_freq_lte] = aclr_mod_results
+                            self.measure_current()
                         logger.debug(data_freq)
                         # ready to export to excel
                         self.filename = self.tx_power_relative_test_export_excel(data_freq, self.band_lte, self.bw_lte,

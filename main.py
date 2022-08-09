@@ -1711,8 +1711,8 @@ class MainApp:
         self.UHB_all_state_fr1()
 
     def thermal_dis(self):
-        from thermal_disable import thd
-        thd()
+        from adb_control import thermal_charger_disable
+        thermal_charger_disable()
 
     def init_select(self):
         self.instrument.set('Anritsu8820')
@@ -2969,6 +2969,7 @@ class MainApp:
         wt.tx_pcl_lb = self.pcl_lb.get()
         wt.tx_pcl_mb = self.pcl_mb.get()
         wt.tx_level = self.tx_level.get()
+        # wt.psu_enable = self.psu_enable.get()
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820
