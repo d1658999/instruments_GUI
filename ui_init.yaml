@@ -18,9 +18,14 @@ bw:
   bw_fr1:
   - 10
   bw_lte:
+  - 1.4
+  - 3
+  - 5
   - 10
+  - 15
+  - 20
 channel:
-  chan: LMH
+  chan: M
 instrument:
   instrument: Cmw100
 mcs:
@@ -28,25 +33,28 @@ mcs:
   - QPSK
   mcs_lte:
   - QPSK
+  - Q16
+  - Q64
+  - Q256
   modulaiton_gsm: GMSK
 path:
   asw_path: 0
   rx_paths:
   - 3
   sa_nsa: 0
-  srs_path: 3
+  srs_path: 0
   srs_path_enable: false
   sync_path: Main
   tx_paths:
   - TX1
 port:
-  port_tx: 4
+  port_tx: 1
   port_tx_fr1: 4
   port_tx_lte: 1
 power:
   lb_gsm_pcl: 5
   mb_gsm_pcl: 0
-  tx_level: 10
+  tx_level: 25
 rb_set:
   rb_ftm_fr1:
   - INNER_FULL

@@ -1140,8 +1140,8 @@ class MainApp:
         self.UHB_all_state_fr1()
 
     def thermal_dis(self):
-        from thermal_disable import thd
-        thd()
+        from adb_control import thermal_charger_disable
+        thermal_charger_disable()
 
     def init_select(self):
         self.instrument.set('Anritsu8820')

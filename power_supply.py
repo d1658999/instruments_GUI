@@ -5,7 +5,7 @@ import time
 import want_test_band as wt
 
 
-PSU_LIST = ['E3631A', ]
+PSU_LIST = ['E3631A', 'E3642A', ]
 fileConfig('logging.ini')
 logger = logging.getLogger()
 
@@ -20,7 +20,7 @@ class Psu:
 
     def psu_init(self, voltage=wt.psu_voltage, current=wt.psu_current):
         logger.info('----------Init PSU----------')
-        logger.info(self.psu.query("*IDN?"))
+        logger.info(self.psu.query("*IDN?").strip())
         self.psu.write('*CLS')
         self.psu.write('INST P6V')
         self.psu.write(f'VOLT {voltage}')
@@ -30,7 +30,7 @@ class Psu:
         logger.info('----------Get current value----------')
         current_measure = []
         count = 0
-        while count < 10:
+        while count < 5:
             current = eval(self.psu.query('MEAS:CURR?')) * 1000
             logger.debug(current)
             current_measure.append(current)
