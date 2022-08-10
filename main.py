@@ -17,7 +17,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main_v2_2.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2_3.ui"
 
 
 class MainApp:
@@ -228,6 +228,16 @@ class MainApp:
         self.D8 = None
         self.D6 = None
         self.D19 = None
+        self.tempcham_enable = None
+        self.hthv = None
+        self.htlv = None
+        self.ntnv = None
+        self.lthv = None
+        self.ltlv = None
+        self.psu_enable = None
+        self.hv = None
+        self.nv = None
+        self.lv = None
         builder.import_variables(
             self,
             [
@@ -419,6 +429,16 @@ class MainApp:
                 "D8",
                 "D6",
                 "D19",
+                "tempcham_enable",
+                "hthv",
+                "htlv",
+                "ntnv",
+                "lthv",
+                "ltlv",
+                "psu_enable",
+                "hv",
+                "nv",
+                "lv",
             ],
         )
 
@@ -1676,6 +1696,18 @@ class MainApp:
         with open('ui_init.py', 'w') as f:
             f.writelines(new_data)
 
+    def temp_enable_status(self):
+        if self.tempcham_enable.get():
+            logger.info('=====Enable TempChamber=====')
+        else:
+            logger.info('=====Disable TempChamber=====')
+
+    def psu_enable_status(self):
+        if self.psu_enable.get():
+            logger.info('=====Enable PSU=====')
+        else:
+            logger.info('=====Disable PSU=====')
+
     def off_all_reset_GSM(self):
         self.GSM_all.set(False)
         self.GSM_all_state()
@@ -1726,6 +1758,45 @@ class MainApp:
         self.sa_nsa.set(0)
 
         logger.info(f'default instrument: {self.instrument.get()}')
+
+    def wanted_temp_volts(self):
+        self.temp_volts = []
+        if self.hthv.get():
+            logger.debug('Enable HTHV')
+            self.temp_volts.append('HTHV')
+        if self.htlv.get():
+            logger.debug('Enable HTLV')
+            self.temp_volts.append('HTLV')
+        if self.ntnv.get():
+            logger.debug('Enable NTNV')
+            self.temp_volts.append('NTNV')
+        if self.lthv.get():
+            logger.debug('Enable LTHV')
+            self.temp_volts.append('LTHV')
+        if self.ltlv.get():
+            logger.debug('Enable LTLV')
+            self.temp_volts.append('LTLV')
+        if self.temp_volts == []:
+            logger.debug('Nothing to select for temp and volts')
+        logger.info(f'select temp and volts: {self.temp_volts}')
+        return self.temp_volts
+
+    def wanted_volts(self):
+        self.volts = []
+        if self.hv.get():
+            logger.debug('Enable HV')
+            self.volts.append('HV')
+        if self.nv.get():
+            logger.debug('Enable NV')
+            self.volts.append('NV')
+        if self.lv.get():
+            logger.debug('Enable LV')
+            self.volts.append('LV')
+        if self.volts == []:
+            logger.debug('Nothing to select for volts')
+        logger.info(f'select volts: {self.volts}')
+
+        return self.volts
 
     def wanted_band_ENDC(self):
         self.band_endc = []

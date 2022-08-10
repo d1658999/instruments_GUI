@@ -236,9 +236,9 @@ class Cmw100:
 
     def measure_current(self):
         if wt.psu_enable:
-            self.psu.current_average()
+            return self.psu.current_average()
         else:
-            pass
+            return None
 
     def preset_instrument(self):
         logger.info('----------Preset CMW100----------')
@@ -2413,6 +2413,7 @@ class Cmw100:
                                 ws['R1'] = 'Tx_Path'
                                 ws['S1'] = 'Sync_Path'
                                 ws['T1'] = 'AS_Path'
+                                ws['U1'] = 'Current'
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -2562,6 +2563,8 @@ class Cmw100:
                             ws.cell(row, 18).value = self.tx_path
                             ws.cell(row, 19).value = self.sync_path
                             ws.cell(row, 20).value = self.asw_path
+                            ws.cell(row, 21).value = measured_data[10]
+
                             row += 1
 
                 elif self.tech == 'FR1':
@@ -3288,7 +3291,7 @@ class Cmw100:
                                     self.tx_power_aclr_evm_lmh_lte(plot=False)
                                 else:
                                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+                            # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
@@ -3714,10 +3717,10 @@ class Cmw100:
                         for tx_freq_lte in tx_freq_select_list:
                             self.tx_freq_lte = tx_freq_lte
                             self.tx_set_lte()
-                            aclr_mod_results = self.tx_measure_lte()
+                            aclr_mod_current_results = aclr_mod_results = self.tx_measure_lte()
                             logger.debug(aclr_mod_results)
-                            data_freq[self.tx_freq_lte] = aclr_mod_results
-                            self.measure_current()
+                            aclr_mod_current_results.append(self.measure_current())
+                            data_freq[self.tx_freq_lte] = aclr_mod_current_results
                         logger.debug(data_freq)
                         # ready to export to excel
                         self.filename = self.tx_power_relative_test_export_excel(data_freq, self.band_lte, self.bw_lte,
