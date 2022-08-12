@@ -20,7 +20,7 @@ logger = logging.getLogger()
 
 
 class Anritsu8821(Anritsu8820):
-    def __init__(self):
+    def __init__(self, psu_object=None):
         super().__init__()
 
     def set_init_before_calling_lte(self, dl_ch, bw):

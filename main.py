@@ -12,6 +12,8 @@ import os
 import yaml
 
 import ui_init
+from power_supply import Psu
+from temp_chamber import TempChamber
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -238,6 +240,7 @@ class MainApp:
         self.hv = None
         self.nv = None
         self.lv = None
+        self.psu = None
         builder.import_variables(
             self,
             [
@@ -459,9 +462,48 @@ class MainApp:
         print('Crtrl C')
         os.kill(signal.CTRL_C_EVENT, 0)
 
+
+    def mega_measure(self):
+        start = datetime.datetime.now()
+
+        temp_dict = {
+            'HT': 55,
+            'NT': 25,
+            'LT': -10,
+        }
+        volts_dict = {
+            'HV': 4.2,
+            'NV': 3.85,
+            'LV': 3.6,
+        }
+        if self.tempcham_enable.get():  # with temp chamber and PSU
+            self.tpchb = TempChamber()
+            self.psu = Psu()
+            for temp_volt in self.wanted_temp_volts():
+                self.condition = temp_volt  # HVHV, HTLV, NVNV, LTHV, LVLV
+                temp = temp_dict[temp_volt[:2]]
+                volt = volts_dict[temp_volt[2:]]
+                self.tpchb.tpchb_init(temp)
+                self.psu.psu_init(volt)
+                self.measure()
+        elif self.psu_enable.get() and (self.tempcham_enable.get() is False):  # with only PSU
+            self.psu = Psu()
+            for volt in self.want_temp_psu_combination():
+                self.condition = volt  # HV, NV, LV
+                self.psu.psu_init(volts_dict[volt])
+                self.measure()
+        else:  # wtih anything
+            self.condition = None
+            self.measure()
+
+        stop = datetime.datetime.now()
+
+        logger.info(f'Timer: {stop - start}')
+
     def t_measure(self):
-        t = threading.Thread(target=self.measure, daemon=True)
+        t = threading.Thread(target=self.mega_measure, daemon=True)
         t.start()
+
 
     def import_ui_setting_yaml(self):
         """
@@ -493,6 +535,16 @@ class MainApp:
         self.pcl_mb.set(ui_init['power']['mb_gsm_pcl'])
         self.mod_gsm.set(ui_init['mcs']['modulaiton_gsm'])
         self.tx_level.set(ui_init['power']['tx_level'])
+        self.tempcham_enable.set(ui_init['external_inst']['tempchb'])
+        self.psu_enable.set(ui_init['external_inst']['psu'])
+        self.hthv.set(ui_init['condition']['hthv'])
+        self.htlv.set(ui_init['condition']['htlv'])
+        self.ntnv.set(ui_init['condition']['ntnv'])
+        self.lthv.set(ui_init['condition']['lthv'])
+        self.ltlv.set(ui_init['condition']['ltlv'])
+        self.hv.set(ui_init['condition']['hv'])
+        self.nv.set(ui_init['condition']['mv'])
+        self.lv.set(ui_init['condition']['lv'])
 
         # reset all the check button
         self.off_all_reset_tech()
@@ -1339,6 +1391,16 @@ class MainApp:
         band_segment_fr1 = self.band_segment_fr1.get()
         chan = self.wanted_chan()
         tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
+        tpchb_enable = self.tempcham_enable.get()
+        psu_enable = self.psu_enable.get()
+        hthv = self.hthv.get()
+        htlv = self.htlv.get()
+        ntnv = self.ntnv.get()
+        lthv = self.lthv.get()
+        ltlv = self.ltlv.get()
+        hv = self.hv.get()
+        nv = self.nv.get()
+        lv = self.lv.get()
 
         content = {
             'port': {
@@ -1409,7 +1471,20 @@ class MainApp:
                 'rb_ftm_lte': rb_ftm_lte,
                 'rb_ftm_fr1': rb_ftm_fr1,
             },
-
+            'external_inst':{
+                'tempchb': tpchb_enable,
+                'psu': psu_enable,
+            },
+            'condition': {
+                'hthv': hthv,
+                'htlv': htlv,
+                'ntnv': ntnv,
+                'lthv': lthv,
+                'ltlv': ltlv,
+                'hv': hv,
+                'mv': nv,
+                'lv': lv,
+            },
         }
 
         with open(yaml_file, 'w', encoding='utf-8') as outfile:
@@ -1759,44 +1834,52 @@ class MainApp:
 
         logger.info(f'default instrument: {self.instrument.get()}')
 
+    def want_temp_psu_combination(self):
+        if self.tempcham_enable.get():
+            return self.wanted_temp_volts()
+        else:
+            if self.psu_enable.get():
+                return self.wanted_volts()
+            else:
+                return None
+
     def wanted_temp_volts(self):
-        self.temp_volts = []
+        temp_volts = []
         if self.hthv.get():
             logger.debug('Enable HTHV')
-            self.temp_volts.append('HTHV')
+            temp_volts.append('HTHV')
         if self.htlv.get():
             logger.debug('Enable HTLV')
-            self.temp_volts.append('HTLV')
+            temp_volts.append('HTLV')
         if self.ntnv.get():
             logger.debug('Enable NTNV')
-            self.temp_volts.append('NTNV')
+            temp_volts.append('NTNV')
         if self.lthv.get():
             logger.debug('Enable LTHV')
-            self.temp_volts.append('LTHV')
+            temp_volts.append('LTHV')
         if self.ltlv.get():
             logger.debug('Enable LTLV')
-            self.temp_volts.append('LTLV')
-        if self.temp_volts == []:
+            temp_volts.append('LTLV')
+        if temp_volts == []:
             logger.debug('Nothing to select for temp and volts')
-        logger.info(f'select temp and volts: {self.temp_volts}')
-        return self.temp_volts
+        logger.info(f'select temp and volts: {temp_volts}')
+        return temp_volts
 
     def wanted_volts(self):
-        self.volts = []
+        volts = []
         if self.hv.get():
             logger.debug('Enable HV')
-            self.volts.append('HV')
+            volts.append('HV')
         if self.nv.get():
             logger.debug('Enable NV')
-            self.volts.append('NV')
+            volts.append('NV')
         if self.lv.get():
             logger.debug('Enable LV')
-            self.volts.append('LV')
-        if self.volts == []:
+            volts.append('LV')
+        if volts == []:
             logger.debug('Nothing to select for volts')
-        logger.info(f'select volts: {self.volts}')
-
-        return self.volts
+        logger.info(f'select volts: {volts}')
+        return volts
 
     def wanted_band_ENDC(self):
         self.band_endc = []
@@ -2282,6 +2365,10 @@ class MainApp:
     def wanted_tech(self):
         self.tech = []
 
+        if self.tech_FR1.get():
+            logger.debug(self.tech_FR1.get())
+            self.tech.append('FR1')
+
         if self.tech_LTE.get():
             logger.debug(self.tech_LTE.get())
             self.tech.append('LTE')
@@ -2301,10 +2388,6 @@ class MainApp:
         if self.tech_GSM.get():
             logger.debug(self.tech_GSM.get())
             self.tech.append('GSM')
-
-        if self.tech_FR1.get():
-            logger.debug(self.tech_FR1.get())
-            self.tech.append('FR1')
 
         if self.tech == []:
             logger.debug('Nothing to select for tech')
@@ -2964,7 +3047,7 @@ class MainApp:
         self.wanted_ue_pwr()
 
     def test_pipeline(self, inst_class):
-        inst = inst_class()
+        inst = inst_class(self.psu)
         if inst.__class__.__name__ == 'Cmw100':
             if self.wanted_test['tx']:
                 inst.run_tx()
@@ -3002,7 +3085,7 @@ class MainApp:
         import want_test_band as wt
         for button_run in self.button_run:
             button_run['state'] = tkinter.DISABLED
-        start = datetime.datetime.now()
+
         self.export_ui_setting_yaml()
         # list-like
         wt.tech = self.wanted_tech()
@@ -3040,7 +3123,8 @@ class MainApp:
         wt.tx_pcl_lb = self.pcl_lb.get()
         wt.tx_pcl_mb = self.pcl_mb.get()
         wt.tx_level = self.tx_level.get()
-        # wt.psu_enable = self.psu_enable.get()
+        wt.psu_enable = self.psu_enable.get()
+        wt.condition = self.condition
 
         if self.instrument.get() == 'Anritsu8820':
             from anritsu8820 import Anritsu8820
@@ -3099,9 +3183,6 @@ class MainApp:
             from cmw100 import Cmw100
             self.test_pipeline(Cmw100)
 
-        stop = datetime.datetime.now()
-
-        logger.info(f'Timer: {stop - start}')
         for button_run in self.button_run:
             button_run['state'] = tkinter.NORMAL
 

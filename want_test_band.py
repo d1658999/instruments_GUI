@@ -36,12 +36,14 @@ port_tx_fr1 = 4  # 1 ~ 8 default is  1
 asw_path = 0
 srs_path = 0
 psu_enable = True
-psu_voltage = 3.7
+psu_voltage = 4.0
 psu_current = 5.0
+temp = 25
 srs_path_enable = False
 sync_path = 'Main'  # 'Main', 'CA#1', 'CA#2', 'CA#3'
 tx_paths = ['TX1']   # 'TX1' | 'TX2' | 'MIMO
 rx_paths = [15]  #  0: default(free run) | 1: DRX_ONLY | 2: PRX ONLY | 3: PRX+DRX | 4: 4RX_PRX(RX2) ONLY | 8: 4RX_DRX(RX3) ONLY | 12: 4RX_PRX(RX2) + 4RX_DRX(RX3) | 15: ALL PATH
+condition = 'NV'
 
 scripts = ['GENERAL']  # 'GENERAL' | 'FCC' | 'CE' | 'FACTORY'
 
@@ -54,8 +56,8 @@ rb_ftm_fr1 = ['OUTER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' |
 scs = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz
 
 tx_level_range_list = [-20, 24]  # tx_level_1, tx_level_2
-tx_pcl_range_list_lb = [5, 19]  # tx_pcl_1, tx_pcl_2; GMSK_LB: 5 ~ 19, EPSK_LB: 8~19
-tx_pcl_range_list_mb = [0, 15]  # tx_pcl_1, tx_pcl_2; GMSK_MB: 0 ~ 15, EPSK_MB: 2~15
+tx_pcl_range_list_lb = [19, 5]  # tx_pcl_1, tx_pcl_2; GMSK_LB: 5 ~ 19, EPSK_LB: 8~19
+tx_pcl_range_list_mb = [15, 0]  # tx_pcl_1, tx_pcl_2; GMSK_MB: 0 ~ 15, EPSK_MB: 2~15
 
 
 

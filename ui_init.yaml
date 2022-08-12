@@ -4,10 +4,8 @@ band:
   bands_endc: []
   bands_fr1:
   - 5
-  - 77
   bands_gsm:
   - 850
-  - 900
   bands_hsdpa: []
   bands_hsupa: []
   bands_lte:
@@ -18,14 +16,9 @@ bw:
   bw_fr1:
   - 10
   bw_lte:
-  - 1.4
-  - 3
-  - 5
   - 10
-  - 15
-  - 20
 channel:
-  chan: M
+  chan: H
 instrument:
   instrument: Cmw100
 mcs:
@@ -33,9 +26,6 @@ mcs:
   - QPSK
   mcs_lte:
   - QPSK
-  - Q16
-  - Q64
-  - Q256
   modulaiton_gsm: GMSK
 path:
   asw_path: 0
@@ -57,9 +47,8 @@ power:
   tx_level: 25
 rb_set:
   rb_ftm_fr1:
-  - INNER_FULL
+  - OUTER_FULL
   rb_ftm_lte:
-  - PRB
   - FRB
 rx_set:
   ue_power:
@@ -70,13 +59,25 @@ scripts:
   - GENERAL
 tech:
   tech:
-  - LTE
+  - GSM
 test_items:
   rx: false
   rx_sweep: false
-  tx: true
+  tx: false
   tx_freq_sweep: false
-  tx_level_sweep: false
+  tx_level_sweep: true
 type:
   type_fr1:
   - DFTS
+external_inst:
+  tempchb: True
+  psu: False
+condition:
+  hthv: False
+  htlv: False
+  ntnv: False
+  lthv: False
+  ltlv: False
+  hv: False
+  mv: False
+  lv: False

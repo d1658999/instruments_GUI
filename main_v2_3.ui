@@ -10705,7 +10705,7 @@ Disable</property>
                 <child>
                   <object class="ttk.Labelframe" id="labelframe2">
                     <property name="height">200</property>
-                    <property name="text" translatable="yes">TempChamber</property>
+                    <property name="text" translatable="yes">TempChamber &amp; PSU</property>
                     <property name="width">200</property>
                     <layout manager="grid">
                       <property name="column">0</property>
@@ -10803,7 +10803,7 @@ Disable</property>
                 <child>
                   <object class="ttk.Labelframe" id="labelframe3">
                     <property name="height">200</property>
-                    <property name="text" translatable="yes">PSU</property>
+                    <property name="text" translatable="yes">PSU only</property>
                     <property name="width">200</property>
                     <layout manager="grid">
                       <property name="column">1</property>

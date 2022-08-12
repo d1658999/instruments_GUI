@@ -18,7 +18,7 @@ logger = logging.getLogger()
 
 
 class Anritsu8820(pyvisa.ResourceManager):
-    def __init__(self):
+    def __init__(self, psu_object=None):
         self.excel_path = None
         self.count = 5
         self.pwr = None

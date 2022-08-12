@@ -18,18 +18,18 @@ import math
 import common_parameters_ftm as cm_pmt_ftm
 import want_test_band as wt
 from loss_table import loss_table
-from power_supply import Psu
+# from power_supply import Psu
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
 
 
 class Cmw100:
-    def __init__(self):
+    def __init__(self, psu_object=None):
         self.begin_serial()
         self.get_resource()
         self.parameters_init()
-        self.psu = Psu(wt.psu_enable)
+        self.psu = psu_object
 
     def parameters_init(self):
         self.asw_on_off = 0  # 1: AS ON, 0: AS OFF
@@ -2413,7 +2413,8 @@ class Cmw100:
                                 ws['R1'] = 'Tx_Path'
                                 ws['S1'] = 'Sync_Path'
                                 ws['T1'] = 'AS_Path'
-                                ws['U1'] = 'Current'
+                                ws['U1'] = 'Current(mA)'
+                                ws['V1'] = 'Condition'
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -2443,6 +2444,8 @@ class Cmw100:
                                 ws['T1'] = 'RB_STATE'
                                 ws['U1'] = 'Sync_Path'
                                 ws['V1'] = 'SRS_Path'
+                                ws['W1'] = 'Current(mA)'
+                                ws['X1'] = 'Condition'
 
                     elif self.tech == 'WCDMA':
 
@@ -2466,6 +2469,8 @@ class Cmw100:
                             ws['N1'] = 'IQ_OFFSET'
                             ws['O1'] = 'Tx_Path'
                             ws['P1'] = 'AS_Path'
+                            ws['Q1'] = 'Current(mA)'
+                            ws['R1'] = 'Condition'
 
                     elif self.tech == 'GSM':
 
@@ -2496,6 +2501,8 @@ class Cmw100:
                             ws['T1'] = 'ORFS_SW_-1200'
                             ws['U1'] = 'ORFS_SW_+1200'
                             ws['V1'] = 'AS_Path'
+                            ws['W1'] = 'Current(mA)'
+                            ws['X1'] = 'Condition'
 
                     wb.save(filename)
                     wb.close()
@@ -2564,6 +2571,7 @@ class Cmw100:
                             ws.cell(row, 19).value = self.sync_path
                             ws.cell(row, 20).value = self.asw_path
                             ws.cell(row, 21).value = measured_data[10]
+                            ws.cell(row, 22).value = wt.condition
 
                             row += 1
 
@@ -2623,6 +2631,8 @@ class Cmw100:
                             ws.cell(row, 20).value = self.rb_state
                             ws.cell(row, 21).value = self.sync_path
                             ws.cell(row, 22).value = self.srs_path
+                            ws.cell(row, 23).value = measured_data[10]
+                            ws.cell(row, 24).value = wt.condition
 
                             row += 1
 
@@ -2671,6 +2681,8 @@ class Cmw100:
                             ws.cell(row, 14).value = measured_data[8]
                             ws.cell(row, 15).value = self.tx_path
                             ws.cell(row, 16).value = self.asw_path
+                            ws.cell(row, 17).value = measured_data[9]
+                            ws.cell(row, 18).value = wt.condition
                             row += 1
 
                 elif self.tech == 'GSM':
@@ -2702,6 +2714,7 @@ class Cmw100:
                             ws.cell(row, 21).value = measured_data[15]
                             ws.cell(row, 22).value = self.asw_path
 
+
                             row += 1
 
                     elif tx_freq_level <= 100:
@@ -2729,6 +2742,8 @@ class Cmw100:
                             ws.cell(row, 20).value = measured_data[14]
                             ws.cell(row, 21).value = measured_data[15]
                             ws.cell(row, 22).value = self.asw_path
+                            ws.cell(row, 23).value = measured_data[16]
+                            ws.cell(row, 24).value = wt.condition
 
                             row += 1
 
@@ -2773,6 +2788,8 @@ class Cmw100:
                             ws['Q1'] = 'Tx_Path'
                             ws['R1'] = 'Sync_Path'
                             ws['S1'] = 'AS_Path'
+                            ws['T1'] = 'Current(mA)'
+                            ws['U1'] = 'Condition'
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -2801,6 +2818,8 @@ class Cmw100:
                                 ws['S1'] = 'RB_STATE'
                                 ws['T1'] = 'Sync_Path'
                                 ws['U1'] = 'SRS_Path'
+                                ws['V1'] = 'Current(mA)'
+                                ws['W1'] = 'Condition'
 
                     elif self.tech == 'WCDMA':
                         wb.create_sheet(f'Raw_Data')
@@ -2821,6 +2840,8 @@ class Cmw100:
                             ws['M1'] = 'IQ_OFFSET'
                             ws['N1'] = 'Tx_Path'
                             ws['O1'] = 'AS_Path'
+                            ws['P1'] = 'Current(mA)'
+                            ws['Q1'] = 'Condition'
 
                     elif self.tech == 'GSM':
                         wb.create_sheet(f'Raw_Data_GMSK')
@@ -2849,6 +2870,8 @@ class Cmw100:
                             ws['S1'] = 'ORFS_SW_-1200'
                             ws['T1'] = 'ORFS_SW_+1200'
                             ws['U1'] = 'AS_Path'
+                            ws['V1'] = 'Current(mA)'
+                            ws['W1'] = 'Condition'
 
                     wb.save(filename)
                     wb.close()
@@ -2889,6 +2912,8 @@ class Cmw100:
                             ws.cell(row, 17).value = self.tx_path
                             ws.cell(row, 18).value = self.sync_path
                             ws.cell(row, 19).value = self.asw_path
+                            ws.cell(row, 20).value = measured_data[10]
+                            ws.cell(row, 21).value = wt.condition
                             row += 1
 
                     elif tx_freq_level <= 100:
@@ -2940,6 +2965,8 @@ class Cmw100:
                             ws.cell(row, 19).value = self.rb_state
                             ws.cell(row, 20).value = self.sync_path
                             ws.cell(row, 21).value = self.srs_path
+                            ws.cell(row, 22).value = measured_data[10]
+                            ws.cell(row, 23).value = wt.condition
                             row += 1
 
                     elif tx_freq_level <= 100:
@@ -2964,7 +2991,7 @@ class Cmw100:
                             ws.cell(row, 18).value = self.scs
                             ws.cell(row, 19).value = self.rb_state
                             ws.cell(row, 20).value = self.sync_path
-                            s.cell(row, 21).value = self.srs_path
+                            ws.cell(row, 21).value = self.srs_path
                             row += 1
 
                 elif self.tech == 'WCDMA':
@@ -2988,6 +3015,8 @@ class Cmw100:
                             ws.cell(row, 13).value = measured_data[8]
                             ws.cell(row, 14).value = self.tx_path
                             ws.cell(row, 15).value = self.asw_path
+                            ws.cell(row, 16).value = measured_data[9]
+                            ws.cell(row, 17).value = wt.condition
                             row += 1
 
                     elif tx_freq_level <= 100:
@@ -3035,6 +3064,8 @@ class Cmw100:
                             ws.cell(row, 19).value = measured_data[14]
                             ws.cell(row, 20).value = measured_data[15]
                             ws.cell(row, 21).value = self.asw_path
+                            ws.cell(row, 22).value = measured_data[16]
+                            ws.cell(row, 23).value = wt.condition
 
                             row += 1
 
@@ -3291,7 +3322,7 @@ class Cmw100:
                                     self.tx_power_aclr_evm_lmh_lte(plot=False)
                                 else:
                                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-                            # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+                            self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
                         except TypeError:
                             logger.info(f'there is no data to plot because the band does not have this BW ')
 
@@ -3597,9 +3628,10 @@ class Cmw100:
                     self.sig_gen_gsm()
                     self.sync_gsm()
                     self.tx_set_gsm()
-                    aclr_mod_results = self.tx_measure_gsm()
+                    aclr_mod_current_results = aclr_mod_results = self.tx_measure_gsm()
                     logger.debug(aclr_mod_results)
-                    data_chan[self.rx_freq_gsm] = aclr_mod_results
+                    aclr_mod_current_results.append(self.measure_current())
+                    data_chan[self.rx_freq_gsm] = aclr_mod_current_results
                 logger.debug(data_chan)
                 # ready to export to excel
                 self.filename = self.tx_power_relative_test_export_excel(data_chan, self.band_gsm, 0,
@@ -3656,10 +3688,11 @@ class Cmw100:
                     self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
                     self.tx_set_wcdma()
                     # self.antenna_switch_v2()
-                    aclr_mod_results = self.tx_measure_wcdma()
+                    aclr_mod_current_results = aclr_mod_results = self.tx_measure_wcdma()
                     logger.debug(aclr_mod_results)
+                    aclr_mod_current_results.append(self.measure_current())
                     data_chan[
-                        cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma)] = aclr_mod_results
+                        cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma)] = aclr_mod_current_results
                 logger.debug(data_chan)
                 # ready to export to excel
                 self.filename = self.tx_power_relative_test_export_excel(data_chan, self.band_wcdma, 5,
@@ -3781,9 +3814,10 @@ class Cmw100:
                         for tx_freq_fr1 in tx_freq_select_list:
                             self.tx_freq_fr1 = tx_freq_fr1
                             self.tx_set_fr1()
-                            aclr_mod_results = self.tx_measure_fr1()
+                            aclr_mod_current_results = aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)
-                            data_freq[self.tx_freq_fr1] = aclr_mod_results
+                            aclr_mod_current_results.append(self.measure_current())
+                            data_freq[self.tx_freq_fr1] = aclr_mod_current_results
                         logger.debug(data_freq)
                         # ready to export to excel
                         self.filename = self.tx_power_relative_test_export_excel(data_freq, self.band_fr1, self.bw_fr1,
@@ -4207,9 +4241,10 @@ class Cmw100:
                         self.pcl = tx_pcl
                         logger.info(f'========Now Tx PCL = PCL{self.pcl} ========')
                         self.tx_set_gsm()
-                        mod_orfs_results = self.tx_measure_gsm()
+                        mod_orfs_current_results = mod_orfs_results = self.tx_measure_gsm()
                         logger.debug(mod_orfs_results)
-                        data[tx_pcl] = mod_orfs_results
+                        mod_orfs_current_results.append(self.measure_current())
+                        data[tx_pcl] = mod_orfs_current_results
                     logger.debug(data)
                     self.filename = self.tx_power_relative_test_export_excel(data, self.band_gsm, 0,
                                                                              self.rx_freq_gsm)
@@ -4285,7 +4320,7 @@ class Cmw100:
                         # self.command(f'AT+HTXPERSTART={self.tx_chan_wcdma}')
                         # self.command(f'AT+HSETMAXPOWER={self.tx_level * 10}')
                         # self.antenna_switch_v2()
-                        spectrum_mod_results = self.tx_measure_wcdma()
+                        spectrum_mod_current_results = spectrum_mod_results = self.tx_measure_wcdma()
                         # self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:UMAR 10.00')
                         # self.command_cmw100_write(f'CONF:WCDM:MEAS:RFS:ENP {self.tx_level + 5}')
                         # mod_results = self.command_cmw100_query(
@@ -4319,7 +4354,8 @@ class Cmw100:
                         # self.command_cmw100_query(f'*OPC?')
 
                         logger.debug(spectrum_mod_results)
-                        data[tx_level] = spectrum_mod_results
+                        spectrum_mod_current_results.append(self.measure_current())
+                        data[tx_level] = spectrum_mod_current_results
                     logger.debug(data)
                     self.filename = self.tx_power_relative_test_export_excel(data, self.band_wcdma, 5,
                                                                              self.tx_freq_wcdma)
@@ -4442,9 +4478,10 @@ class Cmw100:
                                 # logger.info(f'SEM_AVER results: {sem_avg_results}')
                                 self.command_cmw100_write(f'STOP:LTE:MEAS:MEV')
                                 self.command_cmw100_query('*OPC?')
-
-                                logger.debug(aclr_results + mod_results)
-                                data[tx_level] = aclr_results + mod_results
+                                aclr_mod_current_results = aclr_mod_results = aclr_results + mod_results
+                                logger.debug(aclr_mod_results)
+                                aclr_mod_current_results.append(self.measure_current())
+                                data[tx_level] = aclr_mod_current_results
                             logger.debug(data)
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte,
                                                                                      self.tx_freq_lte)
@@ -4570,9 +4607,10 @@ class Cmw100:
                                 # logger.info(f'SEM_AVER results: {sem_avg_results}')
                                 self.command_cmw100_write(f'STOP:NRS:MEAS:MEV')
                                 self.command_cmw100_query('*OPC?')
-
-                                logger.debug(aclr_results + mod_results)
-                                data[tx_level] = aclr_results + mod_results
+                                aclr_mod_current_results = aclr_mod_results = aclr_results + mod_results
+                                logger.debug(aclr_mod_results)
+                                aclr_mod_current_results.append(self.measure_current())
+                                data[tx_level] = aclr_mod_current_results
                             logger.debug(data)
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
                                                                                      self.tx_freq_fr1)
@@ -4611,163 +4649,6 @@ class Cmw100:
                         chart.set_categories(x_data)
 
                         chart.series[0].marker.symbol = 'circle'
-                        chart.series[0].marker.size = 10
-
-                        ws.add_chart(chart, "V1")
-
-                        logger.info('----------ACLR---------')
-                        chart = LineChart()
-                        chart.title = 'ACLR'
-                        chart.y_axis.title = 'ACLR(dB)'
-                        chart.x_axis.title = 'Band'
-                        chart.x_axis.tickLblPos = 'low'
-                        chart.y_axis.scaling.min = -60
-                        chart.y_axis.scaling.max = -20
-
-                        chart.height = 20
-                        chart.width = 32
-
-                        y_data = Reference(ws, min_col=6, min_row=1, max_col=11, max_row=ws.max_row)
-                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        chart.add_data(y_data, titles_from_data=True)
-                        chart.set_categories(x_data)
-
-                        chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
-                        chart.series[0].marker.size = 10
-                        chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
-                        chart.series[1].marker.size = 10
-                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                        chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
-                        chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
-
-                        ws.add_chart(chart, "V39")
-
-                        logger.info('----------EVM---------')
-                        chart = LineChart()
-                        chart.title = 'EVM'
-                        chart.y_axis.title = 'EVM(%)'
-                        chart.x_axis.title = 'Band'
-                        chart.x_axis.tickLblPos = 'low'
-
-                        chart.height = 20
-                        chart.width = 32
-
-                        y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
-                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        chart.add_data(y_data, titles_from_data=True)
-                        chart.set_categories(x_data)
-
-                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                        chart.series[0].marker.size = 10
-
-                        ws.add_chart(chart, "V77")
-
-                    wb.save(filename)
-                    wb.close()
-                else:
-                    for ws_name in wb.sheetnames:
-                        logger.info(f'========={ws_name}==========')
-                        ws = wb[ws_name]
-
-                        if ws._charts != []:  # if there is charts, delete it
-                            ws._charts.clear()
-
-                        logger.info('----------Power---------')
-                        chart = LineChart()
-                        chart.title = 'Power'
-                        chart.y_axis.title = 'Power(dBm)'
-                        chart.x_axis.title = 'Band'
-                        chart.x_axis.tickLblPos = 'low'
-
-                        chart.height = 20
-                        chart.width = 32
-
-                        y_data = Reference(ws, min_col=4, min_row=1, max_col=4, max_row=ws.max_row)
-                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        chart.add_data(y_data, titles_from_data=True)
-                        chart.set_categories(x_data)
-
-                        chart.series[0].marker.symbol = 'circle'
-                        chart.series[0].marker.size = 10
-
-                        ws.add_chart(chart, "S1")
-
-                        logger.info('----------ACLR---------')
-                        chart = LineChart()
-                        chart.title = 'ACLR'
-                        chart.y_axis.title = 'ACLR(dB)'
-                        chart.x_axis.title = 'Band'
-                        chart.x_axis.tickLblPos = 'low'
-                        chart.y_axis.scaling.min = -60
-                        chart.y_axis.scaling.max = -20
-
-                        chart.height = 20
-                        chart.width = 32
-
-                        y_data = Reference(ws, min_col=5, min_row=1, max_col=10, max_row=ws.max_row)
-                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        chart.add_data(y_data, titles_from_data=True)
-                        chart.set_categories(x_data)
-
-                        chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
-                        chart.series[0].marker.size = 10
-                        chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
-                        chart.series[1].marker.size = 10
-                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
-                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
-                        chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
-                        chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
-
-                        ws.add_chart(chart, "S39")
-
-                        logger.info('----------EVM---------')
-                        chart = LineChart()
-                        chart.title = 'EVM'
-                        chart.y_axis.title = 'EVM(%)'
-                        chart.x_axis.title = 'Band'
-                        chart.x_axis.tickLblPos = 'low'
-
-                        chart.height = 20
-                        chart.width = 32
-
-                        y_data = Reference(ws, min_col=11, min_row=1, max_col=11, max_row=ws.max_row)
-                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        chart.add_data(y_data, titles_from_data=True)
-                        chart.set_categories(x_data)
-
-                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
-                        chart.series[0].marker.size = 10
-
-                        ws.add_chart(chart, "S77")
-
-                    wb.save(filename)
-                    wb.close()
-            elif self.tech == 'FR1':
-                if mode == 1:
-                    for ws_name in wb.sheetnames:
-                        logger.info(f'========={ws_name}==========')
-                        ws = wb[ws_name]
-
-                        if ws._charts != []:  # if there is charts, delete it
-                            ws._charts.clear()
-
-                        logger.info('----------Power---------')
-                        chart = LineChart()
-                        chart.title = 'Power'
-                        chart.y_axis.title = 'Power(dBm)'
-                        chart.x_axis.title = 'Band'
-                        chart.x_axis.tickLblPos = 'low'
-
-                        chart.height = 20
-                        chart.width = 32
-
-                        y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
-                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
-                        chart.add_data(y_data, titles_from_data=True)
-                        chart.set_categories(x_data)
-
-                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
                         ws.add_chart(chart, "W1")
@@ -4820,9 +4701,29 @@ class Cmw100:
 
                         ws.add_chart(chart, "W77")
 
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=21, min_row=1, max_col=21, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "W115")
+
                     wb.save(filename)
                     wb.close()
-                else:
+                else:  # mode 0
                     for ws_name in wb.sheetnames:
                         logger.info(f'========={ws_name}==========')
                         ws = wb[ws_name]
@@ -4845,7 +4746,7 @@ class Cmw100:
                         chart.add_data(y_data, titles_from_data=True)
                         chart.set_categories(x_data)
 
-                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
                         ws.add_chart(chart, "V1")
@@ -4898,6 +4799,222 @@ class Cmw100:
 
                         ws.add_chart(chart, "V77")
 
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=20, min_row=1, max_col=20, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "V115")
+
+                    wb.save(filename)
+                    wb.close()
+            elif self.tech == 'FR1':
+                if mode == 1:
+                    for ws_name in wb.sheetnames:
+                        logger.info(f'========={ws_name}==========')
+                        ws = wb[ws_name]
+
+                        if ws._charts != []:  # if there is charts, delete it
+                            ws._charts.clear()
+
+                        logger.info('----------Power---------')
+                        chart = LineChart()
+                        chart.title = 'Power'
+                        chart.y_axis.title = 'Power(dBm)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=5, min_row=1, max_col=5, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "Y1")
+
+                        logger.info('----------ACLR---------')
+                        chart = LineChart()
+                        chart.title = 'ACLR'
+                        chart.y_axis.title = 'ACLR(dB)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+                        chart.y_axis.scaling.min = -60
+                        chart.y_axis.scaling.max = -20
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=6, min_row=1, max_col=11, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                        chart.series[0].marker.size = 10
+                        chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[1].marker.size = 10
+                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                        chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                        chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+
+                        ws.add_chart(chart, "Y39")
+
+                        logger.info('----------EVM---------')
+                        chart = LineChart()
+                        chart.title = 'EVM'
+                        chart.y_axis.title = 'EVM(%)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=12, min_row=1, max_col=12, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "Y77")
+
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=23, min_row=1, max_col=23, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "Y115")
+
+                    wb.save(filename)
+                    wb.close()
+                else:
+                    for ws_name in wb.sheetnames:
+                        logger.info(f'========={ws_name}==========')
+                        ws = wb[ws_name]
+
+                        if ws._charts != []:  # if there is charts, delete it
+                            ws._charts.clear()
+
+                        logger.info('----------Power---------')
+                        chart = LineChart()
+                        chart.title = 'Power'
+                        chart.y_axis.title = 'Power(dBm)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=4, min_row=1, max_col=4, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "X1")
+
+                        logger.info('----------ACLR---------')
+                        chart = LineChart()
+                        chart.title = 'ACLR'
+                        chart.y_axis.title = 'ACLR(dB)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+                        chart.y_axis.scaling.min = -60
+                        chart.y_axis.scaling.max = -20
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=5, min_row=1, max_col=10, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'triangle'  # for EUTRA_-1
+                        chart.series[0].marker.size = 10
+                        chart.series[1].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[1].marker.size = 10
+                        chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-1
+                        chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+1
+                        chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
+                        chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
+
+                        ws.add_chart(chart, "X39")
+
+                        logger.info('----------EVM---------')
+                        chart = LineChart()
+                        chart.title = 'EVM'
+                        chart.y_axis.title = 'EVM(%)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=11, min_row=1, max_col=11, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "X77")
+
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=22, min_row=1, max_col=22, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "X115")
                     wb.save(filename)
                     wb.close()
             elif self.tech == 'WCDMA':
@@ -4927,7 +5044,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "R1")
+                        ws.add_chart(chart, "T1")
 
                         logger.info('----------ACLR---------')
                         chart = LineChart()
@@ -4953,7 +5070,7 @@ class Cmw100:
                         chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-2
                         chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+2
 
-                        ws.add_chart(chart, "R39")
+                        ws.add_chart(chart, "T39")
 
                         logger.info('----------EVM---------')
                         chart = LineChart()
@@ -4973,7 +5090,27 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "R77")
+                        ws.add_chart(chart, "T77")
+
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=17, min_row=1, max_col=17, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "T115")
 
                     wb.save(filename)
                     wb.close()
@@ -5051,6 +5188,26 @@ class Cmw100:
 
                         ws.add_chart(chart, "S77")
 
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=16, min_row=1, max_col=16, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "S115")
+
                     wb.save(filename)
                     wb.close()
             elif self.tech == 'GSM':
@@ -5080,7 +5237,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "W1")
+                        ws.add_chart(chart, "Y1")
 
                         logger.info('----------ORFS_MOD---------')
                         chart = LineChart()
@@ -5108,7 +5265,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_-600
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_+600
 
-                        ws.add_chart(chart, "W39")
+                        ws.add_chart(chart, "y39")
 
                         logger.info('----------ORFS_SW---------')
                         chart = LineChart()
@@ -5136,7 +5293,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_-1200
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_+1200
 
-                        ws.add_chart(chart, "W77")
+                        ws.add_chart(chart, "Y77")
 
                         if 'GMSK' in ws_name:
                             logger.info('----------PHASE_RMS---------')
@@ -5157,7 +5314,7 @@ class Cmw100:
                             chart.series[0].marker.symbol = 'circle'
                             chart.series[0].marker.size = 10
 
-                            ws.add_chart(chart, "W115")
+                            ws.add_chart(chart, "Y115")
 
                         elif 'EPSK' in ws_name:
                             logger.info('----------EVM_RMS---------')
@@ -5178,7 +5335,27 @@ class Cmw100:
                             chart.series[0].marker.symbol = 'circle'
                             chart.series[0].marker.size = 10
 
-                            ws.add_chart(chart, "W115")
+                            ws.add_chart(chart, "Y115")
+
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=23, min_row=1, max_col=23, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "Y153")
 
                     wb.save(filename)
                     wb.close()
@@ -5207,7 +5384,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "V1")
+                        ws.add_chart(chart, "X1")
 
                         logger.info('----------ORFS_MOD---------')
                         chart = LineChart()
@@ -5235,7 +5412,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_-600
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_+600
 
-                        ws.add_chart(chart, "V39")
+                        ws.add_chart(chart, "X39")
 
                         logger.info('----------ORFS_SW---------')
                         chart = LineChart()
@@ -5263,7 +5440,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_-1200
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_+1200
 
-                        ws.add_chart(chart, "V77")
+                        ws.add_chart(chart, "X77")
 
                         if 'GMSK' in ws_name:
                             logger.info('----------PHASE_RMS---------')
@@ -5284,7 +5461,7 @@ class Cmw100:
                             chart.series[0].marker.symbol = 'circle'
                             chart.series[0].marker.size = 10
 
-                            ws.add_chart(chart, "V115")
+                            ws.add_chart(chart, "X115")
 
                         elif 'EPSK' in ws_name:
                             logger.info('----------EVM_RMS---------')
@@ -5305,7 +5482,27 @@ class Cmw100:
                             chart.series[0].marker.symbol = 'circle'
                             chart.series[0].marker.size = 10
 
-                            ws.add_chart(chart, "V115")
+                            ws.add_chart(chart, "X115")
+
+                        logger.info('----------Current---------')
+                        chart = LineChart()
+                        chart.title = 'Current'
+                        chart.y_axis.title = 'Current(mA)'
+                        chart.x_axis.title = 'Band'
+                        chart.x_axis.tickLblPos = 'low'
+
+                        chart.height = 20
+                        chart.width = 32
+
+                        y_data = Reference(ws, min_col=22, min_row=1, max_col=22, max_row=ws.max_row)
+                        x_data = Reference(ws, min_col=1, min_row=2, max_col=2, max_row=ws.max_row)
+                        chart.add_data(y_data, titles_from_data=True)
+                        chart.set_categories(x_data)
+
+                        chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
+                        chart.series[0].marker.size = 10
+
+                        ws.add_chart(chart, "X153")
 
                     wb.save(filename)
                     wb.close()
