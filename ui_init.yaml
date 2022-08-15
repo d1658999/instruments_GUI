@@ -18,9 +18,21 @@ bw:
   bw_lte:
   - 10
 channel:
-  chan: H
+  chan: M
+condition:
+  hthv: false
+  htlv: false
+  hv: true
+  lthv: false
+  ltlv: false
+  lv: false
+  mv: false
+  ntnv: false
+external_inst:
+  psu: true
+  tempchb: false
 instrument:
-  instrument: Cmw100
+  instrument: Anritsu8820
 mcs:
   mcs_fr1:
   - QPSK
@@ -53,31 +65,18 @@ rb_set:
 rx_set:
   ue_power:
   - 1
-  - 0
 scripts:
   scripts:
   - GENERAL
 tech:
   tech:
-  - GSM
+  - LTE
 test_items:
   rx: false
-  rx_sweep: false
+  rx_sweep: true
   tx: false
   tx_freq_sweep: false
-  tx_level_sweep: true
+  tx_level_sweep: false
 type:
   type_fr1:
   - DFTS
-external_inst:
-  tempchb: True
-  psu: False
-condition:
-  hthv: False
-  htlv: False
-  ntnv: False
-  lthv: False
-  ltlv: False
-  hv: False
-  mv: False
-  lv: False

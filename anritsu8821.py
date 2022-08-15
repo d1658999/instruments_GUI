@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 class Anritsu8821(Anritsu8820):
     def __init__(self, psu_object=None):
-        super().__init__()
+        super().__init__(psu_object)
 
     def set_init_before_calling_lte(self, dl_ch, bw):
         """
@@ -288,8 +288,8 @@ class Anritsu8821(Anritsu8820):
                     sh['B1'] = 'ch0'
                     sh['C1'] = 'ch1'
                     sh['D1'] = 'ch2'
-
-            wb.save(f'results_{bw}MHZ_LTE.xlsx')
+            excel_path = f'results_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'results_{bw}MHZ_LTE_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
         elif standard == 'WCDMA':
@@ -314,8 +314,8 @@ class Anritsu8821(Anritsu8820):
                     sh['B1'] = 'ch01'
                     sh['C1'] = 'ch02'
                     sh['D1'] = 'ch03'
-
-            wb.save(f'results_WCDMA.xlsx')
+            excel_path = f'results_WCDMA.xlsx' if wt.condition is None else f'results_WCDMA_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
     def run_tx(self):

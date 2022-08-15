@@ -17,7 +17,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 
-class Anritsu8820(pyvisa.ResourceManager):
+class Anritsu8820:
     def __init__(self, psu_object=None):
         self.excel_path = None
         self.count = 5
@@ -38,7 +38,7 @@ class Anritsu8820(pyvisa.ResourceManager):
 
     def get_gpib(self):
         resources = []
-        for resource in super().list_resources():
+        for resource in pyvisa.ResourceManager().list_resources():
             if 'GPIB' in resource:
                 resources.append(resource)
                 logger.debug(resource)
@@ -47,12 +47,12 @@ class Anritsu8820(pyvisa.ResourceManager):
     def build_object(self):
         logger.info('start to connect')
         for gpib in self.get_gpib():  # this is to search GPIB for 8820/8821
-            self.inst = super().open_resource(gpib)
+            self.inst = pyvisa.ResourceManager().open_resource(gpib)
             inst = self.inst.query('*IDN?').strip()
             if '8820' in inst or '8821' in inst:
                 self.gpib = gpib
 
-        self.inst = super().open_resource(self.gpib)  # to build inst object
+        self.inst = pyvisa.ResourceManager().open_resource(self.gpib)  # to build inst object
         self.inst.timeout = 5000
         self.comport = get_comport_wanted()
         self.flymode = Flymode(self.comport)
@@ -1727,9 +1727,11 @@ class Anritsu8820(pyvisa.ResourceManager):
         sh['D1'] = 'Tx_power'
 
         if standard == 'LTE':
-            wb.save(f'Sweep_{bw}MHZ_LTE.xlsx')
+            excel_path = f'Sweep_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'Sweep_{bw}MHZ_LTE_{wt.condition}.xlsx'
+            wb.save(excel_path)
         elif standard == 'WCDMA':
-            wb.save(f'Sweep_WCDMA.xlsx')
+            excel_path = f'Sweep_WCDMA.xlsx' if wt.condition is None else f'Sweep_WCDMA_{wt.condition}.xlsx'
+            wb.save(excel_path)
 
         wb.close()
 
@@ -1751,7 +1753,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 sh['C1'] = 'ch1'
                 sh['D1'] = 'ch2'
 
-            wb.save(f'Sensitivity_{bw}MHZ_LTE.xlsx')
+            excel_path = f'Sweep_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'Sweep_{bw}MHZ_LTE_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
         elif standard == 'WCDMA':
@@ -1769,8 +1772,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 sh['B1'] = 'ch0'
                 sh['C1'] = 'ch1'
                 sh['D1'] = 'ch2'
-
-            wb.save(f'Sensitivity_WCDMA.xlsx')
+            excel_path = f'Sweep_WCDMA.xlsx' if wt.condition is None else f'Sweep_WCDMA_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
     def create_excel_tx(self, standard, bw=None):
@@ -1815,8 +1818,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     sh['B1'] = 'ch0'
                     sh['C1'] = 'ch1'
                     sh['D1'] = 'ch2'
-
-            wb.save(f'results_{bw}MHZ_LTE.xlsx')
+            excel_path = f'results_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'results_{bw}MHZ_LTE_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
         elif standard == 'WCDMA' and self.chcoding == 'REFMEASCH':  # this is WCDMA
@@ -1841,8 +1844,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     sh['B1'] = 'ch01'
                     sh['C1'] = 'ch02'
                     sh['D1'] = 'ch03'
-
-            wb.save(f'results_WCDMA.xlsx')
+            excel_path = f'results_WCDMA.xlsx' if wt.condition is None else f'results_WCDMA_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
         elif standard == 'WCDMA' and self.chcoding == 'EDCHTEST':  # this is HSUPA
@@ -1868,8 +1871,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     sh['C1'] = 'ch02'
                     sh['D1'] = 'ch03'
                     sh['E1'] = 'subtest_number'
-
-            wb.save(f'results_HSUPA.xlsx')
+            excel_path = f'results_HSUPA.xlsx' if wt.condition is None else f'results_HSUPA_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
         elif standard == 'WCDMA' and self.chcoding == 'FIXREFCH':  # this is HSDPA
@@ -1896,8 +1899,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                     sh['C1'] = 'ch02'
                     sh['D1'] = 'ch03'
                     sh['E1'] = 'subtest_number'
-
-            wb.save(f'results_HSDPA.xlsx')
+            excel_path = f'results_HSDPA.xlsx' if wt.condition is None else f'results_HSDPA_{wt.condition}.xlsx'
+            wb.save(excel_path)
             wb.close()
 
     @staticmethod
@@ -2359,11 +2362,12 @@ class Anritsu8820(pyvisa.ResourceManager):
         self.band = band
         self.bw = bw
         if self.std == 'LTE':
-            if pathlib.Path(f'Sweep_{bw}MHZ_LTE.xlsx').exists() is False:
+            excel_path = f'Sweep_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'Sweep_{bw}MHZ_LTE_{wt.condition}.xlsx'
+            if pathlib.Path(excel_path).exists() is False:
                 self.create_excel_rx_sweep(self.std, power_selected, bw)
                 logger.debug('Create Excel')
 
-            wb = openpyxl.load_workbook(f'Sweep_{bw}MHZ_LTE.xlsx')
+            wb = openpyxl.load_workbook(excel_path)
             logger.debug('Open Excel')
 
             if power_selected == 1:
@@ -2400,19 +2404,18 @@ class Anritsu8820(pyvisa.ResourceManager):
                 self.fill_progress_rx_sweep(self.std, ws, band, dl_ch, data,
                                             power_selected)  # progress of filling sensitivity progress
 
-            wb.save(f'Sweep_{bw}MHZ_LTE.xlsx')
+            wb.save(excel_path)
             wb.close()
-
-            excel_path = f'Sweep_{bw}MHZ_LTE.xlsx'
 
             return excel_path
 
         elif self.std == 'WCDMA':
-            if pathlib.Path(f'Sweep_WCDMA.xlsx').exists() is False:
+            excel_path = f'Sweep_WCDMA.xlsx' if wt.condition is None else f'Sweep_WCDMA_{wt.condition}.xlsx'
+            if pathlib.Path(excel_path).exists() is False:
                 self.create_excel_rx_sweep(self.std, power_selected, bw)
                 logger.debug('Create Excel')
 
-            wb = openpyxl.load_workbook(f'Sweep_WCDMA.xlsx')
+            wb = openpyxl.load_workbook(excel_path)
             logger.debug('Open Excel')
 
             if power_selected == 1:
@@ -2447,10 +2450,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 self.fill_progress_rx_sweep(self.std, ws, band, dl_ch, data,
                                             power_selected)  # progress of filling sensitivity progress
 
-            wb.save(f'Sweep_WCDMA.xlsx')
+            wb.save(excel_path)
             wb.close()
-
-            excel_path = f'Sweep_WCDMA.xlsx'
 
             return excel_path
 
@@ -2459,11 +2460,12 @@ class Anritsu8820(pyvisa.ResourceManager):
             data format:[Tx Power, Sensitivity, PER]
         """
         if self.std == 'LTE':
-            if pathlib.Path(f'Sensitivity_{bw}MHZ_LTE.xlsx').exists() is False:
+            excel_path = f'Sweep_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'Sweep_{bw}MHZ_LTE_{wt.condition}.xlsx'
+            if pathlib.Path(excel_path).exists() is False:
                 self.create_excel_rx(self.std, bw)
                 logger.debug('Create Excel')
 
-            wb = openpyxl.load_workbook(f'Sensitivity_{bw}MHZ_LTE.xlsx')
+            wb = openpyxl.load_workbook(excel_path)
             logger.debug('Open Excel')
 
             if power_selected == 1:
@@ -2484,19 +2486,18 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.debug('fill power')
                 self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected, bw)  # fill power
 
-            wb.save(f'Sensitivity_{bw}MHZ_LTE.xlsx')
+            wb.save(excel_path)
             wb.close()
-
-            excel_path = f'Sensitivity_{bw}MHZ_LTE.xlsx'
 
             return excel_path
 
         elif self.std == 'WCDMA':
-            if pathlib.Path(f'Sensitivity_WCDMA.xlsx').exists() is False:
+            excel_path = f'Sweep_WCDMA.xlsx' if wt.condition is None else f'Sweep_WCDMA_{wt.condition}.xlsx'
+            if pathlib.Path(excel_path).exists() is False:
                 self.create_excel_rx(self.std, bw)
                 logger.debug('Create Excel')
 
-            wb = openpyxl.load_workbook(f'Sensitivity_WCDMA.xlsx')
+            wb = openpyxl.load_workbook(excel_path)
             logger.debug('Open Excel')
 
             if power_selected == 1:
@@ -2517,10 +2518,8 @@ class Anritsu8820(pyvisa.ResourceManager):
                 logger.debug('fill power')
                 self.fill_progress_rx(self.std, ws, band, dl_ch, data, 0, power_selected)  # fill power
 
-            wb.save(f'Sensitivity_WCDMA.xlsx')
+            wb.save(excel_path)
             wb.close()
-
-            excel_path = f'Sensitivity_WCDMA.xlsx'
 
             return excel_path
 
@@ -2530,7 +2529,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             """
                 LTE format:{Q1:[power], Q_P:[power, ACLR, EVM], ...} and ACLR format is [L, M, H] 
             """
-            excel_path = f'results_{bw}MHZ_LTE.xlsx'
+            excel_path = f'results_{bw}MHZ_LTE.xlsx' if wt.condition is None else f'results_{bw}MHZ_LTE_{wt.condition}.xlsx'
 
             if pathlib.Path(excel_path).exists() is False:
                 self.create_excel_tx(self.std, bw)
@@ -2562,7 +2561,7 @@ class Anritsu8820(pyvisa.ResourceManager):
             """
                 WCDMA format:[power, ACLR, EVM], ...} and ACLR format is list format like [L, M, H]  
             """
-            excel_path = f'results_WCDMA.xlsx'
+            excel_path = f'results_WCDMA.xlsx' if wt.condition is None else f'results_WCDMA_{wt.condition}.xlsx'
 
             if self.chcoding == 'REFMEASCH':  # this is WCDMA
                 if pathlib.Path(excel_path).exists() is False:
@@ -2594,7 +2593,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                 """
                     HSUPA format:{subtest_number: [power, ACLR], ...} and ACLR format is list format like [L, M, H]  
                 """
-                excel_path = f'results_HSUPA.xlsx'
+                excel_path = f'results_HSUPA.xlsx' if wt.condition is None else f'results_HSUPA_{wt.condition}.xlsx'
 
                 if pathlib.Path(excel_path).exists() is False:
                     self.create_excel_tx(self.std, bw)
@@ -2624,7 +2623,7 @@ class Anritsu8820(pyvisa.ResourceManager):
                     HSDPA format:{subtest_number: [power, ACLR], ...} and ACLR format is list format like [L, M, H]  
                     only subtest3 is for [power, ACLR, evm], evm to pickup the worst vaule from p0, p1, p2, p3
                 """
-                excel_path = f'results_HSDPA.xlsx'
+                excel_path = f'results_HSDPA.xlsx' if wt.condition is None else f'results_HSDPA_{wt.condition}.xlsx'
 
                 if pathlib.Path(excel_path).exists() is False:
                     self.create_excel_tx(self.std, bw)
