@@ -2,7 +2,7 @@
 <interface version="1.2">
   <object class="tk.Toplevel" id="toplevel1">
     <property name="resizable">none</property>
-    <property name="title" translatable="yes">Meta GUI(V2.2)</property>
+    <property name="title" translatable="yes">Meta GUI(V2.3)</property>
     <child>
       <object class="ttk.Notebook" id="notebook1">
         <layout manager="pack">
