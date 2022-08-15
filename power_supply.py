@@ -21,9 +21,9 @@ class Psu:
     def psu_init(self, voltage=wt.psu_voltage, current=wt.psu_current):
         volt_output_port = None
         if self.psu_inst == 'E3631A':
-            volt_output_port = 'INIT P6V'
+            volt_output_port = 'INST P6V'
         elif self.psu_inst == 'E3642A':
-            volt_output_port = 'VOLT:RANG P8V' # APPLY P8V is fine
+            volt_output_port = 'VOLT:RANG P8V'  # APPLY P8V is fine
         elif self.psu_inst == 'E36313A':
             volt_output_port = 'APPLY P6V'
 
