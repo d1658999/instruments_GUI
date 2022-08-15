@@ -462,7 +462,6 @@ class MainApp:
         print('Crtrl C')
         os.kill(signal.CTRL_C_EVENT, 0)
 
-
     def mega_measure(self):
         start = datetime.datetime.now()
 
@@ -503,7 +502,6 @@ class MainApp:
     def t_measure(self):
         t = threading.Thread(target=self.mega_measure, daemon=True)
         t.start()
-
 
     def import_ui_setting_yaml(self):
         """
@@ -1471,7 +1469,7 @@ class MainApp:
                 'rb_ftm_lte': rb_ftm_lte,
                 'rb_ftm_fr1': rb_ftm_fr1,
             },
-            'external_inst':{
+            'external_inst': {
                 'tempchb': tpchb_enable,
                 'psu': psu_enable,
             },
