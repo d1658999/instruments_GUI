@@ -3,7 +3,7 @@ band:
   band_segment_fr1: A
   bands_endc: []
   bands_fr1:
-  - 5
+  - 8
   bands_gsm:
   - 850
   bands_hsdpa: []
@@ -22,17 +22,18 @@ channel:
 condition:
   hthv: false
   htlv: false
-  hv: true
+  hv: false
   lthv: false
   ltlv: false
   lv: false
   mv: false
   ntnv: false
 external_inst:
-  psu: true
+  odpm: false
+  psu: false
   tempchb: false
 instrument:
-  instrument: Anritsu8820
+  instrument: Cmw100
 mcs:
   mcs_fr1:
   - QPSK
@@ -70,13 +71,13 @@ scripts:
   - GENERAL
 tech:
   tech:
-  - LTE
+  - FR1
 test_items:
   rx: false
   rx_sweep: true
   tx: false
   tx_freq_sweep: false
-  tx_level_sweep: false
+  tx_level_sweep: true
 type:
   type_fr1:
   - DFTS

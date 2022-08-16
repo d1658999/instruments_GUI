@@ -51,8 +51,18 @@ def get_serial_devices():
 def reboot():
     sp.run(r'adb reboot')
 
+def get_odpm_current():
+    """
+    Current unit is mA
+    :return:
+    """
+    current = sp.run(r'adb shell pmic s2mpg12 getcurrent 40 | grep mA', capture_output=True).stdout.decode().strip().split('=')[1]
+    print(f'Get the current: {current} mA')
+    return round(eval(current), 2)
+
 def main():
-    get_serial_devices()
+    current = get_odpm_current()
+    print(current)
 
 
 if __name__ == '__main__':

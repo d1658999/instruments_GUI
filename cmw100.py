@@ -18,7 +18,8 @@ import math
 import common_parameters_ftm as cm_pmt_ftm
 import want_test_band as wt
 from loss_table import loss_table
-# from power_supply import Psu
+from adb_control import get_odpm_current
+
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -235,7 +236,9 @@ class Cmw100:
         logger.info('TCPIP0::127.0.0.1::INSTR')
 
     def measure_current(self):
-        if wt.psu_enable:
+        if wt.odpm_enable:
+            return get_odpm_current()
+        elif wt.psu_enable:
             return self.psu.current_average()
         else:
             return None

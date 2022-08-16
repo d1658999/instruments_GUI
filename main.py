@@ -19,7 +19,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main_v2_3.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2_4.ui"
 
 
 class MainApp:
@@ -241,6 +241,7 @@ class MainApp:
         self.nv = None
         self.lv = None
         self.psu = None
+        self.odpm_enable = None
         builder.import_variables(
             self,
             [
@@ -442,6 +443,7 @@ class MainApp:
                 "hv",
                 "nv",
                 "lv",
+                "odpm_enable",
             ],
         )
 
@@ -535,6 +537,7 @@ class MainApp:
         self.tx_level.set(ui_init['power']['tx_level'])
         self.tempcham_enable.set(ui_init['external_inst']['tempchb'])
         self.psu_enable.set(ui_init['external_inst']['psu'])
+        self.odpm_enable.set(ui_init['external_inst']['odpm'])
         self.hthv.set(ui_init['condition']['hthv'])
         self.htlv.set(ui_init['condition']['htlv'])
         self.ntnv.set(ui_init['condition']['ntnv'])
@@ -1391,6 +1394,7 @@ class MainApp:
         tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
         tpchb_enable = self.tempcham_enable.get()
         psu_enable = self.psu_enable.get()
+        odpm_enable = self.odpm_enable.get()
         hthv = self.hthv.get()
         htlv = self.htlv.get()
         ntnv = self.ntnv.get()
@@ -1472,6 +1476,7 @@ class MainApp:
             'external_inst': {
                 'tempchb': tpchb_enable,
                 'psu': psu_enable,
+                'odpm': odpm_enable,
             },
             'condition': {
                 'hthv': hthv,
@@ -1780,6 +1785,12 @@ class MainApp:
             logger.info('=====Enable PSU=====')
         else:
             logger.info('=====Disable PSU=====')
+
+    def odpm_enable_status(self):
+        if self.odpm_enable.get():
+            logger.info('=====Enable ODPM=====')
+        else:
+            logger.info('=====Disable ODPM=====')
 
     def off_all_reset_GSM(self):
         self.GSM_all.set(False)
@@ -3122,6 +3133,7 @@ class MainApp:
         wt.tx_pcl_mb = self.pcl_mb.get()
         wt.tx_level = self.tx_level.get()
         wt.psu_enable = self.psu_enable.get()
+        wt.odpm_enable = self.odpm_enable.get()
         wt.condition = self.condition
 
         if self.instrument.get() == 'Anritsu8820':

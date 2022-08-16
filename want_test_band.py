@@ -35,6 +35,7 @@ port_tx_fr1 = 4  # 1 ~ 8 default is  1
 
 asw_path = 0
 srs_path = 0
+odpm_enable = True
 psu_enable = True
 psu_voltage = 4.0
 psu_current = 5.0
