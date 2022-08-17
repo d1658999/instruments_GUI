@@ -20,7 +20,6 @@ import want_test_band as wt
 from loss_table import loss_table
 from adb_control import get_odpm_current
 
-
 fileConfig('logging.ini')
 logger = logging.getLogger()
 
@@ -234,6 +233,27 @@ class Cmw100:
         self.cmw100.timeout = 5000
         logger.info('Connect to CMW100')
         logger.info('TCPIP0::127.0.0.1::INSTR')
+
+    def get_temperature(self):
+        """
+        for P22, AT+GOOGTHERMISTOR=1,1 for MHB LPAMid/ MHB Rx1 LFEM, AT+GOOGTHERMISTOR=0,1 for LB LPAMid, MHB ENDC LPAMid, UHB(n77/n79 LPAF)
+        :return:
+        """
+        res0 = self.command('AT+GOOGTHERMISTOR=0,1')
+        res1 = self.command('AT+GOOGTHERMISTOR=1,1')
+        res_list = [res0, res1]
+        therm_list = []
+        for res in res_list:
+            for r in res:
+                if 'TEMPERATURE' in r.decode().strip():
+                    try:
+                        temp = eval(r.decode().strip().split(':')[1]) / 1000
+                        therm_list.append(temp)
+                    except:
+                        therm_list.appned(None)
+        logger.info(f'thermistor0 get temp: {therm_list[0]}')
+        logger.info(f'thermistor1 get temp: {therm_list[1]}')
+        return therm_list
 
     def measure_current(self):
         if wt.odpm_enable:
@@ -507,8 +527,9 @@ class Cmw100:
     def sync_gsm(self):
         logger.info('---------Sync----------')
         self.command(f'AT+TESTRESET', delay=0.2)
-        self.command(f'AT+TESTSYNC={self.band_tx_set_dict_gsm[self.band_gsm]},0,{self.rx_chan_gsm},{-1 * int( round(self.rx_level,0))}',
-                     delay=0.5)
+        self.command(
+            f'AT+TESTSYNC={self.band_tx_set_dict_gsm[self.band_gsm]},0,{self.rx_chan_gsm},{-1 * int(round(self.rx_level, 0))}',
+            delay=0.5)
 
     def sync_wcdma(self):
         logger.info('---------Sync----------')
@@ -751,7 +772,7 @@ class Cmw100:
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MOEX ON')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:TSEQ TSC{self.tsc}')
-        self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MVI {(",").join([self.mod_gsm]* 8)}')
+        self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MVI {(",").join([self.mod_gsm] * 8)}')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MSL 0,1,0')
         self.command_cmw100_query('*OPC?')
@@ -1167,7 +1188,9 @@ class Cmw100:
         logger.info('========== FER measure ==========')
         self.sig_gen_gsm()
         self.sync_gsm()
-        res = self.command(f'AT+TESTBER={self.band_tx_set_dict_gsm[self.band_gsm]},{self.mod_dict_gsm[self.mod_gsm]},0,1,{self.rx_chan_gsm},{-1 * int(round(self.rx_level,0))},7,2', delay=0.5)
+        res = self.command(
+            f'AT+TESTBER={self.band_tx_set_dict_gsm[self.band_gsm]},{self.mod_dict_gsm[self.mod_gsm]},0,1,{self.rx_chan_gsm},{-1 * int(round(self.rx_level, 0))},7,2',
+            delay=0.5)
         for line in res:
             if '+TESTBER: ' in line.decode():
                 results = eval(line.decode().split(': ')[1])
@@ -1208,7 +1231,7 @@ class Cmw100:
             # self.set_rx_level()
             self.query_fer_measure_gsm()
         return rssi
-            # self.command_cmw100_query('*OPC?')
+        # self.command_cmw100_query('*OPC?')
 
     def search_window_wcdma(self):
         self.query_fer_measure_wcdma()
@@ -1576,8 +1599,6 @@ class Cmw100:
                                                                          mode=1)  # mode=1: LMH mode
             else:
                 logger.info(f"GSM doesn't have this RX path {self.rx_path_gsm_dict[self.rx_path_gsm]}")
-
-
 
     def search_sensitivity_lmh_progress_wcdma(self):
         rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
@@ -2088,7 +2109,7 @@ class Cmw100:
                     elif tx_freq_level <= 100:
                         for rx_chan, rx_level_rssi in data.items():
                             chan = self.chan_judge_gsm(band,
-                                                         cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, rx_chan))
+                                                       cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, rx_chan))
                             ws.cell(row, 1).value = band
                             ws.cell(row, 2).value = self.rx_path_gsm_dict[self.rx_path_gsm]
                             ws.cell(row, 3).value = chan  # LMH
@@ -2418,6 +2439,9 @@ class Cmw100:
                                 ws['T1'] = 'AS_Path'
                                 ws['U1'] = 'Current(mA)'
                                 ws['V1'] = 'Condition'
+                                ws['W1'] = 'Temp0'
+                                ws['X1'] = 'Temp1'
+
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -2449,6 +2473,8 @@ class Cmw100:
                                 ws['V1'] = 'SRS_Path'
                                 ws['W1'] = 'Current(mA)'
                                 ws['X1'] = 'Condition'
+                                ws['Y1'] = 'Temp0'
+                                ws['Z1'] = 'Temp1'
 
                     elif self.tech == 'WCDMA':
 
@@ -2474,6 +2500,8 @@ class Cmw100:
                             ws['P1'] = 'AS_Path'
                             ws['Q1'] = 'Current(mA)'
                             ws['R1'] = 'Condition'
+                            ws['S1'] = 'Temp0'
+                            ws['T1'] = 'Temp1'
 
                     elif self.tech == 'GSM':
 
@@ -2506,6 +2534,8 @@ class Cmw100:
                             ws['V1'] = 'AS_Path'
                             ws['W1'] = 'Current(mA)'
                             ws['X1'] = 'Condition'
+                            ws['Y1'] = 'Temp0'
+                            ws['Z1'] = 'Temp1'
 
                     wb.save(filename)
                     wb.close()
@@ -2575,6 +2605,9 @@ class Cmw100:
                             ws.cell(row, 20).value = self.asw_path
                             ws.cell(row, 21).value = measured_data[10]
                             ws.cell(row, 22).value = wt.condition
+                            ws.cell(row, 23).value = measured_data[11]
+                            ws.cell(row, 24).value = measured_data[12]
+
 
                             row += 1
 
@@ -2636,6 +2669,8 @@ class Cmw100:
                             ws.cell(row, 22).value = self.srs_path
                             ws.cell(row, 23).value = measured_data[10]
                             ws.cell(row, 24).value = wt.condition
+                            ws.cell(row, 25).value = measured_data[11]
+                            ws.cell(row, 26).value = measured_data[12]
 
                             row += 1
 
@@ -2686,6 +2721,8 @@ class Cmw100:
                             ws.cell(row, 16).value = self.asw_path
                             ws.cell(row, 17).value = measured_data[9]
                             ws.cell(row, 18).value = wt.condition
+                            ws.cell(row, 19).value = measured_data[10]
+                            ws.cell(row, 20).value = measured_data[11]
                             row += 1
 
                 elif self.tech == 'GSM':
@@ -2717,7 +2754,6 @@ class Cmw100:
                             ws.cell(row, 21).value = measured_data[15]
                             ws.cell(row, 22).value = self.asw_path
 
-
                             row += 1
 
                     elif tx_freq_level <= 100:
@@ -2747,6 +2783,8 @@ class Cmw100:
                             ws.cell(row, 22).value = self.asw_path
                             ws.cell(row, 23).value = measured_data[16]
                             ws.cell(row, 24).value = wt.condition
+                            ws.cell(row, 25).value = measured_data[17]
+                            ws.cell(row, 26).value = measured_data[18]
 
                             row += 1
 
@@ -3120,9 +3158,11 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:REP SING')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:RES:ALL ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OFF, ON')
         self.command_cmw100_query(f'*OPC?')
-        self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:SMOD:OFR 100KHZ,200KHZ,250KHZ,400KHZ,600KHZ,800KHZ,1600KHZ,1800KHZ,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF')
+        self.command_cmw100_write(
+            f'CONF:GSM:MEAS:MEV:SMOD:OFR 100KHZ,200KHZ,250KHZ,400KHZ,600KHZ,800KHZ,1600KHZ,1800KHZ,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:SMOD:EAR ON,6,45,ON,90,129')
-        self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:SSW:OFR 400KHZ,600KHZ,1200KHZ,1800KHZ,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF')
+        self.command_cmw100_write(
+            f'CONF:GSM:MEAS:MEV:SSW:OFR 400KHZ,600KHZ,1200KHZ,1800KHZ,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF,OFF')
         self.command_cmw100_query(f'SYST:ERR:ALL?')
 
     def tx_power_relative_test_initial_wcdma(self):
@@ -3634,7 +3674,7 @@ class Cmw100:
                     aclr_mod_current_results = aclr_mod_results = self.tx_measure_gsm()
                     logger.debug(aclr_mod_results)
                     aclr_mod_current_results.append(self.measure_current())
-                    data_chan[self.rx_freq_gsm] = aclr_mod_current_results
+                    data_chan[self.rx_freq_gsm] = aclr_mod_current_results + self.get_temperature()
                 logger.debug(data_chan)
                 # ready to export to excel
                 self.filename = self.tx_power_relative_test_export_excel(data_chan, self.band_gsm, 0,
@@ -3695,7 +3735,8 @@ class Cmw100:
                     logger.debug(aclr_mod_results)
                     aclr_mod_current_results.append(self.measure_current())
                     data_chan[
-                        cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma, self.tx_chan_wcdma)] = aclr_mod_current_results
+                        cm_pmt_ftm.transfer_chan2freq_wcdma(self.band_wcdma,
+                                                            self.tx_chan_wcdma)] = aclr_mod_current_results + self.get_temperature()
                 logger.debug(data_chan)
                 # ready to export to excel
                 self.filename = self.tx_power_relative_test_export_excel(data_chan, self.band_wcdma, 5,
@@ -3756,7 +3797,7 @@ class Cmw100:
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_lte()
                             logger.debug(aclr_mod_results)
                             aclr_mod_current_results.append(self.measure_current())
-                            data_freq[self.tx_freq_lte] = aclr_mod_current_results
+                            data_freq[self.tx_freq_lte] = aclr_mod_current_results + self.get_temperature()
                         logger.debug(data_freq)
                         # ready to export to excel
                         self.filename = self.tx_power_relative_test_export_excel(data_freq, self.band_lte, self.bw_lte,
@@ -3820,7 +3861,7 @@ class Cmw100:
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)
                             aclr_mod_current_results.append(self.measure_current())
-                            data_freq[self.tx_freq_fr1] = aclr_mod_current_results
+                            data_freq[self.tx_freq_fr1] = aclr_mod_current_results + self.get_temperature()
                         logger.debug(data_freq)
                         # ready to export to excel
                         self.filename = self.tx_power_relative_test_export_excel(data_freq, self.band_fr1, self.bw_fr1,
@@ -3945,6 +3986,7 @@ class Cmw100:
         #     self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         # else:
         #     pass
+
     def tx_freq_sweep_progress_gsm(self, plot=True):
         """
         :param band_gsm:
@@ -3973,7 +4015,8 @@ class Cmw100:
 
         rx_chan_range_list = [rx_chan_list[0], rx_chan_list[2], 0.2]
         step = int(rx_chan_range_list[2] * 1000 * 5)
-        rx_freq_range_list = [cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, rx_chan) for rx_chan in rx_chan_range_list[:2]]
+        rx_freq_range_list = [cm_pmt_ftm.transfer_chan2freq_gsm(self.band_gsm, rx_chan) for rx_chan in
+                              rx_chan_range_list[:2]]
         rx_freq_range_list.append(step)
 
         for script in wt.scripts:
@@ -4002,7 +4045,6 @@ class Cmw100:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
-
 
     def tx_freq_sweep_progress_wcdma(self, plot=True):
         """
@@ -4230,7 +4272,8 @@ class Cmw100:
 
                     # self.tx_power_relative_test_initial_gsm()
 
-                    tx_range_list = wt.tx_pcl_range_list_lb if self.band_gsm in [850, 900] else wt.tx_pcl_range_list_mb  # [tx_pcl_1, tx_pcl_2]
+                    tx_range_list = wt.tx_pcl_range_list_lb if self.band_gsm in [850,
+                                                                                 900] else wt.tx_pcl_range_list_mb  # [tx_pcl_1, tx_pcl_2]
 
                     logger.info('----------TX Level Sweep progress---------')
                     logger.info(f'----------from PCL{tx_range_list[0]} to PCL{tx_range_list[1]}----------')
@@ -4256,7 +4299,6 @@ class Cmw100:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
-
 
     def tx_level_sweep_progress_wcdma(self, plot=True):
         """
@@ -4654,7 +4696,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "W1")
+                        ws.add_chart(chart, "Y1")
 
                         logger.info('----------ACLR---------')
                         chart = LineChart()
@@ -4682,7 +4724,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
-                        ws.add_chart(chart, "W39")
+                        ws.add_chart(chart, "Y39")
 
                         logger.info('----------EVM---------')
                         chart = LineChart()
@@ -4702,7 +4744,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "W77")
+                        ws.add_chart(chart, "Y77")
 
                         logger.info('----------Current---------')
                         chart = LineChart()
@@ -4722,7 +4764,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "W115")
+                        ws.add_chart(chart, "Y115")
 
                     wb.save(filename)
                     wb.close()
@@ -4851,7 +4893,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "Y1")
+                        ws.add_chart(chart, "AA1")
 
                         logger.info('----------ACLR---------')
                         chart = LineChart()
@@ -4879,7 +4921,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_-2
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for UTRA_+2
 
-                        ws.add_chart(chart, "Y39")
+                        ws.add_chart(chart, "AA39")
 
                         logger.info('----------EVM---------')
                         chart = LineChart()
@@ -4899,7 +4941,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "Y77")
+                        ws.add_chart(chart, "AA77")
 
                         logger.info('----------Current---------')
                         chart = LineChart()
@@ -4919,7 +4961,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "Y115")
+                        ws.add_chart(chart, "AA115")
 
                     wb.save(filename)
                     wb.close()
@@ -5047,7 +5089,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "T1")
+                        ws.add_chart(chart, "U1")
 
                         logger.info('----------ACLR---------')
                         chart = LineChart()
@@ -5073,7 +5115,7 @@ class Cmw100:
                         chart.series[2].graphicalProperties.line.width = 50000  # for UTRA_-2
                         chart.series[3].graphicalProperties.line.width = 50000  # for UTRA_+2
 
-                        ws.add_chart(chart, "T39")
+                        ws.add_chart(chart, "U39")
 
                         logger.info('----------EVM---------')
                         chart = LineChart()
@@ -5093,7 +5135,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "T77")
+                        ws.add_chart(chart, "U77")
 
                         logger.info('----------Current---------')
                         chart = LineChart()
@@ -5113,7 +5155,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "T115")
+                        ws.add_chart(chart, "U115")
 
                     wb.save(filename)
                     wb.close()
@@ -5240,7 +5282,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'  # for EUTRA_+1
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "Y1")
+                        ws.add_chart(chart, "AA1")
 
                         logger.info('----------ORFS_MOD---------')
                         chart = LineChart()
@@ -5268,7 +5310,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_-600
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_+600
 
-                        ws.add_chart(chart, "y39")
+                        ws.add_chart(chart, "AA39")
 
                         logger.info('----------ORFS_SW---------')
                         chart = LineChart()
@@ -5296,7 +5338,7 @@ class Cmw100:
                         chart.series[4].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_-1200
                         chart.series[5].graphicalProperties.line.dashStyle = 'dash'  # for ORFS_+1200
 
-                        ws.add_chart(chart, "Y77")
+                        ws.add_chart(chart, "AA77")
 
                         if 'GMSK' in ws_name:
                             logger.info('----------PHASE_RMS---------')
@@ -5317,7 +5359,7 @@ class Cmw100:
                             chart.series[0].marker.symbol = 'circle'
                             chart.series[0].marker.size = 10
 
-                            ws.add_chart(chart, "Y115")
+                            ws.add_chart(chart, "AA115")
 
                         elif 'EPSK' in ws_name:
                             logger.info('----------EVM_RMS---------')
@@ -5338,7 +5380,7 @@ class Cmw100:
                             chart.series[0].marker.symbol = 'circle'
                             chart.series[0].marker.size = 10
 
-                            ws.add_chart(chart, "Y115")
+                            ws.add_chart(chart, "AA115")
 
                         logger.info('----------Current---------')
                         chart = LineChart()
@@ -5358,7 +5400,7 @@ class Cmw100:
                         chart.series[0].marker.symbol = 'circle'
                         chart.series[0].marker.size = 10
 
-                        ws.add_chart(chart, "Y153")
+                        ws.add_chart(chart, "AA153")
 
                     wb.save(filename)
                     wb.close()
@@ -5951,7 +5993,6 @@ class Cmw100:
                     wb.close()
                 else:
                     pass
-
 
     def rxs_endc_plot(self, filename):
         logger.info('----------Plot Chart---------')
