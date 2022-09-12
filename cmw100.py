@@ -1361,64 +1361,80 @@ class Cmw100:
         self.chan = wt.channel
         self.mod_gsm = wt.mod_gsm
         self.script = 'GENERAL'
-        for tech in wt.tech:
-            if tech == 'GSM' and wt.gsm_bands != []:
-                self.tech = 'GSM'
-                for band in wt.gsm_bands:
-                    self.pcl = wt.tx_pcl_lb if band in [850, 900] else wt.tx_pcl_mb
-                    self.band_gsm = band
-                    self.search_sensitivity_lmh_progress_gsm()
-                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+        items = [
+            (tech, band)
+            for tech in wt.tech
+            for band in wt.gsm_bands
+        ]
+        for item in items:
+            if item[0] == 'GSM' and wt.gsm_bands != []:
+                self.tech = item[0]
+                self.band_gsm = item[1]
+                self.pcl = wt.tx_pcl_lb if self.band_gsm in [850, 900] else wt.tx_pcl_mb
+                self.search_sensitivity_lmh_progress_gsm()
+        self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_pipline_wcdma(self):
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mcs_wcdma = 'QPSK'
         self.script = 'GENERAL'
-        for tech in wt.tech:
-            if tech == 'WCDMA' and wt.wcdma_bands != []:
-                self.tech = 'WCDMA'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    # for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                    # self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                    for band in wt.wcdma_bands:
-                        self.band_wcdma = band
-                        self.search_sensitivity_lmh_progress_wcdma()
-                    # self.rx_desense_progress()
-                    self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+        items = [
+            (tech, tx_path, band)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for band in wt.wcdma_bands
+        ]
+        for item in items:
+            if item[0] == 'WCDMA' and wt.wcdma_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                # for ue_power_bool in wt.tx_max_pwr_sensitivity:
+                # self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
+                self.band_wcdma = item[2]
+                self.search_sensitivity_lmh_progress_wcdma()
+                # self.rx_desense_progress()
+        self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
 
     def search_sensitivity_pipline_lte(self):
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.mcs_lte = 'QPSK'
         self.script = 'GENERAL'
-        for tech in wt.tech:
-            if tech == 'LTE' and wt.lte_bands != []:
-                self.tech = 'LTE'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.lte_bandwidths:
-                        self.bw_lte = bw
-                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                            self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                            for band in wt.lte_bands:
-                                self.band_lte = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
-                                    self.search_sensitivity_lmh_progress_lte()
-                                else:
-                                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-                        try:
-                            self.rx_desense_progress()
-                            self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
-                        except TypeError as err:
-                            logger.debug(err)
-                            logger.info(
-                                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
-                        except KeyError as err:
-                            logger.debug(err)
-                            logger.info(
-                                f"{self.band_lte} doesn't have this {self.bw_lte}, so desens progress cannot run")
+        items = [
+            (tech, tx_path, bw, ue_power_bool, band)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.lte_bandwidths
+            for ue_power_bool in wt.tx_max_pwr_sensitivity
+            for band in wt.lte_bands
+        ]
+        for item in items:
+            if item[0] == 'LTE' and wt.lte_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_lte = item[2]
+                self.ue_power_bool = item[3]
+                self.tx_level = wt.tx_level if self.ue_power_bool == 1 else -10
+                self.band_lte = item[4]
+                if self.bw_lte in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                    self.search_sensitivity_lmh_progress_lte()
+                else:
+                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+        try:
+            for bw in wt.lte_bandwidths:
+                self.bw_lte = bw
+                self.filename = f'Sensitivty_{self.bw_lte}MHZ_{self.tech}_LMH.xlsx'
+                self.rx_desense_progress()
+                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+        except TypeError as err:
+            logger.debug(err)
+            logger.info(
+                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
+        except KeyError as err:
+            logger.debug(err)
+            logger.info(
+                f"{self.band_lte} doesn't have this {self.bw_lte}, so desens progress cannot run")
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx
@@ -1427,32 +1443,40 @@ class Cmw100:
         self.sa_nsa_mode = wt.sa_nsa
         self.script = 'GENERAL'
         self.mcs_fr1 = 'QPSK'
-        for tech in wt.tech:
-            if tech == 'FR1' and wt.fr1_bands != []:
-                self.tech = 'FR1'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.fr1_bandwidths:
-                        self.bw_fr1 = bw
-                        for ue_power_bool in wt.tx_max_pwr_sensitivity:
-                            self.tx_level = wt.tx_level if ue_power_bool == 1 else -10
-                            for band in wt.fr1_bands:
-                                self.band_fr1 = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                    self.search_sensitivity_lmh_progress_fr1()
-                                else:
-                                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-                        try:
-                            self.rx_desense_progress()
-                            self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
-                        except TypeError as err:
-                            logger.debug(err)
-                            logger.info(
-                                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
-                        except KeyError as err:
-                            logger.debug(err)
-                            logger.info(
-                                f"{self.band_fr1} doesn't have this {self.bw_fr1}, so desens progress cannot run")
+        items = [
+            (tech, tx_path, bw, ue_power_bool, band)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.fr1_bandwidths
+            for ue_power_bool in wt.tx_max_pwr_sensitivity
+            for band in wt.fr1_bands
+        ]
+        for item in items:
+            if item[0] == 'FR1' and wt.fr1_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_fr1 = item[2]
+                self.ue_power_bool = item[3]
+                self.tx_level = wt.tx_level if self.ue_power_bool == 1 else -10
+                self.band_fr1 = item[4]
+                if self.bw_fr1 in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                    self.search_sensitivity_lmh_progress_fr1()
+                else:
+                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+        try:
+            for bw in wt.fr1_bandwidths:
+                self.bw_fr1 = bw
+                self.filename = f'Sensitivty_{self.bw_fr1}MHZ_{self.tech}_LMH.xlsx'
+                self.rx_desense_progress()
+                self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
+        except TypeError as err:
+            logger.debug(err)
+            logger.info(
+                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
+        except KeyError as err:
+            logger.debug(err)
+            logger.info(
+                f"{self.band_fr1} doesn't have this {self.bw_fr1}, so desens progress cannot run")
 
     def sensitivity_pipline_endc(self):
         self.tx_level_endc_lte = wt.tx_level_endc_lte
@@ -1532,7 +1556,7 @@ class Cmw100:
         self.rxs_endc_plot('Sensitivty_ENDC.xlsx')
 
     def search_sensitivity_pipline_fast_lte(
-            self):  # this is for that RSRP and  CINR without issue because this is calculated method
+            self):  # this is for that RSRP and CINR without issue because this is calculated method
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
@@ -2607,7 +2631,6 @@ class Cmw100:
                             ws.cell(row, 22).value = wt.condition
                             ws.cell(row, 23).value = measured_data[11]
                             ws.cell(row, 24).value = measured_data[12]
-
 
                             row += 1
 
