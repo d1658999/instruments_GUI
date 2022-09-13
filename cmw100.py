@@ -3447,101 +3447,119 @@ class Cmw100:
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
-        for tech in wt.tech:
-            if tech == 'LTE' and wt.lte_bands != []:
-                self.tech = 'LTE'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.lte_bandwidths:
-                        self.bw_lte = bw
-                        try:
-                            for band in wt.lte_bands:
-                                self.band_lte = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
-                                    self.tx_power_aclr_evm_lmh_lte(plot=False)
-                                else:
-                                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
-                        except TypeError:
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+        items = [
+            (tech, tx_path, bw, band)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.lte_bandwidths
+            for band in wt.lte_bands
+        ]
+        for item in items:
+            if item[0] == 'LTE' and wt.lte_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_lte = item[2]
+                self.band_lte = item[3]
+                if self.bw_lte in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                    self.tx_power_aclr_evm_lmh_lte(plot=False)
+                else:
+                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+        try:
+            for bw in wt.lte_bandwidths:
+                self.filename = f'TxP_ACLR_EVM_{bw}MHZ_{self.tech}_LMH.xlsx'
+                self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+        except TypeError:
+            logger.info(f'there is no data to plot because the band does not have this BW ')
+
 
     def tx_power_aclr_evm_lmh_pipeline_fr1(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nsa
-        for tech in wt.tech:
-            if tech == 'FR1' and wt.fr1_bands != []:
-                self.tech = 'FR1'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.fr1_bandwidths:
-                        self.bw_fr1 = bw
-                        try:
-                            for band in wt.fr1_bands:
-                                self.band_fr1 = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                    for type in wt.type_fr1:
-                                        self.type_fr1 = type
-                                        self.tx_power_aclr_evm_lmh_fr1(plot=False)
-                                else:
-                                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
-                        except TypeError:
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+        items = [
+            (tech, tx_path, bw, band, type_)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.fr1_bandwidths
+            for band in wt.fr1_bands
+            for type_ in wt.type_fr1
+        ]
+
+        for item in items:
+            if item[0] == 'FR1' and wt.fr1_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_fr1 = item[2]
+                self.band_fr1 = item[3]
+                self.type_fr1 = item[4]
+                if self.bw_fr1 in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                    self.tx_power_aclr_evm_lmh_fr1(plot=False)
+                else:
+                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+        try:
+            for bw in wt.fr1_bandwidths:
+                self.filename = f'TxP_ACLR_EVM_{bw}MHZ_{self.tech}_LMH.xlsx'
+                self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
+        except TypeError:
+            logger.info(f'there is no data to plot because the band does not have this BW ')
+
 
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.sa_nsa_mode = wt.sa_nsa
-        for tech in wt.tech:
-            if tech == 'FR1' and wt.fr1_bands != []:
-                self.tech = 'FR1'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    try:
-                        for band in wt.fr1_bands:
-                            self.band_fr1 = band
-                            for bw in wt.fr1_bandwidths:
-                                self.bw_fr1 = bw
-                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                    for type in wt.type_fr1:
-                                        self.type_fr1 = type
-                                        self.tx_power_fcc_fr1()
-                                else:
-                                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-                        # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
-                    except TypeError:
-                        logger.info(f'there is no data to plot because the band does not have this BW ')
+        items = [
+            (tech, tx_path, bw, band, type_)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.fr1_bandwidths
+            for band in wt.fr1_bands
+            for type_ in wt.type_fr1
+        ]
+
+        for item in items:
+            if item[0] == 'FR1' and wt.fr1_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_fr1 = item[2]
+                self.band_fr1 = item[3]
+                self.type_fr1 = item[4]
+                if self.bw_fr1 in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                    self.tx_power_fcc_fr1()
+                else:
+                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
 
     def tx_power_pipline_ce_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.sa_nsa_mode = wt.sa_nsa
-        for tech in wt.tech:
-            if tech == 'FR1' and wt.fr1_bands != []:
-                self.tech = 'FR1'
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    try:
-                        for band in wt.fr1_bands:
-                            self.band_fr1 = band
-                            for bw in wt.fr1_bandwidths:
-                                self.bw_fr1 = bw
-                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                    for type in wt.type_fr1:
-                                        self.type_fr1 = type
-                                        self.tx_power_ce_fr1()
-                                else:
-                                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-                        # self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
-                    except TypeError:
-                        logger.info(f'there is no data to plot because the band does not have this BW ')
+        items = [
+            (tech, tx_path, bw, band, type_)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.fr1_bandwidths
+            for band in wt.fr1_bands
+            for type_ in wt.type_fr1
+        ]
+
+        for item in items:
+            if item[0] == 'FR1' and wt.fr1_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_fr1 = item[2]
+                self.band_fr1 = item[3]
+                self.type_fr1 = item[4]
+                if self.bw_fr1 in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                    self.tx_power_ce_fr1()
+                else:
+                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+
 
     def tx_freq_sweep_pipline_gsm(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        self.chan = wt.channel
+        # self.chan = wt.channel
         self.mod_gsm = wt.mod_gsm
         self.tsc = 0 if self.mod_gsm == 'GMSK' else 5
         for tech in wt.tech:
@@ -3556,7 +3574,7 @@ class Cmw100:
     def tx_freq_sweep_pipline_wcdma(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        self.chan = wt.channel
+        # self.chan = wt.channel
         for tech in wt.tech:
             if tech == 'WCDMA' and wt.wcdma_bands != []:
                 self.tech = tech
@@ -3568,49 +3586,63 @@ class Cmw100:
     def tx_freq_sweep_pipline_lte(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        self.chan = wt.channel
-        for tech in wt.tech:
-            if tech == 'LTE' and wt.lte_bands != []:
-                self.tech = tech
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.lte_bandwidths:
-                        self.bw_lte = bw
-                        try:
-                            for band in wt.lte_bands:
-                                self.band_lte = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
-                                    self.tx_freq_sweep_progress_lte(plot=False)
-                                else:
-                                    logger.info(f'B{band} does not have BW {bw}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=0)
-                        except TypeError:
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+        # self.chan = wt.channel
+        items = [
+            (tech, tx_path, bw, band)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.lte_bandwidths
+            for band in wt.lte_bands
+        ]
+        for item in items:
+            if item[0] == 'LTE' and wt.lte_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_lte = item[2]
+                self.band_lte = item[3]
+                if self.bw_lte in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                    self.tx_freq_sweep_progress_lte(plot=False)
+                else:
+                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+
+        try:
+            for bw in wt.lte_bandwidths:
+                self.filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
+                self.txp_aclr_evm_plot(self.filename, mode=0)
+        except TypeError:
+            logger.info(f'there is no data to plot because the band does not have this BW ')
 
     def tx_freq_sweep_pipline_fr1(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        self.chan = wt.channel
+        # self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nsa
-        for tech in wt.tech:
-            if tech == 'FR1' and wt.fr1_bands != []:
-                self.tech = tech
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.fr1_bandwidths:
-                        self.bw_fr1 = bw
-                        try:
-                            for band in wt.fr1_bands:
-                                self.band_fr1 = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                    for type in wt.type_fr1:
-                                        self.type_fr1 = type
-                                        self.tx_freq_sweep_progress_fr1(plot=False)
-                                else:
-                                    logger.info(f'N{band} does not have BW {bw}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=0)
-                        except TypeError:
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+        items = [
+            (tech, tx_path, bw, band, type_)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.fr1_bandwidths
+            for band in wt.fr1_bands
+            for type_ in wt.type_fr1
+        ]
+
+        for item in items:
+            if item[0] == 'FR1' and wt.fr1_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_fr1 = item[2]
+                self.band_fr1 = item[3]
+                self.type_fr1 = item[4]
+                if self.bw_fr1 in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                    self.tx_freq_sweep_progress_fr1(plot=False)
+                else:
+                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+        try:
+            for bw in wt.fr1_bandwidths:
+                self.filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
+                self.txp_aclr_evm_plot(self.filename, mode=0)
+        except TypeError:
+            logger.info(f'there is no data to plot because the band does not have this BW ')
 
     def tx_level_sweep_pipeline_gsm(self):
         self.tx_level = wt.tx_level
@@ -4096,15 +4128,6 @@ class Cmw100:
         logger.info('----------Freq Sweep progress ---------')
         rx_chan_list = cm_pmt_ftm.dl_chan_select_gsm(self.band_gsm)
 
-        rx_chan_select_list = []
-        for chan in self.chan:
-            if chan == 'L':
-                rx_chan_select_list.append(rx_chan_list[0])
-            elif chan == 'M':
-                rx_chan_select_list.append(rx_chan_list[1])
-            elif chan == 'H':
-                rx_chan_select_list.append(rx_chan_list[2])
-
         self.preset_instrument()
         self.set_test_mode_gsm()
         self.set_test_end_gsm()
@@ -4222,15 +4245,6 @@ class Cmw100:
         self.sig_gen_lte()
         self.sync_lte()
 
-        tx_freq_select_list = []
-        for chan in self.chan:
-            if chan == 'L':
-                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[0]))
-            elif chan == 'M':
-                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[1]))
-            elif chan == 'H':
-                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[2]))
-
         freq_range_list = [tx_freq_list[0], tx_freq_list[2], 1000]
         step = freq_range_list[2]
 
@@ -4289,16 +4303,7 @@ class Cmw100:
         self.sig_gen_fr1()
         self.sync_fr1()
 
-        tx_freq_select_list = []
-        for chan in self.chan:
-            if chan == 'L':
-                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[0]))
-            elif chan == 'M':
-                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
-            elif chan == 'H':
-                tx_freq_select_list.append(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[2]))
-
-        freq_range_list = [tx_freq_list[0], tx_freq_list[2], 10000]
+        freq_range_list = [tx_freq_list[0], tx_freq_list[2], 1000]
         step = freq_range_list[2]
 
         for mcs in wt.mcs_fr1:
