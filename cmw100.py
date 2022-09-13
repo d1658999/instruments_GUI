@@ -265,6 +265,7 @@ class Cmw100:
 
     def preset_instrument(self):
         logger.info('----------Preset CMW100----------')
+        self.command_cmw100_write('SYSTem:PRESet:ALL')
         self.command_cmw100_query('SYSTem:BASE:OPTion:VERSion?  "CMW_NRSub6G_Meas"')
         self.command_cmw100_write('CONFigure:FDCorrection:DEACtivate:ALL')
         self.command_cmw100_write('CONFigure:BASE:FDCorrection:CTABle:DELete:ALL')
@@ -476,8 +477,9 @@ class Cmw100:
             self.command_cmw100_write(
                 f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_Channel_CC0_RxAnt0_RF_Verification_10M_SIMO_01.wv'")
         else:
-            self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_10MHz.wv'")
-            # self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_{self.bw_lte}MHz.wv'")
+            # self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_10MHz.wv'")
+            bw_lte = '1p4' if self.bw_lte == 1.4 else '03' if self.bw_lte == 3 else self.bw_lte
+            self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_{bw_lte}MHz.wv'")
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_lte}KHz')
@@ -1013,13 +1015,13 @@ class Cmw100:
         bw = f'00{self.bw_fr1}' if self.bw_fr1 < 10 else f'0{self.bw_fr1}' if 10 <= self.bw_fr1 < 100 else self.bw_fr1
         self.command_cmw100_write(f'CONF:NRS:MEAS:MEV:BWC S{scs}K, B{bw}')
         self.command_cmw100_write(
-            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{self.bw_fr1}   ON, 0.015MHz, 0.0985MHz, {round(-13.5 - 10 * math.log10(self.bw_fr1 / 5), 1)},K030')
+            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA1:CBAN{self.bw_fr1} ON,0.015MHz,0.0985MHz,{round(-13.5 - 10 * math.log10(self.bw_fr1 / 5), 1)},K030')
         self.command_cmw100_write(
-            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA2:CBAN{self.bw_fr1}   ON,   1.5MHz,    4.5MHz,  -8.5,  M1')
+            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA2:CBAN{self.bw_fr1} ON,1.5MHz,4.5MHz,-8.5,M1')
         self.command_cmw100_write(
-            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA3:CBAN{self.bw_fr1}   ON,   5.5MHz,   {round(-0.5 + self.bw_fr1, 1)}MHz, -11.5,  M1')
+            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA3:CBAN{self.bw_fr1} ON,5.5MHz,{round(-0.5 + self.bw_fr1, 1)}MHz,-11.5,M1')
         self.command_cmw100_write(
-            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA4:CBAN{self.bw_fr1}   ON, 0 {round(0.5 + self.bw_fr1, 1)}MHz,  {round(4.5 + self.bw_fr1, 1)}MHz, -23.5,  M1')
+            f'CONF:NRS:MEAS:MEV:LIM:SEM:AREA4:CBAN{self.bw_fr1} ON,{round(0.5 + self.bw_fr1, 1)}MHz,{round(4.5 + self.bw_fr1, 1)}MHz,-23.5,M1')
         _256Q_flag = 2 if self.mcs_fr1 == 'Q256' else 0
         self.command_cmw100_write(
             f'CONFigure:NRSub:MEASurement:MEValuation:PUSChconfig {self.mcs_fr1},A,OFF,{self.rb_size_fr1},{self.rb_start_fr1},14,0,T1,SING,{_256Q_flag},2')
@@ -1521,6 +1523,7 @@ class Cmw100:
             self.set_test_end_lte(delay=0.5)
             self.set_test_end_fr1(delay=0.5)
             self.set_test_mode_lte()
+            self.rx_level = -70
             self.sig_gen_lte()
             self.sync_lte()
             self.set_test_mode_fr1()
@@ -1554,8 +1557,8 @@ class Cmw100:
                          self.tx_freq_fr1, self.tx_level, self.tx_level_endc_fr1,
                          self.rb_size_lte,
                          self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1])
-        self.set_test_end_fr1(delay=0.5)
-        self.set_test_end_lte(delay=0.5)
+            self.set_test_end_fr1(delay=0.5)
+            self.set_test_end_lte(delay=0.5)
         self.endc_relative_power_senstivity_export_excel(data)
         self.rx_desense_endc_progress()
         self.rxs_endc_plot('Sensitivty_ENDC.xlsx')
