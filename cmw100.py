@@ -1423,20 +1423,24 @@ class Cmw100:
                     self.search_sensitivity_lmh_progress_lte()
                 else:
                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-        try:
-            for bw in wt.lte_bandwidths:
+        for bw in wt.lte_bandwidths:
+            try:
                 self.bw_lte = bw
                 self.filename = f'Sensitivty_{self.bw_lte}MHZ_{self.tech}_LMH.xlsx'
                 self.rx_desense_progress()
                 self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
-        except TypeError as err:
-            logger.debug(err)
-            logger.info(
-                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
-        except KeyError as err:
-            logger.debug(err)
-            logger.info(
-                f"{self.band_lte} doesn't have this {self.bw_lte}, so desens progress cannot run")
+            except TypeError as err:
+                logger.debug(err)
+                logger.info(
+                    'It might not have the Bw in this Band, so it cannot to be calculated for desens')
+            except KeyError as err:
+                logger.debug(err)
+                logger.info(
+                    f"{self.band_lte} doesn't have this {self.bw_lte}, so desens progress cannot run")
+            except FileNotFoundError as err:
+                logger.debug(err)
+                logger.info(f"There is not file to plot BW{bw}")
+
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx
@@ -1465,20 +1469,23 @@ class Cmw100:
                     self.search_sensitivity_lmh_progress_fr1()
                 else:
                     logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-        try:
-            for bw in wt.fr1_bandwidths:
+        for bw in wt.fr1_bandwidths:
+            try:
                 self.bw_fr1 = bw
                 self.filename = f'Sensitivty_{self.bw_fr1}MHZ_{self.tech}_LMH.xlsx'
                 self.rx_desense_progress()
                 self.rxs_relative_plot(self.filename, mode=1)  # mode=1: LMH mode
-        except TypeError as err:
-            logger.debug(err)
-            logger.info(
-                'It might not have the Bw in this Band, so it cannot to be calculated for desens')
-        except KeyError as err:
-            logger.debug(err)
-            logger.info(
-                f"{self.band_fr1} doesn't have this {self.bw_fr1}, so desens progress cannot run")
+            except TypeError as err:
+                logger.debug(err)
+                logger.info(
+                    'It might not have the Bw in this Band, so it cannot to be calculated for desens')
+            except KeyError as err:
+                logger.debug(err)
+                logger.info(
+                    f"{self.band_fr1} doesn't have this {self.bw_fr1}, so desens progress cannot run")
+            except FileNotFoundError as err:
+                logger.debug(err)
+                logger.info(f"There is not file to plot BW{bw}")
 
     def sensitivity_pipline_endc(self):
         self.tx_level_endc_lte = wt.tx_level_endc_lte
@@ -3464,12 +3471,14 @@ class Cmw100:
                     self.tx_power_aclr_evm_lmh_lte(plot=False)
                 else:
                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
-        try:
-            for bw in wt.lte_bandwidths:
+        for bw in wt.lte_bandwidths:
+            try:
                 self.filename = f'TxP_ACLR_EVM_{bw}MHZ_{self.tech}_LMH.xlsx'
                 self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
-        except TypeError:
-            logger.info(f'there is no data to plot because the band does not have this BW ')
+            except TypeError:
+                logger.info(f'there is no data to plot because the band does not have this BW ')
+            except FileNotFoundError:
+                logger.info(f'there is not file to plot BW{bw} ')
 
 
     def tx_power_aclr_evm_lmh_pipeline_fr1(self):
@@ -3497,12 +3506,14 @@ class Cmw100:
                     self.tx_power_aclr_evm_lmh_fr1(plot=False)
                 else:
                     logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-        try:
-            for bw in wt.fr1_bandwidths:
+        for bw in wt.fr1_bandwidths:
+            try:
                 self.filename = f'TxP_ACLR_EVM_{bw}MHZ_{self.tech}_LMH.xlsx'
                 self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
-        except TypeError:
-            logger.info(f'there is no data to plot because the band does not have this BW ')
+            except TypeError:
+                logger.info(f'there is no data to plot because the band does not have this BW ')
+            except FileNotFoundError:
+                logger.info(f'there is not file to plot BW{bw} ')
 
 
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
@@ -3605,12 +3616,14 @@ class Cmw100:
                 else:
                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
 
-        try:
-            for bw in wt.lte_bandwidths:
+        for bw in wt.lte_bandwidths:
+            try:
                 self.filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
                 self.txp_aclr_evm_plot(self.filename, mode=0)
-        except TypeError:
-            logger.info(f'there is no data to plot because the band does not have this BW ')
+            except TypeError:
+                logger.info(f'there is no data to plot because the band does not have this BW ')
+            except FileNotFoundError:
+                logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_freq_sweep_pipline_fr1(self):
         self.tx_level = wt.tx_level
@@ -3637,12 +3650,14 @@ class Cmw100:
                     self.tx_freq_sweep_progress_fr1(plot=False)
                 else:
                     logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-        try:
-            for bw in wt.fr1_bandwidths:
+        for bw in wt.fr1_bandwidths:
+            try:
                 self.filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
                 self.txp_aclr_evm_plot(self.filename, mode=0)
-        except TypeError:
-            logger.info(f'there is no data to plot because the band does not have this BW ')
+            except TypeError:
+                logger.info(f'there is no data to plot because the band does not have this BW ')
+            except FileNotFoundError:
+                logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_level_sweep_pipeline_gsm(self):
         self.tx_level = wt.tx_level
@@ -3677,48 +3692,66 @@ class Cmw100:
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
-        for tech in wt.tech:
-            if tech == 'LTE' and wt.lte_bands != []:
-                self.tech = tech
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.lte_bandwidths:
-                        self.bw_lte = bw
-                        try:
-                            for band in wt.lte_bands:
-                                self.band_lte = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
-                                    self.tx_level_sweep_progress_lte(plot=False)
-                                else:
-                                    logger.info(f'B{band} does not have BW {bw}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=0)
-                        except TypeError:
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+
+        items = [
+            (tech, tx_path, bw, band)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.lte_bandwidths
+            for band in wt.lte_bands
+        ]
+        for item in items:
+            if item[0] == 'LTE' and wt.lte_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_lte = item[2]
+                self.band_lte = item[3]
+                if self.bw_lte in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                    self.tx_level_sweep_progress_lte(plot=False)
+                else:
+                    logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
+        for bw in wt.lte_bandwidths:
+            try:
+                self.filename = f'Tx_level_sweep_{bw}MHZ_{self.tech}.xlsx'
+                self.txp_aclr_evm_plot(self.filename, mode=0)
+            except TypeError:
+                logger.info(f'there is no data to plot because the band does not have this BW ')
+            except FileNotFoundError:
+                logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_level_sweep_pipeline_fr1(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nsa
-        for tech in wt.tech:
-            if tech == 'FR1' and wt.fr1_bands != []:
-                self.tech = tech
-                for tx_path in wt.tx_paths:
-                    self.tx_path = tx_path
-                    for bw in wt.fr1_bandwidths:
-                        self.bw_fr1 = bw
-                        try:
-                            for band in wt.fr1_bands:
-                                self.band_fr1 = band
-                                if bw in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
-                                    for type in wt.type_fr1:
-                                        self.type_fr1 = type
-                                        self.tx_level_sweep_progress_fr1(plot=False)
-                                else:
-                                    logger.info(f'N{band} does not have BW {bw}MHZ')
-                            self.txp_aclr_evm_plot(self.filename, mode=0)
-                        except TypeError:
-                            logger.info(f'there is no data to plot because the band does not have this BW ')
+        items = [
+            (tech, tx_path, bw, band, type_)
+            for tech in wt.tech
+            for tx_path in wt.tx_paths
+            for bw in wt.fr1_bandwidths
+            for band in wt.fr1_bands
+            for type_ in wt.type_fr1
+        ]
+
+        for item in items:
+            if item[0] == 'FR1' and wt.fr1_bands != []:
+                self.tech = item[0]
+                self.tx_path = item[1]
+                self.bw_fr1 = item[2]
+                self.band_fr1 = item[3]
+                self.type_fr1 = item[4]
+                if self.bw_fr1 in cm_pmt_ftm.bandwidths_selected_fr1(self.band_fr1):
+                    self.tx_level_sweep_progress_fr1(plot=False)
+                else:
+                    logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
+        for bw in wt.fr1_bandwidths:
+            try:
+                self.filename = f'Tx_level_sweep_{bw}MHZ_{self.tech}.xlsx'
+                self.txp_aclr_evm_plot(self.filename, mode=0)
+            except TypeError:
+                logger.info(f'there is no data to plot because the band does not have this BW ')
+            except FileNotFoundError:
+                logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_measure_single(self):  # this is incompleted
         if 'LTE' in wt.tech:
