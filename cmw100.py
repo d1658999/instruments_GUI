@@ -3568,6 +3568,7 @@ class Cmw100:
 
 
     def tx_freq_sweep_pipline_gsm(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         # self.chan = wt.channel
@@ -3583,6 +3584,7 @@ class Cmw100:
                 self.txp_aclr_evm_plot(self.filename, mode=0)
 
     def tx_freq_sweep_pipline_wcdma(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         # self.chan = wt.channel
@@ -3595,6 +3597,7 @@ class Cmw100:
                 self.txp_aclr_evm_plot(self.filename, mode=0)
 
     def tx_freq_sweep_pipline_lte(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         # self.chan = wt.channel
@@ -3626,6 +3629,7 @@ class Cmw100:
                 logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_freq_sweep_pipline_fr1(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         # self.chan = wt.channel
@@ -3660,6 +3664,7 @@ class Cmw100:
                 logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_level_sweep_pipeline_gsm(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
@@ -3675,6 +3680,7 @@ class Cmw100:
                 self.txp_aclr_evm_plot(self.filename, mode=0)
 
     def tx_level_sweep_pipeline_wcdma(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
@@ -3689,6 +3695,7 @@ class Cmw100:
                     self.txp_aclr_evm_plot(self.filename, mode=0)
 
     def tx_level_sweep_pipeline_lte(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
@@ -3720,6 +3727,7 @@ class Cmw100:
                 logger.info(f'there is not file to plot BW{bw} ')
 
     def tx_level_sweep_pipeline_fr1(self):
+        self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
         self.chan = wt.channel
