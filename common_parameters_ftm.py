@@ -13,6 +13,7 @@ def bandwidths_selected_fr1(band):
         'N14': [5, 10, ],
         'N18': [5, 10, 15],
         'N20': [5, 10, 15, 20, ],
+        'N24': [5, 10, ],
         'N25': [5, 10, 15, 20, ],
         'N26': [5, 10, 15, 20],
         'N28': [5, 10, 15, 20],
@@ -92,6 +93,7 @@ def dl_freq_selected(standard, band, bw=5):
         'N14': [758 + bw / 2, 763, 768 - bw / 2],
         'N18': [860 + bw / 2, 867.5, 875 - bw / 2],
         'N20': [791 + bw / 2, 806, 821 - bw / 2],
+        'N24': [1525 + bw / 2, 1542, 1559 - bw / 2],
         'N25': [1930 + bw / 2, 1962.5, 1995 - bw / 2],
         'N26': [859 + bw / 2, 876.5, 894 - bw / 2],
         'N28': [758 + bw / 2, 780.5, 803 - bw / 2],
@@ -466,6 +468,7 @@ def transfer_freq_rx2tx_fr1(band_fr1, freq):
             14: 30000,
             18: -45000,
             20: 41000,
+            24: 101500,
             25: -80000,
             26: -45000,
             28: -55000,
@@ -496,6 +499,7 @@ def transfer_freq_tx2rx_fr1(band_fr1, freq):
             14: -30000,
             18: 45000,
             20: -41000,
+            24: -101500,
             25: 80000,
             26: 45000,
             28: 55000,
@@ -794,6 +798,18 @@ def special_uplink_config_sensitivity_fr1(band, scs, bw):
                 return 10, 6
             elif bw == 20:
                 return 10, 8
+    elif int(band) == 24:
+        if scs == 15:
+            if bw == 5:
+                return 25, 0
+            elif bw == 10:
+                return 50, 0
+        elif scs == 30:
+            if bw == 10:
+                return 24, 0
+        elif scs == 60:
+            if bw == 10:
+                return 10, 0
     elif int(band) == 25:
         if scs == 15:
             if bw == 5:

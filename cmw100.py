@@ -1025,8 +1025,8 @@ class Cmw100:
         _256Q_flag = 2 if self.mcs_fr1 == 'Q256' else 0
         self.command_cmw100_write(
             f'CONFigure:NRSub:MEASurement:MEValuation:PUSChconfig {self.mcs_fr1},A,OFF,{self.rb_size_fr1},{self.rb_start_fr1},14,0,T1,SING,{_256Q_flag},2')
-        type = 'ON' if self.type_fr1 == 'DFTS' else 'OFF'  # DFTS: ON, CP: OFF
-        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:DFTPrecoding {type}')
+        type_ = 'ON' if self.type_fr1 == 'DFTS' else 'OFF'  # DFTS: ON, CP: OFF
+        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:DFTPrecoding {type_}')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PCOMp OFF, 6000E+6')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:REPetition SING')
@@ -3398,8 +3398,8 @@ class Cmw100:
         _256Q_flag = 2 if self.mcs_fr1 == 'Q256' else 0
         self.command_cmw100_write(
             f'CONFigure:NRSub:MEASurement:MEValuation:PUSChconfig {self.mcs_fr1},A,OFF,{self.rb_size_fr1},{self.rb_start_fr1},14,0,T1,SING,{_256Q_flag},2')
-        type = 'ON' if self.type_fr1 == 'DFTS' else 'OFF'  # DFTS: ON, CP: OFF
-        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:DFTPrecoding {type}')
+        type_ = 'ON' if self.type_fr1 == 'DFTS' else 'OFF'  # DFTS: ON, CP: OFF
+        self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:DFTPrecoding {type_}')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:PCOMp OFF, 6000E+6')
         self.command_cmw100_query(f'*OPC?')
         self.command_cmw100_write(f'CONFigure:NRSub:MEASurement:MEValuation:REPetition SING')
@@ -3932,7 +3932,6 @@ class Cmw100:
                                                    self.bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         self.rx_freq_lte = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq_list[1]))
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_lte()
@@ -3962,6 +3961,7 @@ class Cmw100:
                         data_freq = {}
                         for tx_freq_lte in tx_freq_select_list:
                             self.tx_freq_lte = tx_freq_lte
+                            self.loss_tx = self.get_loss(self.tx_freq_lte)
                             self.tx_set_lte()
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_lte()
                             logger.debug(aclr_mod_results)
@@ -3993,7 +3993,6 @@ class Cmw100:
                                                    self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
         self.set_test_end_fr1()
@@ -4026,6 +4025,7 @@ class Cmw100:
                         data_freq = {}
                         for tx_freq_fr1 in tx_freq_select_list:
                             self.tx_freq_fr1 = tx_freq_fr1
+                            self.loss_tx = self.get_loss(self.tx_freq_fr1)
                             self.tx_set_fr1()
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)
@@ -4047,7 +4047,6 @@ class Cmw100:
                                                    self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
         logger.info('----------Test FCC LMH progress---------')
         self.preset_instrument()
         self.set_gprf_measurement()
@@ -4079,6 +4078,7 @@ class Cmw100:
                             for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
                                 chan_mark = f'chan{num}'
                                 self.tx_freq_fr1 = tx_freq_fr1
+                                self.loss_tx = self.get_loss(self.tx_freq_fr1)
                                 self.set_gprf_tx_freq()
                                 self.set_duty_cycle()
                                 self.tx_set_no_sync_fr1()
@@ -4104,7 +4104,6 @@ class Cmw100:
                                                    self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq_list[1]))
         logger.info('----------Test CE LMH progress---------')
         self.preset_instrument()
         self.set_gprf_measurement()
@@ -4136,6 +4135,7 @@ class Cmw100:
                             for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
                                 chan_mark = f'chan{num}'
                                 self.tx_freq_fr1 = tx_freq_fr1
+                                self.loss_tx = self.get_loss(self.tx_freq_fr1)
                                 self.set_gprf_tx_freq()
                                 self.set_duty_cycle()
                                 self.tx_set_no_sync_fr1()
@@ -4278,7 +4278,6 @@ class Cmw100:
         tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_lte(self.band_lte, rx_freq) for rx_freq in rx_freq_list]
         self.rx_freq_lte = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_lte()
         self.set_test_mode_lte()
@@ -4301,6 +4300,7 @@ class Cmw100:
                         data = {}
                         for tx_freq_lte in range(freq_range_list[0], freq_range_list[1] + step, step):
                             self.tx_freq_lte = tx_freq_lte
+                            self.loss_tx = self.get_loss(self.tx_freq_lte)
                             self.tx_set_lte()
                             aclr_mod_results = self.tx_measure_lte()
                             logger.debug(aclr_mod_results)
@@ -4333,7 +4333,6 @@ class Cmw100:
         tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq) for rx_freq in rx_freq_list]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
         self.set_test_mode_fr1()
@@ -4359,6 +4358,7 @@ class Cmw100:
                         data = {}
                         for tx_freq_fr1 in range(freq_range_list[0], freq_range_list[1] + step, step):
                             self.tx_freq_fr1 = tx_freq_fr1
+                            self.loss_tx = self.get_loss(self.tx_freq_fr1)
                             self.tx_set_fr1()
                             aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)
@@ -4571,7 +4571,6 @@ class Cmw100:
         self.rx_freq_lte = rx_freq_list[1]
         self.tx_freq_lte = tx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_lte(self.band_lte, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_lte()
         self.set_test_mode_lte()
@@ -4605,6 +4604,7 @@ class Cmw100:
                         #  initial all before tx level prgress
                         for tx_freq_select in tx_freq_select_list:
                             self.tx_freq_lte = tx_freq_select
+                            self.loss_tx = self.get_loss(self.tx_freq_lte)
                             self.tx_set_lte()
                             self.tx_power_relative_test_initial_lte()
 
@@ -4697,7 +4697,6 @@ class Cmw100:
         self.rx_freq_fr1 = rx_freq_list[1]
         self.tx_freq_fr1 = tx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
-        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_list[1]))
         self.preset_instrument()
         self.set_test_end_fr1()
         self.set_test_mode_fr1()
@@ -4733,6 +4732,7 @@ class Cmw100:
                         #  initial all before tx level prgress
                         for tx_freq_select in tx_freq_select_list:
                             self.tx_freq_fr1 = tx_freq_select
+                            self.loss_tx = self.get_loss(self.tx_freq_fr1)
                             self.tx_set_fr1()
                             self.tx_power_relative_test_initial_fr1()
 

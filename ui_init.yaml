@@ -1,21 +1,39 @@
 band:
   band_segment: A
-  band_segment_fr1: A
+  band_segment_fr1: B
   bands_endc: []
   bands_fr1:
-  - 1
-  - 2
-  - 3
-  - 66
+  - 28
+  - 71
+  - 48
+  - 77
+  - 78
   bands_gsm:
   - 850
   - 900
+  - 1800
+  - 1900
   bands_hsdpa: []
   bands_hsupa: []
   bands_lte:
-  - 5
-  - 8
+  - 1
+  - 2
+  - 3
+  - 4
+  - 7
+  - 25
+  - 66
+  - 30
+  - 39
+  - 40
+  - 38
+  - 41
+  - 42
+  - 48
   bands_wcdma:
+  - 1
+  - 2
+  - 4
   - 5
   - 8
 bw:
@@ -24,7 +42,7 @@ bw:
   bw_lte:
   - 10
 channel:
-  chan: LMH
+  chan: L
 condition:
   hthv: false
   htlv: false
@@ -42,14 +60,10 @@ instrument:
   instrument: Cmw100
 mcs:
   mcs_fr1:
-  - BPSK
   - QPSK
-  - Q16
-  - Q64
-  - Q256
   mcs_lte:
   - QPSK
-  modulaiton_gsm: GMSK
+  modulaiton_gsm: EPSK
 path:
   asw_path: 0
   rx_paths:
@@ -59,20 +73,20 @@ path:
   srs_path_enable: false
   sync_path: Main
   tx_paths:
-  - TX2
+  - TX1
 port:
-  port_tx: 3
+  port_tx: 1
   port_tx_fr1: 4
   port_tx_lte: 1
 power:
   lb_gsm_pcl: 5
   mb_gsm_pcl: 0
-  tx_level: 25
+  tx_level: 26
 rb_set:
   rb_ftm_fr1:
   - INNER_FULL
-  - OUTER_FULL
   rb_ftm_lte:
+  - PRB
   - FRB
 rx_set:
   ue_power:
@@ -86,10 +100,9 @@ tech:
 test_items:
   rx: false
   rx_sweep: true
-  tx: true
-  tx_freq_sweep: false
+  tx: false
+  tx_freq_sweep: true
   tx_level_sweep: false
 type:
   type_fr1:
   - DFTS
-  - CP
