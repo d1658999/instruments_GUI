@@ -51,7 +51,7 @@ class Cmw100:
         self.port_rx = None
         self.chan = None
         self.sync_path = wt.sync_path  # 0: Main, 1: CA#1, 2: CA#2, 3: CA#3
-        self.sync_mode = 0  # 0: Main, 1: 4RX, 2: 6RX
+        self.sync_mode = 0  # 0: MAIN , 1: 4RX, 2: 6RX
         self.sa_nsa_mode = None  # SA: 0, NSA: 1
         self.filename = None
         self.tech = None
@@ -433,9 +433,11 @@ class Cmw100:
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_gsm}KHz')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
-        self.command_cmw100_write(f'SOUR:GPRF:GEN1:STAT ON')
+        gprf_gen = self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
+        if gprf_gen == 'OFF':
+            self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
+            self.command_cmw100_query('*OPC?')
 
     def sig_gen_wcdma(self):
         logger.info('----------Sig Gen----------')
@@ -455,9 +457,11 @@ class Cmw100:
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_wcdma}KHz')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
-        self.command_cmw100_write(f'SOUR:GPRF:GEN1:STAT ON')
+        gprf_gen = self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
+        if gprf_gen == 'OFF':
+            self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
+            self.command_cmw100_query('*OPC?')
 
     def sig_gen_lte(self):
         logger.info('----------Sig Gen----------')
@@ -484,9 +488,11 @@ class Cmw100:
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_lte}KHz')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
-        self.command_cmw100_write(f'SOUR:GPRF:GEN1:STAT ON')
+        gprf_gen = self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
+        if gprf_gen == 'OFF':
+            self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
+            self.command_cmw100_query('*OPC?')
 
     def sig_gen_fr1(self):
         """
@@ -522,9 +528,12 @@ class Cmw100:
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:FREQ {self.rx_freq_fr1}KHz')
         self.command_cmw100_write(f'SOUR:GPRF:GEN1:RFS:LEV {self.rx_level}')
-        self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
+        gprf_gen = self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
         self.command_cmw100_query('*OPC?')
-        self.command_cmw100_query('SOUR:GPRF:GEN1:STAT?')
+        if gprf_gen == 'OFF':
+            self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
+            self.command_cmw100_query('*OPC?')
+
 
     def sync_gsm(self):
         logger.info('---------Sync----------')
@@ -1780,13 +1789,13 @@ class Cmw100:
                 logger.info('----------Test LMH progress---------')
                 self.preset_instrument()
                 self.set_test_end_lte()
-                self.antenna_switch_v2()
                 self.set_test_mode_lte()
                 # self.command_cmw100_query('*OPC?')
                 self.sig_gen_lte()
                 self.sync_lte()
                 self.rb_size_lte, self.rb_start_lte = cm_pmt_ftm.special_uplink_config_sensitivity_lte(self.band_lte,
                                                                                                        self.bw_lte)  # for RB set
+                self.antenna_switch_v2()
                 self.tx_set_lte()
                 aclr_mod_results = self.tx_measure_lte()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
                 self.rx_path_setting_lte()
@@ -1823,7 +1832,6 @@ class Cmw100:
                 logger.info('----------Test LMH progress---------')
                 self.preset_instrument()
                 self.set_test_end_fr1()
-                self.antenna_switch_v2()
                 self.set_test_mode_fr1()
                 # self.command_cmw100_query('*OPC?')
                 self.sig_gen_fr1()
@@ -1831,6 +1839,7 @@ class Cmw100:
                 self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1,
                                                                                                        self.scs,
                                                                                                        self.bw_fr1)  # for RB set(including special tx setting)
+                self.antenna_switch_v2()
                 self.tx_set_fr1()
                 aclr_mod_results = self.tx_measure_fr1()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
                 self.rx_path_setting_fr1()
@@ -1844,7 +1853,7 @@ class Cmw100:
             self.filename = self.rx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1, self.tx_level,
                                                                      mode=1)  # mode=1: LMH mode
 
-    def search_sensitivity_lmh_fast_progress_lte(self):
+    def search_sensitivity_lmh_fast_progress_lte(self):  # this is not yet used
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte,
                                                    self.bw_lte)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         rx_freq_select_list = []
