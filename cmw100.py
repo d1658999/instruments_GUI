@@ -699,6 +699,8 @@ class Cmw100:
         2: PRX, 1: DRX, 4: RX2, 8:RX3, 3: PRX+DRX, 12: RX2+RX3, 15: ALL PATH
         :return:
         """
+        if self.rx_path_lte is None:
+            self.rx_path_lte = 15
         logger.info('----------Rx path setting----------')
         logger.info(f'----------Now is {self.rx_path_lte_dict[self.rx_path_lte]}---------')
         self.command(f'AT+LRXMODESET={self.rx_path_lte}')
@@ -709,6 +711,8 @@ class Cmw100:
         2: PRX, 1: DRX, 4: RX2, 8:RX3, 3: PRX+DRX, 12: RX2+RX3, 15: ALL PATH
         :return:
         """
+        if self.rx_path_fr1 is None:
+            self.rx_path_fr1 = 15
         logger.info('----------Rx path setting----------')
         logger.info(f'----------Now is {self.rx_path_fr1_dict[self.rx_path_fr1]}---------')
         self.command(f'AT+NRXMODESET={self.rx_path_fr1}')
@@ -1793,12 +1797,12 @@ class Cmw100:
                 # self.command_cmw100_query('*OPC?')
                 self.sig_gen_lte()
                 self.sync_lte()
+                self.rx_path_setting_lte()
                 self.rb_size_lte, self.rb_start_lte = cm_pmt_ftm.special_uplink_config_sensitivity_lte(self.band_lte,
                                                                                                        self.bw_lte)  # for RB set
                 self.antenna_switch_v2()
                 self.tx_set_lte()
                 aclr_mod_results = self.tx_measure_lte()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
-                self.rx_path_setting_lte()
                 # self.command_cmw100_query('*OPC?')
                 self.search_sensitivity_lte()
                 self.query_rx_measure_lte()
@@ -1836,13 +1840,13 @@ class Cmw100:
                 # self.command_cmw100_query('*OPC?')
                 self.sig_gen_fr1()
                 self.sync_fr1()
+                self.rx_path_setting_fr1()
                 self.rb_size_fr1, self.rb_start_fr1 = cm_pmt_ftm.special_uplink_config_sensitivity_fr1(self.band_fr1,
                                                                                                        self.scs,
                                                                                                        self.bw_fr1)  # for RB set(including special tx setting)
                 self.antenna_switch_v2()
                 self.tx_set_fr1()
                 aclr_mod_results = self.tx_measure_fr1()  # aclr_results + mod_results  # U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET
-                self.rx_path_setting_fr1()
                 # self.command_cmw100_query('*OPC?')
                 self.search_sensitivity_fr1()
                 self.query_rx_measure_fr1()
@@ -1998,6 +2002,7 @@ class Cmw100:
                             ws['Q1'] = 'AGC_RX1'
                             ws['R1'] = 'AGC_RX2'
                             ws['S1'] = 'AGC_RX3'
+                            ws['T1'] = 'TX_Path'
 
                         wb.create_sheet(f'Desens_{self.mcs_lte}')
                         ws = wb[f'Desens_{self.mcs_lte}']
@@ -2030,6 +2035,7 @@ class Cmw100:
                             ws['Q1'] = 'AGC_RX1'
                             ws['R1'] = 'AGC_RX2'
                             ws['S1'] = 'AGC_RX3'
+                            ws['T1'] = 'TX_Path'
 
                         wb.create_sheet(f'Desens_{self.mcs_fr1}')
                         ws = wb[f'Desens_{self.mcs_fr1}']
@@ -2037,6 +2043,7 @@ class Cmw100:
                         ws['B1'] = 'Rx_Path'
                         ws['C1'] = 'Chan'
                         ws['D1'] = 'Diff'
+                        ws['E1'] = 'TX_Path'
 
                     elif self.tech == 'WCDMA':
                         wb.create_sheet(f'Raw_Data')
@@ -2130,6 +2137,7 @@ class Cmw100:
                             ws.cell(row, 17).value = measured_data[4][1]
                             ws.cell(row, 18).value = measured_data[4][2]
                             ws.cell(row, 19).value = measured_data[4][3]
+                            ws.cell(row, 20).value = self.tx_path
                             row += 1
                 elif self.tech == 'FR1':
                     max_row = ws.max_row
@@ -2181,6 +2189,7 @@ class Cmw100:
                             ws.cell(row, 17).value = measured_data[4][1]
                             ws.cell(row, 18).value = measured_data[4][2]
                             ws.cell(row, 19).value = measured_data[4][3]
+                            ws.cell(row, 20).value = self.tx_path
                             row += 1
                 elif self.tech == 'WCDMA':
                     max_row = ws.max_row
@@ -2418,6 +2427,8 @@ class Cmw100:
             ws_desens.cell(row, 2).value = ws_txmax.cell(row, 2).value
             ws_desens.cell(row, 3).value = ws_txmax.cell(row, 3).value
             ws_desens.cell(row, 4).value = ws_txmax.cell(row, 7).value - ws_txmin.cell(row, 7).value
+            ws_desens.cell(row, 5).value = ws_txmax.cell(row, 20).value
+
 
         wb.save(self.filename)
         wb.close()
