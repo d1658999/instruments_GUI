@@ -1,55 +1,34 @@
 band:
   band_segment: A
-  band_segment_fr1: B
+  band_segment_fr1: A
   bands_endc: []
   bands_fr1:
-  - 28
-  - 71
-  - 48
-  - 77
-  - 78
-  bands_gsm:
-  - 850
-  - 900
-  - 1800
-  - 1900
+  - 1
+  - 2
+  - 3
+  - 7
+  - 25
+  - 66
+  bands_gsm: []
   bands_hsdpa: []
   bands_hsupa: []
   bands_lte:
   - 1
-  - 2
-  - 3
-  - 4
-  - 7
-  - 25
-  - 66
-  - 30
-  - 39
-  - 40
-  - 38
-  - 41
-  - 42
-  - 48
-  bands_wcdma:
-  - 1
-  - 2
-  - 4
-  - 5
-  - 8
+  bands_wcdma: []
 bw:
   bw_fr1:
   - 10
   bw_lte:
   - 10
 channel:
-  chan: L
+  chan: LMH
 condition:
   hthv: false
   htlv: false
-  hv: true
+  hv: false
   lthv: false
   ltlv: false
-  lv: true
+  lv: false
   mv: true
   ntnv: false
 external_inst:
@@ -63,17 +42,17 @@ mcs:
   - QPSK
   mcs_lte:
   - QPSK
-  modulaiton_gsm: EPSK
+  modulaiton_gsm: GMSK
 path:
   asw_path: 0
   rx_paths:
-  - 3
+  - 4
   sa_nsa: 0
   srs_path: 0
   srs_path_enable: false
   sync_path: Main
   tx_paths:
-  - TX1
+  - TX2
 port:
   port_tx: 1
   port_tx_fr1: 4
@@ -87,21 +66,21 @@ rb_set:
   - INNER_FULL
   rb_ftm_lte:
   - PRB
-  - FRB
 rx_set:
   ue_power:
   - 1
+  - 0
 scripts:
   scripts:
   - GENERAL
 tech:
   tech:
-  - FR1
+  - LTE
 test_items:
-  rx: false
-  rx_sweep: true
+  rx: true
+  rx_sweep: false
   tx: false
-  tx_freq_sweep: true
+  tx_freq_sweep: false
   tx_level_sweep: false
 type:
   type_fr1:
