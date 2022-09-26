@@ -32,7 +32,7 @@ def bandwidths_selected_fr1(band):
         'N76': [5, 10, ],
         'N77': [10, 15, 20, 25, 40, 50, 60, 70, 80, 90, 100, ],
         'N78': [10, 15, 20, 25, 40, 50, 60, 70, 80, 90, 100, ],
-        'N79': [40, 50, 60, 80, 90, 100, ],
+        'N79': [10, 20, 30, 40, 50, 60, 80, 90, 100, ],
     }
 
     return bandwidths[f'N{band}']
@@ -1457,7 +1457,11 @@ def special_uplink_config_sensitivity_fr1(band, scs, bw):
             elif bw == 50:
                 return 270, 0
         elif scs == 30:
-            if bw == 40:
+            if bw == 10:
+                return 24, 0
+            elif bw == 20:
+                return 50, 0
+            elif bw == 40:
                 return 100, 0
             elif bw == 50:
                 return 128, 0

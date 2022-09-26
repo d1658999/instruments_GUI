@@ -4011,18 +4011,23 @@ class Cmw100:
         """
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1,
                                                    self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
-        self.rx_freq_fr1 = rx_freq_list[1]
-        self.loss_rx = self.get_loss(rx_freq_list[1])
+        # self.rx_freq_fr1 = rx_freq_list[1]
+        # self.loss_rx = self.get_loss(rx_freq_list[1])
         logger.info('----------Test LMH progress---------')
         self.preset_instrument()
-        self.set_test_end_fr1()
-        self.set_test_mode_fr1()
-        if self.srs_path_enable:
-            self.srs_switch()
-        else:
-            self.antenna_switch_v2()
-        self.sig_gen_fr1()
-        self.sync_fr1()
+        # self.set_test_end_fr1()
+        # self.set_test_mode_fr1()
+        # if self.srs_path_enable:
+        #     self.srs_switch()
+        # else:
+        #     self.antenna_switch_v2()
+        # self.sig_gen_fr1()
+        # self.sync_fr1()
+
+        scs = 1 if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 77, 78,  # temp
+                                     79] else 0  # for now FDD is forced to 15KHz and TDD is to be 30KHz  # temp
+        scs = 15 * (2 ** scs)  # temp
+        self.scs = scs  # temp
 
         tx_freq_select_list = []
         for chan in self.chan:
@@ -4045,7 +4050,17 @@ class Cmw100:
                         data_freq = {}
                         for tx_freq_fr1 in tx_freq_select_list:
                             self.tx_freq_fr1 = tx_freq_fr1
+                            self.rx_freq_fr1 = cm_pmt_ftm.transfer_freq_tx2rx_fr1(self.band_fr1, tx_freq_fr1) # temp
                             self.loss_tx = self.get_loss(self.tx_freq_fr1)
+                            self.loss_rx = self.get_loss(rx_freq_list[1])  # temp
+                            self.set_test_end_fr1()  # temp
+                            self.set_test_mode_fr1()  # temp
+                            if self.srs_path_enable:  # temp
+                                self.srs_switch()  # temp
+                            else:  # temp
+                                self.antenna_switch_v2()  # temp
+                            self.sig_gen_fr1()  # temp
+                            self.sync_fr1()  # temp
                             self.tx_set_fr1()
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)

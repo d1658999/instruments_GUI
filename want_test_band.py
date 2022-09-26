@@ -25,7 +25,7 @@ tx_pcl_lb = 5  # GMSK_MB: 0 ~ 15, EPSK_MB 2~15:
 tx_pcl_mb = 0  # GMSK_MB: 0 ~ 15, EPSK_MB 2~15:
 sa_nsa = 0
 duty_cycle = 100  # 100 for NR TDD PC3, 50: for NR TDD PC2
-init_rx_sync_level = -50
+init_rx_sync_level = -70
 
 port_tx = 1
 port_tx_lte = 1  # 1 ~ 8 default is  1
@@ -56,7 +56,7 @@ rb_ftm_lte = ['FRB']  # 'PRB' | 'FRB'
 rb_ftm_fr1 = ['OUTER_FULL']  #  'INNER_FULL' | 'OUTER_FULL' | 'INNER_1RB_LEFT' | 'INNER_1RB_RIGHT' | 'EDGE_1RB_LEFT' | 'EDGE_1RB_RIGHT' | 'EDGE_FULL_LEFT' | 'EDGE_FULL_RIGHT'
 scs = [1]  # 0: 15KHz | 1: 30KHz | 2: 60KHz
 
-tx_level_range_list = [-20, 24]  # tx_level_1, tx_level_2
+tx_level_range_list = [-20, 26]  # tx_level_1, tx_level_2
 tx_pcl_range_list_lb = [19, 5]  # tx_pcl_1, tx_pcl_2; GMSK_LB: 5 ~ 19, EPSK_LB: 8~19
 tx_pcl_range_list_mb = [15, 0]  # tx_pcl_1, tx_pcl_2; GMSK_MB: 0 ~ 15, EPSK_MB: 2~15
 
