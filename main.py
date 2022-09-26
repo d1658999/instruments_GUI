@@ -2287,7 +2287,7 @@ class MainApp:
         self.wanted_test.setdefault('rx_sweep', False)
         self.wanted_test.setdefault('tx_level_sweep', False)
         self.wanted_test.setdefault('tx_freq_sweep', False)
-        self.wanted_test.setdefault('rx_1rb_sweep', False)
+        self.wanted_test.setdefault('tx_1rb_sweep', False)
 
         if self.tx.get():
             logger.debug(self.tx.get())
