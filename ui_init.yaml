@@ -6,14 +6,20 @@ band:
   - 1
   - 2
   - 3
-  - 7
-  - 25
   - 66
+  - 38
+  - 41
   bands_gsm: []
   bands_hsdpa: []
   bands_hsupa: []
   bands_lte:
   - 1
+  - 2
+  - 3
+  - 4
+  - 66
+  - 38
+  - 41
   bands_wcdma: []
 bw:
   bw_fr1:
@@ -21,16 +27,16 @@ bw:
   bw_lte:
   - 10
 channel:
-  chan: LMH
+  chan: M
 condition:
   hthv: false
   htlv: false
   hv: false
-  lthv: false
+  lthv: true
   ltlv: false
   lv: false
   mv: true
-  ntnv: false
+  ntnv: true
 external_inst:
   odpm: false
   psu: false
@@ -45,8 +51,7 @@ mcs:
   modulaiton_gsm: GMSK
 path:
   asw_path: 0
-  rx_paths:
-  - 4
+  rx_paths: []
   sa_nsa: 0
   srs_path: 0
   srs_path_enable: false
@@ -77,11 +82,12 @@ tech:
   tech:
   - LTE
 test_items:
-  rx: true
+  rx: false
   rx_sweep: false
-  tx: false
+  tx: true
   tx_freq_sweep: false
   tx_level_sweep: false
+  tx_1rb_sweep: false
 type:
   type_fr1:
   - DFTS

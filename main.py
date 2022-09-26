@@ -19,7 +19,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main_v2_4.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2_5.ui"
 
 
 class MainApp:
@@ -81,6 +81,7 @@ class MainApp:
         self.rx = None
         self.tx_level_sweep = None
         self.tx_freq_sweep = None
+        self.tx_1rb_sweep = None
         self.qpsk_lte = None
         self.q16_lte = None
         self.q64_lte = None
@@ -284,6 +285,7 @@ class MainApp:
                 "rx",
                 "tx_level_sweep",
                 "tx_freq_sweep",
+                "tx_1rb_sweep",
                 "qpsk_lte",
                 "q16_lte",
                 "q64_lte",
@@ -523,6 +525,7 @@ class MainApp:
         self.rx_sweep.set(ui_init['test_items']['rx_sweep'])
         self.tx_level_sweep.set(ui_init['test_items']['tx_level_sweep'])
         self.tx_freq_sweep.set(ui_init['test_items']['tx_freq_sweep'])
+        self.tx_1rb_sweep.set(ui_init['test_items']['tx_1rb_sweep'])
         self.port_tx.set(ui_init['port']['port_tx'])
         self.port_tx_lte.set(ui_init['port']['port_tx_lte'])
         self.port_tx_fr1.set(ui_init['port']['port_tx_fr1'])
@@ -940,6 +943,7 @@ class MainApp:
         self.rx_sweep.set(ui_init.rx_sweep)
         self.tx_level_sweep.set(ui_init.tx_level_sweep)
         self.tx_freq_sweep.set(ui_init.tx_freq_sweep)
+        self.tx_1rb_sweep.set(ui_init.tx_1rb_sweep)
         self.port_tx.set(ui_init.port_tx)
         self.port_tx_lte.set(ui_init.port_tx_lte)
         self.port_tx_fr1.set(ui_init.port_tx_fr1)
@@ -1391,7 +1395,7 @@ class MainApp:
         band_segment = self.band_segment.get()
         band_segment_fr1 = self.band_segment_fr1.get()
         chan = self.wanted_chan()
-        tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
+        tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep, tx_1rb_sweep = self.wanted_tx_rx_sweep()
         tpchb_enable = self.tempcham_enable.get()
         psu_enable = self.psu_enable.get()
         odpm_enable = self.odpm_enable.get()
@@ -1428,6 +1432,7 @@ class MainApp:
                 'rx_sweep': rx_sweep,
                 'tx_level_sweep': tx_level_sweep,
                 'tx_freq_sweep': tx_freq_sweep,
+                'tx_1rb_sweep': tx_1rb_sweep,
             },
             'band': {
                 'bands_fr1': bands_fr1,
@@ -1529,7 +1534,7 @@ class MainApp:
         band_segment = self.band_segment.get()
         band_segment_fr1 = self.band_segment_fr1.get()
         chan = self.wanted_chan()
-        tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep = self.wanted_tx_rx_sweep()
+        tx, rx, rx_sweep, tx_level_sweep, tx_freq_sweep, tx_1rb_sweep = self.wanted_tx_rx_sweep()
 
         new_data = []
         with open('ui_init.py', 'r') as f:
@@ -1749,6 +1754,12 @@ class MainApp:
                     temp_list = line.split('=')
                     temp_list[1] = ' ' + str(tx_freq_sweep) + '\n'
                     logger.debug('replace tx freq sweep setting')
+                    line = '='.join(temp_list)
+
+                elif 'tx_1rb_sweep' in line:
+                    temp_list = line.split('=')
+                    temp_list[1] = ' ' + str(tx_1rb_sweep) + '\n'
+                    logger.debug('replace tx 1rb sweep setting')
                     line = '='.join(temp_list)
 
                 elif 'rx ' in line:
@@ -2276,6 +2287,7 @@ class MainApp:
         self.wanted_test.setdefault('rx_sweep', False)
         self.wanted_test.setdefault('tx_level_sweep', False)
         self.wanted_test.setdefault('tx_freq_sweep', False)
+        self.wanted_test.setdefault('rx_1rb_sweep', False)
 
         if self.tx.get():
             logger.debug(self.tx.get())
@@ -2289,6 +2301,10 @@ class MainApp:
             logger.debug(self.tx_freq_sweep.get())
             self.wanted_test['tx_freq_sweep'] = self.tx_freq_sweep.get()
 
+        if self.tx_1rb_sweep.get():
+            logger.debug(self.tx_1rb_sweep.get())
+            self.wanted_test['tx_1rb_sweep'] = self.tx_1rb_sweep.get()
+
         if self.rx.get():
             logger.debug(self.rx.get())
             self.wanted_test['rx'] = self.rx.get()
@@ -2301,7 +2317,7 @@ class MainApp:
             logger.debug('Nothing to select for test items')
 
         logger.info(self.wanted_test)
-        return self.tx.get(), self.rx.get(), self.rx_sweep.get(), self.tx_level_sweep.get(), self.tx_freq_sweep.get()
+        return self.tx.get(), self.rx.get(), self.rx_sweep.get(), self.tx_level_sweep.get(), self.tx_freq_sweep.get(), self.tx_1rb_sweep.get()
 
     def wanted_ue_pwr(self):
         self.ue_power = []
@@ -3069,6 +3085,9 @@ class MainApp:
 
             if self.wanted_test['tx_freq_sweep']:
                 inst.run_tx_freq_sweep()
+
+            if self.wanted_test['tx_1rb_sweep']:
+                inst.run_tx_1rb_sweep()
 
         elif inst.__class__.__name__ == 'Anritsu8820':
             if self.wanted_test['tx']:
