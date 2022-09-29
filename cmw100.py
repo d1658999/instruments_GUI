@@ -4482,7 +4482,7 @@ class Cmw100:
                             self.rb_alloc_fr1_dict[3]]  # capture EDGE_1RB_RIGHT
                         self.rb_state = '1rb_sweep'
                         data = {}
-                        for rb_start in range(rb_sweep_fr1):
+                        for rb_start in range(rb_sweep_fr1+1):
                             self.rb_start_fr1 = rb_start
                             self.tx_freq_fr1 = tx_freq_fr1
                             self.loss_tx = self.get_loss(self.tx_freq_fr1)
