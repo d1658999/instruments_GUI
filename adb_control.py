@@ -39,7 +39,7 @@ def get_odpm_current():
     :return:
     """
     print('----------Get Current from ODPM----------')
-    current = sp.run(r'adb shell pmic s2mpg12 getcurrent 40 | grep mA', capture_output=True).stdout.decode().strip().split('=')[1]
+    current = sp.run(r'adb shell pmic s2mpg14 getcurrent 36 | grep mA', capture_output=True).stdout.decode().strip().split('=')[1]
     print(f'Get the current: {current} mA')
     return round(eval(current), 2)
 
