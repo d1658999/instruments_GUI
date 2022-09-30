@@ -83,6 +83,7 @@ class Cmw100:
         self.ul_slot = None
         self.ul_symbol = None
         self.mod_gsm = None
+        self.tx_1rb_filename_judge = None
         self.tx_path_dict = {
             'TX1': 0,
             'TX2': 1,
@@ -482,7 +483,7 @@ class Cmw100:
                 f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_Channel_CC0_RxAnt0_RF_Verification_10M_SIMO_01.wv'")
         else:
             # self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_10MHz.wv'")
-            bw_lte = '1p4' if self.bw_lte == 1.4 else '03' if self.bw_lte == 3 else self.bw_lte
+            bw_lte = 10 if self.bw_lte == 1.4 else '03' if self.bw_lte == 3 else self.bw_lte
             self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_{bw_lte}MHz.wv'")
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
@@ -2919,7 +2920,10 @@ class Cmw100:
                 if tx_freq_level >= 100:
                     filename = f'Tx_level_sweep_{bw}MHZ_{self.tech}.xlsx'
                 elif tx_freq_level <= 100:
-                    filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
+                    if self.tx_1rb_filename_judge:
+                        filename = f'Tx_1RB_sweep_{bw}MHZ_{self.tech}.xlsx'
+                    else:
+                        filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
 
                 if pathlib.Path(filename).exists() is False:
                     logger.info('----------file does not exist----------')
@@ -3781,12 +3785,13 @@ class Cmw100:
             except FileNotFoundError:
                 logger.info(f'there is not file to plot BW{bw} ')
 
-    def tx_1rb_sweep(self):
+    def tx_1rb_sweep_pipeline_fr1(self):
         self.rx_level = wt.init_rx_sync_level
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
-        # self.chan = wt.channel
+        self.chan = wt.channel
         self.sa_nsa_mode = wt.sa_nsa
+        self.tx_1rb_filename_judge = True
         items = [
             (tech, tx_path, bw, band, type_)
             for tech in wt.tech
@@ -3809,12 +3814,13 @@ class Cmw100:
                     logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
         for bw in wt.fr1_bandwidths:
             try:
-                self.filename = f'Freq_sweep_{bw}MHZ_{self.tech}.xlsx'
+                self.filename = f'Tx_1RB_sweep_{bw}MHZ_{self.tech}.xlsx'
                 self.txp_aclr_evm_plot(self.filename, mode=0)
             except TypeError:
                 logger.info(f'there is no data to plot because the band does not have this BW ')
             except FileNotFoundError:
                 logger.info(f'there is not file to plot BW{bw} ')
+        self.tx_1rb_filename_judge = False
 
 
     def tx_measure_single(self):  # this is incompleted
@@ -4443,10 +4449,10 @@ class Cmw100:
         else:
             pass
 
-    def tx_1rb_sweep_progress_fr1(self,plot=True):
+    def tx_1rb_sweep_progress_fr1(self, plot=True):
         logger.info('----------1RB Sweep progress ---------')
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1, self.bw_fr1)
-        tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq) for rx_freq in rx_freq_list]
+        # tx_freq_list = [cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, rx_freq) for rx_freq in rx_freq_list]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
         self.preset_instrument()
@@ -4479,19 +4485,18 @@ class Cmw100:
                     for tx_freq_select in tx_freq_select_list:
                         self.tx_freq_fr1 = tx_freq_select
                         self.rb_size_fr1, rb_sweep_fr1 = scripts.GENERAL_FR1[self.bw_fr1][self.scs][self.type_fr1][
-                            self.rb_alloc_fr1_dict[3]]  # capture EDGE_1RB_RIGHT
+                            self.rb_alloc_fr1_dict['EDGE_1RB_RIGHT']]  # capture EDGE_1RB_RIGHT
                         self.rb_state = '1rb_sweep'
                         data = {}
                         for rb_start in range(rb_sweep_fr1+1):
                             self.rb_start_fr1 = rb_start
-                            self.tx_freq_fr1 = tx_freq_fr1
                             self.loss_tx = self.get_loss(self.tx_freq_fr1)
                             self.tx_set_fr1()
                             aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)
                             data[self.tx_freq_fr1] = aclr_mod_results
-                        logger.debug(data)
-                        self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
+                            logger.debug(data)
+                            self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
                                                                                  self.tx_level, mode=0)
         self.set_test_end_fr1()
         if plot == True:
@@ -6361,6 +6366,15 @@ class Cmw100:
                 self.tx_freq_sweep_pipline_wcdma()
             elif tech == 'GSM':
                 self.tx_freq_sweep_pipline_gsm()
+
+    def run_tx_1rb_sweep(self):
+        for tech in wt.tech:
+            if tech == 'FR1':
+                self.tx_1rb_sweep_pipeline_fr1()
+            elif tech == 'LTE':
+                pass
+            else:
+                pass
 
     def command_cmw100_query(self, tcpip_command):
         tcpip_response = self.cmw100.query(tcpip_command).strip()
