@@ -535,7 +535,6 @@ class Cmw100:
             self.command_cmw100_write('SOUR:GPRF:GEN1:STAT ON')
             self.command_cmw100_query('*OPC?')
 
-
     def sync_gsm(self):
         logger.info('---------Sync----------')
         self.command(f'AT+TESTRESET', delay=0.2)
@@ -1454,7 +1453,6 @@ class Cmw100:
             except FileNotFoundError as err:
                 logger.debug(err)
                 logger.info(f"There is not file to plot BW{bw}")
-
 
     def search_sensitivity_pipline_fr1(self):
         self.port_tx = wt.port_tx
@@ -2429,7 +2427,6 @@ class Cmw100:
             ws_desens.cell(row, 3).value = ws_txmax.cell(row, 3).value
             ws_desens.cell(row, 4).value = ws_txmax.cell(row, 7).value - ws_txmin.cell(row, 7).value
             ws_desens.cell(row, 5).value = ws_txmax.cell(row, 20).value
-
 
         wb.save(self.filename)
         wb.close()
@@ -3504,7 +3501,6 @@ class Cmw100:
             except FileNotFoundError:
                 logger.info(f'there is not file to plot BW{bw} ')
 
-
     def tx_power_aclr_evm_lmh_pipeline_fr1(self):
         self.tx_level = wt.tx_level
         self.port_tx = wt.port_tx
@@ -3538,7 +3534,6 @@ class Cmw100:
                 logger.info(f'there is no data to plot because the band does not have this BW ')
             except FileNotFoundError:
                 logger.info(f'there is not file to plot BW{bw} ')
-
 
     def tx_power_pipline_fcc_fr1(self):  # band > bw > mcs > rb
         self.tx_level = wt.tx_level
@@ -3589,7 +3584,6 @@ class Cmw100:
                     self.tx_power_ce_fr1()
                 else:
                     logger.info(f'B{self.band_fr1} does not have BW {self.bw_fr1}MHZ')
-
 
     def tx_freq_sweep_pipline_gsm(self):
         self.rx_level = wt.init_rx_sync_level
@@ -3822,7 +3816,6 @@ class Cmw100:
                 logger.info(f'there is not file to plot BW{bw} ')
         self.tx_1rb_filename_judge = False
 
-
     def tx_measure_single(self):  # this is incompleted
         if 'LTE' in wt.tech:
             self.port_tx = wt.port_tx
@@ -3961,7 +3954,7 @@ class Cmw100:
                     self.sync_wcdma()
                     self.tx_chan_wcdma = tx_rx_chan_wcdma[0]
                     self.tx_set_wcdma()
-                    # self.antenna_switch_v2()
+                    self.antenna_switch_v2()
                     aclr_mod_current_results = aclr_mod_results = self.tx_measure_wcdma()
                     logger.debug(aclr_mod_results)
                     aclr_mod_current_results.append(self.measure_current())
@@ -4324,6 +4317,7 @@ class Cmw100:
                     self.sync_wcdma()
                     # self.antenna_switch_v2()
                     self.tx_set_wcdma()
+                    self.antenna_switch_v2()
                     aclr_mod_results = self.tx_measure_wcdma()
                     logger.debug(aclr_mod_results)
                     data[self.tx_chan_wcdma] = aclr_mod_results
@@ -4488,7 +4482,7 @@ class Cmw100:
                             self.rb_alloc_fr1_dict['EDGE_1RB_RIGHT']]  # capture EDGE_1RB_RIGHT
                         self.rb_state = '1rb_sweep'
                         data = {}
-                        for rb_start in range(rb_sweep_fr1+1):
+                        for rb_start in range(rb_sweep_fr1 + 1):
                             self.rb_start_fr1 = rb_start
                             self.loss_tx = self.get_loss(self.tx_freq_fr1)
                             self.tx_set_fr1()
@@ -4497,7 +4491,7 @@ class Cmw100:
                             data[self.tx_freq_fr1] = aclr_mod_results
                             logger.debug(data)
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
-                                                                                 self.tx_level, mode=0)
+                                                                                     self.tx_level, mode=0)
         self.set_test_end_fr1()
         if plot == True:
             self.txp_aclr_evm_plot(self.filename, mode=0)
@@ -4638,7 +4632,7 @@ class Cmw100:
                         self.tx_set_wcdma()
                         # self.command(f'AT+HTXPERSTART={self.tx_chan_wcdma}')
                         # self.command(f'AT+HSETMAXPOWER={self.tx_level * 10}')
-                        # self.antenna_switch_v2()
+                        self.antenna_switch_v2()
                         spectrum_mod_current_results = spectrum_mod_results = self.tx_measure_wcdma()
                         # self.command_cmw100_write(f'CONF:WCDMA:MEAS:RFS:UMAR 10.00')
                         # self.command_cmw100_write(f'CONF:WCDM:MEAS:RFS:ENP {self.tx_level + 5}')
