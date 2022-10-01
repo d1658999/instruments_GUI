@@ -223,8 +223,9 @@ class Cmw100:
         try:
             self.ser.open()
             logger.info('open modem comport')
-        except:
+        except Exception as err:
             logger.info('check the comport is locked or drop comport')
+            logger.debug(err)
 
     def com_close(self):
         self.ser.close()
@@ -237,7 +238,8 @@ class Cmw100:
 
     def get_temperature(self):
         """
-        for P22, AT+GOOGTHERMISTOR=1,1 for MHB LPAMid/ MHB Rx1 LFEM, AT+GOOGTHERMISTOR=0,1 for LB LPAMid, MHB ENDC LPAMid, UHB(n77/n79 LPAF)
+        for P22, AT+GOOGTHERMISTOR=1,1 for MHB LPAMid/ MHB Rx1 LFEM, AT+GOOGTHERMISTOR=0,1
+        for LB LPAMid, MHB ENDC LPAMid, UHB(n77/n79 LPAF)
         :return:
         """
         res0 = self.command('AT+GOOGTHERMISTOR=0,1')
@@ -250,7 +252,8 @@ class Cmw100:
                     try:
                         temp = eval(r.decode().strip().split(':')[1]) / 1000
                         therm_list.append(temp)
-                    except:
+                    except Exception as err:
+                        logger.debug(err)
                         therm_list.appned(None)
         logger.info(f'thermistor0 get temp: {therm_list[0]}')
         logger.info(f'thermistor1 get temp: {therm_list[1]}')
@@ -585,14 +588,14 @@ class Cmw100:
 
     def tx_set_lte(self):
         """
-        :param tx_path: TX1: 0 (main path)| TX2: 1 (sub path)
-        :param bw_lte: 1.4: 0 | 3: 1 | 5: 2 | 10: 3 | 15: 4 | 20: 5
-        :param tx_freq_lte:
-        :param rb_num:
-        :param rb_start:
-        :param mcs: "QPSK": 0 | "Q16": 11 | "Q64": 25 | "Q256": 27
-        :param pwr:
-        :return:
+        tx_path: TX1: 0 (main path)| TX2: 1 (sub path)
+        bw_lte: 1.4: 0 | 3: 1 | 5: 2 | 10: 3 | 15: 4 | 20: 5
+        tx_freq_lte:
+        rb_num:
+        rb_start:
+        mcs: "QPSK": 0 | "Q16": 11 | "Q64": 25 | "Q256": 27
+        pwr:
+
         """
         logger.info('---------Tx Set----------')
         self.command(
@@ -653,8 +656,8 @@ class Cmw100:
         P0: RAT (0=GSM, 1=WCDMA, 2=LTE, 4=CDMA, 6=NR)
         P1: ANT path (0=default, 1=switched, 4=dynamic mode),
         P1 (P0=NR): ANT Path (0=Tx-Ant1, 1=Tx-Ant2, 2=Tx-Ant3, 3=Tx-Ant4, 4=dynamic switch mode)
-        :param tech:
-        :param ant_path:
+        tech:
+        ant_path:
         :return:
         """
         self.asw_tech = self.tech
@@ -787,7 +790,7 @@ class Cmw100:
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MOEX ON')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:TSEQ TSC{self.tsc}')
-        self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MVI {(",").join([self.mod_gsm] * 8)}')
+        self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MVI {",".join([self.mod_gsm] * 8)}')
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:MSL 0,1,0')
         self.command_cmw100_query('*OPC?')
@@ -810,7 +813,7 @@ class Cmw100:
             time.sleep(0.2)
             f_state = self.command_cmw100_query('FETC:GSM:MEAS:MEV:STAT?')
             self.command_cmw100_query('*OPC?')
-        pvt = self.command_cmw100_query(f'FETC:GSM:MEAS:MEV:PVT:AVER:SVEC?')  # PVT
+        pvt = self.command_cmw100_query(f'FETC:GSM:MEAS:MEV:PVT:AVER:SVEC?')  # PVT, but it is of no use
         orfs_mod = self.command_cmw100_query(f'FETC:GSM:MEAS:MEV:SMOD:FREQ?')  # MOD_ORFS
         orfs_mod = [round(eval(orfs_mod), 2) for orfs_mod in orfs_mod.split(',')[13:29]]
         orfs_mod = [
@@ -1895,7 +1898,8 @@ class Cmw100:
             self.filename = self.rx_power_relative_test_export_excel(data_freq, self.band_lte, self.bw_lte, rx_level,
                                                                      mode=1)  # mode=1: LMH mode
 
-    def endc_relative_power_senstivity_export_excel(self, data):
+    @staticmethod
+    def endc_relative_power_senstivity_export_excel(data):
         """
         :param data:  data = [int(self.band_lte), int(self.band_fr1), self.power_monitor_endc_lte, self.power_endc_fr1, self.rx_level, self.bw_lte, self.bw_fr1, self.tx_freq_lte, self.tx_freq_fr1, self.tx_level_endc_lte, self.tx_level_endc_fr1, self.rb_size_lte, self.rb_start_lte, self.rb_size_fr1, self.rb_start_fr1]
         :return:
@@ -2416,7 +2420,7 @@ class Cmw100:
 
     def rx_desense_progress(self):
         wb = openpyxl.load_workbook(self.filename)
-        self.mcs = self.mcs_lte if self.mcs_lte != None else self.mcs_fr1
+        self.mcs = self.mcs_lte if self.mcs_lte is None else self.mcs_fr1
 
         ws_txmax = wb[f'Raw_Data_{self.mcs}_TxMax']
         ws_txmin = wb[f'Raw_Data_{self.mcs}_-10dBm']
@@ -2431,7 +2435,8 @@ class Cmw100:
         wb.save(self.filename)
         wb.close()
 
-    def rx_desense_endc_progress(self):
+    @staticmethod
+    def rx_desense_endc_progress():
         wb = openpyxl.load_workbook('Sensitivty_ENDC.xlsx')
         ws_txmax = wb[f'Raw_Data_ENDC_FR1_TxMax']
         ws_txmin = wb[f'Raw_Data_ENDC_FR1_-10dBm']
@@ -2511,6 +2516,7 @@ class Cmw100:
 
         wb.save(filename)
         wb.close()
+        return filename
 
     def tx_power_relative_test_export_excel(self, data, band, bw, tx_freq_level,
                                             mode=0):  # mode general: 0,  mode LMH: 1
@@ -2563,7 +2569,6 @@ class Cmw100:
                                 ws['V1'] = 'Condition'
                                 ws['W1'] = 'Temp0'
                                 ws['X1'] = 'Temp1'
-
 
                     elif self.tech == 'FR1':
                         for mcs in ['QPSK', 'Q16', 'Q64', 'Q256', 'BPSK']:  # some cmw10 might not have licesnse of Q256
@@ -3857,11 +3862,11 @@ class Cmw100:
     def tx_power_aclr_evm_lmh_gsm(self, plot=True):
         """
                 order: tx_path > band > chan
-                :param band_gsm:
-                :param tx_pcl:
-                :param rf_port:
-                :param freq_select: 'LMH'
-                :param tx_path:
+                band_gsm:
+                tx_pcl:
+                rf_port:
+                freq_select: 'LMH'
+                tx_path:
                 data: {rx_freq: [power, phase_err_rms, phase_peak, ferr,orfs_mod_-200,orfs_mod_200,...orfs_sw-400,orfs_sw400,...], ...}
         """
         rx_chan_list = cm_pmt_ftm.dl_chan_select_gsm(self.band_gsm)
@@ -3905,7 +3910,7 @@ class Cmw100:
                                                                          self.pcl,
                                                                          mode=1)  # mode=1: LMH mode
         self.set_test_end_gsm()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         else:
             pass
@@ -3913,11 +3918,11 @@ class Cmw100:
     def tx_power_aclr_evm_lmh_wcdma(self, plot=True):
         """
                 order: tx_path > bw > band > mcs > rb > chan
-                :param band_wcdma:
-                :param tx_level:
-                :param rf_port:
-                :param freq_select: 'LMH'
-                :param tx_path:
+                band_wcdma:
+                tx_level:
+                rf_port:
+                freq_select: 'LMH'
+                tx_path:
                 data: {tx_level: [Pwr, U_-1, U_+1, U_-2, U_+2, OBW, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
@@ -3967,7 +3972,7 @@ class Cmw100:
                                                                          self.tx_level,
                                                                          mode=1)  # mode=1: LMH mode
         self.set_test_end_wcdma()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         else:
             pass
@@ -3975,12 +3980,12 @@ class Cmw100:
     def tx_power_aclr_evm_lmh_lte(self, plot=True):
         """
         order: tx_path > bw > band > mcs > rb > chan
-        :param band_lte:
-        :param bw_lte:
-        :param tx_level:
-        :param rf_port:
-        :param freq_select: 'LMH'
-        :param tx_path:
+        band_lte:
+        bw_lte:
+        tx_level:
+        rf_port:
+        freq_select: 'LMH'
+        tx_path:
         data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte,
@@ -4028,7 +4033,7 @@ class Cmw100:
                                                                                  self.tx_level,
                                                                                  mode=1)  # mode=1: LMH mode
         self.set_test_end_lte()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         else:
             pass
@@ -4036,12 +4041,12 @@ class Cmw100:
     def tx_power_aclr_evm_lmh_fr1(self, plot=True):
         """
         order: tx_path > bw > band > mcs > rb > chan
-        :param band_fr1:
-        :param bw_fr1:
-        :param tx_level:
-        :param rf_port:
-        :param freq_select: 'LMH'
-        :param tx_path:
+        band_fr1:
+        bw_fr1:
+        tx_level:
+        rf_port:
+        freq_select: 'LMH'
+        tx_path:
         data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1,
@@ -4107,7 +4112,7 @@ class Cmw100:
                                                                                  self.tx_level,
                                                                                  mode=1)  # mode=1: LMH mode
         self.set_test_end_fr1()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=1)  # mode=1: LMH mode
         else:
             pass
@@ -4142,8 +4147,7 @@ class Cmw100:
                     self.script = script
                     self.rb_state = 'FCC'
                     try:
-                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.FCC_FR1[self.band_fr1][self.bw_fr1][
-                            self.mcs_fr1]:
+                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.FCC_FR1[self.band_fr1][self.bw_fr1][self.mcs_fr1]:
                             data = {}
                             for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
                                 chan_mark = f'chan{num}'
@@ -4199,8 +4203,7 @@ class Cmw100:
                     self.script = script
                     self.rb_state = 'CE'
                     try:
-                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.CE_FR1[self.band_fr1][self.bw_fr1][
-                            self.mcs_fr1]:
+                        for self.rb_size_fr1, self.rb_start_fr1 in scripts.CE_FR1[self.band_fr1][self.bw_fr1][self.mcs_fr1]:
                             data = {}
                             for num, tx_freq_fr1 in enumerate(tx_freq_select_list):
                                 chan_mark = f'chan{num}'
@@ -4228,12 +4231,12 @@ class Cmw100:
 
     def tx_freq_sweep_progress_gsm(self, plot=True):
         """
-        :param band_gsm:
-        :param tx_freq_gsm:
-        :param tx_pcl:
-        :param rf_port:
-        :param freq_range_list: [freq_level_1, freq_level_2, freq_step]
-        :param tx_path:
+        band_gsm:
+        tx_freq_gsm:
+        tx_pcl:
+        rf_port:
+        freq_range_list: [freq_level_1, freq_level_2, freq_step]
+        tx_path:
         data: {tx_freq: [power, phase_err_rms, phase_peak, ferr,orfs_mod_-200,orfs_mod_200,...orfs_sw-400,orfs_sw400,...], ...}
         """
         logger.info('----------Freq Sweep progress ---------')
@@ -4271,23 +4274,23 @@ class Cmw100:
                 self.filename = self.tx_power_relative_test_export_excel(data, self.band_gsm, 0,
                                                                          self.pcl, mode=0)
         self.set_test_end_gsm()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_freq_sweep_progress_wcdma(self, plot=True):
         """
-        :param band_lte:
-        :param bw_lte:
-        :param tx_freq_lte:
-        :param rb_num:
-        :param rb_start:
-        :param mcs:
-        :param tx_level:
-        :param rf_port:
-        :param freq_range_list: [freq_level_1, freq_level_2, freq_step]
-        :param tx_path:
+        band_lte:
+        bw_lte:
+        tx_freq_lte:
+        rb_num:
+        rb_start:
+        mcs:
+        tx_level:
+        rf_port:
+        freq_range_list: [freq_level_1, freq_level_2, freq_step]
+        tx_path:
         data: {tx_freq: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         logger.info('----------Freq Sweep progress ---------')
@@ -4325,23 +4328,23 @@ class Cmw100:
                 self.filename = self.tx_power_relative_test_export_excel(data, self.band_wcdma, 5,
                                                                          self.tx_level, mode=0)
         self.set_test_end_wcdma()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_freq_sweep_progress_lte(self, plot=True):
         """
-        :param band_lte:
-        :param bw_lte:
-        :param tx_freq_lte:
-        :param rb_num:
-        :param rb_start:
-        :param mcs:
-        :param tx_level:
-        :param rf_port:
-        :param freq_range_list: [freq_level_1, freq_level_2, freq_step]
-        :param tx_path:
+        band_lte:
+        bw_lte:
+        tx_freq_lte:
+        rb_num:
+        rb_start:
+        mcs:
+        tx_level:
+        rf_port:
+        freq_range_list: [freq_level_1, freq_level_2, freq_step]
+        tx_path:
         data: {tx_freq: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         logger.info('----------Freq Sweep progress ---------')
@@ -4380,23 +4383,23 @@ class Cmw100:
                         self.filename = self.tx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte,
                                                                                  self.tx_level, mode=0)
         self.set_test_end_lte()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_freq_sweep_progress_fr1(self, plot=True):
         """
-        :param band_fr1:
-        :param bw_fr1:
-        :param tx_freq_fr1:
-        :param rb_num:
-        :param rb_start:
-        :param mcs:
-        :param tx_level:
-        :param rf_port:
-        :param freq_range_list: [freq_level_1, freq_level_2, freq_step]
-        :param tx_path:
+        band_fr1:
+        bw_fr1:
+        tx_freq_fr1:
+        rb_num:
+        rb_start:
+        mcs:
+        tx_level:
+        rf_port:
+        freq_range_list: [freq_level_1, freq_level_2, freq_step]
+        tx_path:
         data: {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         logger.info('----------Freq Sweep progress ---------')
@@ -4438,7 +4441,7 @@ class Cmw100:
                         self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
                                                                                  self.tx_level, mode=0)
         self.set_test_end_fr1()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
@@ -4493,19 +4496,19 @@ class Cmw100:
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
                                                                                      self.tx_level, mode=0)
         self.set_test_end_fr1()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_level_sweep_progress_gsm(self, plot=True):
         """
-        :param band_gsm:
-        :param tx_freq_gsm:
-        :param pwr:
-        :param rf_port:
-        :param loss:
-        :param tx_path:
+        band_gsm:
+        tx_freq_gsm:
+        pwr:
+        rf_port:
+        loss:
+        tx_path:
         data {tx_pcl: [power, phase_err_rms, phase_peak, ferr,orfs_mod_-200,orfs_mod_200,...orfs_sw-400,orfs_sw400,...], ...}
         """
         rx_chan_list = cm_pmt_ftm.dl_chan_select_gsm(self.band_gsm)
@@ -4563,23 +4566,23 @@ class Cmw100:
                     self.filename = self.tx_power_relative_test_export_excel(data, self.band_gsm, 0,
                                                                              self.rx_freq_gsm)
         self.set_test_end_gsm()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_level_sweep_progress_wcdma(self, plot=True):
         """
-        :param band_wcdma:
-        :param bw_wcdma:
-        :param tx_freq_wcdma:
-        :param rb_num:
-        :param rb_start:
-        :param mcs:
-        :param pwr:
-        :param rf_port:
-        :param loss:
-        :param tx_path:
+        band_wcdma:
+        bw_wcdma:
+        tx_freq_wcdma:
+        rb_num:
+        rb_start:
+        mcs:
+        pwr:
+        rf_port:
+        loss:
+        tx_path:
         data {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         rx_chan_list = cm_pmt_ftm.dl_chan_select_wcdma(self.band_wcdma)
@@ -4673,23 +4676,23 @@ class Cmw100:
                     self.filename = self.tx_power_relative_test_export_excel(data, self.band_wcdma, 5,
                                                                              self.tx_freq_wcdma)
         self.set_test_end_wcdma()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_level_sweep_progress_lte(self, plot=True):
         """
-        :param band_lte:
-        :param bw_lte:
-        :param tx_freq_lte:
-        :param rb_num:
-        :param rb_start:
-        :param mcs:
-        :param pwr:
-        :param rf_port:
-        :param loss:
-        :param tx_path:
+        band_lte:
+        bw_lte:
+        tx_freq_lte:
+        rb_num:
+        rb_start:
+        mcs:
+        pwr:
+        rf_port:
+        loss:
+        tx_path:
         data {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('LTE', self.band_lte, self.bw_lte)
@@ -4799,23 +4802,23 @@ class Cmw100:
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte,
                                                                                      self.tx_freq_lte)
         self.set_test_end_lte()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
 
     def tx_level_sweep_progress_fr1(self, plot=True):
         """
-        :param band_fr1:
-        :param bw_fr1:
-        :param tx_freq_fr1:
-        :param rb_num:
-        :param rb_start:
-        :param mcs:
-        :param pwr:
-        :param rf_port:
-        :param loss:
-        :param tx_path:
+        band_fr1:
+        bw_fr1:
+        tx_freq_fr1:
+        rb_num:
+        rb_start:
+        mcs:
+        pwr:
+        rf_port:
+        loss:
+        tx_path:
         data {tx_level: [ U_-2, U_-1, E_-1, Pwr, E_+1, U_+1, U_+2, EVM, Freq_Err, IQ_OFFSET], ...}
         """
         rx_freq_list = cm_pmt_ftm.dl_freq_selected('FR1', self.band_fr1, self.bw_fr1)
@@ -4928,7 +4931,7 @@ class Cmw100:
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
                                                                                      self.tx_freq_fr1)
         self.set_test_end_fr1()
-        if plot == True:
+        if plot:
             self.txp_aclr_evm_plot(self.filename, mode=0)
         else:
             pass
@@ -6262,7 +6265,8 @@ class Cmw100:
                 else:
                     pass
 
-    def rxs_endc_plot(self, filename):
+    @staticmethod
+    def rxs_endc_plot(filename):
         logger.info('----------Plot Chart---------')
         wb = openpyxl.load_workbook(filename)
         ws_desens = wb[f'Desens_ENDC']
