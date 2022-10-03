@@ -486,7 +486,7 @@ class Cmw100:
                 f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_Channel_CC0_RxAnt0_RF_Verification_10M_SIMO_01.wv'")
         else:
             # self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_10MHz.wv'")
-            bw_lte = 10 if self.bw_lte == 1.4 else '03' if self.bw_lte == 3 else self.bw_lte
+            bw_lte = '1p4' if self.bw_lte == 1.4 else '03' if self.bw_lte == 3 else self.bw_lte
             self.command_cmw100_write(f"SOUR:GPRF:GEN1:ARB:FILE 'C:\CMW100_WV\SMU_NodeB_Ant0_FRC_{bw_lte}MHz.wv'")
         self.command_cmw100_query('*OPC?')
         self.command_cmw100_query('SOUR:GPRF:GEN1:ARB:FILE?')
