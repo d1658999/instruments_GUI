@@ -2420,7 +2420,7 @@ class Cmw100:
 
     def rx_desense_progress(self):
         wb = openpyxl.load_workbook(self.filename)
-        self.mcs = self.mcs_lte if self.mcs_lte is None else self.mcs_fr1
+        self.mcs = self.mcs_lte if self.mcs_lte is not None else self.mcs_fr1
 
         ws_txmax = wb[f'Raw_Data_{self.mcs}_TxMax']
         ws_txmin = wb[f'Raw_Data_{self.mcs}_-10dBm']
