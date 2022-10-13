@@ -1,5 +1,6 @@
 import os
 import subprocess as sp
+import time
 
 
 def thermal_charger_disable():
@@ -33,15 +34,21 @@ def get_serial_devices():
 def reboot():
     sp.run(r'adb reboot')
 
-def get_odpm_current():
+def get_odpm_current(count=1):
     """
     Current unit is mA
     :return:
     """
     print('----------Get Current from ODPM----------')
-    current = sp.run(r'adb shell pmic s2mpg14 getcurrent 36 | grep mA', capture_output=True).stdout.decode().strip().split('=')[1]
+    n = 0
+    current = 0
+    while n < count:
+        temp = sp.run(r'adb shell pmic s2mpg14 getcurrent 36 | grep mA', capture_output=True).stdout.decode().strip().split('=')[1]
+        if eval(temp) > current:
+            current = eval(temp)
+        n += 1
     print(f'Get the current: {current} mA')
-    return round(eval(current), 2)
+    return round(current, 2)
 
 def main():
     current = get_odpm_current()
