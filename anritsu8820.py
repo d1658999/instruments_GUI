@@ -551,9 +551,13 @@ class Anritsu8820:
             self.inst.write('AUTHENT_KEYALL 00112233,44556677,8899AABB,CCDDEEFF')
             self.inst.write('OPC_ALL 00000000,00000000,00000000,00000000')
 
+    def set_rfout(self, port='MAIN'):
+        self.inst.write(f'RFOUT {port}')
+
     def set_init_miscs(self, standard):
         s = standard
         if s == 'LTE':
+            self.inst.write('RFOUT MAIN')
             self.inst.write('RRCUPDATE PAGING')
             self.inst.write('PT_TRGSRC FRAME')
             self.inst.write('MODIFPERIOD N2')
@@ -2967,6 +2971,7 @@ class Anritsu8820:
         self.set_init_rx(standard)
 
         for power_selected in wt.tx_max_pwr_sensitivity:
+            self.set_rfout(wt.rfout_anritsu)
             if power_selected == 1:
                 self.set_tpc('ALL1')
                 self.set_input_level(30)
@@ -2984,6 +2989,7 @@ class Anritsu8820:
                 logger.debug(f'Sensitivity list:{sens_list}')
                 self.excel_path = self.fill_values_rx(sens_list, band, dl_ch, power_selected, bw)
                 self.set_output_level(-70)
+            self.set_rfout()
 
     def rx_sweep_core(self, standard, band, dl_ch, bw=None):
         conn_state = int(self.inst.query("CALLSTAT?").strip())
@@ -3118,6 +3124,7 @@ class Anritsu8820:
                 logger.info(f'Finished')
 
     def run_rx(self):
+        self.set_rfout()
         for tech in wt.tech:
             if tech == 'LTE' and wt.lte_bands != []:
                 standard = self.switch_to_lte()

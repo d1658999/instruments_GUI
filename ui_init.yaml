@@ -3,22 +3,11 @@ band:
   band_segment_fr1: A
   bands_endc: []
   bands_fr1:
-  - 1
-  - 2
   - 3
-  - 66
-  - 38
-  - 41
   bands_gsm: []
   bands_hsdpa: []
   bands_hsupa: []
   bands_lte:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 66
-  - 38
   - 41
   bands_wcdma: []
 bw:
@@ -27,7 +16,7 @@ bw:
   bw_lte:
   - 10
 channel:
-  chan: M
+  chan: LM
 condition:
   hthv: false
   htlv: false
@@ -42,16 +31,22 @@ external_inst:
   psu: false
   tempchb: false
 instrument:
-  instrument: Cmw100
+  instrument: Anritsu8820
 mcs:
   mcs_fr1:
+  - BPSK
   - QPSK
+  - Q16
+  - Q64
+  - Q256
   mcs_lte:
   - QPSK
+  - Q256
   modulaiton_gsm: GMSK
 path:
   asw_path: 0
-  rx_paths: []
+  rx_paths:
+  - 4
   sa_nsa: 0
   srs_path: 0
   srs_path_enable: false
@@ -62,6 +57,7 @@ port:
   port_tx: 1
   port_tx_fr1: 4
   port_tx_lte: 1
+  rfout_anritsu: AUX
 power:
   lb_gsm_pcl: 5
   mb_gsm_pcl: 0
@@ -69,8 +65,16 @@ power:
 rb_set:
   rb_ftm_fr1:
   - INNER_FULL
+  - OUTER_FULL
+  - INNER_1RB_LEFT
+  - INNER_1RB_RIGHT
+  - EDGE_1RB_LEFT
+  - EDGE_1RB_RIGHT
+  - EDGE_FULL_LEFT
+  - EDGE_FULL_RIGHT
   rb_ftm_lte:
   - PRB
+  - FRB
 rx_set:
   ue_power:
   - 1
@@ -82,12 +86,13 @@ tech:
   tech:
   - LTE
 test_items:
-  rx: false
+  rx: true
   rx_sweep: false
-  tx: true
+  tx: false
+  tx_1rb_sweep: false
   tx_freq_sweep: false
   tx_level_sweep: false
-  tx_1rb_sweep: false
 type:
   type_fr1:
   - DFTS
+  - CP

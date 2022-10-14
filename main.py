@@ -19,7 +19,7 @@ fileConfig('logging.ini')
 logger = logging.getLogger()
 
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "main_v2_5.ui"
+PROJECT_UI = PROJECT_PATH / "main_v2_6.ui"
 
 
 class MainApp:
@@ -48,6 +48,7 @@ class MainApp:
         self.port_tx = None
         self.port_tx_lte = None
         self.port_tx_fr1 = None
+        self.rfout_anritsu = None
         self.sync_path = None
         self.asw_path = None
         self.srs_path_enable = None
@@ -252,6 +253,7 @@ class MainApp:
                 "port_tx",
                 "port_tx_lte",
                 "port_tx_fr1",
+                "rfout_anritsu",
                 "sync_path",
                 "tx_level",
                 "asw_path",
@@ -529,6 +531,7 @@ class MainApp:
         self.port_tx.set(ui_init['port']['port_tx'])
         self.port_tx_lte.set(ui_init['port']['port_tx_lte'])
         self.port_tx_fr1.set(ui_init['port']['port_tx_fr1'])
+        self.rfout_anritsu.set(ui_init['port']['rfout_anritsu'])
         self.asw_path.set(ui_init['path']['asw_path'])
         self.srs_path.set(ui_init['path']['srs_path'])
         self.srs_path_enable.set(ui_init['path']['srs_path_enable'])
@@ -1392,6 +1395,7 @@ class MainApp:
         srs_path = self.srs_path.get()
         srs_path_enable = self.srs_path_enable.get()
         sync_path = self.sync_path.get()
+        rfout_anritsu = self.rfout_anritsu.get()
         band_segment = self.band_segment.get()
         band_segment_fr1 = self.band_segment_fr1.get()
         chan = self.wanted_chan()
@@ -1413,6 +1417,7 @@ class MainApp:
                 'port_tx': port_tx,
                 'port_tx_lte': port_tx_lte,
                 'port_tx_fr1': port_tx_fr1,
+                'rfout_anritsu': rfout_anritsu,
             },
             'path': {
                 'sa_nsa': sa_nsa,
@@ -1530,6 +1535,7 @@ class MainApp:
         asw_path = self.asw_path.get()
         srs_path = self.srs_path.get()
         srs_path_enable = self.srs_path_enable.get()
+        rfout_anritsu = self.rfout_anritsu()
         sync_path = self.sync_path.get()
         band_segment = self.band_segment.get()
         band_segment_fr1 = self.band_segment_fr1.get()
@@ -2984,6 +2990,9 @@ class MainApp:
 
         return self.rx_path
 
+    def select_rfout_anritsu(self, option):
+        logger.info(f'RFOUT for Anritsu: {self.rfout_anritsu.get()}')
+
     def select_asw_path(self, option):
         logger.info(f'select AS path {self.asw_path.get()}')
 
@@ -3071,6 +3080,8 @@ class MainApp:
         self.rx.set(False)
         self.wanted_ue_pwr()
 
+
+
     def test_pipeline(self, inst_class):
         inst = inst_class(self.psu)
         if inst.__class__.__name__ == 'Cmw100':
@@ -3142,6 +3153,7 @@ class MainApp:
         wt.port_tx_fr1 = self.port_tx_fr1.get()
         wt.band_segment = self.band_segment.get()
         wt.band_segment_fr1 = self.band_segment_fr1.get()
+        wt.rfout_anritsu = self.rfout_anritsu.get()
         wt.asw_path = self.asw_path.get()
         wt.srs_path = self.srs_path.get()
         wt.srs_path_enable = self.srs_path_enable.get()

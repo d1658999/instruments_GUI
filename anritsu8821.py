@@ -218,7 +218,7 @@ class Anritsu8821(Anritsu8820):
                 time.sleep(10)
                 self.inst.write('CALLSA')
                 logger.info('waiting for 10 second to re-connect')
-                logger.info(('measure it again'))
+                logger.info('measure it again')
                 self.set_to_measure()
                 meas_status = int(self.inst.query('MSTAT?').strip())
 
