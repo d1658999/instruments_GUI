@@ -254,7 +254,7 @@ class Cmw100:
                         therm_list.append(temp)
                     except Exception as err:
                         logger.debug(err)
-                        therm_list.appned(None)
+                        therm_list.append(None)
         logger.info(f'thermistor0 get temp: {therm_list[0]}')
         logger.info(f'thermistor1 get temp: {therm_list[1]}')
         return therm_list
