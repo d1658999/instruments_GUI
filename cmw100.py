@@ -41,6 +41,7 @@ class Cmw100:
         }
         self.asw_tech = None
         self.asw_path = wt.asw_path
+        self.asw_srs_path = None
         self.srs_path = wt.srs_path
         self.srs_path_enable = wt.srs_path_enable
         self.rx_path_lte = None
@@ -259,11 +260,11 @@ class Cmw100:
         logger.info(f'thermistor1 get temp: {therm_list[1]}')
         return therm_list
 
-    def measure_current(self):
+    def measure_current(self, n=1):
         if wt.odpm_enable:
-            return get_odpm_current()
+            return get_odpm_current(n)
         elif wt.psu_enable:
-            return self.psu.current_average()
+            return self.psu.current_average(n)
         else:
             return None
 
@@ -664,12 +665,14 @@ class Cmw100:
         logger.info('---------Antenna Switch----------')
         self.command(f'AT+ANTSWSEL={self.asw_tech_dict[self.asw_tech]},{self.asw_path}')
         logger.info(f'RAT: {self.asw_tech}, ANT_PATH: {self.asw_path}')
+        self.asw_srs_path = self.asw_path
         # self.command_cmw100_query('*OPC?')
 
     def srs_switch(self):
         logger.info('---------SRS Switch----------')
         self.command(f'AT+NTXSRSSWPATHSET={self.srs_path}')
         logger.info(f'SRS_PATH: {self.srs_path}')
+        self.asw_srs_path = self.srs_path
 
     def rx_path_setting_gsm(self):
         """
@@ -2597,7 +2600,7 @@ class Cmw100:
                                 ws['S1'] = 'SCS(KHz)'
                                 ws['T1'] = 'RB_STATE'
                                 ws['U1'] = 'Sync_Path'
-                                ws['V1'] = 'SRS_Path'
+                                ws['V1'] = 'AS_SRS_Path'
                                 ws['W1'] = 'Current(mA)'
                                 ws['X1'] = 'Condition'
                                 ws['Y1'] = 'Temp0'
@@ -2764,7 +2767,7 @@ class Cmw100:
                             ws.cell(row, 19).value = self.scs
                             ws.cell(row, 20).value = self.rb_state
                             ws.cell(row, 21).value = self.sync_path
-                            ws.cell(row, 22).value = self.srs_path
+                            ws.cell(row, 22).value = self.asw_srs_path
 
                             row += 1
 
@@ -2792,7 +2795,7 @@ class Cmw100:
                             ws.cell(row, 19).value = self.scs
                             ws.cell(row, 20).value = self.rb_state
                             ws.cell(row, 21).value = self.sync_path
-                            ws.cell(row, 22).value = self.srs_path
+                            ws.cell(row, 22).value = self.asw_srs_path
                             ws.cell(row, 23).value = measured_data[10]
                             ws.cell(row, 24).value = wt.condition
                             ws.cell(row, 25).value = measured_data[11]
@@ -2987,7 +2990,7 @@ class Cmw100:
                                 ws['R1'] = 'SCS(KHz)'
                                 ws['S1'] = 'RB_STATE'
                                 ws['T1'] = 'Sync_Path'
-                                ws['U1'] = 'SRS_Path'
+                                ws['U1'] = 'AS_SRS_Path'
                                 ws['V1'] = 'Current(mA)'
                                 ws['W1'] = 'Condition'
 
@@ -3134,7 +3137,7 @@ class Cmw100:
                             ws.cell(row, 18).value = self.scs
                             ws.cell(row, 19).value = self.rb_state
                             ws.cell(row, 20).value = self.sync_path
-                            ws.cell(row, 21).value = self.srs_path
+                            ws.cell(row, 21).value = self.asw_srs_path
                             ws.cell(row, 22).value = measured_data[10]
                             ws.cell(row, 23).value = wt.condition
                             row += 1
@@ -3161,7 +3164,7 @@ class Cmw100:
                             ws.cell(row, 18).value = self.scs
                             ws.cell(row, 19).value = self.rb_state
                             ws.cell(row, 20).value = self.sync_path
-                            ws.cell(row, 21).value = self.srs_path
+                            ws.cell(row, 21).value = self.asw_srs_path
                             row += 1
 
                 elif self.tech == 'WCDMA':
@@ -4025,7 +4028,11 @@ class Cmw100:
                             self.tx_set_lte()
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_lte()
                             logger.debug(aclr_mod_results)
-                            aclr_mod_current_results.append(self.measure_current())
+                            if self.band_lte in [34, 38, 39, 40, 41, 42, 48] and self.tx_level > 15:
+                                n = 10
+                            else:
+                                n = 1
+                            aclr_mod_current_results.append(self.measure_current(n))
                             data_freq[self.tx_freq_lte] = aclr_mod_current_results + self.get_temperature()
                         logger.debug(data_freq)
                         # ready to export to excel
@@ -4104,7 +4111,11 @@ class Cmw100:
                             self.tx_set_fr1()
                             aclr_mod_current_results = aclr_mod_results = self.tx_measure_fr1()
                             logger.debug(aclr_mod_results)
-                            aclr_mod_current_results.append(self.measure_current())
+                            if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 77, 78, 79] and self.tx_level > 15:
+                                n = 10
+                            else:
+                                n = 1
+                            aclr_mod_current_results.append(self.measure_current(n))
                             data_freq[self.tx_freq_fr1] = aclr_mod_current_results + self.get_temperature()
                         logger.debug(data_freq)
                         # ready to export to excel
@@ -4796,7 +4807,11 @@ class Cmw100:
                                 self.command_cmw100_query('*OPC?')
                                 aclr_mod_current_results = aclr_mod_results = aclr_results + mod_results
                                 logger.debug(aclr_mod_results)
-                                aclr_mod_current_results.append(self.measure_current())
+                                if self.band_lte in [34, 38, 39, 40, 41, 42, 48] and self.tx_level > 15:
+                                    n = 10
+                                else:
+                                    n = 1
+                                aclr_mod_current_results.append(self.measure_current(n))
                                 data[tx_level] = aclr_mod_current_results
                             logger.debug(data)
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_lte, self.bw_lte,
@@ -4925,7 +4940,11 @@ class Cmw100:
                                 self.command_cmw100_query('*OPC?')
                                 aclr_mod_current_results = aclr_mod_results = aclr_results + mod_results
                                 logger.debug(aclr_mod_results)
-                                aclr_mod_current_results.append(self.measure_current())
+                                if self.band_fr1 in [34, 38, 39, 40, 41, 42, 48, 77, 78, 79] and self.tx_level > 15:
+                                    n = 10
+                                else:
+                                    n = 1
+                                aclr_mod_current_results.append(self.measure_current(n))
                                 data[tx_level] = aclr_mod_current_results
                             logger.debug(data)
                             self.filename = self.tx_power_relative_test_export_excel(data, self.band_fr1, self.bw_fr1,
