@@ -35,11 +35,11 @@ class Psu:
         self.psu.write(f'CURR {current}')
         logger.info(f'Now PSU limit is set to {voltage} V, {current} A')
 
-    def get_current(self):
+    def get_current(self, n=5):
         logger.info('----------Get current value----------')
         current_measure = []
         count = 0
-        while count < 5:
+        while count < n:
             current = eval(self.psu.query('MEAS:CURR?')) * 1000
             logger.debug(current)
             current_measure.append(current)
@@ -47,9 +47,10 @@ class Psu:
             # time.sleep(0.1)
         return current_measure
 
-    def current_average(self):
+    def current_average(self, n):
         logger.debug('calculation for currnet average')
-        current_list = self.get_current()
+        _n = n + 4
+        current_list = self.get_current(_n)  # _n >= 5
         average = round(sum(current_list) / len(current_list), 2)
         logger.info(f'Average current: {average} mA')
         return average
