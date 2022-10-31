@@ -35,7 +35,7 @@ class MainApp:
         button_run_signaling = builder.get_object("button_run_signaling", master)
         self.button_run = [button_run_ftm, button_run_ftm_fcc, button_run_ftm_ce, button_run_ftm_endc,
                            button_run_signaling]
-        ICON_FILE = PROJECT_PATH / pathlib.Path('Wave.ico')
+        ICON_FILE = PROJECT_PATH / pathlib.Path('Wave2.ico')
         self.mainwindow.iconbitmap(ICON_FILE)
         # self.checkbox_hsupa = builder.get_object("checkbutton_WCDMA", master)
         # self.checkbox_hsdpa = builder.get_object("checkbutton_HSUPA", master)
