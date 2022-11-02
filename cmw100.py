@@ -3908,8 +3908,9 @@ class Cmw100:
                     current_list = []
                     for n in range(20):
                         current_list.append(self.measure_current())
-                    print(current_list)
-                    aclr_mod_current_results.append(sum(current_list)/len(current_list))
+                    avg_sample = sum(current_list) / len(current_list)
+                    logging.info(f'Average of ODPM for GSM: {avg_sample}')
+                    aclr_mod_current_results.append(avg_sample)
                     data_chan[self.rx_freq_gsm] = aclr_mod_current_results + self.get_temperature()
                 logger.debug(data_chan)
                 # ready to export to excel
