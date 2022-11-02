@@ -6345,8 +6345,6 @@ class Cmw100:
                         self.tx_power_pipline_fcc_fr1()
                     elif script == 'CE':
                         self.tx_power_pipline_ce_fr1()
-                    elif tech == 'WCDMA':
-                        self.tx_power_aclr_evm_lmh_pipeline_wcdma()
             elif tech == 'WCDMA':
                 self.tx_power_aclr_evm_lmh_pipeline_wcdma()
             elif tech == 'GSM':
