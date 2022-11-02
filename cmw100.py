@@ -3909,7 +3909,7 @@ class Cmw100:
                     for n in range(20):
                         current_list.append(self.measure_current())
                     avg_sample = sum(current_list) / len(current_list)
-                    logging.info(f'Average of current for GSM: {avg_sample}')
+                    logging.info(f'Average of above current for GSM: {avg_sample}')
                     aclr_mod_current_results.append(avg_sample)
                     data_chan[self.rx_freq_gsm] = aclr_mod_current_results + self.get_temperature()
                 logger.debug(data_chan)
