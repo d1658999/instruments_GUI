@@ -3905,7 +3905,11 @@ class Cmw100:
                     self.tx_set_gsm()
                     aclr_mod_current_results = aclr_mod_results = self.tx_measure_gsm()
                     logger.debug(aclr_mod_results)
-                    aclr_mod_current_results.append(self.measure_current())
+                    current_list = []
+                    for n in range(20):
+                        current_list.append(self.measure_current())
+                    print(current_list)
+                    aclr_mod_current_results.append(sum(current_list)/len(current_list))
                     data_chan[self.rx_freq_gsm] = aclr_mod_current_results + self.get_temperature()
                 logger.debug(data_chan)
                 # ready to export to excel
