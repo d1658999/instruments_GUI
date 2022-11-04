@@ -3285,7 +3285,6 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:GSM:MEAS:RFS:EATT {self.loss_tx}')
         self.command_cmw100_write(f'CONF:GSM:MEAS:RFS:UMAR 10.00')
         self.command_cmw100_write(f"TRIG:GSM:MEAS:MEV:SOUR 'Power'")
-        self.command_cmw100_write(f'TRIG:GSM:MEAS:MEV:THR -30')
         self.command_cmw100_write(f'TRIG:GSM:MEAS:MEV:THR -20.0')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:REP SING')
         self.command_cmw100_write(f'CONF:GSM:MEAS:MEV:RES:ALL ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, OFF, ON')
