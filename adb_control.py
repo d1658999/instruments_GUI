@@ -26,6 +26,19 @@ def thermal_charger_disable():
     print(r'adb shell mount -t debugfs debugfs /sys/kernel/debug')
     sp.run(r'adb shell "echo 1 > /d/google_charger/input_suspend"')
     print(r'adb shell "echo 1 > /d/google_charger/input_suspend"')
+    sp.run(r'adb shell setprop persist.vendor.disable.thermal.tj.control 1')
+    print(r'adb shell setprop setprop persist.vendor.disable.thermal.tj.control 1')
+    sp.run(r'adb shell "getprop gsm.version.baseband"')
+    print(r'adb shell "getprop gsm.version.baseband"')
+    sp.run(r'adb shell "getprop ro.vendor.build.fingerprint"')
+    print(r'adb shell "getprop ro.vendor.build.fingerprint"')
+    sp.run(r'adb shell "echo 25000 > /dev/thermal/tz-by-name/BIG/emul_temp"')
+    print(r'adb shell "echo 25000 > /dev/thermal/tz-by-name/BIG/emul_temp"')
+    sp.run(r'adb shell "echo 25000 > /dev/thermal/tz-by-name/MID/emul_temp"')
+    print(r'adb shell "echo 25000 > /dev/thermal/tz-by-name/MID/emul_temp"')
+    sp.run(r'adb shell "echo 25000 > /dev/thermal/tz-by-name/LITTLE/emul_temp"')
+    print(r'adb shell "echo 25000 > /dev/thermal/tz-by-name/LITTLE/emul_temp"')
+
 
 
 def get_serial_devices():
