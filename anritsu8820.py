@@ -3146,8 +3146,10 @@ class Anritsu8820:
                             logger.debug(f'Test Channel List: {band}, {bw}MHZ, downlink channel list:{ch_list}')
                             for dl_ch in ch_list:
                                 self.rx_core(standard, band, dl_ch, bw)
+                            time.sleep(1)
                     self.fill_desens(self.excel_path)
                     self.excel_plot_line(standard, self.excel_path)
+
             elif tech == 'WCDMA' and wt.wcdma_bands != []:
                 standard = self.switch_to_wcdma()
                 for band in wt.wcdma_bands:

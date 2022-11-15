@@ -19,16 +19,22 @@ class TempChamber:
         self.tpchb.write(f'POWER,ON')
         self.tpchb.write(f'TEMP,S{target_temp} H80 L-40')
         time.sleep(0.2)
-        temp_state = float(self.tpchb.query('TEMP?').strip().split(',')[0])
-        while True:
-            if target_temp - 1 < temp_state < target_temp + 1:
-                break
-            else:
-                time.sleep(10)
-                temp_state = float(self.tpchb.query('TEMP?').strip().split(',')[0])
-                logger.info(f'Now the room temp is {temp_state}C')
-        logger.info(f'Acheieve to the target temp {target_temp}, and need to wait 2 min')
-        time.sleep(120)
+        temp_state = None
+        try:
+            temp_state = float(self.tpchb.query('TEMP?').strip().split(',')[0])
+        except Exception as err:
+            logger.info(err)
+            temp_state = float(self.tpchb.query('TEMP?').strip().split(',')[0])
+        finally:
+            while True:
+                if target_temp - 1 < temp_state < target_temp + 1:
+                    break
+                else:
+                    time.sleep(10)
+                    temp_state = float(self.tpchb.query('TEMP?').strip().split(',')[0])
+                    logger.info(f'Now the room temp is {temp_state}C')
+            logger.info(f'Acheieve to the target temp {target_temp}, and need to wait 2 min')
+            time.sleep(120)
 
     def build_object(self):
         logger.info('start to connect')
