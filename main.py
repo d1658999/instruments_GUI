@@ -478,7 +478,7 @@ class MainApp:
             'LT': -10,
         }
         volts_dict = {
-            'HV': 4.2,
+            'HV': 4.4,
             'NV': 3.85,
             'LV': 3.6,
         }
