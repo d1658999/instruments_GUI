@@ -909,7 +909,7 @@ class Cmw100:
         self.command_cmw100_write(f'CONF:LTE:MEAS:BAND OB{self.band_lte}')
         self.command_cmw100_write(f'CONF:LTE:MEAS:RFS:FREQ {self.tx_freq_lte}KHz')
         self.command_cmw100_query('*OPC?')
-        rb = f'0{self.bw_lte * 10}' if self.bw_lte < 10 else f'{self.bw_lte * 10}'
+        rb = f'0{int(self.bw_lte * 10)}' if self.bw_lte < 10 else f'{self.bw_lte * 10}'
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:CBAN B{rb}')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:MOD:MSCH {self.mcs_lte}')
         self.command_cmw100_write(f'CONF:LTE:MEAS:MEV:RBAL:NRB {self.rb_size_lte}')

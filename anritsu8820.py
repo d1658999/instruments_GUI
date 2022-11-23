@@ -1550,6 +1550,7 @@ class Anritsu8820:
                 self.inst.write('ULRMC_64QAM DISABLED')
                 self.inst.write(mod)
 
+            time.sleep(0.1)
             self.set_to_measure()
             meas_status = int(self.inst.query('MSTAT?').strip())
 
