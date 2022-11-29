@@ -843,7 +843,7 @@ class Cmw100:
         logger.info(f'ORFS_SW_-400KHz: {orfs_sw[0]}, ORFS_SW_400KHz: {orfs_sw[1]}')
         logger.info(f'ORFS_SW_-600KHz: {orfs_sw[2]}, ORFS_SW_600KHz: {orfs_sw[3]}')
         logger.info(f'ORFS_SW_-1200KHz: {orfs_sw[4]}, ORFS_SW_1200KHz: {orfs_sw[5]}')
-        self.command_cmw100_write(f'STOP:WCDM:MEAS:MEV')
+        self.command_cmw100_write(f'STOP:GSM:MEAS:MEV')
         self.command_cmw100_query('*OPC?')
 
         return mod_results + orfs_mod + orfs_sw  # [0~3] + [4~10] + [11~17]
@@ -3496,6 +3496,8 @@ class Cmw100:
                 self.bw_lte = item[2]
                 self.band_lte = item[3]
                 if self.bw_lte in cm_pmt_ftm.bandwidths_selected_lte(self.band_lte):
+                    logging.info('wait 3 seconds...')
+                    time.sleep(3)
                     self.tx_power_aclr_evm_lmh_lte(plot=False)
                 else:
                     logger.info(f'B{self.band_lte} does not have BW {self.bw_lte}MHZ')
@@ -3904,12 +3906,16 @@ class Cmw100:
                     self.tx_set_gsm()
                     aclr_mod_current_results = aclr_mod_results = self.tx_measure_gsm()
                     logger.debug(aclr_mod_results)
-                    current_list = []
-                    for n in range(20):
-                        current_list.append(self.measure_current())
-                    avg_sample = sum(current_list) / len(current_list)
-                    logging.info(f'Average of above current for GSM: {avg_sample}')
-                    aclr_mod_current_results.append(avg_sample)
+
+                    if not wt.odpm_enable and not wt.psu_enable:
+                        aclr_mod_current_results.append(None)
+                    else:
+                        current_list = []
+                        for n in range(20):
+                            current_list.append(self.measure_current())
+                        avg_sample = sum(current_list) / len(current_list)
+                        logging.info(f'Average of above current for GSM: {avg_sample}')
+                        aclr_mod_current_results.append(avg_sample)
                     data_chan[self.rx_freq_gsm] = aclr_mod_current_results + self.get_temperature()
                 logger.debug(data_chan)
                 # ready to export to excel
