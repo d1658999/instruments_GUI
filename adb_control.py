@@ -1,7 +1,82 @@
 import os
 import subprocess as sp
-import time
+import re
 
+
+SHL = 'adb shell '
+CAT = '"cat" '
+CD = '/sys/bus/iio/devices/iio\:'
+PMIC = 'device0/energy_value '
+grep = '"| grep" '
+cat_cmd = SHL + CAT + CD + PMIC + grep
+rffe_rail = 25
+modem_rail = 23
+panel_rail = 19
+cpu1_rail = 9
+cpu2_rail = 7
+cpu3_rail = 5
+time = 1
+vol_typ = 3.85
+avg_count = 10
+
+
+def record_current():
+    while True:
+        rffe_ma_lst = []
+        cpu_ma_lst = []
+        modem_ma_lst = []
+        panel_ma_lst = []
+        for i in range(0, avg_count):
+            get_pwr = os.popen(SHL + CAT + CD + PMIC).read()
+            uwatta = re.split(', |\n|t=', get_pwr)
+            # sleep(0.1)
+            get_pwr = os.popen(SHL + CAT + CD + PMIC).read()
+            uwattb = re.split(', |\n|t=', get_pwr)
+
+            time_msa = int(uwatta[time])
+            rffe_uwa = int(uwatta[rffe_rail])
+            modem_uwa = int(uwatta[modem_rail])
+            panel_uwa = int(uwatta[panel_rail])
+            cpu_uwa = int(uwatta[cpu1_rail]) + int(uwatta[cpu2_rail]) + int(uwatta[cpu3_rail])
+
+            time_msb = int(uwattb[time])
+            rffe_uwb = int(uwattb[rffe_rail])
+            modem_uwb = int(uwattb[modem_rail])
+            panel_uwb = int(uwattb[panel_rail])
+            cpu_uwb = int(uwattb[cpu1_rail]) + int(uwattb[cpu2_rail]) + int(uwattb[cpu3_rail])
+
+            time_ms = time_msb - time_msa
+            cpu_uw = cpu_uwb - cpu_uwa
+            rffe_uw = rffe_uwb - rffe_uwa
+            modem_uw = modem_uwb - modem_uwa
+            panel_uw = panel_uwb - panel_uwa
+            try:
+                rffe_ma = rffe_uw / vol_typ / time_ms
+                cpu_ma = cpu_uw / vol_typ / time_ms
+                modem_ma = modem_uw / vol_typ / time_ms
+                panel_ma = panel_uw / vol_typ / time_ms
+                rffe_ma_lst.append(rffe_ma)
+                cpu_ma_lst.append(cpu_ma)
+                modem_ma_lst.append(modem_ma)
+                panel_ma_lst.append(panel_ma)
+                modem_current_num.config(text=str(round(modem_ma, 2)) + " mA")
+                pa_current_num.config(text=str(round(rffe_ma, 2)) + " mA")
+                cpu_current_num.config(text=str(round(cpu_ma, 2)) + " mA")
+                panel_current_num.config(text=str(round(panel_ma, 2)) + " mA")
+
+            except:
+                pass
+        avg_rffe = round(sum(rffe_ma_lst) / len(rffe_ma_lst), 2)
+        avg_modem = round(sum(modem_ma_lst) / len(modem_ma_lst), 2)
+        avg_panel = round(sum(panel_ma_lst) / len(panel_ma_lst), 2)
+        avg_cpu = round(sum(cpu_ma_lst) / len(cpu_ma_lst), 2)
+
+        return avg_rffe
+
+        # modem_cur_avg_num.config(text=str(avg_modem) + " mA")
+        # pa_cur_avg_num.config(text=str(avg_rffe) + " mA")
+        # panel_cur_avg_num.config(text=str(avg_panel) + " mA")
+        # cpu_cur_avg_num.config(text=str(avg_cpu) + " mA")
 
 def thermal_charger_disable():
     sp.run(r'adb root')
@@ -70,9 +145,10 @@ def get_odpm_current(count=1):
     print(f'Get the current: {current} mA')
     return round(current, 2)
 
+
+
 def main():
-    current = get_odpm_current()
-    print(current)
+    record_current()
 
 
 if __name__ == '__main__':

@@ -18,7 +18,8 @@ import math
 import common_parameters_ftm as cm_pmt_ftm
 import want_test_band as wt
 from loss_table import loss_table
-from adb_control import get_odpm_current
+# from adb_control import get_odpm_current
+from adb_control import record_current
 
 fileConfig('logging.ini')
 logger = logging.getLogger()
@@ -262,11 +263,19 @@ class Cmw100:
 
     def measure_current(self, n=1):
         if wt.odpm_enable:
-            return get_odpm_current(n)
-        elif wt.psu_enable:
-            return self.psu.current_average(n)
+            rffe_current = record_current()
+            logging.info(f'rffe current: {rffe_current}')
+            return rffe_current
         else:
             return None
+
+    # def measure_current(self, n=1):
+    #     if wt.odpm_enable:
+    #         return get_odpm_current(n)
+    #     elif wt.psu_enable:
+    #         return self.psu.current_average(n)
+    #     else:
+    #         return None
 
     def preset_instrument(self):
         logger.info('----------Preset CMW100----------')
