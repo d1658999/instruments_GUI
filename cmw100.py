@@ -4143,6 +4143,7 @@ class Cmw100:
                                                    self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
+        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, self.rx_freq_fr1))
         logger.info('----------Test FCC LMH progress---------')
         self.preset_instrument()
         self.set_gprf_measurement()
@@ -4199,6 +4200,7 @@ class Cmw100:
                                                    self.bw_fr1)  # [L_rx_freq, M_rx_ferq, H_rx_freq]
         self.rx_freq_fr1 = rx_freq_list[1]
         self.loss_rx = self.get_loss(rx_freq_list[1])
+        self.loss_tx = self.get_loss(cm_pmt_ftm.transfer_freq_rx2tx_fr1(self.band_fr1, self.rx_freq_fr1))
         logger.info('----------Test CE LMH progress---------')
         self.preset_instrument()
         self.set_gprf_measurement()
